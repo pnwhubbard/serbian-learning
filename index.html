@@ -2257,10 +2257,12 @@
   function showCard() {
     const card = cards[deck[index]];
     const flipped = direction === 'en';
-    document.getElementById('front-label').textContent   = flipped ? 'English' : 'Serbian';
-    document.getElementById('back-label').textContent    = flipped ? 'Serbian' : 'English';
-    document.getElementById('front-word').textContent    = flipped ? card.english : card.serbian;
-    document.getElementById('back-word').textContent     = flipped ? card.serbian : card.english;
+    document.getElementById('front-label').textContent    = flipped ? 'English' : 'Serbian';
+    document.getElementById('back-label').textContent     = flipped ? 'Serbian' : 'English';
+    document.getElementById('front-word').textContent     = flipped ? card.english : card.serbian;
+    document.getElementById('back-word').textContent      = flipped ? card.serbian : card.english;
+    document.getElementById('front-cyrillic').textContent = flipped ? '' : latinToCyrillic(card.serbian);
+    document.getElementById('back-cyrillic').textContent  = flipped ? latinToCyrillic(card.serbian) : '';
     document.getElementById('back-category').textContent = card.category || '';
     const noteEl = document.getElementById('back-note');
     if (card.note) { noteEl.textContent = card.note; noteEl.style.display = 'block'; }
@@ -2335,8 +2337,9 @@
     if (!has) return;
 
     const noun = grammarNouns[gIndex];
-    document.getElementById('g-display-nom').textContent = noun.forms.nominativ;
-    document.getElementById('g-display-en').textContent  = noun.english;
+    document.getElementById('g-display-nom').textContent      = noun.forms.nominativ;
+    document.getElementById('g-display-cyrillic').textContent = latinToCyrillic(noun.forms.nominativ);
+    document.getElementById('g-display-en').textContent       = noun.english;
     document.getElementById('g-progress').textContent    = `Noun ${gIndex + 1} of ${grammarNouns.length}`;
     document.getElementById('g-prev-btn').disabled = gIndex === 0;
     document.getElementById('g-next-btn').disabled = gIndex === grammarNouns.length - 1;
@@ -2438,7 +2441,7 @@
       inp.classList.toggle('g-incorrect', !ok);
       fb.innerHTML = ok
         ? `<span class="fb-correct">✓</span>`
-        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${noun.forms[c.key]}</span>`;
+        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${noun.forms[c.key]}<br><span style="color:#74b9ff;font-style:normal">${latinToCyrillic(noun.forms[c.key])}</span></span>`;
       total++;
       if (ok) correct++;
     });
@@ -2582,8 +2585,9 @@
 
     if (vIndex >= allVerbs.length) vIndex = 0;
     const verb = allVerbs[vIndex];
-    document.getElementById('v-display-inf').textContent = verb.infinitive;
-    document.getElementById('v-display-en').textContent  = verb.english;
+    document.getElementById('v-display-inf').textContent      = verb.infinitive;
+    document.getElementById('v-display-cyrillic').textContent = latinToCyrillic(verb.infinitive);
+    document.getElementById('v-display-en').textContent       = verb.english;
     document.getElementById('v-progress').textContent    = `Verb ${vIndex + 1} of ${allVerbs.length}`;
     document.getElementById('v-prev-btn').disabled = vIndex === 0;
     document.getElementById('v-next-btn').disabled = vIndex === allVerbs.length - 1;
@@ -2637,7 +2641,7 @@
       inp.classList.toggle('g-incorrect', !ok);
       fb.innerHTML = ok
         ? `<span class="fb-correct">✓</span>`
-        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${expected}</span>`;
+        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${expected}<br><span style="color:#74b9ff;font-style:normal">${latinToCyrillic(expected)}</span></span>`;
       total++;
       if (ok) correct++;
     });
