@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serbian Flashcards</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background: #16213e;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      box-shadow: 0 2px 8px #0006;
+    }
+    header h1 { font-size: 1.4rem; color: #e94560; flex: 1; }
+
+    nav button {
+      background: none;
+      border: 2px solid #e94560;
+      color: #e94560;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    nav button:hover, nav button.active { background: #e94560; color: #fff; }
+
+    main { width: 100%; max-width: 760px; padding: 40px 20px; flex: 1; }
+
+    /* ── SHARED ─────────────────────────────────────────── */
+    .btn {
+      padding: 10px 26px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .btn:disabled { opacity: 0.3; cursor: default; }
+    .btn-primary   { background: #e94560; color: #fff; }
+    .btn-secondary { background: #0f3460; color: #fff; }
+    .btn-sm {
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .empty-msg {
+      color: #aaa;
+      text-align: center;
+      margin-top: 60px;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    label { font-size: 0.82rem; color: #aaa; }
+
+    input[type="text"], select {
+      background: #16213e;
+      border: 1px solid #0f3460;
+      color: #eee;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 1rem;
+      width: 100%;
+    }
+    input[type="text"]:focus, select:focus { outline: none; border-color: #e94560; }
+    select option { background: #16213e; }
+
+    /* ── STUDY ──────────────────────────────────────────── */
+    #study-view { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+
+    .direction-toggle {
+      display: flex; gap: 8px; align-items: center; font-size: 0.85rem; color: #aaa;
+    }
+    .direction-toggle button {
+      background: #0f3460; border: none; color: #eee;
+      padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;
+    }
+    .direction-toggle button.active { background: #e94560; }
+
+    /* Group filter bar */
+    .group-filter-bar {
+      width: 100%;
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .group-filter-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: #aaa;
+    }
+    .group-filter-actions { display: flex; gap: 8px; }
+    .group-filter-actions button {
+      background: none;
+      border: 1px solid #0f3460;
+      color: #aaa;
+      padding: 3px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .group-filter-actions button:hover { border-color: #e94560; color: #e94560; }
+
+    .group-toggle-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .group-pill {
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 2px solid var(--gc, #555);
+      background: transparent;
+      color: var(--gc, #aaa);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .group-pill.active { background: var(--gc, #555); color: #fff; }
+    .group-pill:hover  { opacity: 0.85; }
+
+    .progress { color: #aaa; font-size: 0.9rem; }
+
+    .scene { width: 100%; height: 260px; perspective: 1000px; cursor: pointer; }
+    .card-inner {
+      position: relative; width: 100%; height: 100%;
+      transition: transform 0.5s; transform-style: preserve-3d;
+    }
+    .scene.flipped .card-inner { transform: rotateY(180deg); }
+    .card-face {
+      position: absolute; width: 100%; height: 100%;
+      backface-visibility: hidden; border-radius: 16px;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 12px; padding: 24px; text-align: center;
+    }
+    .card-front { background: #16213e; border: 2px solid #0f3460; }
+    .card-back  { background: #0f3460; border: 2px solid #e94560; transform: rotateY(180deg); }
+    .card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #aaa; }
+    .card-word  { font-size: 2.4rem; font-weight: 700; color: #fff; }
+    .card-hint  { font-size: 0.85rem; color: #aaa; }
+    .card-note  {
+      font-size: 0.72rem; color: #74b9ff; text-align: left;
+      line-height: 1.6; white-space: pre-line;
+      background: #0a1f3a; border-radius: 8px;
+      padding: 8px 14px; width: 88%; margin-top: -4px;
+    }
+
+    .study-controls { display: flex; gap: 16px; }
+
+    /* ── GRAMMAR ────────────────────────────────────────── */
+    #grammar-view { display: flex; flex-direction: column; gap: 24px; }
+
+    .case-selector {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 16px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .case-sel-label { font-size: 0.85rem; color: #aaa; white-space: nowrap; }
+    .case-toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .case-toggle {
+      width: 36px; height: 36px; border-radius: 8px;
+      border: 2px solid #0f3460; background: #0f3460;
+      color: #aaa; font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; transition: all 0.15s; position: relative;
+    }
+    .case-toggle:hover { border-color: #e94560; color: #e94560; }
+    .case-toggle.active { background: #e94560; border-color: #e94560; color: #fff; }
+    .case-toggle[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute; top: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      background: #0f3460; color: #eee; font-size: 0.7rem; font-weight: 400;
+      white-space: nowrap; padding: 4px 8px; border-radius: 6px;
+      border: 1px solid #e94560; z-index: 10; pointer-events: none;
+    }
+
+    .g-header-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.9rem; color: #aaa;
+    }
+    .g-score-badge { background: #0f3460; border-radius: 20px; padding: 4px 14px; font-size: 0.85rem; }
+    .g-score-badge span { color: #27ae60; font-weight: 700; }
+
+    .noun-card {
+      background: #16213e; border: 2px solid #0f3460; border-radius: 16px;
+      padding: 28px 32px; display: flex; flex-direction: column;
+      align-items: center; gap: 10px; text-align: center;
+    }
+    .noun-card-given { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: #555; }
+    .noun-card-word  { font-size: 2.6rem; font-weight: 700; color: #fff; }
+    .noun-card-sub   { display: flex; gap: 12px; align-items: center; }
+    .noun-card-en    { font-size: 1rem; color: #aaa; }
+
+    .gender-badge { font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; }
+    .gender-m { background: #1a3a6e; color: #74b9ff; }
+    .gender-f { background: #5c1a3a; color: #fd79a8; }
+    .gender-n { background: #1a4a2e; color: #55efc4; }
+
+    .case-inputs { display: flex; flex-direction: column; }
+    .case-row {
+      display: flex; flex-direction: column; gap: 7px;
+      padding: 12px 0; border-bottom: 1px solid #0f3460;
+    }
+    .case-row:last-child { border-bottom: none; }
+    .case-row.hidden { display: none; }
+
+    .case-row-main {
+      display: grid;
+      grid-template-columns: 28px 130px 1fr 28px minmax(50px, auto);
+      gap: 10px; align-items: center;
+    }
+    .case-abbr { font-size: 0.78rem; font-weight: 700; color: #e94560; text-align: center; background: #0f3460; border-radius: 4px; padding: 2px 4px; }
+    .case-name-col { display: flex; flex-direction: column; gap: 2px; }
+    .case-name-main { font-size: 0.9rem; font-weight: 600; }
+    .case-name-hint { font-size: 0.7rem; color: #666; font-style: italic; }
+    .case-inp {
+      background: #16213e; border: 2px solid #0f3460; color: #eee;
+      padding: 9px 14px; border-radius: 8px; font-size: 1rem; width: 100%;
+      transition: border-color 0.2s;
+    }
+    .case-inp:focus { outline: none; border-color: #e94560; }
+    .case-inp.g-correct   { border-color: #27ae60 !important; background: #0d2b1a; }
+    .case-inp.g-incorrect { border-color: #e94560 !important; background: #2b0d1a; }
+
+    .case-info-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid #e94560; background: none; color: #e94560;
+      cursor: pointer; font-size: 0.8rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.15s, color 0.15s;
+    }
+    .case-info-btn:hover { background: #e94560; color: #fff; }
+
+    .case-feedback { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+    .fb-correct   { color: #27ae60; font-size: 1.1rem; }
+    .fb-incorrect { color: #e94560; font-size: 1.1rem; }
+    .fb-answer    { font-size: 0.8rem; color: #e94560; font-style: italic; }
+
+    /* Example sentence below each input */
+    .case-example {
+      /* indent aligns with the input column: 28px abbr + 130px name + 2×10px gap */
+      padding-left: calc(28px + 130px + 20px);
+      display: flex; align-items: baseline; gap: 6px;
+      font-size: 0.82rem; flex-wrap: wrap;
+    }
+    .case-example .ex-arrow { color: #3a5a4a; }
+    .case-example .ex-sr    { color: #7eac92; font-weight: 500; }
+    .case-example .ex-sep   { color: #3a5a4a; }
+    .case-example .ex-en    { color: #4a6a56; font-style: italic; }
+
+    .grammar-controls { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── CASE INFO MODAL ──────────────────────────────── */
+    #case-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.72); z-index: 200;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    #case-modal-overlay.open { display: flex; }
+    #case-modal {
+      background: #16213e; border: 1px solid #e9456044;
+      border-radius: 16px; width: 100%; max-width: 500px;
+      max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+      animation: modal-in 0.18s ease;
+    }
+    @keyframes modal-in {
+      from { transform: scale(0.93); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+    .modal-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 20px 24px 16px; border-bottom: 1px solid #0f3460; gap: 12px;
+    }
+    .modal-header-left { display: flex; flex-direction: column; gap: 4px; }
+    .modal-case-abbr {
+      display: inline-block; background: #e94560; color: #fff;
+      font-size: 0.72rem; font-weight: 700; padding: 2px 9px;
+      border-radius: 4px; letter-spacing: 1px; margin-bottom: 2px; width: fit-content;
+    }
+    .modal-case-name { font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .modal-case-hint { font-size: 0.85rem; color: #888; font-style: italic; }
+    .modal-close {
+      background: none; border: none; color: #555;
+      font-size: 1.7rem; cursor: pointer; line-height: 1; padding: 0 4px; flex-shrink: 0;
+    }
+    .modal-close:hover { color: #fff; }
+    .modal-body { padding: 20px 24px 28px; display: flex; flex-direction: column; gap: 22px; }
+    .modal-section { display: flex; flex-direction: column; gap: 10px; }
+    .modal-section-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 2.5px;
+      color: #e94560; text-transform: uppercase;
+    }
+    .modal-section > p { font-size: 0.92rem; color: #ccc; line-height: 1.65; }
+    .prep-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prep-tag {
+      background: #0f3460; border: 1px solid #1a4a7a; border-radius: 8px;
+      padding: 7px 12px; font-size: 0.82rem; display: flex; flex-direction: column; gap: 2px;
+    }
+    .prep-tag .pt-prep    { color: #74b9ff; font-weight: 600; font-style: italic; }
+    .prep-tag .pt-meaning { color: #aaa; font-size: 0.72rem; }
+    .prep-note {
+      font-size: 0.82rem; color: #7f8c8d; font-style: italic;
+      border-left: 2px solid #1a4a7a; padding-left: 10px; line-height: 1.5;
+    }
+    .modal-example-box {
+      background: #0f3460; border-radius: 10px; padding: 14px 18px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .modal-ex-sr { font-size: 1.15rem; color: #eee; font-weight: 600; }
+    .modal-ex-en { font-size: 0.88rem; color: #aaa; }
+
+    /* ── MANAGE ─────────────────────────────────────────── */
+    #manage-view { display: flex; flex-direction: column; gap: 24px; }
+
+    .manage-tabs { display: flex; gap: 8px; border-bottom: 2px solid #0f3460; }
+    .manage-tab-btn {
+      background: none; border: none; color: #aaa;
+      padding: 10px 20px; cursor: pointer; font-size: 0.95rem;
+      border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s;
+    }
+    .manage-tab-btn:hover { color: #eee; }
+    .manage-tab-btn.active { color: #e94560; border-bottom-color: #e94560; }
+
+    .manage-section { display: flex; flex-direction: column; gap: 28px; }
+
+    .section-title {
+      font-size: 1.1rem; font-weight: 600; color: #e94560;
+      margin-bottom: 12px; border-bottom: 1px solid #0f3460; padding-bottom: 8px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-count { font-size: 0.85rem; font-weight: 400; color: #aaa; }
+
+    .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
+
+    /* Groups list in manage */
+    .group-list-manage { display: flex; flex-direction: column; gap: 8px; }
+    .group-manage-row {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 10px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 14px;
+    }
+    .group-color-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .group-manage-name { font-weight: 600; font-size: 1rem; flex: 1; }
+    .group-manage-count { font-size: 0.82rem; color: #aaa; }
+
+    /* Cards list */
+    .card-list { display: flex; flex-direction: column; gap: 8px; }
+    .card-row {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 10px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap;
+    }
+    .card-row .c-serbian { font-weight: 700; font-size: 1.05rem; flex: 1; min-width: 80px; }
+    .card-row .c-english { color: #aaa; flex: 1; min-width: 80px; font-size: 0.95rem; }
+    .inline-group-select {
+      background: #0f3460; border: 1px solid #1a4a7a;
+      color: #eee; padding: 4px 8px; border-radius: 6px;
+      font-size: 0.8rem; cursor: pointer; width: auto;
+    }
+    .inline-group-select:focus { outline: none; border-color: #e94560; }
+
+    .del-btn {
+      background: none; border: 1px solid #c0392b; color: #c0392b;
+      padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; white-space: nowrap;
+    }
+    .del-btn:hover { background: #c0392b; color: #fff; }
+
+    .list-filter-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+    }
+    .list-filter-row label { font-size: 0.85rem; color: #aaa; white-space: nowrap; }
+    .list-filter-row select { width: auto; padding: 7px 12px; font-size: 0.85rem; }
+
+    /* Grammar noun manage */
+    .noun-row { background: #16213e; border: 1px solid #0f3460; border-radius: 10px; padding: 14px 18px; }
+    .noun-row-top { display: flex; align-items: center; gap: 14px; }
+    .noun-row-top .nom { font-weight: 700; font-size: 1.1rem; flex: 1; }
+    .noun-row-top .eng { color: #aaa; flex: 1; font-size: 0.95rem; }
+    .noun-row-forms {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+      margin-top: 10px; padding-top: 10px; border-top: 1px solid #0f3460;
+    }
+    .noun-form-cell { display: flex; flex-direction: column; gap: 2px; }
+    .noun-form-case { font-size: 0.65rem; color: #e94560; font-weight: 700; text-transform: uppercase; }
+    .noun-form-val  { font-size: 0.85rem; }
+    .declension-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+
+    /* ── MOBILE ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+
+      /* 1. Header / Nav */
+      header {
+        padding: 12px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      nav button {
+        min-height: 44px;
+        padding: 10px 14px;
+      }
+
+      /* 2. Study Tab */
+      .direction-toggle {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .direction-toggle button {
+        min-height: 44px;
+        padding: 10px 16px;
+      }
+      .study-controls {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .study-controls .btn {
+        min-height: 44px;
+        flex: 1;
+      }
+      .group-pill {
+        min-height: 36px;
+        padding: 8px 14px;
+      }
+
+      /* 6. Font sizes */
+      .card-word       { font-size: 1.8rem; }
+      .card-note       { font-size: 0.8rem; }
+      .case-name-hint  { font-size: 0.8rem; }
+      .modal-section-label { font-size: 0.8rem; }
+
+      /* 3. Grammar Tab — case-row grid → mobile 2-row layout */
+      .case-row-main {
+        grid-template-columns: auto 1fr 44px auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+          "abbr name name name"
+          "inp  inp  btn  fb";
+        gap: 8px;
+      }
+      .case-abbr     { grid-area: abbr; align-self: center; }
+      .case-name-col { grid-area: name; align-self: center; }
+      .case-inp      { grid-area: inp; }
+      .case-info-btn {
+        grid-area: btn;
+        width: 44px; height: 44px;
+        border-radius: 8px;
+        align-self: center;
+      }
+      .case-feedback { grid-area: fb; align-self: center; }
+
+      /* Remove deep indent on example sentence */
+      .case-example { padding-left: 0; }
+
+      /* 7. Tap targets — case toggles */
+      .case-toggle { width: 44px; height: 44px; border-radius: 10px; }
+
+      /* 4. Manage Tab */
+      .form-row { flex-direction: column; }
+      .form-group { min-width: unset; }
+      .manage-tab-btn { padding: 8px 12px; font-size: 0.88rem; }
+      .del-btn { min-height: 44px; padding: 10px 14px; }
+
+      /* 5. Modal */
+      .modal-header { padding: 16px 18px 12px; }
+      .modal-body   { padding: 16px 18px 20px; }
+      .modal-close  {
+        width: 44px; height: 44px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem;
+      }
+
+      /* 7. Tap targets — grammar controls */
+      .grammar-controls .btn { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Serbian Flashcards</h1>
+  <nav>
+    <button class="active" id="nav-study"   onclick="showView('study')">Study</button>
+    <button id="nav-grammar" onclick="showView('grammar')">Grammar</button>
+    <button id="nav-manage"  onclick="showView('manage')">Manage Cards</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ═══════════════ STUDY VIEW ═══════════════ -->
+  <div id="study-view">
+
+    <div class="direction-toggle">
+      <span>Direction:</span>
+      <button id="dir-sr" class="active" onclick="setDirection('sr')">Serbian → English</button>
+      <button id="dir-en" onclick="setDirection('en')">English → Serbian</button>
+    </div>
+
+    <!-- Group filter -->
+    <div class="group-filter-bar" id="group-filter-bar">
+      <div class="group-filter-header">
+        <span>Groups</span>
+        <div class="group-filter-actions">
+          <button onclick="selectAllStudyGroups()">Select all</button>
+          <button onclick="clearAllStudyGroups()">Clear all</button>
+        </div>
+      </div>
+      <div class="group-toggle-row" id="study-group-toggles"></div>
+    </div>
+
+    <p class="progress" id="progress">Card 0 of 0</p>
+
+    <div class="scene" id="scene" onclick="flipCard()">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <span class="card-label" id="front-label">Serbian</span>
+          <span class="card-word"  id="front-word">—</span>
+          <span class="card-hint">click to reveal</span>
+        </div>
+        <div class="card-face card-back">
+          <span class="card-label" id="back-label">English</span>
+          <span class="card-word"  id="back-word">—</span>
+          <div class="card-note"   id="back-note" style="display:none"></div>
+          <span class="card-hint"  id="back-category"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="study-controls">
+      <button class="btn btn-secondary" id="prev-btn"    onclick="prevCard()">← Prev</button>
+      <button class="btn btn-primary"   id="shuffle-btn" onclick="shuffle()">Shuffle</button>
+      <button class="btn btn-secondary" id="next-btn"    onclick="nextCard()">Next →</button>
+    </div>
+
+    <div id="empty-study" class="empty-msg" style="display:none">
+      No cards match the selected groups.<br>
+      Select more groups above or add cards in <strong>Manage Cards</strong>.
+    </div>
+  </div>
+
+  <!-- ═══════════════ GRAMMAR VIEW ═══════════════ -->
+  <div id="grammar-view" style="display:none">
+
+    <div class="case-selector">
+      <span class="case-sel-label">Practice cases:</span>
+      <div class="case-toggles" id="case-toggles"></div>
+    </div>
+
+    <div class="g-header-row">
+      <span id="g-progress">Noun 1 of 1</span>
+      <span class="g-score-badge">Score: <span id="g-score-val">0 / 0</span></span>
+    </div>
+
+    <div class="noun-card" id="g-noun-card">
+      <span class="noun-card-given">Given — Nominativ</span>
+      <span class="noun-card-word" id="g-display-nom">—</span>
+      <div class="noun-card-sub">
+        <span class="noun-card-en" id="g-display-en">—</span>
+        <span class="gender-badge"  id="g-display-gender">—</span>
+      </div>
+    </div>
+
+    <div class="case-inputs" id="case-inputs"></div>
+
+    <div class="grammar-controls">
+      <button class="btn btn-secondary" id="g-prev-btn" onclick="gPrev()">← Prev</button>
+      <button class="btn btn-primary"   onclick="checkGrammar()">Check Answers</button>
+      <button class="btn btn-secondary" id="g-next-btn" onclick="gNext()">Next →</button>
+      <button class="btn btn-secondary" onclick="shuffleGrammar()" title="Shuffle noun order">⇌ Shuffle</button>
+    </div>
+
+    <div id="empty-grammar" class="empty-msg" style="display:none">
+      No grammar nouns yet.<br>Go to <strong>Manage Cards → Grammar Nouns</strong> to add some.
+    </div>
+  </div>
+
+  <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
+  <div id="manage-view" style="display:none">
+
+    <div class="manage-tabs">
+      <button class="manage-tab-btn active" id="mtab-cards"   onclick="showManageTab('cards')">Flashcards</button>
+      <button class="manage-tab-btn"        id="mtab-grammar" onclick="showManageTab('grammar')">Grammar Nouns</button>
+    </div>
+
+    <!-- ── Flashcards tab ── -->
+    <div id="manage-cards" class="manage-section">
+
+      <!-- Groups manager -->
+      <div>
+        <p class="section-title">
+          Groups <span class="section-count" id="groups-count"></span>
+        </p>
+        <div class="form-row" style="margin-bottom:14px">
+          <div class="form-group">
+            <label for="inp-group-name">New group name</label>
+            <input type="text" id="inp-group-name" placeholder="e.g. Verbs, Travel, Numbers…" />
+          </div>
+          <div class="form-group" style="justify-content:flex-end; max-width:160px">
+            <label>&nbsp;</label>
+            <button class="btn btn-primary" onclick="addGroup()">Create Group</button>
+          </div>
+        </div>
+        <div class="group-list-manage" id="group-list-manage"></div>
+      </div>
+
+      <!-- Add card -->
+      <div>
+        <p class="section-title">Add a Card</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inp-serbian">Serbian word</label>
+            <input type="text" id="inp-serbian" placeholder="e.g. hvala" inputmode="text" />
+          </div>
+          <div class="form-group">
+            <label for="inp-english">English translation</label>
+            <input type="text" id="inp-english" placeholder="e.g. thank you" inputmode="text" />
+          </div>
+          <div class="form-group">
+            <label for="inp-group">Group</label>
+            <select id="inp-group"></select>
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <button class="btn btn-primary" onclick="addCard()">Add Card</button>
+        </div>
+      </div>
+
+      <!-- Card list -->
+      <div>
+        <p class="section-title">
+          Cards <span class="section-count" id="card-count"></span>
+        </p>
+        <div class="list-filter-row">
+          <label for="filter-group">Show group:</label>
+          <select id="filter-group" onchange="renderCardList()">
+            <option value="">All groups</option>
+          </select>
+        </div>
+        <div class="card-list" id="card-list"></div>
+      </div>
+    </div>
+
+    <!-- ── Grammar Nouns tab ── -->
+    <div id="manage-grammar" class="manage-section" style="display:none">
+      <div>
+        <p class="section-title">Add a Grammar Noun</p>
+        <div class="form-row" style="margin-bottom:12px">
+          <div class="form-group">
+            <label for="gn-english">English meaning</label>
+            <input type="text" id="gn-english" placeholder="e.g. brother" />
+          </div>
+          <div class="form-group">
+            <label for="gn-gender">Gender</label>
+            <select id="gn-gender">
+              <option value="masculine">Masculine</option>
+              <option value="feminine">Feminine</option>
+              <option value="neuter">Neuter</option>
+            </select>
+          </div>
+        </div>
+        <p style="font-size:0.82rem; color:#aaa; margin-bottom:10px">Declension forms:</p>
+        <div class="declension-grid">
+          <div class="form-group"><label>N — Nominativ</label>    <input type="text" id="gn-nominativ"    placeholder="e.g. brat"   /></div>
+          <div class="form-group"><label>G — Genitiv</label>      <input type="text" id="gn-genitiv"      placeholder="e.g. brata"  /></div>
+          <div class="form-group"><label>D — Dativ</label>        <input type="text" id="gn-dativ"        placeholder="e.g. bratu"  /></div>
+          <div class="form-group"><label>A — Akuzativ</label>     <input type="text" id="gn-akuzativ"     placeholder="e.g. brata"  /></div>
+          <div class="form-group"><label>V — Vokativ</label>      <input type="text" id="gn-vokativ"      placeholder="e.g. brate"  /></div>
+          <div class="form-group"><label>I — Instrumental</label> <input type="text" id="gn-instrumental" placeholder="e.g. bratom" /></div>
+          <div class="form-group"><label>L — Lokativ</label>      <input type="text" id="gn-lokativ"      placeholder="e.g. bratu"  /></div>
+        </div>
+        <div style="margin-top:16px">
+          <button class="btn btn-primary" onclick="addGrammarNoun()">Add Noun</button>
+        </div>
+      </div>
+      <div>
+        <p class="section-title">All Grammar Nouns <span class="section-count" id="gn-count"></span></p>
+        <div class="card-list" id="gn-list"></div>
+      </div>
+    </div>
+
+  </div><!-- /manage-view -->
+
+</main>
+
+<script>
+  // ═══════════════════════════════════════════════════
+  //  CONSTANTS
+  // ═══════════════════════════════════════════════════
+  const PALETTE = [
+    '#e94560','#0077b6','#27ae60','#f39c12',
+    '#8e44ad','#16a085','#d35400','#2980b9',
+    '#c0392b','#1abc9c','#e67e22','#6c5ce7',
+  ];
+
+  const CASES = [
+    {
+      key: 'nominativ', label: 'Nominativ', abbr: 'N', hint: 'ko? šta?',
+      description: 'The subject of the sentence — who or what performs the action. This is the base (dictionary) form of the word.',
+      prepositions: [],
+      prepNote: 'No preposition needed. The nominative always stands alone as the sentence subject.',
+      example: (form, english) => ({ sr: `Gde je ${form}?`, en: `Where is the ${english}?` }),
+    },
+    {
+      key: 'genitiv', label: 'Genitiv', abbr: 'G', hint: 'koga? čega?',
+      description: 'Expresses possession, absence, origin, or quantity. Also required after many of the most common Serbian prepositions.',
+      prepositions: [
+        { prep: 'od',     meaning: 'from / of' },
+        { prep: 'do',     meaning: 'to / until' },
+        { prep: 'iz',     meaning: 'from / out of' },
+        { prep: 'kod',    meaning: 'at the place of' },
+        { prep: 'bez',    meaning: 'without' },
+        { prep: 'zbog',   meaning: 'because of' },
+        { prep: 'posle',  meaning: 'after' },
+        { prep: 'pre',    meaning: 'before' },
+        { prep: 'oko',    meaning: 'around / about' },
+        { prep: 'između', meaning: 'between' },
+        { prep: 'pored',  meaning: 'next to' },
+        { prep: 'tokom',  meaning: 'during' },
+      ],
+      prepNote: '',
+      example: (form, english) => ({ sr: `Nema ${form}.`, en: `There is no ${english}.` }),
+    },
+    {
+      key: 'dativ', label: 'Dativ', abbr: 'D', hint: 'kome? čemu?',
+      description: 'The indirect object — the recipient of an action. Answers "to whom" or "for whom" something is done.',
+      prepositions: [
+        { prep: 'ka / prema', meaning: 'toward' },
+        { prep: 'nasuprot',   meaning: 'opposite to' },
+      ],
+      prepNote: 'Most dative use is preposition-free — the case ending alone marks the indirect object.',
+      example: (form, english) => ({ sr: `Dajem to ${form}.`, en: `I give it to the ${english}.` }),
+    },
+    {
+      key: 'akuzativ', label: 'Akuzativ', abbr: 'A', hint: 'koga? šta?',
+      description: 'The direct object — the thing directly acted upon. Also used after prepositions to indicate motion or direction toward something.',
+      prepositions: [
+        { prep: 'u',    meaning: 'into' },
+        { prep: 'na',   meaning: 'onto' },
+        { prep: 'za',   meaning: 'for' },
+        { prep: 'kroz', meaning: 'through' },
+        { prep: 'po',   meaning: 'after / per' },
+        { prep: 'pred', meaning: 'in front of (motion)' },
+        { prep: 'nad',  meaning: 'above (motion)' },
+        { prep: 'pod',  meaning: 'under (motion)' },
+      ],
+      prepNote: 'With motion prepositions (u, na, pod…), accusative signals movement toward a place. Compare: "u kući" (locative = inside) vs "u kuću" (accusative = into).',
+      example: (form, english) => ({ sr: `Vidim ${form}.`, en: `I see the ${english}.` }),
+    },
+    {
+      key: 'vokativ', label: 'Vokativ', abbr: 'V', hint: 'direct address',
+      description: 'Used when directly calling out to or addressing someone. It stands apart from the main sentence, typically separated by a comma.',
+      prepositions: [],
+      prepNote: 'Never used with a preposition. It is always an isolated call or address, often at the start of a sentence.',
+      example: (form, english) => ({ sr: `Hej, ${form}!`, en: `Hey, ${english}!` }),
+    },
+    {
+      key: 'instrumental', label: 'Instrumental', abbr: 'I', hint: 'kim? čim?',
+      description: 'Expresses the means or instrument ("by means of"), or companionship ("together with"). Also marks static position after certain prepositions.',
+      prepositions: [
+        { prep: 'sa / s',  meaning: 'with (together with)' },
+        { prep: 'pred',    meaning: 'in front of (static)' },
+        { prep: 'nad',     meaning: 'above (static)' },
+        { prep: 'pod',     meaning: 'under (static)' },
+        { prep: 'za',      meaning: 'behind (static)' },
+        { prep: 'između',  meaning: 'between (static)' },
+      ],
+      prepNote: 'With "sa/s" it means togetherness. Without a preposition, it expresses the tool, means, or manner of an action.',
+      example: (form, english) => ({ sr: `Idem sa ${form}.`, en: `I'm going with the ${english}.` }),
+    },
+    {
+      key: 'lokativ', label: 'Lokativ', abbr: 'L', hint: 'o kome? gde?',
+      description: 'Expresses location ("where something is") or topic ("what something is about"). The only Serbian case that can never appear without a preposition.',
+      prepositions: [
+        { prep: 'u',   meaning: 'in / inside' },
+        { prep: 'na',  meaning: 'on / at' },
+        { prep: 'o',   meaning: 'about / concerning' },
+        { prep: 'po',  meaning: 'around / throughout' },
+        { prep: 'pri', meaning: 'at / near / upon' },
+      ],
+      prepNote: 'Always requires a preposition — never appears alone. Key contrast: "u + accusative" = motion into; "u + locative" = static location inside.',
+      example: (form, english) => ({ sr: `Pričam o ${form}.`, en: `I'm talking about the ${english}.` }),
+    },
+  ];
+
+  // ═══════════════════════════════════════════════════
+  //  GROUPS STORAGE
+  // ═══════════════════════════════════════════════════
+  const GROUPS_KEY  = 'serbian_groups';
+  const GROUPS_VER  = '2';
+
+  const DEFAULT_GROUPS = [
+    'Greetings','Basics','Food & Drink','Places','Numbers','Animals',
+    'People','Time','Colors','Body','Home','Verbs','Adjectives','Prepositions',
+  ];
+
+  function loadGroups() {
+    const raw = localStorage.getItem(GROUPS_KEY);
+    const ver = localStorage.getItem(GROUPS_KEY + '_v');
+    if (!raw || ver !== GROUPS_VER) {
+      const existing = raw ? JSON.parse(raw) : [];
+      const merged   = [...existing];
+      DEFAULT_GROUPS.forEach(g => { if (!existing.includes(g)) merged.push(g); });
+      saveGroups(merged);
+      localStorage.setItem(GROUPS_KEY + '_v', GROUPS_VER);
+      return merged;
+    }
+    return JSON.parse(raw);
+  }
+  function saveGroups(g) { localStorage.setItem(GROUPS_KEY, JSON.stringify(g)); }
+
+  function getGroupColor(name) {
+    if (!name) return '#546e7a';
+    const idx = groups.indexOf(name);
+    return idx >= 0 ? PALETTE[idx % PALETTE.length] : '#546e7a';
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  FLASHCARD STORAGE
+  // ═══════════════════════════════════════════════════
+  const STORAGE_KEY = 'serbian_cards';
+  const CARDS_VER   = '2';
+
+  const DEFAULT_CARDS = [
+    // ── GREETINGS ─────────────────────────────────────────────────────────
+    { serbian:'zdravo',        english:'hello',                    category:'Greetings' },
+    { serbian:'doviđenja',     english:'goodbye',                   category:'Greetings' },
+    { serbian:'hvala',         english:'thank you',                 category:'Greetings' },
+    { serbian:'molim',         english:"please / you're welcome",   category:'Greetings' },
+    { serbian:'dobro jutro',   english:'good morning',              category:'Greetings' },
+    { serbian:'dobro veče',    english:'good evening',              category:'Greetings' },
+    { serbian:'laku noć',      english:'good night',                category:'Greetings' },
+    { serbian:'kako si?',      english:'how are you? (informal)',   category:'Greetings' },
+    { serbian:'kako ste?',     english:'how are you? (formal)',     category:'Greetings' },
+    { serbian:'dobro',         english:'fine / well',               category:'Greetings' },
+    { serbian:'izvini',        english:'excuse me / sorry (inf.)',  category:'Greetings' },
+    { serbian:'izvinite',      english:'excuse me (formal)',        category:'Greetings' },
+    // ── BASICS ────────────────────────────────────────────────────────────
+    { serbian:'da',            english:'yes',                       category:'Basics' },
+    { serbian:'ne',            english:'no',                        category:'Basics' },
+    { serbian:'možda',         english:'maybe',                     category:'Basics' },
+    { serbian:'naravno',       english:'of course',                 category:'Basics' },
+    { serbian:'u redu',        english:'OK / alright',              category:'Basics' },
+    { serbian:'razumem',       english:'I understand',              category:'Basics' },
+    { serbian:'ne razumem',    english:"I don't understand",        category:'Basics' },
+    { serbian:'ovde',          english:'here',                      category:'Basics' },
+    { serbian:'tamo',          english:'there',                     category:'Basics' },
+    { serbian:'sada',          english:'now',                       category:'Basics' },
+    { serbian:'malo',          english:'a little / a bit',          category:'Basics' },
+    { serbian:'mnogo',         english:'a lot / many',              category:'Basics' },
+    { serbian:'ovo',           english:'this',                      category:'Basics' },
+    { serbian:'ono',           english:'that',                      category:'Basics' },
+    { serbian:'ko',            english:'who',                       category:'Basics' },
+    { serbian:'šta',           english:'what',                      category:'Basics' },
+    { serbian:'gde',           english:'where',                     category:'Basics' },
+    { serbian:'kada',          english:'when',                      category:'Basics' },
+    { serbian:'zašto',         english:'why',                       category:'Basics' },
+    { serbian:'kako',          english:'how',                       category:'Basics' },
+    // ── NUMBERS ───────────────────────────────────────────────────────────
+    { serbian:'jedan',         english:'one',                       category:'Numbers' },
+    { serbian:'dva',           english:'two',                       category:'Numbers' },
+    { serbian:'tri',           english:'three',                     category:'Numbers' },
+    { serbian:'četiri',        english:'four',                      category:'Numbers' },
+    { serbian:'pet',           english:'five',                      category:'Numbers' },
+    { serbian:'šest',          english:'six',                       category:'Numbers' },
+    { serbian:'sedam',         english:'seven',                     category:'Numbers' },
+    { serbian:'osam',          english:'eight',                     category:'Numbers' },
+    { serbian:'devet',         english:'nine',                      category:'Numbers' },
+    { serbian:'deset',         english:'ten',                       category:'Numbers' },
+    { serbian:'dvadeset',      english:'twenty',                    category:'Numbers' },
+    { serbian:'sto',           english:'one hundred',               category:'Numbers' },
+    { serbian:'hiljada',       english:'one thousand',              category:'Numbers' },
+    { serbian:'prvi',          english:'first',                     category:'Numbers' },
+    { serbian:'drugi',         english:'second',                    category:'Numbers' },
+    { serbian:'treći',         english:'third',                     category:'Numbers' },
+    // ── FOOD & DRINK ──────────────────────────────────────────────────────
+    { serbian:'voda',          english:'water',                     category:'Food & Drink' },
+    { serbian:'hleb',          english:'bread',                     category:'Food & Drink' },
+    { serbian:'kafa',          english:'coffee',                    category:'Food & Drink' },
+    { serbian:'čaj',           english:'tea',                       category:'Food & Drink' },
+    { serbian:'mleko',         english:'milk',                      category:'Food & Drink' },
+    { serbian:'sok',           english:'juice',                     category:'Food & Drink' },
+    { serbian:'pivo',          english:'beer',                      category:'Food & Drink' },
+    { serbian:'vino',          english:'wine',                      category:'Food & Drink' },
+    { serbian:'meso',          english:'meat',                      category:'Food & Drink' },
+    { serbian:'riba',          english:'fish',                      category:'Food & Drink' },
+    { serbian:'piletina',      english:'chicken',                   category:'Food & Drink' },
+    { serbian:'jaje',          english:'egg',                       category:'Food & Drink' },
+    { serbian:'sir',           english:'cheese',                    category:'Food & Drink' },
+    { serbian:'salata',        english:'salad',                     category:'Food & Drink' },
+    { serbian:'supa',          english:'soup',                      category:'Food & Drink' },
+    { serbian:'krompir',       english:'potato',                    category:'Food & Drink' },
+    { serbian:'jabuka',        english:'apple',                     category:'Food & Drink' },
+    { serbian:'paradajz',      english:'tomato',                    category:'Food & Drink' },
+    { serbian:'šećer',         english:'sugar',                     category:'Food & Drink' },
+    { serbian:'so',            english:'salt',                      category:'Food & Drink' },
+    { serbian:'ulje',          english:'oil',                       category:'Food & Drink' },
+    { serbian:'restoran',      english:'restaurant',                category:'Food & Drink' },
+    { serbian:'račun',         english:'bill / check',              category:'Food & Drink' },
+    { serbian:'doručak',       english:'breakfast',                 category:'Food & Drink' },
+    { serbian:'ručak',         english:'lunch',                     category:'Food & Drink' },
+    { serbian:'večera',        english:'dinner',                    category:'Food & Drink' },
+    // ── PLACES ────────────────────────────────────────────────────────────
+    { serbian:'kuća',          english:'house',                     category:'Places' },
+    { serbian:'ulica',         english:'street',                    category:'Places' },
+    { serbian:'grad',          english:'city / town',               category:'Places' },
+    { serbian:'selo',          english:'village',                   category:'Places' },
+    { serbian:'zemlja',        english:'country / land',            category:'Places' },
+    { serbian:'bolnica',       english:'hospital',                  category:'Places' },
+    { serbian:'prodavnica',    english:'store / shop',              category:'Places' },
+    { serbian:'pijaca',        english:'market',                    category:'Places' },
+    { serbian:'park',          english:'park',                      category:'Places' },
+    { serbian:'hotel',         english:'hotel',                     category:'Places' },
+    { serbian:'aerodrom',      english:'airport',                   category:'Places' },
+    { serbian:'stanica',       english:'station',                   category:'Places' },
+    { serbian:'crkva',         english:'church',                    category:'Places' },
+    { serbian:'muzej',         english:'museum',                    category:'Places' },
+    { serbian:'bioskop',       english:'cinema',                    category:'Places' },
+    { serbian:'banka',         english:'bank',                      category:'Places' },
+    { serbian:'apoteka',       english:'pharmacy',                  category:'Places' },
+    { serbian:'planina',       english:'mountain',                  category:'Places' },
+    { serbian:'šuma',          english:'forest',                    category:'Places' },
+    { serbian:'most',          english:'bridge',                    category:'Places' },
+    { serbian:'more',          english:'sea',                       category:'Places' },
+    { serbian:'reka',          english:'river',                     category:'Places' },
+    // ── ANIMALS ───────────────────────────────────────────────────────────
+    { serbian:'pas',           english:'dog',                       category:'Animals' },
+    { serbian:'mačka',         english:'cat',                       category:'Animals' },
+    { serbian:'konj',          english:'horse',                     category:'Animals' },
+    { serbian:'krava',         english:'cow',                       category:'Animals' },
+    { serbian:'ovca',          english:'sheep',                     category:'Animals' },
+    { serbian:'svinja',        english:'pig',                       category:'Animals' },
+    { serbian:'kokoška',       english:'hen / chicken',             category:'Animals' },
+    { serbian:'ptica',         english:'bird',                      category:'Animals' },
+    { serbian:'zec',           english:'rabbit',                    category:'Animals' },
+    { serbian:'medved',        english:'bear',                      category:'Animals' },
+    { serbian:'vuk',           english:'wolf',                      category:'Animals' },
+    { serbian:'lisica',        english:'fox',                       category:'Animals' },
+    { serbian:'miš',           english:'mouse',                     category:'Animals' },
+    { serbian:'lav',           english:'lion',                      category:'Animals' },
+    { serbian:'tigar',         english:'tiger',                     category:'Animals' },
+    { serbian:'slon',          english:'elephant',                  category:'Animals' },
+    { serbian:'zmija',         english:'snake',                     category:'Animals' },
+    // ── PEOPLE ────────────────────────────────────────────────────────────
+    { serbian:'prijatelj',     english:'friend (m)',                category:'People' },
+    { serbian:'prijateljica',  english:'friend (f)',                category:'People' },
+    { serbian:'porodica',      english:'family',                    category:'People' },
+    { serbian:'otac',          english:'father',                    category:'People' },
+    { serbian:'majka',         english:'mother',                    category:'People' },
+    { serbian:'kćerka',        english:'daughter',                  category:'People' },
+    { serbian:'dečak',         english:'boy',                       category:'People' },
+    { serbian:'devojka',       english:'girl / young woman',        category:'People' },
+    { serbian:'beba',          english:'baby',                      category:'People' },
+    { serbian:'dete',          english:'child',                     category:'People' },
+    { serbian:'muž',           english:'husband',                   category:'People' },
+    { serbian:'supruga',       english:'wife',                      category:'People' },
+    { serbian:'deda',          english:'grandfather',               category:'People' },
+    { serbian:'baka',          english:'grandmother',               category:'People' },
+    { serbian:'komšija',       english:'neighbor',                  category:'People' },
+    { serbian:'stranac',       english:'foreigner / stranger',      category:'People' },
+    { serbian:'učitelj',       english:'teacher (m)',               category:'People' },
+    { serbian:'doktor',        english:'doctor',                    category:'People' },
+    // ── TIME ──────────────────────────────────────────────────────────────
+    { serbian:'dan',           english:'day',                       category:'Time' },
+    { serbian:'noć',           english:'night',                     category:'Time' },
+    { serbian:'sat',           english:"hour / o'clock",            category:'Time' },
+    { serbian:'minuta',        english:'minute',                    category:'Time' },
+    { serbian:'jutro',         english:'morning',                   category:'Time' },
+    { serbian:'podne',         english:'noon / midday',             category:'Time' },
+    { serbian:'veče',          english:'evening',                   category:'Time' },
+    { serbian:'nedelja',       english:'week / Sunday',             category:'Time' },
+    { serbian:'mesec',         english:'month / moon',              category:'Time' },
+    { serbian:'godina',        english:'year',                      category:'Time' },
+    { serbian:'danas',         english:'today',                     category:'Time' },
+    { serbian:'juče',          english:'yesterday',                 category:'Time' },
+    { serbian:'sutra',         english:'tomorrow',                  category:'Time' },
+    { serbian:'ponedeljak',    english:'Monday',                    category:'Time' },
+    { serbian:'utorak',        english:'Tuesday',                   category:'Time' },
+    { serbian:'sreda',         english:'Wednesday',                 category:'Time' },
+    { serbian:'četvrtak',      english:'Thursday',                  category:'Time' },
+    { serbian:'petak',         english:'Friday',                    category:'Time' },
+    { serbian:'subota',        english:'Saturday',                  category:'Time' },
+    { serbian:'proleće',       english:'spring',                    category:'Time' },
+    { serbian:'leto',          english:'summer',                    category:'Time' },
+    { serbian:'jesen',         english:'autumn / fall',             category:'Time' },
+    { serbian:'zima',          english:'winter',                    category:'Time' },
+    // ── COLORS ────────────────────────────────────────────────────────────
+    { serbian:'crvena',        english:'red',                       category:'Colors' },
+    { serbian:'plava',         english:'blue',                      category:'Colors' },
+    { serbian:'zelena',        english:'green',                     category:'Colors' },
+    { serbian:'žuta',          english:'yellow',                    category:'Colors' },
+    { serbian:'narandžasta',   english:'orange',                    category:'Colors' },
+    { serbian:'ljubičasta',    english:'purple',                    category:'Colors' },
+    { serbian:'crna',          english:'black',                     category:'Colors' },
+    { serbian:'bela',          english:'white',                     category:'Colors' },
+    { serbian:'siva',          english:'gray',                      category:'Colors' },
+    { serbian:'smeđa',         english:'brown',                     category:'Colors' },
+    { serbian:'roze',          english:'pink',                      category:'Colors' },
+    // ── BODY ──────────────────────────────────────────────────────────────
+    { serbian:'glava',         english:'head',                      category:'Body' },
+    { serbian:'lice',          english:'face',                      category:'Body' },
+    { serbian:'oko',           english:'eye',                       category:'Body' },
+    { serbian:'uho',           english:'ear',                       category:'Body' },
+    { serbian:'nos',           english:'nose',                      category:'Body' },
+    { serbian:'usta',          english:'mouth',                     category:'Body' },
+    { serbian:'zub',           english:'tooth',                     category:'Body' },
+    { serbian:'ruka',          english:'hand / arm',                category:'Body' },
+    { serbian:'noga',          english:'leg / foot',                category:'Body' },
+    { serbian:'srce',          english:'heart',                     category:'Body' },
+    { serbian:'stomak',        english:'stomach',                   category:'Body' },
+    { serbian:'leđa',          english:'back',                      category:'Body' },
+    { serbian:'kosa',          english:'hair',                      category:'Body' },
+    { serbian:'prst',          english:'finger / toe',              category:'Body' },
+    { serbian:'koža',          english:'skin',                      category:'Body' },
+    // ── HOME ──────────────────────────────────────────────────────────────
+    { serbian:'soba',          english:'room',                      category:'Home' },
+    { serbian:'kuhinja',       english:'kitchen',                   category:'Home' },
+    { serbian:'kupatilo',      english:'bathroom',                  category:'Home' },
+    { serbian:'spavaća soba',  english:'bedroom',                   category:'Home' },
+    { serbian:'dnevna soba',   english:'living room',               category:'Home' },
+    { serbian:'sto',           english:'table',                     category:'Home' },
+    { serbian:'stolica',       english:'chair',                     category:'Home' },
+    { serbian:'krevet',        english:'bed',                       category:'Home' },
+    { serbian:'vrata',         english:'door',                      category:'Home' },
+    { serbian:'prozor',        english:'window',                    category:'Home' },
+    { serbian:'pod',           english:'floor',                     category:'Home' },
+    { serbian:'zid',           english:'wall',                      category:'Home' },
+    { serbian:'plafon',        english:'ceiling',                   category:'Home' },
+    { serbian:'lampa',         english:'lamp',                      category:'Home' },
+    { serbian:'frižider',      english:'refrigerator',              category:'Home' },
+    { serbian:'ogledalo',      english:'mirror',                    category:'Home' },
+    { serbian:'šporet',        english:'stove / cooker',            category:'Home' },
+    // ── VERBS ─────────────────────────────────────────────────────────────
+    { serbian:'biti',          english:'to be',                     category:'Verbs' },
+    { serbian:'imati',         english:'to have',                   category:'Verbs' },
+    { serbian:'ići',           english:'to go',                     category:'Verbs' },
+    { serbian:'doći',          english:'to come',                   category:'Verbs' },
+    { serbian:'videti',        english:'to see',                    category:'Verbs' },
+    { serbian:'jesti',         english:'to eat',                    category:'Verbs' },
+    { serbian:'piti',          english:'to drink',                  category:'Verbs' },
+    { serbian:'govoriti',      english:'to speak / to talk',        category:'Verbs' },
+    { serbian:'razumeti',      english:'to understand',             category:'Verbs' },
+    { serbian:'čuti',          english:'to hear',                   category:'Verbs' },
+    { serbian:'znati',         english:'to know',                   category:'Verbs' },
+    { serbian:'moći',          english:'can / to be able to',       category:'Verbs' },
+    { serbian:'hteti',         english:'to want',                   category:'Verbs' },
+    { serbian:'voleti',        english:'to love / to like',         category:'Verbs' },
+    { serbian:'raditi',        english:'to work / to do',           category:'Verbs' },
+    { serbian:'živeti',        english:'to live',                   category:'Verbs' },
+    { serbian:'čitati',        english:'to read',                   category:'Verbs' },
+    { serbian:'pisati',        english:'to write',                  category:'Verbs' },
+    { serbian:'spavati',       english:'to sleep',                  category:'Verbs' },
+    { serbian:'kupiti',        english:'to buy',                    category:'Verbs' },
+    { serbian:'tražiti',       english:'to look for / to ask for',  category:'Verbs' },
+    { serbian:'dati',          english:'to give',                   category:'Verbs' },
+    // ── ADJECTIVES ────────────────────────────────────────────────────────
+    { serbian:'dobar',         english:'good',                      category:'Adjectives' },
+    { serbian:'loš',           english:'bad',                       category:'Adjectives' },
+    { serbian:'velik',         english:'big / large',               category:'Adjectives' },
+    { serbian:'mali',          english:'small / little',            category:'Adjectives' },
+    { serbian:'nov',           english:'new',                       category:'Adjectives' },
+    { serbian:'star',          english:'old',                       category:'Adjectives' },
+    { serbian:'lep',           english:'beautiful / nice',          category:'Adjectives' },
+    { serbian:'brz',           english:'fast / quick',              category:'Adjectives' },
+    { serbian:'spor',          english:'slow',                      category:'Adjectives' },
+    { serbian:'topao',         english:'warm',                      category:'Adjectives' },
+    { serbian:'hladan',        english:'cold',                      category:'Adjectives' },
+    { serbian:'vruć',          english:'hot',                       category:'Adjectives' },
+    { serbian:'težak',         english:'heavy / difficult',         category:'Adjectives' },
+    { serbian:'lak',           english:'light / easy',              category:'Adjectives' },
+    { serbian:'skup',          english:'expensive',                 category:'Adjectives' },
+    { serbian:'jeftin',        english:'cheap',                     category:'Adjectives' },
+    { serbian:'srećan',        english:'happy',                     category:'Adjectives' },
+    { serbian:'tužan',         english:'sad',                       category:'Adjectives' },
+    { serbian:'gladan',        english:'hungry',                    category:'Adjectives' },
+    { serbian:'žedan',         english:'thirsty',                   category:'Adjectives' },
+    { serbian:'jak',           english:'strong',                    category:'Adjectives' },
+    { serbian:'slab',          english:'weak',                      category:'Adjectives' },
+    // ── PREPOSITIONS ──────────────────────────────────────────────────────
+    { serbian:'u',       english:'in / into',              category:'Prepositions', note:'motion → + Accusative\nidem u školu  (I go to school)\n\nposition → + Locative\nživim u gradu  (I live in the city)' },
+    { serbian:'na',      english:'on / onto / at',         category:'Prepositions', note:'motion → + Accusative\nstaviću na sto  (I will put it on the table)\n\nposition → + Locative\nknjiga je na stolu  (the book is on the table)' },
+    { serbian:'od',      english:'from / of',              category:'Prepositions', note:'+ Genitive\nod majke  (from mother)' },
+    { serbian:'do',      english:'to / until / up to',     category:'Prepositions', note:'+ Genitive\ndo škole  (to school / until school)' },
+    { serbian:'iz',      english:'from / out of',          category:'Prepositions', note:'+ Genitive\niz Beograda  (from Belgrade)' },
+    { serbian:'za',      english:'for / behind',           category:'Prepositions', note:'purpose → + Accusative\nkupujem za tebe  (I am buying for you)\n\nbehind → + Instrumental\nza stolom  (behind the table)' },
+    { serbian:'sa',      english:'with / off of',          category:'Prepositions', note:'together → + Instrumental\nsa prijateljem  (with a friend)\n\nfrom off → + Genitive\nsa stola  (off the table)' },
+    { serbian:'kod',     english:'at / by / near',         category:'Prepositions', note:'+ Genitive\nkod kuće  (at home)' },
+    { serbian:'bez',     english:'without',                category:'Prepositions', note:'+ Genitive\nbez vode  (without water)' },
+    { serbian:'kroz',    english:'through',                category:'Prepositions', note:'+ Accusative\nkroz šumu  (through the forest)' },
+    { serbian:'prema',   english:'toward / according to',  category:'Prepositions', note:'+ Dative\nprema gradu  (toward the city)' },
+    { serbian:'između',  english:'between',                category:'Prepositions', note:'+ Genitive\nizmeđu kuća  (between the houses)' },
+    { serbian:'pored',   english:'next to / beside',       category:'Prepositions', note:'+ Genitive\npored reke  (beside the river)' },
+    { serbian:'ispred',  english:'in front of',            category:'Prepositions', note:'+ Genitive\nispred škole  (in front of the school)' },
+    { serbian:'iza',     english:'behind',                 category:'Prepositions', note:'+ Genitive\niza zgrade  (behind the building)' },
+    { serbian:'iznad',   english:'above / over',           category:'Prepositions', note:'+ Genitive\niznad grada  (above the city)' },
+    { serbian:'ispod',   english:'under / below',          category:'Prepositions', note:'+ Genitive\nispod mosta  (below the bridge)' },
+    { serbian:'oko',     english:'around / about (time)',  category:'Prepositions', note:'+ Genitive\noko stola  (around the table)' },
+    { serbian:'zbog',    english:'because of / due to',    category:'Prepositions', note:'+ Genitive\nzbog kiše  (because of the rain)' },
+    { serbian:'posle',   english:'after',                  category:'Prepositions', note:'+ Genitive\nposle ručka  (after lunch)' },
+    { serbian:'pre',     english:'before',                 category:'Prepositions', note:'+ Genitive\npre večere  (before dinner)' },
+    { serbian:'tokom',   english:'during',                 category:'Prepositions', note:'+ Genitive\ntokom leta  (during summer)' },
+    { serbian:'po',      english:'around / along / per',   category:'Prepositions', note:'+ Dative\nšetam po gradu  (I walk around town)' },
+    { serbian:'nad',     english:'above / over (dominant)', category:'Prepositions', note:'+ Instrumental\nnad selom  (above the village)' },
+    { serbian:'pod',     english:'under / below (static)', category:'Prepositions', note:'+ Instrumental\npod stolom  (under the table)' },
+    { serbian:'pred',    english:'in front of / before',   category:'Prepositions', note:'static → + Instrumental\npred kućom  (in front of the house)\n\nmotion → + Accusative\npred kuću  (toward the front of the house)' },
+    { serbian:'pri',     english:'at / near / upon',       category:'Prepositions', note:'+ Locative\npri kraju  (near the end)' },
+    { serbian:'o',       english:'about / concerning',     category:'Prepositions', note:'+ Locative\npričam o tome  (I talk about that)' },
+    { serbian:'ka',      english:'toward (direction)',     category:'Prepositions', note:'+ Dative\nka moru  (toward the sea)' },
+  ];
+
+  function loadCards() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const ver = localStorage.getItem(STORAGE_KEY + '_v');
+    if (!raw || ver !== CARDS_VER) {
+      // Merge: add any new defaults not already present (matched by serbian+category)
+      const existing = raw ? JSON.parse(raw) : [];
+      const merged   = [...existing];
+      DEFAULT_CARDS.forEach(def => {
+        const exists = existing.some(e => e.serbian === def.serbian && e.category === def.category);
+        if (!exists) merged.push(def);
+      });
+      saveCards(merged);
+      localStorage.setItem(STORAGE_KEY + '_v', CARDS_VER);
+      return merged;
+    }
+    return JSON.parse(raw);
+  }
+  function saveCards(c) { localStorage.setItem(STORAGE_KEY, JSON.stringify(c)); }
+
+  // ═══════════════════════════════════════════════════
+  //  GRAMMAR NOUN STORAGE
+  // ═══════════════════════════════════════════════════
+  const GRAMMAR_KEY = 'serbian_grammar_nouns';
+
+  const DEFAULT_GRAMMAR_NOUNS = [
+    { english:'brother', gender:'masculine', forms:{ nominativ:'brat',   genitiv:'brata',   dativ:'bratu',   akuzativ:'brata',   vokativ:'brate',   instrumental:'bratom',   lokativ:'bratu'   }},
+    { english:'city',    gender:'masculine', forms:{ nominativ:'grad',   genitiv:'grada',   dativ:'gradu',   akuzativ:'grad',    vokativ:'grade',   instrumental:'gradom',   lokativ:'gradu'   }},
+    { english:'man',     gender:'masculine', forms:{ nominativ:'čovek',  genitiv:'čoveka',  dativ:'čoveku',  akuzativ:'čoveka',  vokativ:'čoveče',  instrumental:'čovekom',  lokativ:'čoveku'  }},
+    { english:'dog',     gender:'masculine', forms:{ nominativ:'pas',    genitiv:'psa',     dativ:'psu',     akuzativ:'psa',     vokativ:'pse',     instrumental:'psom',     lokativ:'psu'     }},
+    { english:'son',     gender:'masculine', forms:{ nominativ:'sin',    genitiv:'sina',    dativ:'sinu',    akuzativ:'sina',    vokativ:'sine',    instrumental:'sinom',    lokativ:'sinu'    }},
+    { english:'friend',  gender:'masculine', forms:{ nominativ:'drug',   genitiv:'druga',   dativ:'drugu',   akuzativ:'druga',   vokativ:'druže',   instrumental:'drugom',   lokativ:'drugu'   }},
+    { english:'window',  gender:'masculine', forms:{ nominativ:'prozor', genitiv:'prozora', dativ:'prozoru', akuzativ:'prozor',  vokativ:'prozore', instrumental:'prozorom', lokativ:'prozoru' }},
+    { english:'woman',   gender:'feminine',  forms:{ nominativ:'žena',   genitiv:'žene',    dativ:'ženi',    akuzativ:'ženu',    vokativ:'ženo',    instrumental:'ženom',    lokativ:'ženi'    }},
+    { english:'sister',  gender:'feminine',  forms:{ nominativ:'sestra', genitiv:'sestre',  dativ:'sestri',  akuzativ:'sestru',  vokativ:'sestro',  instrumental:'sestrom',  lokativ:'sestri'  }},
+    { english:'mother',  gender:'feminine',  forms:{ nominativ:'majka',  genitiv:'majke',   dativ:'majci',   akuzativ:'majku',   vokativ:'majko',   instrumental:'majkom',   lokativ:'majci'   }},
+    { english:'book',    gender:'feminine',  forms:{ nominativ:'knjiga', genitiv:'knjige',  dativ:'knjizi',  akuzativ:'knjigu',  vokativ:'knjigo',  instrumental:'knjigom',  lokativ:'knjizi'  }},
+    { english:'house',   gender:'feminine',  forms:{ nominativ:'kuća',   genitiv:'kuće',    dativ:'kući',    akuzativ:'kuću',    vokativ:'kućo',    instrumental:'kućom',    lokativ:'kući'    }},
+    { english:'water',   gender:'feminine',  forms:{ nominativ:'voda',   genitiv:'vode',    dativ:'vodi',    akuzativ:'vodu',    vokativ:'vodo',    instrumental:'vodom',    lokativ:'vodi'    }},
+    { english:'river',   gender:'feminine',  forms:{ nominativ:'reka',   genitiv:'reke',    dativ:'reci',    akuzativ:'reku',    vokativ:'reko',    instrumental:'rekom',    lokativ:'reci'    }},
+    { english:'school',  gender:'feminine',  forms:{ nominativ:'škola',  genitiv:'škole',   dativ:'školi',   akuzativ:'školu',   vokativ:'školo',   instrumental:'školom',   lokativ:'školi'   }},
+    { english:'village', gender:'neuter',    forms:{ nominativ:'selo',   genitiv:'sela',    dativ:'selu',    akuzativ:'selo',    vokativ:'selo',    instrumental:'selom',    lokativ:'selu'    }},
+    { english:'sea',     gender:'neuter',    forms:{ nominativ:'more',   genitiv:'mora',    dativ:'moru',    akuzativ:'more',    vokativ:'more',    instrumental:'morem',    lokativ:'moru'    }},
+    { english:'child',   gender:'neuter',    forms:{ nominativ:'dete',   genitiv:'deteta',  dativ:'detetu',  akuzativ:'dete',    vokativ:'dete',    instrumental:'detetom',  lokativ:'detetu'  }},
+    { english:'name',    gender:'neuter',    forms:{ nominativ:'ime',    genitiv:'imena',   dativ:'imenu',   akuzativ:'ime',     vokativ:'ime',     instrumental:'imenom',   lokativ:'imenu'   }},
+    { english:'sun',     gender:'neuter',    forms:{ nominativ:'sunce',  genitiv:'sunca',   dativ:'suncu',   akuzativ:'sunce',   vokativ:'sunce',   instrumental:'suncem',   lokativ:'suncu'   }},
+  ];
+
+  function loadGrammarNouns() {
+    const raw = localStorage.getItem(GRAMMAR_KEY);
+    if (!raw) { saveGrammarNouns(DEFAULT_GRAMMAR_NOUNS); return [...DEFAULT_GRAMMAR_NOUNS]; }
+    return JSON.parse(raw);
+  }
+  function saveGrammarNouns(n) { localStorage.setItem(GRAMMAR_KEY, JSON.stringify(n)); }
+
+  // ═══════════════════════════════════════════════════
+  //  STATE
+  // ═══════════════════════════════════════════════════
+  let groups       = loadGroups();
+  let cards        = loadCards();
+  let grammarNouns = loadGrammarNouns();
+
+  // Study state
+  let deck              = [];
+  let index             = 0;
+  let direction         = 'sr';
+  let activeStudyGroups = new Set([...groups, '']); // '' = uncategorized
+
+  // Grammar state
+  let gIndex       = 0;
+  let activeCases  = new Set(CASES.map(c => c.key));
+  let gScore       = { correct: 0, total: 0 };
+  let gScoredNoun  = false;
+
+  // ═══════════════════════════════════════════════════
+  //  VIEW SWITCHER
+  // ═══════════════════════════════════════════════════
+  function showView(view) {
+    document.getElementById('study-view').style.display   = view === 'study'   ? 'flex' : 'none';
+    document.getElementById('grammar-view').style.display = view === 'grammar' ? 'flex' : 'none';
+    document.getElementById('manage-view').style.display  = view === 'manage'  ? 'flex' : 'none';
+    ['study','grammar','manage'].forEach(v =>
+      document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
+    );
+    if (view === 'study')   renderStudy();
+    if (view === 'grammar') renderGrammarView();
+    if (view === 'manage')  renderManage();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  STUDY
+  // ═══════════════════════════════════════════════════
+  function buildDeck() {
+    const hasUncategorized = cards.some(c => !c.category);
+    deck = cards.reduce((acc, card, i) => {
+      const g = card.category || '';
+      if (activeStudyGroups.has(g)) acc.push(i);
+      return acc;
+    }, []);
+    index = 0;
+  }
+
+  function renderStudy() {
+    renderStudyGroupFilter();
+    buildDeck();
+
+    const has = deck.length > 0;
+    document.getElementById('scene').style.display         = has ? 'block' : 'none';
+    document.getElementById('progress').style.display      = has ? 'block' : 'none';
+    document.querySelector('.study-controls').style.display = has ? 'flex'  : 'none';
+    document.getElementById('empty-study').style.display   = has ? 'none'  : 'block';
+    if (has) showCard();
+  }
+
+  function renderStudyGroupFilter() {
+    const container = document.getElementById('study-group-toggles');
+    container.innerHTML = '';
+
+    const hasUncategorized = cards.some(c => !c.category);
+    const allPills = [...groups, ...(hasUncategorized ? [''] : [])];
+
+    if (allPills.length === 0) {
+      document.getElementById('group-filter-bar').style.display = 'none';
+      return;
+    }
+    document.getElementById('group-filter-bar').style.display = 'flex';
+
+    allPills.forEach((g, i) => {
+      const color = getGroupColor(g);
+      const btn = document.createElement('button');
+      btn.className = 'group-pill' + (activeStudyGroups.has(g) ? ' active' : '');
+      btn.textContent = g || 'Uncategorized';
+      btn.style.setProperty('--gc', color);
+      btn.onclick = () => {
+        if (activeStudyGroups.has(g)) {
+          activeStudyGroups.delete(g);
+          btn.classList.remove('active');
+        } else {
+          activeStudyGroups.add(g);
+          btn.classList.add('active');
+        }
+        buildDeck();
+        const has = deck.length > 0;
+        document.getElementById('scene').style.display         = has ? 'block' : 'none';
+        document.getElementById('progress').style.display      = has ? 'block' : 'none';
+        document.querySelector('.study-controls').style.display = has ? 'flex'  : 'none';
+        document.getElementById('empty-study').style.display   = has ? 'none'  : 'block';
+        if (has) showCard();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  function selectAllStudyGroups() {
+    const hasUncategorized = cards.some(c => !c.category);
+    activeStudyGroups = new Set([...groups, ...(hasUncategorized ? [''] : [])]);
+    renderStudy();
+  }
+
+  function clearAllStudyGroups() {
+    activeStudyGroups = new Set();
+    renderStudy();
+  }
+
+  function showCard() {
+    const card = cards[deck[index]];
+    const flipped = direction === 'en';
+    document.getElementById('front-label').textContent   = flipped ? 'English' : 'Serbian';
+    document.getElementById('back-label').textContent    = flipped ? 'Serbian' : 'English';
+    document.getElementById('front-word').textContent    = flipped ? card.english : card.serbian;
+    document.getElementById('back-word').textContent     = flipped ? card.serbian : card.english;
+    document.getElementById('back-category').textContent = card.category || '';
+    const noteEl = document.getElementById('back-note');
+    if (card.note) { noteEl.textContent = card.note; noteEl.style.display = 'block'; }
+    else           { noteEl.textContent = '';         noteEl.style.display = 'none';  }
+    document.getElementById('scene').classList.remove('flipped');
+    document.getElementById('progress').textContent = `Card ${index + 1} of ${deck.length}`;
+    document.getElementById('prev-btn').disabled = index === 0;
+    document.getElementById('next-btn').disabled = index === deck.length - 1;
+  }
+
+  function flipCard()  { document.getElementById('scene').classList.toggle('flipped'); }
+  function nextCard()  { if (index < deck.length - 1) { index++; showCard(); } }
+  function prevCard()  { if (index > 0) { index--; showCard(); } }
+
+  function shuffle() {
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    index = 0; showCard();
+  }
+
+  function setDirection(dir) {
+    direction = dir;
+    document.getElementById('dir-sr').classList.toggle('active', dir === 'sr');
+    document.getElementById('dir-en').classList.toggle('active', dir === 'en');
+    showCard();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  GRAMMAR
+  // ═══════════════════════════════════════════════════
+  function renderGrammarView() {
+    buildCaseToggles();
+    renderGrammarNoun();
+  }
+
+  function buildCaseToggles() {
+    const container = document.getElementById('case-toggles');
+    if (container.children.length === CASES.length) return;
+    container.innerHTML = '';
+    CASES.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'case-toggle active';
+      btn.textContent = c.abbr;
+      btn.dataset.key = c.key;
+      btn.dataset.tip = `${c.label} — ${c.hint}`;
+      btn.title = `${c.label} (${c.hint})`;
+      btn.addEventListener('click', () => toggleCase(c.key, btn));
+      container.appendChild(btn);
+    });
+  }
+
+  function toggleCase(key, btn) {
+    if (activeCases.has(key)) {
+      if (activeCases.size === 1) return;
+      activeCases.delete(key);
+      btn.classList.remove('active');
+    } else {
+      activeCases.add(key);
+      btn.classList.add('active');
+    }
+    renderCaseInputs();
+  }
+
+  function renderGrammarNoun() {
+    const has = grammarNouns.length > 0;
+    document.getElementById('g-noun-card').style.display      = has ? 'flex'  : 'none';
+    document.getElementById('case-inputs').style.display      = has ? 'flex'  : 'none';
+    document.querySelector('.grammar-controls').style.display  = has ? 'flex'  : 'none';
+    document.getElementById('empty-grammar').style.display    = has ? 'none'  : 'block';
+    if (!has) return;
+
+    const noun = grammarNouns[gIndex];
+    document.getElementById('g-display-nom').textContent = noun.forms.nominativ;
+    document.getElementById('g-display-en').textContent  = noun.english;
+    document.getElementById('g-progress').textContent    = `Noun ${gIndex + 1} of ${grammarNouns.length}`;
+    document.getElementById('g-prev-btn').disabled = gIndex === 0;
+    document.getElementById('g-next-btn').disabled = gIndex === grammarNouns.length - 1;
+
+    const genderEl = document.getElementById('g-display-gender');
+    genderEl.textContent = noun.gender;
+    genderEl.className   = 'gender-badge ' + { masculine:'gender-m', feminine:'gender-f', neuter:'gender-n' }[noun.gender];
+
+    gScoredNoun = false;
+    renderCaseInputs();
+    updateGScore();
+  }
+
+  function renderCaseInputs() {
+    const container = document.getElementById('case-inputs');
+    container.innerHTML = '';
+    const noun = grammarNouns[gIndex];
+    CASES.forEach(c => {
+      const row = document.createElement('div');
+      row.className = 'case-row' + (activeCases.has(c.key) ? '' : ' hidden');
+      row.id = `g-row-${c.key}`;
+      const form = noun ? noun.forms[c.key] : null;
+      const ex = noun ? c.example(form, noun.english) : null;
+      const exSr = ex ? ex.sr.replace(form, '…') : null;
+      row.innerHTML = `
+        <div class="case-row-main">
+          <span class="case-abbr">${c.abbr}</span>
+          <div class="case-name-col">
+            <span class="case-name-main">${c.label}</span>
+            <span class="case-name-hint">${c.hint}</span>
+          </div>
+          <input class="case-inp" id="g-inp-${c.key}" type="text"
+            placeholder="type the ${c.label.toLowerCase()} form…"
+            autocomplete="off" autocorrect="off" spellcheck="false" />
+          <button class="case-info-btn" onclick="showCaseModal('${c.key}')" title="About the ${c.label}">?</button>
+          <div class="case-feedback" id="g-fb-${c.key}"></div>
+        </div>
+        ${ex ? `<div class="case-example">
+          <span class="ex-arrow">→</span>
+          <span class="ex-sr">${exSr}</span>
+          <span class="ex-sep">—</span>
+          <span class="ex-en">${ex.en}</span>
+        </div>` : ''}
+      `;
+      container.appendChild(row);
+      document.getElementById(`g-inp-${c.key}`).addEventListener('keydown', e => {
+        if (e.key === 'Enter') checkGrammar();
+      });
+    });
+  }
+
+  function normalizeSerbian(str) {
+    return str.toLowerCase()
+      .replace(/č/g, 'c').replace(/ć/g, 'c')
+      .replace(/š/g, 's').replace(/ž/g, 'z')
+      .replace(/đ/g, 'd').replace(/dž/g, 'dz');
+  }
+
+  function checkGrammar() {
+    if (!grammarNouns.length) return;
+    const noun = grammarNouns[gIndex];
+    let correct = 0, total = 0;
+    CASES.forEach(c => {
+      if (!activeCases.has(c.key)) return;
+      const inp = document.getElementById(`g-inp-${c.key}`);
+      const fb  = document.getElementById(`g-fb-${c.key}`);
+      if (!inp) return;
+      const ok = normalizeSerbian(inp.value.trim()) === normalizeSerbian(noun.forms[c.key]);
+      inp.classList.toggle('g-correct',   ok);
+      inp.classList.toggle('g-incorrect', !ok);
+      fb.innerHTML = ok
+        ? `<span class="fb-correct">✓</span>`
+        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${noun.forms[c.key]}</span>`;
+      total++;
+      if (ok) correct++;
+    });
+    if (!gScoredNoun) {
+      gScore.correct += correct;
+      gScore.total   += total;
+      gScoredNoun = true;
+    }
+    updateGScore();
+  }
+
+  function updateGScore() {
+    document.getElementById('g-score-val').textContent = `${gScore.correct} / ${gScore.total}`;
+  }
+
+  function showCaseModal(caseKey) {
+    const caseInfo = CASES.find(c => c.key === caseKey);
+    if (!caseInfo) return;
+    const noun = grammarNouns[gIndex];
+    const ex   = noun ? caseInfo.example(noun.forms[caseKey], noun.english) : null;
+
+    document.getElementById('mc-abbr').textContent = caseInfo.abbr;
+    document.getElementById('mc-name').textContent = caseInfo.label;
+    document.getElementById('mc-hint').textContent = caseInfo.hint;
+    document.getElementById('mc-desc').textContent = caseInfo.description;
+
+    const prepGrid    = document.getElementById('mc-preps');
+    const prepNote    = document.getElementById('mc-prep-note');
+    const prepSection = document.getElementById('mc-prep-section');
+
+    prepGrid.innerHTML = caseInfo.prepositions.map(p =>
+      `<div class="prep-tag">
+        <span class="pt-prep">${p.prep}</span>
+        <span class="pt-meaning">${p.meaning}</span>
+      </div>`
+    ).join('');
+    prepSection.style.display = (caseInfo.prepositions.length > 0 || caseInfo.prepNote) ? 'flex' : 'none';
+    prepNote.textContent  = caseInfo.prepNote;
+    prepNote.style.display = caseInfo.prepNote ? 'block' : 'none';
+
+    const exSection = document.getElementById('mc-ex-section');
+    if (ex) {
+      document.getElementById('mc-ex-sr').textContent = ex.sr;
+      document.getElementById('mc-ex-en').textContent = ex.en;
+      exSection.style.display = 'flex';
+    } else {
+      exSection.style.display = 'none';
+    }
+
+    document.getElementById('case-modal-overlay').classList.add('open');
+  }
+
+  function closeCaseModal() {
+    document.getElementById('case-modal-overlay').classList.remove('open');
+  }
+
+  function gNext() { if (gIndex < grammarNouns.length - 1) { gIndex++; renderGrammarNoun(); } }
+  function gPrev() { if (gIndex > 0) { gIndex--; renderGrammarNoun(); } }
+
+  function shuffleGrammar() {
+    for (let i = grammarNouns.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [grammarNouns[i], grammarNouns[j]] = [grammarNouns[j], grammarNouns[i]];
+    }
+    gIndex = 0;
+    renderGrammarNoun();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  MANAGE — shared
+  // ═══════════════════════════════════════════════════
+  function showManageTab(tab) {
+    document.getElementById('manage-cards').style.display   = tab === 'cards'   ? 'flex' : 'none';
+    document.getElementById('manage-grammar').style.display = tab === 'grammar' ? 'flex' : 'none';
+    document.getElementById('mtab-cards').classList.toggle('active',   tab === 'cards');
+    document.getElementById('mtab-grammar').classList.toggle('active', tab === 'grammar');
+  }
+
+  function renderManage() {
+    renderGroupManager();
+    refreshGroupDropdowns();
+    renderCardList();
+    renderGrammarNounList();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  MANAGE — groups
+  // ═══════════════════════════════════════════════════
+  function renderGroupManager() {
+    document.getElementById('groups-count').textContent = `(${groups.length})`;
+    const list = document.getElementById('group-list-manage');
+    list.innerHTML = '';
+
+    if (groups.length === 0) {
+      list.innerHTML = '<p style="color:#aaa; font-size:0.9rem">No groups yet. Create one above.</p>';
+      return;
+    }
+
+    groups.forEach((g, i) => {
+      const count = cards.filter(c => c.category === g).length;
+      const color = getGroupColor(g);
+      const row = document.createElement('div');
+      row.className = 'group-manage-row';
+      row.innerHTML = `
+        <span class="group-color-dot" style="background:${color}"></span>
+        <span class="group-manage-name">${g}</span>
+        <span class="group-manage-count">${count} card${count !== 1 ? 's' : ''}</span>
+        <button class="del-btn" onclick="deleteGroup(${i})">Delete</button>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  function addGroup() {
+    const name = document.getElementById('inp-group-name').value.trim();
+    if (!name) { alert('Please enter a group name.'); return; }
+    if (groups.includes(name)) { alert(`"${name}" already exists.`); return; }
+    groups.push(name);
+    saveGroups(groups);
+    activeStudyGroups.add(name);
+    document.getElementById('inp-group-name').value = '';
+    renderGroupManager();
+    refreshGroupDropdowns();
+  }
+
+  function deleteGroup(i) {
+    const name  = groups[i];
+    const count = cards.filter(c => c.category === name).length;
+    const msg   = count > 0
+      ? `Delete group "${name}"? The ${count} card${count !== 1 ? 's' : ''} in it will become uncategorized.`
+      : `Delete group "${name}"?`;
+    if (!confirm(msg)) return;
+
+    // Unassign cards
+    cards.forEach(c => { if (c.category === name) c.category = ''; });
+    saveCards(cards);
+
+    groups.splice(i, 1);
+    saveGroups(groups);
+    activeStudyGroups.delete(name);
+
+    renderGroupManager();
+    refreshGroupDropdowns();
+    renderCardList();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  MANAGE — flashcards
+  // ═══════════════════════════════════════════════════
+  function refreshGroupDropdowns() {
+    // "Add card" group select
+    const addSel = document.getElementById('inp-group');
+    const prevAdd = addSel.value;
+    addSel.innerHTML = '<option value="">— Uncategorized —</option>' +
+      groups.map(g => `<option value="${g}">${g}</option>`).join('');
+    if (prevAdd && groups.includes(prevAdd)) addSel.value = prevAdd;
+
+    // Filter group select
+    const filterSel = document.getElementById('filter-group');
+    const prevFilter = filterSel.value;
+    filterSel.innerHTML = '<option value="">All groups</option>' +
+      groups.map(g => `<option value="${g}">${g}</option>`).join('');
+    const hasUncategorized = cards.some(c => !c.category);
+    if (hasUncategorized) filterSel.innerHTML += '<option value="">Uncategorized</option>';
+    filterSel.value = prevFilter;
+  }
+
+  function renderCardList() {
+    const filterVal = document.getElementById('filter-group').value;
+    // Re-build filter dropdown safely
+    const filterSel = document.getElementById('filter-group');
+    const currentFilter = filterSel.value;
+
+    const filtered = filterVal === '' && filterSel.selectedIndex > 0
+      ? cards.filter(c => !c.category)               // "Uncategorized" option selected
+      : filterVal
+        ? cards.filter(c => c.category === filterVal) // specific group
+        : cards;                                       // all
+
+    document.getElementById('card-count').textContent = `(${filtered.length} of ${cards.length})`;
+
+    const list = document.getElementById('card-list');
+    list.innerHTML = '';
+
+    if (filtered.length === 0) {
+      list.innerHTML = '<p style="color:#aaa; font-size:0.9rem">No cards in this group.</p>';
+      return;
+    }
+
+    filtered.forEach(card => {
+      const globalIdx = cards.indexOf(card);
+      const color = getGroupColor(card.category);
+      const row = document.createElement('div');
+      row.className = 'card-row';
+
+      const groupOptions = '<option value="">— Uncategorized —</option>' +
+        groups.map(g => `<option value="${g}" ${card.category === g ? 'selected' : ''}>${g}</option>`).join('');
+
+      row.innerHTML = `
+        <span class="c-serbian">${card.serbian}</span>
+        <span class="c-english">${card.english}</span>
+        <select class="inline-group-select" onchange="moveCard(${globalIdx}, this.value)">
+          ${groupOptions}
+        </select>
+        <button class="del-btn" onclick="deleteCard(${globalIdx})">Delete</button>
+      `;
+      // Color the select border to match group
+      const sel = row.querySelector('select');
+      sel.style.borderColor = color;
+      list.appendChild(row);
+    });
+  }
+
+  function addCard() {
+    const serbian = document.getElementById('inp-serbian').value.trim();
+    const english = document.getElementById('inp-english').value.trim();
+    const group   = document.getElementById('inp-group').value;
+    if (!serbian || !english) { alert('Please fill in both the Serbian word and English translation.'); return; }
+    cards.push({ serbian, english, category: group });
+    saveCards(cards);
+    deck = [];
+    document.getElementById('inp-serbian').value = '';
+    document.getElementById('inp-english').value = '';
+    document.getElementById('inp-serbian').focus();
+    renderCardList();
+    renderGroupManager();
+  }
+
+  function deleteCard(i) {
+    if (!confirm(`Delete "${cards[i].serbian}"?`)) return;
+    cards.splice(i, 1);
+    saveCards(cards);
+    deck = [];
+    renderCardList();
+    renderGroupManager();
+  }
+
+  function moveCard(i, newGroup) {
+    cards[i].category = newGroup;
+    saveCards(cards);
+    deck = [];
+    renderGroupManager();
+    // Re-render list to keep filter consistent (don't call full renderCardList to avoid resetting scroll)
+    const filterSel = document.getElementById('filter-group');
+    if (filterSel.value && filterSel.value !== newGroup) renderCardList();
+    else renderGroupManager();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  MANAGE — grammar nouns
+  // ═══════════════════════════════════════════════════
+  function renderGrammarNounList() {
+    const list = document.getElementById('gn-list');
+    document.getElementById('gn-count').textContent = `(${grammarNouns.length})`;
+    list.innerHTML = '';
+
+    if (grammarNouns.length === 0) {
+      list.innerHTML = '<p style="color:#aaa">No grammar nouns yet. Add one above!</p>';
+      return;
+    }
+
+    grammarNouns.forEach((noun, i) => {
+      const gc = { masculine:'gender-m', feminine:'gender-f', neuter:'gender-n' }[noun.gender];
+      const row = document.createElement('div');
+      row.className = 'noun-row';
+      row.innerHTML = `
+        <div class="noun-row-top">
+          <span class="nom">${noun.forms.nominativ}</span>
+          <span class="eng">${noun.english}</span>
+          <span class="gender-badge ${gc}">${noun.gender}</span>
+          <button class="del-btn" onclick="deleteGrammarNoun(${i})">Delete</button>
+        </div>
+        <div class="noun-row-forms">
+          ${CASES.map(c => `
+            <div class="noun-form-cell">
+              <span class="noun-form-case">${c.abbr}</span>
+              <span class="noun-form-val">${noun.forms[c.key]}</span>
+            </div>`).join('')}
+        </div>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  function addGrammarNoun() {
+    const english = document.getElementById('gn-english').value.trim();
+    const gender  = document.getElementById('gn-gender').value;
+    const forms   = {};
+    const missing = [];
+    CASES.forEach(c => {
+      const val = document.getElementById(`gn-${c.key}`).value.trim();
+      if (!val) missing.push(c.label);
+      forms[c.key] = val;
+    });
+    if (!english)       { alert('Please enter the English meaning.'); return; }
+    if (missing.length) { alert(`Please fill in: ${missing.join(', ')}`); return; }
+    grammarNouns.push({ english, gender, forms });
+    saveGrammarNouns(grammarNouns);
+    document.getElementById('gn-english').value = '';
+    CASES.forEach(c => document.getElementById(`gn-${c.key}`).value = '');
+    document.getElementById('gn-english').focus();
+    renderGrammarNounList();
+  }
+
+  function deleteGrammarNoun(i) {
+    if (!confirm(`Delete "${grammarNouns[i].forms.nominativ}"?`)) return;
+    grammarNouns.splice(i, 1);
+    saveGrammarNouns(grammarNouns);
+    if (gIndex >= grammarNouns.length) gIndex = Math.max(0, grammarNouns.length - 1);
+    renderGrammarNounList();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  KEYBOARD SHORTCUTS
+  // ═══════════════════════════════════════════════════
+  ['inp-serbian','inp-english'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') addCard();
+    });
+  });
+  document.getElementById('inp-group-name').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addGroup();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeCaseModal(); return; }
+    const studyVisible   = document.getElementById('study-view').style.display   !== 'none';
+    const grammarVisible = document.getElementById('grammar-view').style.display !== 'none';
+    if (studyVisible) {
+      if (e.key === 'ArrowRight') nextCard();
+      if (e.key === 'ArrowLeft')  prevCard();
+      if (e.key === ' ') { e.preventDefault(); flipCard(); }
+    }
+    if (grammarVisible && document.activeElement.tagName !== 'INPUT') {
+      if (e.key === 'ArrowRight') gNext();
+      if (e.key === 'ArrowLeft')  gPrev();
+    }
+  });
+
+  // ═══════════════════════════════════════════════════
+  //  INIT
+  // ═══════════════════════════════════════════════════
+  buildDeck();
+  renderStudy();
+</script>
+
+<!-- ═══════════════ CASE INFO MODAL ═══════════════ -->
+<div id="case-modal-overlay" onclick="closeCaseModal()">
+  <div id="case-modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-case-abbr" id="mc-abbr">N</span>
+        <span class="modal-case-name" id="mc-name">Nominativ</span>
+        <span class="modal-case-hint" id="mc-hint">ko? šta?</span>
+      </div>
+      <button class="modal-close" onclick="closeCaseModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <p class="modal-section-label">Usage</p>
+        <p id="mc-desc"></p>
+      </div>
+      <div class="modal-section" id="mc-prep-section">
+        <p class="modal-section-label">Prepositions</p>
+        <div class="prep-grid" id="mc-preps"></div>
+        <p class="prep-note" id="mc-prep-note"></p>
+      </div>
+      <div class="modal-section" id="mc-ex-section">
+        <p class="modal-section-label">With this word</p>
+        <div class="modal-example-box">
+          <span class="modal-ex-sr" id="mc-ex-sr"></span>
+          <span class="modal-ex-en" id="mc-ex-en"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
