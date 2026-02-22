@@ -415,8 +415,8 @@
     .noun-form-val  { font-size: 0.85rem; }
     .declension-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
 
-    /* ── VERBS ──────────────────────────────────────── */
-    #verbs-view { display: flex; flex-direction: column; gap: 24px; }
+    /* ── VERBS / ADJECTIVES ─────────────────────────── */
+    #verbs-view, #adj-view { display: flex; flex-direction: column; gap: 24px; }
 
     .tense-selector {
       background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
@@ -545,9 +545,10 @@
 <header>
   <h1>Serbian Flashcards</h1>
   <nav>
-    <button class="active" id="nav-study"   onclick="showView('study')">Study</button>
-    <button id="nav-grammar" onclick="showView('grammar')">Grammar</button>
+    <button class="active" id="nav-study"   onclick="showView('study')">Flashcards</button>
+    <button id="nav-grammar" onclick="showView('grammar')">Noun Agreement</button>
     <button id="nav-verbs"   onclick="showView('verbs')">Verbs</button>
+    <button id="nav-adj"     onclick="showView('adj')">Adjectives</button>
     <button id="nav-manage"  onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
@@ -689,13 +690,59 @@
     </div>
   </div>
 
+  <!-- ═══════════════ ADJECTIVES VIEW ═══════════════ -->
+  <div id="adj-view" style="display:none">
+
+    <!-- Gender selector (radio-style) -->
+    <div class="tense-selector">
+      <span class="tense-sel-label">Gender:</span>
+      <div class="tense-btns" id="adj-gender-btns"></div>
+    </div>
+
+    <!-- Case toggles -->
+    <div class="case-selector">
+      <span class="case-sel-label">Practice cases:</span>
+      <div class="case-toggles" id="adj-case-toggles"></div>
+    </div>
+
+    <!-- Progress + score -->
+    <div class="g-header-row">
+      <span id="adj-progress">Adj 1 of 1</span>
+      <span class="g-score-badge">Score: <span id="adj-score-val">0 / 0</span></span>
+    </div>
+
+    <!-- Adjective display card -->
+    <div class="noun-card" id="adj-card">
+      <span class="noun-card-given">Adjective — masc. nom. sg.</span>
+      <span class="noun-card-word"     id="adj-display-base">—</span>
+      <span class="noun-card-cyrillic" id="adj-display-cyrillic"></span>
+      <span class="noun-card-en"       id="adj-display-en">—</span>
+    </div>
+
+    <!-- Case input rows (dynamically generated) -->
+    <div class="case-inputs" id="adj-inputs"></div>
+
+    <!-- Controls -->
+    <div class="grammar-controls">
+      <button class="btn btn-secondary" id="adj-prev-btn" onclick="adjPrev()">← Prev</button>
+      <button class="btn btn-primary"   onclick="checkAdj()">Check Answers</button>
+      <button class="btn btn-secondary" id="adj-next-btn" onclick="adjNext()">Next →</button>
+      <button class="btn btn-secondary" onclick="shuffleAdj()">⇌ Shuffle</button>
+    </div>
+
+    <div id="empty-adj" class="empty-msg" style="display:none">
+      No adjectives available. Add some in <strong>Manage Cards → Adjectives</strong>.
+    </div>
+  </div>
+
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
 
     <div class="manage-tabs">
       <button class="manage-tab-btn active" id="mtab-cards"   onclick="showManageTab('cards')">Flashcards</button>
-      <button class="manage-tab-btn"        id="mtab-grammar" onclick="showManageTab('grammar')">Grammar Nouns</button>
+      <button class="manage-tab-btn"        id="mtab-grammar" onclick="showManageTab('grammar')">Nouns</button>
       <button class="manage-tab-btn"        id="mtab-verbs"   onclick="showManageTab('verbs')">Verbs</button>
+      <button class="manage-tab-btn"        id="mtab-adj"     onclick="showManageTab('adj')">Adjectives</button>
     </div>
 
     <!-- ── Flashcards tab ── -->
@@ -759,7 +806,7 @@
     <!-- ── Grammar Nouns tab ── -->
     <div id="manage-grammar" class="manage-section" style="display:none">
       <div>
-        <p class="section-title">Add a Grammar Noun</p>
+        <p class="section-title">Add a Noun</p>
         <div class="form-row" style="margin-bottom:12px">
           <div class="form-group">
             <label for="gn-english">English meaning</label>
@@ -844,6 +891,62 @@
       <div>
         <p class="section-title">User Verbs <span class="section-count" id="vn-count"></span></p>
         <div class="card-list" id="vn-list"></div>
+      </div>
+    </div>
+
+    <!-- ── Adjectives tab ── -->
+    <div id="manage-adj" class="manage-section" style="display:none">
+      <div>
+        <p class="section-title">Add an Adjective</p>
+        <div class="form-row" style="margin-bottom:12px">
+          <div class="form-group">
+            <label for="an-base">Masc. nom. sg. form</label>
+            <input type="text" id="an-base" placeholder="e.g. dobar" />
+          </div>
+          <div class="form-group">
+            <label for="an-english">English meaning</label>
+            <input type="text" id="an-english" placeholder="e.g. good" />
+          </div>
+        </div>
+
+        <p style="font-size:0.82rem;color:#e94560;font-weight:600;margin-bottom:6px">Masculine</p>
+        <div class="declension-grid" style="margin-bottom:14px">
+          <div class="form-group"><label>N</label><input type="text" id="an-m-nominativ"    placeholder="e.g. dobar"  /></div>
+          <div class="form-group"><label>G</label><input type="text" id="an-m-genitiv"      placeholder="e.g. dobrog" /></div>
+          <div class="form-group"><label>D</label><input type="text" id="an-m-dativ"        placeholder="e.g. dobrom" /></div>
+          <div class="form-group"><label>A</label><input type="text" id="an-m-akuzativ"     placeholder="e.g. dobrog" /></div>
+          <div class="form-group"><label>V</label><input type="text" id="an-m-vokativ"      placeholder="e.g. dobri"  /></div>
+          <div class="form-group"><label>I</label><input type="text" id="an-m-instrumental" placeholder="e.g. dobrim" /></div>
+          <div class="form-group"><label>L</label><input type="text" id="an-m-lokativ"      placeholder="e.g. dobrom" /></div>
+        </div>
+
+        <p style="font-size:0.82rem;color:#e94560;font-weight:600;margin-bottom:6px">Feminine</p>
+        <div class="declension-grid" style="margin-bottom:14px">
+          <div class="form-group"><label>N</label><input type="text" id="an-f-nominativ"    placeholder="e.g. dobra"  /></div>
+          <div class="form-group"><label>G</label><input type="text" id="an-f-genitiv"      placeholder="e.g. dobre"  /></div>
+          <div class="form-group"><label>D</label><input type="text" id="an-f-dativ"        placeholder="e.g. dobroj" /></div>
+          <div class="form-group"><label>A</label><input type="text" id="an-f-akuzativ"     placeholder="e.g. dobru"  /></div>
+          <div class="form-group"><label>V</label><input type="text" id="an-f-vokativ"      placeholder="e.g. dobra"  /></div>
+          <div class="form-group"><label>I</label><input type="text" id="an-f-instrumental" placeholder="e.g. dobrom" /></div>
+          <div class="form-group"><label>L</label><input type="text" id="an-f-lokativ"      placeholder="e.g. dobroj" /></div>
+        </div>
+
+        <p style="font-size:0.82rem;color:#e94560;font-weight:600;margin-bottom:6px">Neuter</p>
+        <div class="declension-grid" style="margin-bottom:16px">
+          <div class="form-group"><label>N</label><input type="text" id="an-n-nominativ"    placeholder="e.g. dobro"  /></div>
+          <div class="form-group"><label>G</label><input type="text" id="an-n-genitiv"      placeholder="e.g. dobrog" /></div>
+          <div class="form-group"><label>D</label><input type="text" id="an-n-dativ"        placeholder="e.g. dobrom" /></div>
+          <div class="form-group"><label>A</label><input type="text" id="an-n-akuzativ"     placeholder="e.g. dobro"  /></div>
+          <div class="form-group"><label>V</label><input type="text" id="an-n-vokativ"      placeholder="e.g. dobro"  /></div>
+          <div class="form-group"><label>I</label><input type="text" id="an-n-instrumental" placeholder="e.g. dobrim" /></div>
+          <div class="form-group"><label>L</label><input type="text" id="an-n-lokativ"      placeholder="e.g. dobrom" /></div>
+        </div>
+
+        <button class="btn btn-primary" onclick="addUserAdj()">Add Adjective</button>
+      </div>
+      <div>
+        <p class="section-title">User Adjectives <span class="section-count" id="an-count"></span></p>
+        <div class="card-list" id="an-list"></div>
       </div>
     </div>
 
@@ -964,6 +1067,388 @@
     { key: 'present', label: 'Present', note: 'Sadašnje' },
     { key: 'past',    label: 'Past',    note: 'Perfekat' },
     { key: 'future',  label: 'Future',  note: 'Futur I' },
+  ];
+
+  const GENDERS = [
+    { key: 'masculine', label: 'Masculine', abbr: 'M' },
+    { key: 'feminine',  label: 'Feminine',  abbr: 'F' },
+    { key: 'neuter',    label: 'Neuter',    abbr: 'N' },
+  ];
+
+  // ═══════════════════════════════════════════════════
+  //  BUILT-IN ADJECTIVES
+  // ═══════════════════════════════════════════════════
+  const ADJECTIVES = [
+    // ── Group 1: Regular hard adjectives ─────────────────────────────────
+    {
+      base: 'dobar', english: 'good',
+      forms: {
+        masculine: { nominativ:'dobar',  genitiv:'dobrog',  dativ:'dobrom',  akuzativ:'dobrog',  vokativ:'dobri',   instrumental:'dobrim',  lokativ:'dobrom'  },
+        feminine:  { nominativ:'dobra',  genitiv:'dobre',   dativ:'dobroj',  akuzativ:'dobru',   vokativ:'dobra',   instrumental:'dobrom',  lokativ:'dobroj'  },
+        neuter:    { nominativ:'dobro',  genitiv:'dobrog',  dativ:'dobrom',  akuzativ:'dobro',   vokativ:'dobro',   instrumental:'dobrim',  lokativ:'dobrom'  },
+      }
+    },
+    {
+      base: 'nov', english: 'new',
+      forms: {
+        masculine: { nominativ:'nov',    genitiv:'novog',   dativ:'novom',   akuzativ:'novog',   vokativ:'novi',    instrumental:'novim',   lokativ:'novom'   },
+        feminine:  { nominativ:'nova',   genitiv:'nove',    dativ:'novoj',   akuzativ:'novu',    vokativ:'nova',    instrumental:'novom',   lokativ:'novoj'   },
+        neuter:    { nominativ:'novo',   genitiv:'novog',   dativ:'novom',   akuzativ:'novo',    vokativ:'novo',    instrumental:'novim',   lokativ:'novom'   },
+      }
+    },
+    {
+      base: 'star', english: 'old',
+      forms: {
+        masculine: { nominativ:'star',   genitiv:'starog',  dativ:'starom',  akuzativ:'starog',  vokativ:'stari',   instrumental:'starim',  lokativ:'starom'  },
+        feminine:  { nominativ:'stara',  genitiv:'stare',   dativ:'staroj',  akuzativ:'staru',   vokativ:'stara',   instrumental:'starom',  lokativ:'staroj'  },
+        neuter:    { nominativ:'staro',  genitiv:'starog',  dativ:'starom',  akuzativ:'staro',   vokativ:'staro',   instrumental:'starim',  lokativ:'starom'  },
+      }
+    },
+    {
+      base: 'lep', english: 'beautiful / nice',
+      forms: {
+        masculine: { nominativ:'lep',    genitiv:'lepog',   dativ:'lepom',   akuzativ:'lepog',   vokativ:'lepi',    instrumental:'lepim',   lokativ:'lepom'   },
+        feminine:  { nominativ:'lepa',   genitiv:'lepe',    dativ:'lepoj',   akuzativ:'lepu',    vokativ:'lepa',    instrumental:'lepom',   lokativ:'lepoj'   },
+        neuter:    { nominativ:'lepo',   genitiv:'lepog',   dativ:'lepom',   akuzativ:'lepo',    vokativ:'lepo',    instrumental:'lepim',   lokativ:'lepom'   },
+      }
+    },
+    {
+      base: 'mali', english: 'small / little',
+      forms: {
+        masculine: { nominativ:'mali',   genitiv:'malog',   dativ:'malom',   akuzativ:'malog',   vokativ:'mali',    instrumental:'malim',   lokativ:'malom'   },
+        feminine:  { nominativ:'mala',   genitiv:'male',    dativ:'maloj',   akuzativ:'malu',    vokativ:'mala',    instrumental:'malom',   lokativ:'maloj'   },
+        neuter:    { nominativ:'malo',   genitiv:'malog',   dativ:'malom',   akuzativ:'malo',    vokativ:'malo',    instrumental:'malim',   lokativ:'malom'   },
+      }
+    },
+    {
+      base: 'velik', english: 'big / large',
+      forms: {
+        masculine: { nominativ:'velik',  genitiv:'velikog', dativ:'velikom', akuzativ:'velikog', vokativ:'veliki',  instrumental:'velikim', lokativ:'velikom' },
+        feminine:  { nominativ:'velika', genitiv:'velike',  dativ:'velikoj', akuzativ:'veliku',  vokativ:'velika',  instrumental:'velikom', lokativ:'velikoj' },
+        neuter:    { nominativ:'veliko', genitiv:'velikog', dativ:'velikom', akuzativ:'veliko',  vokativ:'veliko',  instrumental:'velikim', lokativ:'velikom' },
+      }
+    },
+    {
+      base: 'mlad', english: 'young',
+      forms: {
+        masculine: { nominativ:'mlad',   genitiv:'mladog',  dativ:'mladom',  akuzativ:'mladog',  vokativ:'mladi',   instrumental:'mladim',  lokativ:'mladom'  },
+        feminine:  { nominativ:'mlada',  genitiv:'mlade',   dativ:'mladoj',  akuzativ:'mladu',   vokativ:'mlada',   instrumental:'mladom',  lokativ:'mladoj'  },
+        neuter:    { nominativ:'mlado',  genitiv:'mladog',  dativ:'mladom',  akuzativ:'mlado',   vokativ:'mlado',   instrumental:'mladim',  lokativ:'mladom'  },
+      }
+    },
+    {
+      base: 'brz', english: 'fast / quick',
+      forms: {
+        masculine: { nominativ:'brz',    genitiv:'brzog',   dativ:'brzom',   akuzativ:'brzog',   vokativ:'brzi',    instrumental:'brzim',   lokativ:'brzom'   },
+        feminine:  { nominativ:'brza',   genitiv:'brze',    dativ:'brzoj',   akuzativ:'brzu',    vokativ:'brza',    instrumental:'brzom',   lokativ:'brzoj'   },
+        neuter:    { nominativ:'brzo',   genitiv:'brzog',   dativ:'brzom',   akuzativ:'brzo',    vokativ:'brzo',    instrumental:'brzim',   lokativ:'brzom'   },
+      }
+    },
+    {
+      base: 'spor', english: 'slow',
+      forms: {
+        masculine: { nominativ:'spor',   genitiv:'sporog',  dativ:'sporom',  akuzativ:'sporog',  vokativ:'spori',   instrumental:'sporim',  lokativ:'sporom'  },
+        feminine:  { nominativ:'spora',  genitiv:'spore',   dativ:'sporoj',  akuzativ:'sporu',   vokativ:'spora',   instrumental:'sporom',  lokativ:'sporoj'  },
+        neuter:    { nominativ:'sporo',  genitiv:'sporog',  dativ:'sporom',  akuzativ:'sporo',   vokativ:'sporo',   instrumental:'sporim',  lokativ:'sporom'  },
+      }
+    },
+    {
+      base: 'jak', english: 'strong',
+      forms: {
+        masculine: { nominativ:'jak',    genitiv:'jakog',   dativ:'jakom',   akuzativ:'jakog',   vokativ:'jaki',    instrumental:'jakim',   lokativ:'jakom'   },
+        feminine:  { nominativ:'jaka',   genitiv:'jake',    dativ:'jakoj',   akuzativ:'jaku',    vokativ:'jaka',    instrumental:'jakom',   lokativ:'jakoj'   },
+        neuter:    { nominativ:'jako',   genitiv:'jakog',   dativ:'jakom',   akuzativ:'jako',    vokativ:'jako',    instrumental:'jakim',   lokativ:'jakom'   },
+      }
+    },
+    {
+      base: 'slab', english: 'weak',
+      forms: {
+        masculine: { nominativ:'slab',   genitiv:'slabog',  dativ:'slabom',  akuzativ:'slabog',  vokativ:'slabi',   instrumental:'slabim',  lokativ:'slabom'  },
+        feminine:  { nominativ:'slaba',  genitiv:'slabe',   dativ:'slaboj',  akuzativ:'slabu',   vokativ:'slaba',   instrumental:'slabom',  lokativ:'slaboj'  },
+        neuter:    { nominativ:'slabo',  genitiv:'slabog',  dativ:'slabom',  akuzativ:'slabo',   vokativ:'slabo',   instrumental:'slabim',  lokativ:'slabom'  },
+      }
+    },
+    {
+      base: 'pun', english: 'full',
+      forms: {
+        masculine: { nominativ:'pun',    genitiv:'punog',   dativ:'punom',   akuzativ:'punog',   vokativ:'puni',    instrumental:'punim',   lokativ:'punom'   },
+        feminine:  { nominativ:'puna',   genitiv:'pune',    dativ:'punoj',   akuzativ:'punu',    vokativ:'puna',    instrumental:'punom',   lokativ:'punoj'   },
+        neuter:    { nominativ:'puno',   genitiv:'punog',   dativ:'punom',   akuzativ:'puno',    vokativ:'puno',    instrumental:'punim',   lokativ:'punom'   },
+      }
+    },
+    {
+      base: 'crn', english: 'black',
+      forms: {
+        masculine: { nominativ:'crn',    genitiv:'crnog',   dativ:'crnom',   akuzativ:'crnog',   vokativ:'crni',    instrumental:'crnim',   lokativ:'crnom'   },
+        feminine:  { nominativ:'crna',   genitiv:'crne',    dativ:'crnoj',   akuzativ:'crnu',    vokativ:'crna',    instrumental:'crnom',   lokativ:'crnoj'   },
+        neuter:    { nominativ:'crno',   genitiv:'crnog',   dativ:'crnom',   akuzativ:'crno',    vokativ:'crno',    instrumental:'crnim',   lokativ:'crnom'   },
+      }
+    },
+    {
+      base: 'plav', english: 'blue',
+      forms: {
+        masculine: { nominativ:'plav',   genitiv:'plavog',  dativ:'plavom',  akuzativ:'plavog',  vokativ:'plavi',   instrumental:'plavim',  lokativ:'plavom'  },
+        feminine:  { nominativ:'plava',  genitiv:'plave',   dativ:'plavoj',  akuzativ:'plavu',   vokativ:'plava',   instrumental:'plavom',  lokativ:'plavoj'  },
+        neuter:    { nominativ:'plavo',  genitiv:'plavog',  dativ:'plavom',  akuzativ:'plavo',   vokativ:'plavo',   instrumental:'plavim',  lokativ:'plavom'  },
+      }
+    },
+    {
+      base: 'crven', english: 'red',
+      forms: {
+        masculine: { nominativ:'crven',  genitiv:'crvenog', dativ:'crvenom', akuzativ:'crvenog', vokativ:'crveni',  instrumental:'crvenim', lokativ:'crvenom' },
+        feminine:  { nominativ:'crvena', genitiv:'crvene',  dativ:'crvenoj', akuzativ:'crvenu',  vokativ:'crvena',  instrumental:'crvenom', lokativ:'crvenoj' },
+        neuter:    { nominativ:'crveno', genitiv:'crvenog', dativ:'crvenom', akuzativ:'crveno',  vokativ:'crveno',  instrumental:'crvenim', lokativ:'crvenom' },
+      }
+    },
+    {
+      base: 'zelen', english: 'green',
+      forms: {
+        masculine: { nominativ:'zelen',  genitiv:'zelenog', dativ:'zelenom', akuzativ:'zelenog', vokativ:'zeleni',  instrumental:'zelenim', lokativ:'zelenom' },
+        feminine:  { nominativ:'zelena', genitiv:'zelene',  dativ:'zelenoj', akuzativ:'zelenu',  vokativ:'zelena',  instrumental:'zelenom', lokativ:'zelenoj' },
+        neuter:    { nominativ:'zeleno', genitiv:'zelenog', dativ:'zelenom', akuzativ:'zeleno',  vokativ:'zeleno',  instrumental:'zelenim', lokativ:'zelenom' },
+      }
+    },
+    {
+      base: 'žut', english: 'yellow',
+      forms: {
+        masculine: { nominativ:'žut',    genitiv:'žutog',   dativ:'žutom',   akuzativ:'žutog',   vokativ:'žuti',    instrumental:'žutim',   lokativ:'žutom'   },
+        feminine:  { nominativ:'žuta',   genitiv:'žute',    dativ:'žutoj',   akuzativ:'žutu',    vokativ:'žuta',    instrumental:'žutom',   lokativ:'žutoj'   },
+        neuter:    { nominativ:'žuto',   genitiv:'žutog',   dativ:'žutom',   akuzativ:'žuto',    vokativ:'žuto',    instrumental:'žutim',   lokativ:'žutom'   },
+      }
+    },
+    {
+      base: 'siv', english: 'gray',
+      forms: {
+        masculine: { nominativ:'siv',    genitiv:'sivog',   dativ:'sivom',   akuzativ:'sivog',   vokativ:'sivi',    instrumental:'sivim',   lokativ:'sivom'   },
+        feminine:  { nominativ:'siva',   genitiv:'sive',    dativ:'sivoj',   akuzativ:'sivu',    vokativ:'siva',    instrumental:'sivom',   lokativ:'sivoj'   },
+        neuter:    { nominativ:'sivo',   genitiv:'sivog',   dativ:'sivom',   akuzativ:'sivo',    vokativ:'sivo',    instrumental:'sivim',   lokativ:'sivom'   },
+      }
+    },
+    {
+      base: 'zdrav', english: 'healthy',
+      forms: {
+        masculine: { nominativ:'zdrav',  genitiv:'zdravog', dativ:'zdravom', akuzativ:'zdravog', vokativ:'zdravi',  instrumental:'zdravim', lokativ:'zdravom' },
+        feminine:  { nominativ:'zdrava', genitiv:'zdrave',  dativ:'zdravoj', akuzativ:'zdravu',  vokativ:'zdrava',  instrumental:'zdravom', lokativ:'zdravoj' },
+        neuter:    { nominativ:'zdravo', genitiv:'zdravog', dativ:'zdravom', akuzativ:'zdravo',  vokativ:'zdravo',  instrumental:'zdravim', lokativ:'zdravom' },
+      }
+    },
+    {
+      base: 'lak', english: 'light / easy',
+      forms: {
+        masculine: { nominativ:'lak',    genitiv:'lakog',   dativ:'lakom',   akuzativ:'lakog',   vokativ:'laki',    instrumental:'lakim',   lokativ:'lakom'   },
+        feminine:  { nominativ:'laka',   genitiv:'lake',    dativ:'lakoj',   akuzativ:'laku',    vokativ:'laka',    instrumental:'lakom',   lokativ:'lakoj'   },
+        neuter:    { nominativ:'lako',   genitiv:'lakog',   dativ:'lakom',   akuzativ:'lako',    vokativ:'lako',    instrumental:'lakim',   lokativ:'lakom'   },
+      }
+    },
+    {
+      base: 'skup', english: 'expensive',
+      forms: {
+        masculine: { nominativ:'skup',   genitiv:'skupog',  dativ:'skupom',  akuzativ:'skupog',  vokativ:'skupi',   instrumental:'skupim',  lokativ:'skupom'  },
+        feminine:  { nominativ:'skupa',  genitiv:'skupe',   dativ:'skupoj',  akuzativ:'skupu',   vokativ:'skupa',   instrumental:'skupom',  lokativ:'skupoj'  },
+        neuter:    { nominativ:'skupo',  genitiv:'skupog',  dativ:'skupom',  akuzativ:'skupo',   vokativ:'skupo',   instrumental:'skupim',  lokativ:'skupom'  },
+      }
+    },
+    {
+      base: 'jeftin', english: 'cheap',
+      forms: {
+        masculine: { nominativ:'jeftin',  genitiv:'jeftinog', dativ:'jeftinom', akuzativ:'jeftinog', vokativ:'jeftini',  instrumental:'jeftinim', lokativ:'jeftinom' },
+        feminine:  { nominativ:'jeftina', genitiv:'jeftine',  dativ:'jeftinoj', akuzativ:'jeftinu',  vokativ:'jeftina',  instrumental:'jeftinom', lokativ:'jeftinoj' },
+        neuter:    { nominativ:'jeftino', genitiv:'jeftinog', dativ:'jeftinom', akuzativ:'jeftino',  vokativ:'jeftino',  instrumental:'jeftinim', lokativ:'jeftinom' },
+      }
+    },
+    {
+      base: 'visok', english: 'tall / high',
+      forms: {
+        masculine: { nominativ:'visok',  genitiv:'visokog', dativ:'visokom', akuzativ:'visokog', vokativ:'visoki',  instrumental:'visokim', lokativ:'visokom' },
+        feminine:  { nominativ:'visoka', genitiv:'visoke',  dativ:'visokoj', akuzativ:'visoku',  vokativ:'visoka',  instrumental:'visokom', lokativ:'visokoj' },
+        neuter:    { nominativ:'visoko', genitiv:'visokog', dativ:'visokom', akuzativ:'visoko',  vokativ:'visoko',  instrumental:'visokim', lokativ:'visokom' },
+      }
+    },
+    {
+      base: 'nizak', english: 'short / low',
+      forms: {
+        masculine: { nominativ:'nizak',  genitiv:'niskog',  dativ:'niskom',  akuzativ:'niskog',  vokativ:'niski',   instrumental:'niskim',  lokativ:'niskom'  },
+        feminine:  { nominativ:'niska',  genitiv:'niske',   dativ:'niskoj',  akuzativ:'nisku',   vokativ:'niska',   instrumental:'niskom',  lokativ:'niskoj'  },
+        neuter:    { nominativ:'nisko',  genitiv:'niskog',  dativ:'niskom',  akuzativ:'nisko',   vokativ:'nisko',   instrumental:'niskim',  lokativ:'niskom'  },
+      }
+    },
+    {
+      base: 'dalek', english: 'far / distant',
+      forms: {
+        masculine: { nominativ:'dalek',  genitiv:'dalekog', dativ:'dalekom', akuzativ:'dalekog', vokativ:'daleki',  instrumental:'dalekim', lokativ:'dalekom' },
+        feminine:  { nominativ:'daleka', genitiv:'daleke',  dativ:'dalekoj', akuzativ:'daleku',  vokativ:'daleka',  instrumental:'dalekom', lokativ:'dalekoj' },
+        neuter:    { nominativ:'daleko', genitiv:'dalekog', dativ:'dalekom', akuzativ:'daleko',  vokativ:'daleko',  instrumental:'dalekim', lokativ:'dalekom' },
+      }
+    },
+    {
+      base: 'blizak', english: 'near / close',
+      forms: {
+        masculine: { nominativ:'blizak', genitiv:'bliskog', dativ:'bliskom', akuzativ:'bliskog', vokativ:'bliski',  instrumental:'bliskim', lokativ:'bliskom' },
+        feminine:  { nominativ:'bliska', genitiv:'bliske',  dativ:'bliskoj', akuzativ:'blisku',  vokativ:'bliska',  instrumental:'bliskom', lokativ:'bliskoj' },
+        neuter:    { nominativ:'blisko', genitiv:'bliskog', dativ:'bliskom', akuzativ:'blisko',  vokativ:'blisko',  instrumental:'bliskim', lokativ:'bliskom' },
+      }
+    },
+    {
+      base: 'poznat', english: 'known / famous',
+      forms: {
+        masculine: { nominativ:'poznat',  genitiv:'poznatog', dativ:'poznatom', akuzativ:'poznatog', vokativ:'poznati',  instrumental:'poznatim', lokativ:'poznatom' },
+        feminine:  { nominativ:'poznata', genitiv:'poznate',  dativ:'poznatoj', akuzativ:'poznatu',  vokativ:'poznata',  instrumental:'poznatom', lokativ:'poznatoj' },
+        neuter:    { nominativ:'poznato', genitiv:'poznatog', dativ:'poznatom', akuzativ:'poznato',  vokativ:'poznato',  instrumental:'poznatim', lokativ:'poznatom' },
+      }
+    },
+    {
+      base: 'otvoren', english: 'open',
+      forms: {
+        masculine: { nominativ:'otvoren',  genitiv:'otvorenog', dativ:'otvorenom', akuzativ:'otvorenog', vokativ:'otvoreni',  instrumental:'otvorenim', lokativ:'otvorenom' },
+        feminine:  { nominativ:'otvorena', genitiv:'otvorene',  dativ:'otvorenoj', akuzativ:'otvorenu',  vokativ:'otvorena',  instrumental:'otvorenom', lokativ:'otvorenoj' },
+        neuter:    { nominativ:'otvoreno', genitiv:'otvorenog', dativ:'otvorenom', akuzativ:'otvoreno',  vokativ:'otvoreno',  instrumental:'otvorenim', lokativ:'otvorenom' },
+      }
+    },
+    {
+      base: 'zatvoren', english: 'closed',
+      forms: {
+        masculine: { nominativ:'zatvoren',  genitiv:'zatvorenog', dativ:'zatvorenom', akuzativ:'zatvorenog', vokativ:'zatvoreni',  instrumental:'zatvorenim', lokativ:'zatvorenom' },
+        feminine:  { nominativ:'zatvorena', genitiv:'zatvorene',  dativ:'zatvorenoj', akuzativ:'zatvorenu',  vokativ:'zatvorena',  instrumental:'zatvorenom', lokativ:'zatvorenoj' },
+        neuter:    { nominativ:'zatvoreno', genitiv:'zatvorenog', dativ:'zatvorenom', akuzativ:'zatvoreno',  vokativ:'zatvoreno',  instrumental:'zatvorenim', lokativ:'zatvorenom' },
+      }
+    },
+    {
+      base: 'zanimljiv', english: 'interesting',
+      forms: {
+        masculine: { nominativ:'zanimljiv',  genitiv:'zanimljivog', dativ:'zanimljivom', akuzativ:'zanimljivog', vokativ:'zanimljivi',  instrumental:'zanimljivim', lokativ:'zanimljivom' },
+        feminine:  { nominativ:'zanimljiva', genitiv:'zanimljive',  dativ:'zanimljivoj', akuzativ:'zanimljivu',  vokativ:'zanimljiva',  instrumental:'zanimljivom', lokativ:'zanimljivoj' },
+        neuter:    { nominativ:'zanimljivo', genitiv:'zanimljivog', dativ:'zanimljivom', akuzativ:'zanimljivo',  vokativ:'zanimljivo',  instrumental:'zanimljivim', lokativ:'zanimljivom' },
+      }
+    },
+    {
+      base: 'važan', english: 'important',
+      forms: {
+        masculine: { nominativ:'važan',  genitiv:'važnog',  dativ:'važnom',  akuzativ:'važnog',  vokativ:'važni',   instrumental:'važnim',  lokativ:'važnom'  },
+        feminine:  { nominativ:'važna',  genitiv:'važne',   dativ:'važnoj',  akuzativ:'važnu',   vokativ:'važna',   instrumental:'važnom',  lokativ:'važnoj'  },
+        neuter:    { nominativ:'važno',  genitiv:'važnog',  dativ:'važnom',  akuzativ:'važno',   vokativ:'važno',   instrumental:'važnim',  lokativ:'važnom'  },
+      }
+    },
+    {
+      base: 'čist', english: 'clean',
+      forms: {
+        masculine: { nominativ:'čist',   genitiv:'čistog',  dativ:'čistom',  akuzativ:'čistog',  vokativ:'čisti',   instrumental:'čistim',  lokativ:'čistom'  },
+        feminine:  { nominativ:'čista',  genitiv:'čiste',   dativ:'čistoj',  akuzativ:'čistu',   vokativ:'čista',   instrumental:'čistom',  lokativ:'čistoj'  },
+        neuter:    { nominativ:'čisto',  genitiv:'čistog',  dativ:'čistom',  akuzativ:'čisto',   vokativ:'čisto',   instrumental:'čistim',  lokativ:'čistom'  },
+      }
+    },
+    {
+      base: 'prav', english: 'right / correct / straight',
+      forms: {
+        masculine: { nominativ:'prav',   genitiv:'pravog',  dativ:'pravom',  akuzativ:'pravog',  vokativ:'pravi',   instrumental:'pravim',  lokativ:'pravom'  },
+        feminine:  { nominativ:'prava',  genitiv:'prave',   dativ:'pravoj',  akuzativ:'pravu',   vokativ:'prava',   instrumental:'pravom',  lokativ:'pravoj'  },
+        neuter:    { nominativ:'pravo',  genitiv:'pravog',  dativ:'pravom',  akuzativ:'pravo',   vokativ:'pravo',   instrumental:'pravim',  lokativ:'pravom'  },
+      }
+    },
+    // ── Group 2: Adjectives with stem alternation ─────────────────────────
+    {
+      base: 'loš', english: 'bad',
+      forms: {
+        masculine: { nominativ:'loš',    genitiv:'lošeg',   dativ:'lošem',   akuzativ:'lošeg',   vokativ:'loše',    instrumental:'lošim',   lokativ:'lošem'   },
+        feminine:  { nominativ:'loša',   genitiv:'loše',    dativ:'lošoj',   akuzativ:'lošu',    vokativ:'loša',    instrumental:'lošom',   lokativ:'lošoj'   },
+        neuter:    { nominativ:'loše',   genitiv:'lošeg',   dativ:'lošem',   akuzativ:'loše',    vokativ:'loše',    instrumental:'lošim',   lokativ:'lošem'   },
+      }
+    },
+    {
+      base: 'hladan', english: 'cold',
+      forms: {
+        masculine: { nominativ:'hladan', genitiv:'hladnog', dativ:'hladnom', akuzativ:'hladnog', vokativ:'hladni',  instrumental:'hladnim', lokativ:'hladnom' },
+        feminine:  { nominativ:'hladna', genitiv:'hladne',  dativ:'hladnoj', akuzativ:'hladnu',  vokativ:'hladna',  instrumental:'hladnom', lokativ:'hladnoj' },
+        neuter:    { nominativ:'hladno', genitiv:'hladnog', dativ:'hladnom', akuzativ:'hladno',  vokativ:'hladno',  instrumental:'hladnim', lokativ:'hladnom' },
+      }
+    },
+    {
+      base: 'topao', english: 'warm',
+      forms: {
+        masculine: { nominativ:'topao',  genitiv:'toplog',  dativ:'toplom',  akuzativ:'toplog',  vokativ:'topli',   instrumental:'toplim',  lokativ:'toplom'  },
+        feminine:  { nominativ:'topla',  genitiv:'tople',   dativ:'toploj',  akuzativ:'toplu',   vokativ:'topla',   instrumental:'toplom',  lokativ:'toploj'  },
+        neuter:    { nominativ:'toplo',  genitiv:'toplog',  dativ:'toplom',  akuzativ:'toplo',   vokativ:'toplo',   instrumental:'toplim',  lokativ:'toplom'  },
+      }
+    },
+    {
+      base: 'beo', english: 'white',
+      forms: {
+        masculine: { nominativ:'beo',    genitiv:'belog',   dativ:'belom',   akuzativ:'belog',   vokativ:'beli',    instrumental:'belim',   lokativ:'belom'   },
+        feminine:  { nominativ:'bela',   genitiv:'bele',    dativ:'beloj',   akuzativ:'belu',    vokativ:'bela',    instrumental:'belom',   lokativ:'beloj'   },
+        neuter:    { nominativ:'belo',   genitiv:'belog',   dativ:'belom',   akuzativ:'belo',    vokativ:'belo',    instrumental:'belim',   lokativ:'belom'   },
+      }
+    },
+    {
+      base: 'vruć', english: 'hot',
+      forms: {
+        masculine: { nominativ:'vruć',   genitiv:'vrućeg',  dativ:'vrućem',  akuzativ:'vrućeg',  vokativ:'vruće',   instrumental:'vrućim',  lokativ:'vrućem'  },
+        feminine:  { nominativ:'vruća',  genitiv:'vruće',   dativ:'vrućoj',  akuzativ:'vruću',   vokativ:'vruća',   instrumental:'vrućom',  lokativ:'vrućoj'  },
+        neuter:    { nominativ:'vruće',  genitiv:'vrućeg',  dativ:'vrućem',  akuzativ:'vruće',   vokativ:'vruće',   instrumental:'vrućim',  lokativ:'vrućem'  },
+      }
+    },
+    {
+      base: 'srećan', english: 'happy',
+      forms: {
+        masculine: { nominativ:'srećan', genitiv:'srećnog', dativ:'srećnom', akuzativ:'srećnog', vokativ:'srećni',  instrumental:'srećnim', lokativ:'srećnom' },
+        feminine:  { nominativ:'srećna', genitiv:'srećne',  dativ:'srećnoj', akuzativ:'srećnu',  vokativ:'srećna',  instrumental:'srećnom', lokativ:'srećnoj' },
+        neuter:    { nominativ:'srećno', genitiv:'srećnog', dativ:'srećnom', akuzativ:'srećno',  vokativ:'srećno',  instrumental:'srećnim', lokativ:'srećnom' },
+      }
+    },
+    {
+      base: 'tužan', english: 'sad',
+      forms: {
+        masculine: { nominativ:'tužan',  genitiv:'tužnog',  dativ:'tužnom',  akuzativ:'tužnog',  vokativ:'tužni',   instrumental:'tužnim',  lokativ:'tužnom'  },
+        feminine:  { nominativ:'tužna',  genitiv:'tužne',   dativ:'tužnoj',  akuzativ:'tužnu',   vokativ:'tužna',   instrumental:'tužnom',  lokativ:'tužnoj'  },
+        neuter:    { nominativ:'tužno',  genitiv:'tužnog',  dativ:'tužnom',  akuzativ:'tužno',   vokativ:'tužno',   instrumental:'tužnim',  lokativ:'tužnom'  },
+      }
+    },
+    {
+      base: 'gladan', english: 'hungry',
+      forms: {
+        masculine: { nominativ:'gladan', genitiv:'gladnog', dativ:'gladnom', akuzativ:'gladnog', vokativ:'gladni',  instrumental:'gladnim', lokativ:'gladnom' },
+        feminine:  { nominativ:'gladna', genitiv:'gladne',  dativ:'gladnoj', akuzativ:'gladnu',  vokativ:'gladna',  instrumental:'gladnom', lokativ:'gladnoj' },
+        neuter:    { nominativ:'gladno', genitiv:'gladnog', dativ:'gladnom', akuzativ:'gladno',  vokativ:'gladno',  instrumental:'gladnim', lokativ:'gladnom' },
+      }
+    },
+    {
+      base: 'žedan', english: 'thirsty',
+      forms: {
+        masculine: { nominativ:'žedan',  genitiv:'žednog',  dativ:'žednom',  akuzativ:'žednog',  vokativ:'žedni',   instrumental:'žednim',  lokativ:'žednom'  },
+        feminine:  { nominativ:'žedna',  genitiv:'žedne',   dativ:'žednoj',  akuzativ:'žednu',   vokativ:'žedna',   instrumental:'žednom',  lokativ:'žednoj'  },
+        neuter:    { nominativ:'žedno',  genitiv:'žednog',  dativ:'žednom',  akuzativ:'žedno',   vokativ:'žedno',   instrumental:'žednim',  lokativ:'žednom'  },
+      }
+    },
+    {
+      base: 'težak', english: 'heavy / difficult',
+      forms: {
+        masculine: { nominativ:'težak',  genitiv:'teškog',  dativ:'teškom',  akuzativ:'teškog',  vokativ:'teški',   instrumental:'teškim',  lokativ:'teškom'  },
+        feminine:  { nominativ:'teška',  genitiv:'teške',   dativ:'teškoj',  akuzativ:'tešku',   vokativ:'teška',   instrumental:'teškom',  lokativ:'teškoj'  },
+        neuter:    { nominativ:'teško',  genitiv:'teškog',  dativ:'teškom',  akuzativ:'teško',   vokativ:'teško',   instrumental:'teškim',  lokativ:'teškom'  },
+      }
+    },
+    {
+      base: 'bolestan', english: 'sick / ill',
+      forms: {
+        masculine: { nominativ:'bolestan', genitiv:'bolesnog', dativ:'bolesnom', akuzativ:'bolesnog', vokativ:'bolesni',  instrumental:'bolesnim', lokativ:'bolesnom' },
+        feminine:  { nominativ:'bolesna',  genitiv:'bolesne',  dativ:'bolesnoj', akuzativ:'bolesnu',  vokativ:'bolesna',  instrumental:'bolesnom', lokativ:'bolesnoj' },
+        neuter:    { nominativ:'bolesno',  genitiv:'bolesnog', dativ:'bolesnom', akuzativ:'bolesno',  vokativ:'bolesno',  instrumental:'bolesnim', lokativ:'bolesnom' },
+      }
+    },
+    {
+      base: 'dosadan', english: 'boring',
+      forms: {
+        masculine: { nominativ:'dosadan', genitiv:'dosadnog', dativ:'dosadnom', akuzativ:'dosadnog', vokativ:'dosadni',  instrumental:'dosadnim', lokativ:'dosadnom' },
+        feminine:  { nominativ:'dosadna', genitiv:'dosadne',  dativ:'dosadnoj', akuzativ:'dosadnu',  vokativ:'dosadna',  instrumental:'dosadnom', lokativ:'dosadnoj' },
+        neuter:    { nominativ:'dosadno', genitiv:'dosadnog', dativ:'dosadnom', akuzativ:'dosadno',  vokativ:'dosadno',  instrumental:'dosadnim', lokativ:'dosadnom' },
+      }
+    },
+    {
+      base: 'prazan', english: 'empty',
+      forms: {
+        masculine: { nominativ:'prazan',  genitiv:'praznog', dativ:'praznom', akuzativ:'praznog', vokativ:'prazni',  instrumental:'praznim', lokativ:'praznom' },
+        feminine:  { nominativ:'prazna',  genitiv:'prazne',  dativ:'praznoj', akuzativ:'praznu',  vokativ:'prazna',  instrumental:'praznom', lokativ:'praznoj' },
+        neuter:    { nominativ:'prazno',  genitiv:'praznog', dativ:'praznom', akuzativ:'prazno',  vokativ:'prazno',  instrumental:'praznim', lokativ:'praznom' },
+      }
+    },
   ];
 
   // ═══════════════════════════════════════════════════
@@ -2134,6 +2619,13 @@
   }
   function saveUserVerbs(v) { localStorage.setItem(VERB_KEY, JSON.stringify(v)); }
 
+  const ADJ_KEY = 'serbian_user_adjectives';
+  function loadUserAdjectives() {
+    const raw = localStorage.getItem(ADJ_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }
+  function saveUserAdjectives(a) { localStorage.setItem(ADJ_KEY, JSON.stringify(a)); }
+
   // ═══════════════════════════════════════════════════
   //  STATE
   // ═══════════════════════════════════════════════════
@@ -2162,6 +2654,15 @@
   let vScore         = { correct: 0, total: 0 };
   let vScoredVerb    = false;
 
+  // Adjective state
+  let userAdjectives = loadUserAdjectives();
+  let allAdjectives  = [];
+  let adjIndex       = 0;
+  let adjGender      = 'masculine';
+  let adjActiveCases = new Set(CASES.map(c => c.key));
+  let adjScore       = { correct: 0, total: 0 };
+  let adjScoredAdj   = false;
+
   // ═══════════════════════════════════════════════════
   //  VIEW SWITCHER
   // ═══════════════════════════════════════════════════
@@ -2169,13 +2670,15 @@
     document.getElementById('study-view').style.display   = view === 'study'   ? 'flex' : 'none';
     document.getElementById('grammar-view').style.display = view === 'grammar' ? 'flex' : 'none';
     document.getElementById('verbs-view').style.display   = view === 'verbs'   ? 'flex' : 'none';
+    document.getElementById('adj-view').style.display     = view === 'adj'     ? 'flex' : 'none';
     document.getElementById('manage-view').style.display  = view === 'manage'  ? 'flex' : 'none';
-    ['study','grammar','verbs','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')   renderStudy();
     if (view === 'grammar') renderGrammarView();
     if (view === 'verbs')   renderVerbView();
+    if (view === 'adj')     renderAdjView();
     if (view === 'manage')  renderManage();
   }
 
@@ -2743,15 +3246,247 @@
   }
 
   // ═══════════════════════════════════════════════════
+  //  ADJECTIVES
+  // ═══════════════════════════════════════════════════
+  function buildAllAdjectives() {
+    allAdjectives = [...ADJECTIVES, ...userAdjectives];
+  }
+
+  function renderAdjView() {
+    buildAllAdjectives();
+    buildAdjGenderBtns();
+    buildAdjCaseToggles();
+    renderAdjCard();
+  }
+
+  function buildAdjGenderBtns() {
+    const container = document.getElementById('adj-gender-btns');
+    if (container.children.length === GENDERS.length) {
+      container.querySelectorAll('.tense-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.key === adjGender);
+      });
+      return;
+    }
+    container.innerHTML = '';
+    GENDERS.forEach(g => {
+      const btn = document.createElement('button');
+      btn.className = 'tense-btn' + (g.key === adjGender ? ' active' : '');
+      btn.textContent = g.label;
+      btn.dataset.key = g.key;
+      btn.addEventListener('click', () => {
+        adjGender = g.key;
+        container.querySelectorAll('.tense-btn').forEach(b => b.classList.toggle('active', b.dataset.key === adjGender));
+        adjScoredAdj = false;
+        renderAdjInputs();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function buildAdjCaseToggles() {
+    const container = document.getElementById('adj-case-toggles');
+    if (container.children.length === CASES.length) return;
+    container.innerHTML = '';
+    CASES.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'case-toggle' + (adjActiveCases.has(c.key) ? ' active' : '');
+      btn.textContent = c.abbr;
+      btn.dataset.key = c.key;
+      btn.title = `${c.label} (${c.hint})`;
+      btn.addEventListener('click', () => {
+        if (adjActiveCases.has(c.key)) {
+          if (adjActiveCases.size === 1) return;
+          adjActiveCases.delete(c.key);
+          btn.classList.remove('active');
+        } else {
+          adjActiveCases.add(c.key);
+          btn.classList.add('active');
+        }
+        renderAdjInputs();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function renderAdjCard() {
+    const has = allAdjectives.length > 0;
+    document.getElementById('adj-card').style.display        = has ? 'flex' : 'none';
+    document.getElementById('adj-inputs').style.display      = has ? 'flex' : 'none';
+    document.querySelector('#adj-view .grammar-controls').style.display = has ? 'flex' : 'none';
+    document.getElementById('empty-adj').style.display       = has ? 'none' : 'block';
+    if (!has) return;
+
+    if (adjIndex >= allAdjectives.length) adjIndex = 0;
+    const adj = allAdjectives[adjIndex];
+    document.getElementById('adj-display-base').textContent     = adj.base;
+    document.getElementById('adj-display-cyrillic').textContent = latinToCyrillic(adj.base);
+    document.getElementById('adj-display-en').textContent       = adj.english;
+    document.getElementById('adj-progress').textContent = `Adj ${adjIndex + 1} of ${allAdjectives.length}`;
+    document.getElementById('adj-prev-btn').disabled = adjIndex === 0;
+    document.getElementById('adj-next-btn').disabled = adjIndex === allAdjectives.length - 1;
+
+    adjScoredAdj = false;
+    renderAdjInputs();
+    updateAdjScore();
+  }
+
+  function renderAdjInputs() {
+    const container = document.getElementById('adj-inputs');
+    container.innerHTML = '';
+    if (!allAdjectives.length) return;
+
+    CASES.forEach(c => {
+      const row = document.createElement('div');
+      row.className = 'case-row' + (adjActiveCases.has(c.key) ? '' : ' hidden');
+      row.id = `adj-row-${c.key}`;
+      row.innerHTML = `
+        <div class="case-row-main">
+          <div class="case-label-col">
+            <button class="case-abbr-btn" onclick="openCaseModal('${c.key}')">${c.abbr}</button>
+            <span class="case-label-full">${c.label}</span>
+            <span class="case-hint">${c.hint}</span>
+          </div>
+          <input class="case-inp" id="adj-inp-${c.key}" type="text"
+            placeholder="${adjGender} form…"
+            autocomplete="off" autocorrect="off" spellcheck="false" />
+          <div class="case-feedback" id="adj-fb-${c.key}"></div>
+        </div>
+      `;
+      container.appendChild(row);
+      document.getElementById(`adj-inp-${c.key}`).addEventListener('keydown', e => {
+        if (e.key === 'Enter') checkAdj();
+      });
+    });
+  }
+
+  function checkAdj() {
+    if (!allAdjectives.length) return;
+    const adj = allAdjectives[adjIndex];
+    let correct = 0, total = 0;
+    CASES.forEach(c => {
+      if (!adjActiveCases.has(c.key)) return;
+      const inp = document.getElementById(`adj-inp-${c.key}`);
+      const fb  = document.getElementById(`adj-fb-${c.key}`);
+      if (!inp) return;
+      const expected = ((adj.forms || {})[adjGender] || {})[c.key] || '';
+      const ok = normalizeSerbian(inp.value.trim()) === normalizeSerbian(expected);
+      inp.classList.toggle('g-correct',   ok);
+      inp.classList.toggle('g-incorrect', !ok);
+      fb.innerHTML = ok
+        ? `<span class="fb-correct">✓</span>`
+        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${expected}<br><span style="color:#74b9ff;font-style:normal">${latinToCyrillic(expected)}</span></span>`;
+      total++;
+      if (ok) correct++;
+    });
+    if (!adjScoredAdj) {
+      adjScore.correct += correct;
+      adjScore.total   += total;
+      adjScoredAdj = true;
+    }
+    updateAdjScore();
+  }
+
+  function updateAdjScore() {
+    document.getElementById('adj-score-val').textContent = `${adjScore.correct} / ${adjScore.total}`;
+  }
+
+  function adjNext() { if (adjIndex < allAdjectives.length - 1) { adjIndex++; renderAdjCard(); } }
+  function adjPrev() { if (adjIndex > 0) { adjIndex--; renderAdjCard(); } }
+
+  function shuffleAdj() {
+    buildAllAdjectives();
+    for (let i = allAdjectives.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allAdjectives[i], allAdjectives[j]] = [allAdjectives[j], allAdjectives[i]];
+    }
+    adjIndex = 0;
+    renderAdjCard();
+  }
+
+  // ─── Manage: user adjective CRUD ────────────────────────────────────────
+  function addUserAdj() {
+    const base    = document.getElementById('an-base').value.trim();
+    const english = document.getElementById('an-english').value.trim();
+    if (!base || !english) { alert('Please fill in the base form and English meaning.'); return; }
+
+    const genders = ['m','f','n'];
+    const genderMap = { m: 'masculine', f: 'feminine', n: 'neuter' };
+    const caseKeys  = CASES.map(c => c.key);
+    const forms = { masculine: {}, feminine: {}, neuter: {} };
+    const missing = [];
+
+    genders.forEach(g => {
+      caseKeys.forEach(k => {
+        const val = document.getElementById(`an-${g}-${k}`).value.trim();
+        if (!val) missing.push(`${genderMap[g]}/${k}`);
+        forms[genderMap[g]][k] = val;
+      });
+    });
+
+    if (missing.length) { alert(`Please fill in: ${missing.slice(0, 5).join(', ')}${missing.length > 5 ? '…' : ''}`); return; }
+
+    userAdjectives.push({ base, english, forms });
+    saveUserAdjectives(userAdjectives);
+    buildAllAdjectives();
+
+    // Clear form
+    document.getElementById('an-base').value    = '';
+    document.getElementById('an-english').value = '';
+    genders.forEach(g => caseKeys.forEach(k => document.getElementById(`an-${g}-${k}`).value = ''));
+    document.getElementById('an-base').focus();
+    renderAdjList();
+  }
+
+  function deleteUserAdj(i) {
+    if (!confirm(`Delete "${userAdjectives[i].base}"?`)) return;
+    userAdjectives.splice(i, 1);
+    saveUserAdjectives(userAdjectives);
+    buildAllAdjectives();
+    if (adjIndex >= allAdjectives.length) adjIndex = Math.max(0, allAdjectives.length - 1);
+    renderAdjList();
+  }
+
+  function renderAdjList() {
+    const list = document.getElementById('an-list');
+    document.getElementById('an-count').textContent = `(${userAdjectives.length})`;
+    list.innerHTML = '';
+    if (userAdjectives.length === 0) {
+      list.innerHTML = '<p style="color:#aaa">No user adjectives yet. Add one above!</p>';
+      return;
+    }
+    userAdjectives.forEach((a, i) => {
+      const row = document.createElement('div');
+      row.className = 'noun-row';
+      row.innerHTML = `
+        <div class="noun-row-top">
+          <span class="nom">${a.base}</span>
+          <span class="eng">${a.english}</span>
+          <button class="del-btn" onclick="deleteUserAdj(${i})">Delete</button>
+        </div>
+        <div class="noun-row-forms" style="grid-template-columns:repeat(3,1fr)">
+          ${GENDERS.map(g => `
+            <div class="noun-form-cell">
+              <span class="noun-form-case">${g.abbr}</span>
+              <span class="noun-form-val">${((a.forms || {})[g.key] || {}).nominativ || '—'}</span>
+            </div>`).join('')}
+        </div>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  // ═══════════════════════════════════════════════════
   //  MANAGE — shared
   // ═══════════════════════════════════════════════════
   function showManageTab(tab) {
     document.getElementById('manage-cards').style.display   = tab === 'cards'   ? 'flex' : 'none';
     document.getElementById('manage-grammar').style.display = tab === 'grammar' ? 'flex' : 'none';
     document.getElementById('manage-verbs').style.display   = tab === 'verbs'   ? 'flex' : 'none';
+    document.getElementById('manage-adj').style.display     = tab === 'adj'     ? 'flex' : 'none';
     document.getElementById('mtab-cards').classList.toggle('active',   tab === 'cards');
     document.getElementById('mtab-grammar').classList.toggle('active', tab === 'grammar');
     document.getElementById('mtab-verbs').classList.toggle('active',   tab === 'verbs');
+    document.getElementById('mtab-adj').classList.toggle('active',     tab === 'adj');
   }
 
   function renderManage() {
@@ -2760,6 +3495,7 @@
     renderCardList();
     renderGrammarNounList();
     renderVerbList();
+    renderAdjList();
   }
 
   // ═══════════════════════════════════════════════════
@@ -3006,6 +3742,7 @@
     const studyVisible   = document.getElementById('study-view').style.display   !== 'none';
     const grammarVisible = document.getElementById('grammar-view').style.display !== 'none';
     const verbsVisible   = document.getElementById('verbs-view').style.display   !== 'none';
+    const adjVisible     = document.getElementById('adj-view').style.display     !== 'none';
     if (studyVisible) {
       if (e.key === 'ArrowRight') nextCard();
       if (e.key === 'ArrowLeft')  prevCard();
@@ -3019,12 +3756,17 @@
       if (e.key === 'ArrowRight') vNext();
       if (e.key === 'ArrowLeft')  vPrev();
     }
+    if (adjVisible && document.activeElement.tagName !== 'INPUT') {
+      if (e.key === 'ArrowRight') adjNext();
+      if (e.key === 'ArrowLeft')  adjPrev();
+    }
   });
 
   // ═══════════════════════════════════════════════════
   //  INIT
   // ═══════════════════════════════════════════════════
   buildAllVerbs();
+  buildAllAdjectives();
   buildDeck();
   renderStudy();
 </script>
