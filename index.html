@@ -418,6 +418,167 @@
     /* ── VERBS / ADJECTIVES ─────────────────────────── */
     #verbs-view, #adj-view { display: flex; flex-direction: column; gap: 24px; }
 
+    /* ── ADJECTIVE MULTI-GENDER GRID ─────────────────── */
+    .adj-row-main {
+      display: grid;
+      grid-template-columns: 140px repeat(3, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+    .adj-case-info {
+      display: flex; flex-direction: column; gap: 3px; padding-top: 6px;
+    }
+    .adj-case-abbr-btn {
+      display: inline-block; width: fit-content;
+      background: #0f3460; color: #e94560;
+      border: 1.5px solid #e94560; border-radius: 5px;
+      padding: 2px 8px; font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+    }
+    .adj-case-abbr-btn:hover { background: #e94560; color: #fff; }
+    .adj-case-name { font-size: 0.88rem; font-weight: 600; color: #ddd; margin-top: 2px; }
+    .adj-case-hint-txt { font-size: 0.7rem; color: #666; font-style: italic; }
+    .adj-gender-col { display: flex; flex-direction: column; gap: 4px; }
+    .adj-col-hdr {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .adj-col-hdr.hdr-m { color: #74b9ff; }
+    .adj-col-hdr.hdr-f { color: #fd79a8; }
+    .adj-col-hdr.hdr-n { color: #55efc4; }
+
+    /* ── MISSED CARDS ─────────────────────────────────── */
+    #mark-missed-btn.active { background: #5c1a1a; color: #ff7070; }
+
+    /* ── ASPECT BADGE ────────────────────────────────── */
+    .aspect-badge {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; padding: 2px 9px; border-radius: 10px; align-self: center;
+    }
+    .aspect-imp { background: #1a3a5c; color: #74b9ff; border: 1px solid #2d5a8e; }
+    .aspect-pfv { background: #3a1a2e; color: #fd79a8; border: 1px solid #7a2e50; }
+    .aspect-bi  { background: #2a2a1a; color: #fdcb6e; border: 1px solid #6a5a1a; }
+
+    /* ── ASPECT VIEW ─────────────────────────────────── */
+    #aspect-view { display: flex; flex-direction: column; gap: 24px; }
+
+    .aspect-reveal-box {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 16px 20px; display: flex; gap: 32px; justify-content: center;
+      flex-wrap: wrap; align-items: center;
+    }
+    .aspect-reveal-side { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .aspect-reveal-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; }
+    .aspect-reveal-word  { font-size: 1.3rem; font-weight: 700; }
+    .aspect-reveal-cyril { font-size: 0.95rem; color: #74b9ff; }
+
+    .ap-answer-row {
+      display: grid; grid-template-columns: 130px 1fr minmax(60px, auto);
+      gap: 10px; align-items: center;
+    }
+    .ap-answer-label { font-size: 0.85rem; font-weight: 700; color: #e94560; }
+
+    /* ── SLAGALICA ───────────────────────────────────── */
+    #slagalica-view { display: flex; flex-direction: column; gap: 24px; }
+    .slag-screen { display: flex; flex-direction: column; gap: 20px; }
+
+    .slag-stats-bar {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 16px 20px; display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 14px;
+    }
+    .slag-best { display: flex; flex-direction: column; gap: 2px; }
+    .slag-best-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: #aaa; }
+    .slag-best-val   { font-size: 2.4rem; font-weight: 800; color: #e94560; line-height: 1; }
+
+    .slag-streak-wrap { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .slag-streak-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: #aaa; }
+    .slag-dots { display: flex; gap: 7px; align-items: center; }
+    .slag-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #2a2a4a; transition: background 0.2s;
+    }
+    .slag-dot.win  { background: #27ae60; }
+    .slag-dot.loss { background: #e94560; }
+
+    .slag-dir-row {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 14px 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    }
+
+    .slag-chain-row {
+      display: flex; align-items: stretch; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .slag-chain-box {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 10px 24px; text-align: center; flex: 1;
+    }
+    .slag-chain-label { font-size: 0.72rem; color: #aaa; text-transform: uppercase; letter-spacing: 0.1em; display: block; }
+    .slag-chain-num   { font-size: 2.4rem; font-weight: 800; color: #e94560; line-height: 1.15; display: block; }
+    .slag-dir-badge   {
+      font-size: 0.78rem; color: #74b9ff; background: #1a3a5c;
+      border: 1px solid #2d5a8e; border-radius: 8px; padding: 5px 14px;
+      align-self: center;
+    }
+
+    .slag-q-card {
+      background: #16213e; border: 2px solid #0f3460; border-radius: 16px;
+      padding: 32px 28px; text-align: center; display: flex;
+      flex-direction: column; align-items: center; gap: 10px;
+      animation: slag-fade-in 0.22s ease;
+    }
+    @keyframes slag-fade-in {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .slag-q-label    { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: #555; }
+    .slag-q-word     { font-size: 2.4rem; font-weight: 700; color: #fff; }
+    .slag-q-cyrillic { font-size: 1.1rem; color: #74b9ff; margin-top: -6px; min-height: 1.4em; }
+    .slag-q-cat      { font-size: 0.78rem; color: #555; font-style: italic; }
+
+    .slag-options {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .slag-option {
+      background: #0f3460; border: 2px solid #1a4a7a;
+      color: #eee; border-radius: 12px; padding: 18px 14px;
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+      transition: all 0.15s; text-align: center; line-height: 1.3;
+    }
+    .slag-option:hover:not(:disabled) { border-color: #e94560; color: #fff; background: #1a3a6a; }
+    .slag-option.correct { background: #0d2b1a !important; border-color: #27ae60 !important; color: #27ae60 !important; }
+    .slag-option.wrong   { background: #2b0d1a !important; border-color: #e94560 !important; color: #e94560 !important; }
+    .slag-option:disabled { cursor: default; opacity: 0.7; }
+    .slag-option.correct:disabled, .slag-option.wrong:disabled { opacity: 1; }
+
+    .slag-over-card {
+      background: #16213e; border: 2px solid #e9456044; border-radius: 16px;
+      padding: 40px 32px; display: flex; flex-direction: column;
+      align-items: center; gap: 18px; text-align: center;
+      animation: slag-fade-in 0.3s ease;
+    }
+    .slag-over-title  { font-size: 1.4rem; font-weight: 700; color: #e94560; }
+    .slag-over-score  { font-size: 4.5rem; font-weight: 800; color: #fff; line-height: 1; }
+    .slag-over-sub    { font-size: 0.9rem; color: #aaa; margin-top: -12px; }
+    .slag-over-record { font-size: 1rem; color: #fdcb6e; font-weight: 700; min-height: 1.4em; }
+    .slag-wrong-box {
+      background: #1a1a2e; border: 1px solid #3a1a2e; border-radius: 12px;
+      padding: 16px 20px; width: 100%; text-align: left;
+    }
+    .slag-wrong-label { font-size: 0.72rem; color: #e94560; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+    .slag-wrong-q     { font-size: 1rem; color: #aaa; margin-bottom: 6px; }
+    .slag-wrong-q strong  { color: #fff; }
+    .slag-wrong-ans       { font-size: 0.95rem; color: #aaa; }
+    .slag-wrong-ans strong { color: #55efc4; }
+    .slag-over-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    @media (max-width: 600px) {
+      .slag-options { grid-template-columns: 1fr; }
+      .slag-q-word  { font-size: 1.8rem; }
+      .slag-over-score { font-size: 3.5rem; }
+    }
+
     .tense-selector {
       background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
       padding: 16px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
@@ -441,6 +602,44 @@
     .subj-label-col  { display: flex; flex-direction: column; gap: 1px; }
     .subj-label-main { font-size: 0.9rem; font-weight: 700; color: #e94560; }
     .subj-label-hint { font-size: 0.72rem; color: #666; font-style: italic; }
+
+    /* ── SENTENCE FILL-IN DRILL ─────────────────────── */
+    #drill-view { display: flex; flex-direction: column; gap: 24px; }
+
+    .drill-sentence {
+      font-size: 1.4rem; font-weight: 600; color: #fff;
+      text-align: center; line-height: 1.6;
+    }
+    .drill-blank {
+      color: #e94560; font-weight: 800;
+      border-bottom: 2px solid #e94560; padding: 0 8px; letter-spacing: 0.04em;
+    }
+    .drill-blank-fill { font-weight: 800; padding: 0 6px; border-bottom: 2px solid; }
+    .drill-blank-fill.correct { color: #55efc4; border-color: #27ae60; }
+    .drill-blank-fill.wrong   { color: #ff7070; border-color: #e94560; }
+
+    .drill-options {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .drill-option {
+      background: #0f3460; border: 2px solid #1a4a7a; color: #eee;
+      font-size: 1.25rem; font-weight: 700; padding: 18px 12px;
+      border-radius: 12px; cursor: pointer; transition: all 0.15s;
+      text-align: center; font-family: inherit;
+    }
+    .drill-option:hover:not(:disabled) { border-color: #e94560; color: #fff; }
+    .drill-option.correct { background: #0d2b1a !important; border-color: #27ae60 !important; color: #55efc4 !important; }
+    .drill-option.wrong   { background: #2b0d1a !important; border-color: #e94560 !important; }
+    .drill-option:disabled { opacity: 0.7; cursor: default; }
+    .drill-option.correct:disabled, .drill-option.wrong:disabled { opacity: 1; }
+
+    .drill-feedback {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 14px 18px; font-size: 0.88rem; line-height: 1.7; color: #ccc;
+    }
+    .drill-feedback.correct { border-color: #27ae60; }
+    .drill-feedback.wrong   { border-color: #e94560; }
+    .drill-feedback .df-hint { color: #74b9ff; display: block; margin-top: 4px; }
 
     /* ── MOBILE ──────────────────────────────────────── */
     @media (max-width: 600px) {
@@ -537,6 +736,26 @@
       /* 8. Verbs tab */
       .tense-btn { min-height: 44px; }
       .subj-row-main { grid-template-columns: 90px 1fr auto; }
+
+      /* 9. Adjective multi-gender grid → stacked on mobile */
+      .adj-row-main { grid-template-columns: 1fr; gap: 8px; }
+      .adj-case-info {
+        flex-direction: row; align-items: center; gap: 8px; flex-wrap: wrap;
+        padding-top: 0; padding-bottom: 8px;
+        border-bottom: 1px solid #0f3460; margin-bottom: 2px;
+      }
+      .adj-gender-col {
+        display: grid; grid-template-columns: 55px 1fr auto;
+        align-items: center; gap: 6px;
+      }
+      .adj-col-hdr { font-size: 0.75rem; text-align: right; }
+
+      /* 10. Mark missed button on mobile */
+      #mark-missed-btn { min-height: 44px; }
+
+      /* 11. Fill-in Drill on mobile */
+      .drill-options { grid-template-columns: 1fr; }
+      .drill-option  { font-size: 1.1rem; padding: 16px 12px; min-height: 44px; }
     }
   </style>
 </head>
@@ -549,7 +768,10 @@
     <button id="nav-grammar" onclick="showView('grammar')">Noun Agreement</button>
     <button id="nav-verbs"   onclick="showView('verbs')">Verbs</button>
     <button id="nav-adj"     onclick="showView('adj')">Adjectives</button>
-    <button id="nav-manage"  onclick="showView('manage')">Manage Cards</button>
+    <button id="nav-aspect"     onclick="showView('aspect')">Aspect</button>
+    <button id="nav-drill"      onclick="showView('drill')">Fill-in</button>
+    <button id="nav-slagalica"  onclick="showView('slagalica')">Slagalica</button>
+    <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
 
@@ -562,6 +784,7 @@
       <span>Direction:</span>
       <button id="dir-sr" class="active" onclick="setDirection('sr')">Serbian → English</button>
       <button id="dir-en" onclick="setDirection('en')">English → Serbian</button>
+      <button id="dir-missed" onclick="toggleMissedMode()">⚑ Missed (<span id="missed-count">0</span>)</button>
     </div>
 
     <!-- Group filter -->
@@ -597,9 +820,10 @@
     </div>
 
     <div class="study-controls">
-      <button class="btn btn-secondary" id="prev-btn"    onclick="prevCard()">← Prev</button>
-      <button class="btn btn-primary"   id="shuffle-btn" onclick="shuffle()">Shuffle</button>
-      <button class="btn btn-secondary" id="next-btn"    onclick="nextCard()">Next →</button>
+      <button class="btn btn-secondary" id="prev-btn"       onclick="prevCard()">← Prev</button>
+      <button class="btn btn-primary"   id="shuffle-btn"    onclick="shuffle()">Shuffle</button>
+      <button class="btn btn-secondary" id="next-btn"       onclick="nextCard()">Next →</button>
+      <button class="btn btn-secondary" id="mark-missed-btn" onclick="toggleMissed()" title="Mark as missed">⚑ Mark</button>
     </div>
 
     <div id="empty-study" class="empty-msg" style="display:none">
@@ -669,6 +893,7 @@
     <!-- Verb display card -->
     <div class="noun-card" id="v-verb-card">
       <span class="noun-card-given">Infinitive</span>
+      <span class="aspect-badge" id="v-display-aspect"></span>
       <span class="noun-card-word"    id="v-display-inf">—</span>
       <span class="noun-card-cyrillic" id="v-display-cyrillic"></span>
       <span class="noun-card-en"      id="v-display-en">—</span>
@@ -693,12 +918,6 @@
   <!-- ═══════════════ ADJECTIVES VIEW ═══════════════ -->
   <div id="adj-view" style="display:none">
 
-    <!-- Gender selector (radio-style) -->
-    <div class="tense-selector">
-      <span class="tense-sel-label">Gender:</span>
-      <div class="tense-btns" id="adj-gender-btns"></div>
-    </div>
-
     <!-- Case toggles -->
     <div class="case-selector">
       <span class="case-sel-label">Practice cases:</span>
@@ -713,7 +932,7 @@
 
     <!-- Adjective display card -->
     <div class="noun-card" id="adj-card">
-      <span class="noun-card-given">Adjective — masc. nom. sg.</span>
+      <span class="noun-card-given">Adjective — base form (nom. sg. masc.)</span>
       <span class="noun-card-word"     id="adj-display-base">—</span>
       <span class="noun-card-cyrillic" id="adj-display-cyrillic"></span>
       <span class="noun-card-en"       id="adj-display-en">—</span>
@@ -735,6 +954,178 @@
     </div>
   </div>
 
+  <!-- ═══════════════ FILL-IN DRILL VIEW ════════════ -->
+  <div id="drill-view" style="display:none">
+
+    <div class="g-header-row">
+      <span id="drill-progress">1 of 58</span>
+      <span class="g-score-badge">Score: <span id="drill-score-val">0 / 0</span></span>
+    </div>
+
+    <div class="noun-card" id="drill-card">
+      <span class="noun-card-given" id="drill-hint-label">Complete the sentence</span>
+      <div class="drill-sentence" id="drill-sentence-el"></div>
+      <span class="noun-card-en"   id="drill-english-el"></span>
+    </div>
+
+    <div class="drill-options" id="drill-options"></div>
+
+    <div class="drill-feedback" id="drill-feedback" style="display:none"></div>
+
+    <div class="grammar-controls">
+      <button class="btn btn-secondary" id="drill-prev-btn" onclick="drillPrev()">← Prev</button>
+      <button class="btn btn-secondary" id="drill-next-btn" onclick="drillNext()">Next →</button>
+      <button class="btn btn-secondary" onclick="shuffleDrill()">⇌ Shuffle</button>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ ASPECT VIEW ═══════════════ -->
+  <div id="aspect-view" style="display:none">
+
+    <div class="tense-selector">
+      <span class="tense-sel-label">Drill:</span>
+      <div class="tense-btns" id="aspect-mode-btns"></div>
+    </div>
+
+    <div class="g-header-row">
+      <span id="ap-progress">Pair 1 of 1</span>
+      <span class="g-score-badge">Score: <span id="ap-score-val">0 / 0</span></span>
+    </div>
+
+    <div class="noun-card" id="ap-card">
+      <span class="noun-card-given" id="ap-given-label">Imperfective</span>
+      <span class="aspect-badge"    id="ap-given-badge"></span>
+      <span class="noun-card-word"     id="ap-display-word">—</span>
+      <span class="noun-card-cyrillic" id="ap-display-cyrillic"></span>
+      <span class="noun-card-en"       id="ap-display-en">—</span>
+    </div>
+
+    <div class="case-inputs" id="aspect-inputs"></div>
+
+    <div class="grammar-controls">
+      <button class="btn btn-secondary" id="ap-prev-btn" onclick="apPrev()">← Prev</button>
+      <button class="btn btn-primary"   onclick="checkAspectPair()">Check</button>
+      <button class="btn btn-secondary" id="ap-next-btn" onclick="apNext()">Next →</button>
+      <button class="btn btn-secondary" onclick="shuffleAspectPairs()">⇌ Shuffle</button>
+    </div>
+
+    <div id="ap-reveal" style="display:none" class="aspect-reveal-box"></div>
+
+    <div id="empty-aspect" class="empty-msg" style="display:none">
+      No pairs available. Add some in <strong>Manage Cards → Aspect Pairs</strong>.
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLAGALICA VIEW ═══════════════ -->
+  <div id="slagalica-view" style="display:none">
+
+    <!-- ── LOBBY ── -->
+    <div id="slag-lobby" class="slag-screen">
+
+      <!-- Stats: best score + streak dots -->
+      <div class="slag-stats-bar">
+        <div class="slag-best">
+          <span class="slag-best-label">All-time best</span>
+          <span class="slag-best-val" id="slag-best-display">0</span>
+        </div>
+        <div class="slag-streak-wrap">
+          <span class="slag-streak-label">Last 5 rounds</span>
+          <div class="slag-dots" id="slag-dots"></div>
+        </div>
+      </div>
+
+      <!-- Direction selector -->
+      <div class="slag-dir-row">
+        <span class="tense-sel-label">Direction:</span>
+        <div class="tense-btns" id="slag-dir-btns"></div>
+      </div>
+
+      <!-- Group filter -->
+      <div class="group-filter-bar" id="slag-group-bar">
+        <div class="group-filter-header">
+          <span>Filter by group</span>
+          <div class="group-filter-actions">
+            <button onclick="slagSelectAllGroups()">All</button>
+            <button onclick="slagClearGroups()">None</button>
+          </div>
+        </div>
+        <div class="group-toggle-row" id="slag-group-toggles"></div>
+      </div>
+
+      <div id="slag-too-few" class="empty-msg" style="display:none">
+        Not enough cards — need at least <strong>8</strong> in the selected groups.
+        Add more in <strong>Manage Cards</strong>.
+      </div>
+
+      <div style="display:flex; justify-content:center">
+        <button class="btn btn-primary" id="slag-start-btn" onclick="startSlagGame()"
+          style="font-size:1.1rem; padding:14px 52px; border-radius:10px">
+          ▶ Start Chain
+        </button>
+      </div>
+
+    </div><!-- /slag-lobby -->
+
+    <!-- ── GAME ── -->
+    <div id="slag-game" class="slag-screen" style="display:none">
+
+      <div class="slag-chain-row">
+        <div class="slag-chain-box">
+          <span class="slag-chain-label">Chain</span>
+          <span class="slag-chain-num" id="slag-chain-num">0</span>
+        </div>
+        <span class="slag-dir-badge" id="slag-dir-badge">Serbian → English</span>
+        <div class="slag-chain-box">
+          <span class="slag-chain-label">Best</span>
+          <span class="slag-chain-num" id="slag-game-best">0</span>
+        </div>
+      </div>
+
+      <div class="slag-q-card" id="slag-q-card">
+        <span class="slag-q-label"    id="slag-q-label">Translate to English</span>
+        <span class="slag-q-word"     id="slag-q-word">—</span>
+        <span class="slag-q-cyrillic" id="slag-q-cyrillic"></span>
+        <span class="slag-q-cat"      id="slag-q-cat"></span>
+      </div>
+
+      <div class="slag-options" id="slag-options"></div>
+
+      <div style="text-align:center">
+        <button class="btn btn-secondary" onclick="slagQuit()"
+          style="font-size:0.85rem; padding:7px 22px">Quit</button>
+      </div>
+
+    </div><!-- /slag-game -->
+
+    <!-- ── GAME OVER ── -->
+    <div id="slag-over" class="slag-screen" style="display:none">
+      <div class="slag-over-card">
+
+        <div class="slag-over-title">Chain Broken!</div>
+        <div class="slag-over-score"  id="slag-final-score">0</div>
+        <div class="slag-over-sub">words in a row</div>
+        <div class="slag-over-record" id="slag-record-msg"></div>
+
+        <div class="slag-wrong-box" id="slag-wrong-box">
+          <div class="slag-wrong-label">You got this one wrong</div>
+          <div class="slag-wrong-q"   id="slag-wrong-q"></div>
+          <div class="slag-wrong-ans" id="slag-wrong-ans"></div>
+        </div>
+
+        <div class="slag-dots" id="slag-over-dots"></div>
+
+        <div class="slag-over-btns">
+          <button class="btn btn-primary"   onclick="startSlagGame()">↩ Try Again</button>
+          <button class="btn btn-secondary" id="slag-replay-missed-btn" onclick="startSlagMissedGame()" style="display:none">⚑ Replay Missed (0)</button>
+          <button class="btn btn-secondary" onclick="slagToLobby()">← Back</button>
+        </div>
+
+      </div>
+    </div><!-- /slag-over -->
+
+  </div><!-- /slagalica-view -->
+
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
 
@@ -743,6 +1134,7 @@
       <button class="manage-tab-btn"        id="mtab-grammar" onclick="showManageTab('grammar')">Nouns</button>
       <button class="manage-tab-btn"        id="mtab-verbs"   onclick="showManageTab('verbs')">Verbs</button>
       <button class="manage-tab-btn"        id="mtab-adj"     onclick="showManageTab('adj')">Adjectives</button>
+      <button class="manage-tab-btn"        id="mtab-aspect"  onclick="showManageTab('aspect')">Aspect Pairs</button>
     </div>
 
     <!-- ── Flashcards tab ── -->
@@ -856,6 +1248,13 @@
           </div>
         </div>
 
+        <div style="margin-bottom:12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap">
+          <span style="font-size:0.85rem; color:#aaa">Aspect:</span>
+          <button type="button" class="tense-btn active" id="vn-asp-imp" onclick="setVerbAspect('imp')">Imperfective</button>
+          <button type="button" class="tense-btn"        id="vn-asp-pfv" onclick="setVerbAspect('pfv')">Perfective</button>
+          <button type="button" class="tense-btn"        id="vn-asp-bi"  onclick="setVerbAspect('bi')">Biaspectual</button>
+        </div>
+
         <p style="font-size:0.82rem; color:#e94560; font-weight:600; margin-bottom:6px">Present (Sadašnje)</p>
         <div class="declension-grid" style="margin-bottom:14px">
           <div class="form-group"><label>ja</label>      <input type="text" id="vn-pres-ja"  placeholder="e.g. radim"   /></div>
@@ -947,6 +1346,32 @@
       <div>
         <p class="section-title">User Adjectives <span class="section-count" id="an-count"></span></p>
         <div class="card-list" id="an-list"></div>
+      </div>
+    </div>
+
+    <!-- ── Aspect Pairs tab ── -->
+    <div id="manage-aspect" class="manage-section" style="display:none">
+      <div>
+        <p class="section-title">Add an Aspect Pair</p>
+        <div class="form-row" style="margin-bottom:12px">
+          <div class="form-group">
+            <label for="ap-new-imp">Imperfective (infinitive)</label>
+            <input type="text" id="ap-new-imp" placeholder="e.g. gledati" />
+          </div>
+          <div class="form-group">
+            <label for="ap-new-pfv">Perfective (infinitive)</label>
+            <input type="text" id="ap-new-pfv" placeholder="e.g. pogledati" />
+          </div>
+          <div class="form-group">
+            <label for="ap-new-en">English meaning</label>
+            <input type="text" id="ap-new-en" placeholder="e.g. to watch / to glance" />
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="addUserAspectPair()">Add Pair</button>
+      </div>
+      <div>
+        <p class="section-title">User Aspect Pairs <span class="section-count" id="ap-count"></span></p>
+        <div class="card-list" id="ap-list"></div>
       </div>
     </div>
 
@@ -1452,12 +1877,94 @@
   ];
 
   // ═══════════════════════════════════════════════════
+  //  ASPECT PAIRS
+  // ═══════════════════════════════════════════════════
+  const ASPECT_MODES = [
+    { key: 'imp_pfv', label: 'Imp → Pfv' },
+    { key: 'pfv_imp', label: 'Pfv → Imp' },
+    { key: 'en_both', label: 'Eng → Both' },
+  ];
+
+  const ASPECT_PAIRS = [
+    // po- prefix
+    { imp: 'gledati',       pfv: 'pogledati',    english: 'to watch / to glance' },
+    { imp: 'piti',          pfv: 'popiti',        english: 'to drink / to drink up' },
+    { imp: 'jesti',         pfv: 'pojesti',       english: 'to eat / to eat up' },
+    { imp: 'zvati',         pfv: 'pozvati',       english: 'to call / to invite' },
+    { imp: 'kvariti',       pfv: 'pokvariti',     english: 'to damage / to ruin' },
+    { imp: 'slati',         pfv: 'poslati',       english: 'to send' },
+    { imp: 'slušati',       pfv: 'poslušati',     english: 'to listen / to obey' },
+    { imp: 'pitati',        pfv: 'zapitati',      english: 'to ask / to wonder' },
+    { imp: 'pomagati',      pfv: 'pomoći',        english: 'to help' },
+    // pro- prefix
+    { imp: 'čitati',        pfv: 'pročitati',     english: 'to read / to finish reading' },
+    // na- prefix
+    { imp: 'pisati',        pfv: 'napisati',      english: 'to write / to finish writing' },
+    { imp: 'učiti',         pfv: 'naučiti',       english: 'to learn / to master' },
+    // u- prefix
+    { imp: 'raditi',        pfv: 'uraditi',       english: 'to do / to accomplish' },
+    // za- prefix
+    { imp: 'kasniti',       pfv: 'zakasniti',     english: 'to be late' },
+    { imp: 'pamtiti',       pfv: 'zapamtiti',     english: 'to remember / to memorize' },
+    // s- prefix
+    { imp: 'kuvati',        pfv: 'skuvati',       english: 'to cook / to finish cooking' },
+    { imp: 'skakati',       pfv: 'skočiti',       english: 'to jump' },
+    // o- prefix
+    { imp: 'čistiti',       pfv: 'očistiti',      english: 'to clean / to clean completely' },
+    // ot- prefix
+    { imp: 'pevati',        pfv: 'otpevati',      english: 'to sing / to perform a song' },
+    // Root-change pairs
+    { imp: 'govoriti',      pfv: 'reći',          english: 'to speak / to say' },
+    { imp: 'uzimati',       pfv: 'uzeti',         english: 'to take' },
+    { imp: 'davati',        pfv: 'dati',          english: 'to give' },
+    { imp: 'dolaziti',      pfv: 'doći',          english: 'to come / to arrive' },
+    { imp: 'odlaziti',      pfv: 'otići',         english: 'to leave / to go away' },
+    { imp: 'ulaziti',       pfv: 'ući',           english: 'to enter' },
+    { imp: 'izlaziti',      pfv: 'izaći',         english: 'to exit / to go out' },
+    { imp: 'sedati',        pfv: 'sesti',         english: 'to sit down' },
+    { imp: 'ustajati',      pfv: 'ustati',        english: 'to get up / to stand up' },
+    { imp: 'vraćati se',    pfv: 'vratiti se',    english: 'to return / to come back' },
+    { imp: 'počinjati',     pfv: 'početi',        english: 'to begin / to start' },
+    { imp: 'završavati',    pfv: 'završiti',      english: 'to finish / to end' },
+    { imp: 'padati',        pfv: 'pasti',         english: 'to fall' },
+    { imp: 'tražiti',       pfv: 'naći',          english: 'to look for / to find' },
+    // -avati/-iti alternations
+    { imp: 'otvarati',      pfv: 'otvoriti',      english: 'to open' },
+    { imp: 'zatvarati',     pfv: 'zatvoriti',     english: 'to close' },
+    { imp: 'plaćati',       pfv: 'platiti',       english: 'to pay' },
+    { imp: 'pokazivati',    pfv: 'pokazati',      english: 'to show' },
+    { imp: 'objašnjavati',  pfv: 'objasniti',     english: 'to explain' },
+    { imp: 'odgovarati',    pfv: 'odgovoriti',    english: 'to answer / to reply' },
+    { imp: 'obećavati',     pfv: 'obećati',       english: 'to promise' },
+    { imp: 'odlučivati se', pfv: 'odlučiti se',   english: 'to decide' },
+    { imp: 'birati',        pfv: 'izabrati',      english: 'to choose / to select' },
+    { imp: 'kupovati',      pfv: 'kupiti',        english: 'to buy / to shop' },
+    { imp: 'prodavati',     pfv: 'prodati',       english: 'to sell' },
+    { imp: 'popravljati',   pfv: 'popraviti',     english: 'to fix / to repair' },
+    { imp: 'oblačiti se',   pfv: 'obući se',      english: 'to get dressed' },
+    { imp: 'stavljati',     pfv: 'staviti',       english: 'to put / to place' },
+    { imp: 'vraćati',       pfv: 'vratiti',       english: 'to return (something)' },
+    { imp: 'prihvatati',    pfv: 'prihvatiti',    english: 'to accept' },
+    { imp: 'bacati',        pfv: 'baciti',        english: 'to throw' },
+    { imp: 'posećivati',    pfv: 'posetiti',      english: 'to visit' },
+    { imp: 'zaboravljati',  pfv: 'zaboraviti',    english: 'to forget' },
+    { imp: 'čuvati',        pfv: 'sačuvati',      english: 'to keep / to preserve' },
+    { imp: 'otkazivati',    pfv: 'otkazati',      english: 'to cancel' },
+    { imp: 'čekati',        pfv: 'pričekati',     english: 'to wait / to wait briefly' },
+    { imp: 'razvijati',     pfv: 'razviti',       english: 'to develop' },
+    { imp: 'verovati',      pfv: 'poverovati',    english: 'to believe / to come to believe' },
+    { imp: 'nositi',        pfv: 'doneti',        english: 'to carry / to bring' },
+    { imp: 'voziti',        pfv: 'odvesti',       english: 'to drive / to take (by car)' },
+    { imp: 'živeti',        pfv: 'preživeti',     english: 'to live / to survive' },
+  ];
+
+  // ═══════════════════════════════════════════════════
   //  BUILT-IN VERBS
   // ═══════════════════════════════════════════════════
   const VERBS = [
     // ── Group 1: Essential irregulars ─────────────────────────────────────
     {
-      infinitive: 'biti', english: 'to be',
+      infinitive: 'biti', aspect: 'bi', english: 'to be',
       conjugations: {
         present: { ja:'sam',    ti:'si',    on:'je',    mi:'smo',      vi:'ste',      oni:'su'       },
         past:    { ja:'bio sam',ti:'bio si',on:'bio je',mi:'bili smo', vi:'bili ste', oni:'bili su'  },
@@ -1465,7 +1972,7 @@
       }
     },
     {
-      infinitive: 'imati', english: 'to have',
+      infinitive: 'imati', aspect: 'imp', english: 'to have',
       conjugations: {
         present: { ja:'imam',    ti:'imaš',    on:'ima',    mi:'imamo',    vi:'imate',    oni:'imaju'    },
         past:    { ja:'imao sam',ti:'imao si', on:'imao je',mi:'imali smo',vi:'imali ste',oni:'imali su' },
@@ -1473,7 +1980,7 @@
       }
     },
     {
-      infinitive: 'ići', english: 'to go',
+      infinitive: 'ići', aspect: 'imp', english: 'to go',
       conjugations: {
         present: { ja:'idem',     ti:'ideš',     on:'ide',     mi:'idemo',     vi:'idete',     oni:'idu'       },
         past:    { ja:'išao sam', ti:'išao si',  on:'išao je', mi:'išli smo',  vi:'išli ste',  oni:'išli su'   },
@@ -1481,7 +1988,7 @@
       }
     },
     {
-      infinitive: 'doći', english: 'to come',
+      infinitive: 'doći', aspect: 'pfv', english: 'to come',
       conjugations: {
         present: { ja:'dođem',     ti:'dođeš',     on:'dođe',     mi:'dođemo',     vi:'dođete',     oni:'dođu'       },
         past:    { ja:'došao sam', ti:'došao si',  on:'došao je', mi:'došli smo',  vi:'došli ste',  oni:'došli su'   },
@@ -1489,7 +1996,7 @@
       }
     },
     {
-      infinitive: 'hteti', english: 'to want',
+      infinitive: 'hteti', aspect: 'imp', english: 'to want',
       conjugations: {
         present: { ja:'hoću',    ti:'hoćeš',   on:'hoće',   mi:'hoćemo',   vi:'hoćete',   oni:'hoće'     },
         past:    { ja:'hteo sam',ti:'hteo si', on:'hteo je',mi:'hteli smo',vi:'hteli ste',oni:'hteli su' },
@@ -1497,7 +2004,7 @@
       }
     },
     {
-      infinitive: 'moći', english: 'to be able to / can',
+      infinitive: 'moći', aspect: 'imp', english: 'to be able to / can',
       conjugations: {
         present: { ja:'mogu',     ti:'možeš',    on:'može',    mi:'možemo',    vi:'možete',    oni:'mogu'      },
         past:    { ja:'mogao sam',ti:'mogao si', on:'mogao je',mi:'mogli smo', vi:'mogli ste', oni:'mogli su'  },
@@ -1505,7 +2012,7 @@
       }
     },
     {
-      infinitive: 'znati', english: 'to know',
+      infinitive: 'znati', aspect: 'imp', english: 'to know',
       conjugations: {
         present: { ja:'znam',    ti:'znaš',    on:'zna',    mi:'znamo',    vi:'znate',    oni:'znaju'    },
         past:    { ja:'znao sam',ti:'znao si', on:'znao je',mi:'znali smo',vi:'znali ste',oni:'znali su' },
@@ -1513,7 +2020,7 @@
       }
     },
     {
-      infinitive: 'videti', english: 'to see',
+      infinitive: 'videti', aspect: 'bi', english: 'to see',
       conjugations: {
         present: { ja:'vidim',    ti:'vidiš',    on:'vidi',    mi:'vidimo',    vi:'vidite',    oni:'vide'      },
         past:    { ja:'video sam',ti:'video si', on:'video je',mi:'videli smo',vi:'videli ste',oni:'videli su' },
@@ -1521,7 +2028,7 @@
       }
     },
     {
-      infinitive: 'jesti', english: 'to eat',
+      infinitive: 'jesti', aspect: 'imp', english: 'to eat',
       conjugations: {
         present: { ja:'jedem',   ti:'jedeš',   on:'jede',   mi:'jedemo',   vi:'jedete',   oni:'jedu'     },
         past:    { ja:'jeo sam', ti:'jeo si',  on:'jeo je', mi:'jeli smo', vi:'jeli ste', oni:'jeli su'  },
@@ -1529,7 +2036,7 @@
       }
     },
     {
-      infinitive: 'piti', english: 'to drink',
+      infinitive: 'piti', aspect: 'imp', english: 'to drink',
       conjugations: {
         present: { ja:'pijem',   ti:'piješ',   on:'pije',   mi:'pijemo',   vi:'pijete',   oni:'piju'     },
         past:    { ja:'pio sam', ti:'pio si',  on:'pio je', mi:'pili smo', vi:'pili ste', oni:'pili su'  },
@@ -1537,7 +2044,7 @@
       }
     },
     {
-      infinitive: 'dati', english: 'to give',
+      infinitive: 'dati', aspect: 'pfv', english: 'to give',
       conjugations: {
         present: { ja:'dam',    ti:'daš',    on:'da',    mi:'damo',    vi:'date',    oni:'daju'    },
         past:    { ja:'dao sam',ti:'dao si', on:'dao je',mi:'dali smo',vi:'dali ste',oni:'dali su' },
@@ -1545,7 +2052,7 @@
       }
     },
     {
-      infinitive: 'uzeti', english: 'to take',
+      infinitive: 'uzeti', aspect: 'pfv', english: 'to take',
       conjugations: {
         present: { ja:'uzmem',    ti:'uzmeš',    on:'uzme',    mi:'uzmemo',    vi:'uzmete',    oni:'uzmu'      },
         past:    { ja:'uzeo sam', ti:'uzeo si',  on:'uzeo je', mi:'uzeli smo', vi:'uzeli ste', oni:'uzeli su'  },
@@ -1553,7 +2060,7 @@
       }
     },
     {
-      infinitive: 'reći', english: 'to say / to tell',
+      infinitive: 'reći', aspect: 'pfv', english: 'to say / to tell',
       conjugations: {
         present: { ja:'kažem',    ti:'kažeš',    on:'kaže',    mi:'kažemo',    vi:'kažete',    oni:'kažu'      },
         past:    { ja:'rekao sam',ti:'rekao si', on:'rekao je',mi:'rekli smo', vi:'rekli ste', oni:'rekli su'  },
@@ -1561,7 +2068,7 @@
       }
     },
     {
-      infinitive: 'misliti', english: 'to think',
+      infinitive: 'misliti', aspect: 'imp', english: 'to think',
       conjugations: {
         present: { ja:'mislim',    ti:'misliš',    on:'misli',    mi:'mislimo',    vi:'mislite',    oni:'misle'      },
         past:    { ja:'mislio sam',ti:'mislio si', on:'mislio je',mi:'mislili smo',vi:'mislili ste',oni:'mislili su' },
@@ -1569,7 +2076,7 @@
       }
     },
     {
-      infinitive: 'čuti', english: 'to hear',
+      infinitive: 'čuti', aspect: 'bi', english: 'to hear',
       conjugations: {
         present: { ja:'čujem',   ti:'čuješ',   on:'čuje',   mi:'čujemo',   vi:'čujete',   oni:'čuju'     },
         past:    { ja:'čuo sam', ti:'čuo si',  on:'čuo je', mi:'čuli smo', vi:'čuli ste', oni:'čuli su'  },
@@ -1577,7 +2084,7 @@
       }
     },
     {
-      infinitive: 'ostati', english: 'to stay / to remain',
+      infinitive: 'ostati', aspect: 'pfv', english: 'to stay / to remain',
       conjugations: {
         present: { ja:'ostanem',    ti:'ostaneš',    on:'ostane',    mi:'ostanemo',    vi:'ostanete',    oni:'ostanu'      },
         past:    { ja:'ostao sam',  ti:'ostao si',   on:'ostao je',  mi:'ostali smo',  vi:'ostali ste',  oni:'ostali su'   },
@@ -1585,7 +2092,7 @@
       }
     },
     {
-      infinitive: 'naći', english: 'to find',
+      infinitive: 'naći', aspect: 'pfv', english: 'to find',
       conjugations: {
         present: { ja:'nađem',    ti:'nađeš',    on:'nađe',    mi:'nađemo',    vi:'nađete',    oni:'nađu'      },
         past:    { ja:'našao sam',ti:'našao si', on:'našao je',mi:'našli smo', vi:'našli ste', oni:'našli su'  },
@@ -1593,7 +2100,7 @@
       }
     },
     {
-      infinitive: 'otići', english: 'to leave / to go away',
+      infinitive: 'otići', aspect: 'pfv', english: 'to leave / to go away',
       conjugations: {
         present: { ja:'otiđem',    ti:'otiđeš',    on:'otiđe',    mi:'otiđemo',    vi:'otiđete',    oni:'otiđu'      },
         past:    { ja:'otišao sam',ti:'otišao si', on:'otišao je',mi:'otišli smo', vi:'otišli ste', oni:'otišli su'  },
@@ -1601,7 +2108,7 @@
       }
     },
     {
-      infinitive: 'morati', english: 'to have to / must',
+      infinitive: 'morati', aspect: 'imp', english: 'to have to / must',
       conjugations: {
         present: { ja:'moram',    ti:'moraš',    on:'mora',    mi:'moramo',    vi:'morate',    oni:'moraju'    },
         past:    { ja:'morao sam',ti:'morao si', on:'morao je',mi:'morali smo',vi:'morali ste',oni:'morali su' },
@@ -1609,7 +2116,7 @@
       }
     },
     {
-      infinitive: 'trebati', english: 'to need / to be needed',
+      infinitive: 'trebati', aspect: 'imp', english: 'to need / to be needed',
       conjugations: {
         present: { ja:'trebam',    ti:'trebaš',    on:'treba',    mi:'trebamo',    vi:'trebate',    oni:'trebaju'    },
         past:    { ja:'trebao sam',ti:'trebao si', on:'trebao je',mi:'trebali smo',vi:'trebali ste',oni:'trebali su' },
@@ -1618,7 +2125,7 @@
     },
     // ── Group 2: -ati verbs ────────────────────────────────────────────────
     {
-      infinitive: 'raditi', english: 'to work / to do',
+      infinitive: 'raditi', aspect: 'imp', english: 'to work / to do',
       conjugations: {
         present: { ja:'radim',    ti:'radiš',    on:'radi',    mi:'radimo',    vi:'radite',    oni:'rade'      },
         past:    { ja:'radio sam',ti:'radio si', on:'radio je',mi:'radili smo',vi:'radili ste',oni:'radili su' },
@@ -1626,7 +2133,7 @@
       }
     },
     {
-      infinitive: 'čitati', english: 'to read',
+      infinitive: 'čitati', aspect: 'imp', english: 'to read',
       conjugations: {
         present: { ja:'čitam',    ti:'čitaš',    on:'čita',    mi:'čitamo',    vi:'čitate',    oni:'čitaju'    },
         past:    { ja:'čitao sam',ti:'čitao si', on:'čitao je',mi:'čitali smo',vi:'čitali ste',oni:'čitali su' },
@@ -1634,7 +2141,7 @@
       }
     },
     {
-      infinitive: 'pisati', english: 'to write',
+      infinitive: 'pisati', aspect: 'imp', english: 'to write',
       conjugations: {
         present: { ja:'pišem',    ti:'pišeš',    on:'piše',    mi:'pišemo',    vi:'pišete',    oni:'pišu'      },
         past:    { ja:'pisao sam',ti:'pisao si', on:'pisao je',mi:'pisali smo',vi:'pisali ste',oni:'pisali su' },
@@ -1642,7 +2149,7 @@
       }
     },
     {
-      infinitive: 'gledati', english: 'to watch / to look',
+      infinitive: 'gledati', aspect: 'imp', english: 'to watch / to look',
       conjugations: {
         present: { ja:'gledam',    ti:'gledaš',    on:'gleda',    mi:'gledamo',    vi:'gledate',    oni:'gledaju'    },
         past:    { ja:'gledao sam',ti:'gledao si', on:'gledao je',mi:'gledali smo',vi:'gledali ste',oni:'gledali su' },
@@ -1650,7 +2157,7 @@
       }
     },
     {
-      infinitive: 'slušati', english: 'to listen',
+      infinitive: 'slušati', aspect: 'imp', english: 'to listen',
       conjugations: {
         present: { ja:'slušam',    ti:'slušaš',    on:'sluša',    mi:'slušamo',    vi:'slušate',    oni:'slušaju'    },
         past:    { ja:'slušao sam',ti:'slušao si', on:'slušao je',mi:'slušali smo',vi:'slušali ste',oni:'slušali su' },
@@ -1658,7 +2165,7 @@
       }
     },
     {
-      infinitive: 'igrati', english: 'to play (sport/game)',
+      infinitive: 'igrati', aspect: 'imp', english: 'to play (sport/game)',
       conjugations: {
         present: { ja:'igram',    ti:'igraš',    on:'igra',    mi:'igramo',    vi:'igrate',    oni:'igraju'    },
         past:    { ja:'igrao sam',ti:'igrao si', on:'igrao je',mi:'igrali smo',vi:'igrali ste',oni:'igrali su' },
@@ -1666,7 +2173,7 @@
       }
     },
     {
-      infinitive: 'pričati', english: 'to talk / to tell',
+      infinitive: 'pričati', aspect: 'imp', english: 'to talk / to tell',
       conjugations: {
         present: { ja:'pričam',    ti:'pričaš',    on:'priča',    mi:'pričamo',    vi:'pričate',    oni:'pričaju'    },
         past:    { ja:'pričao sam',ti:'pričao si', on:'pričao je',mi:'pričali smo',vi:'pričali ste',oni:'pričali su' },
@@ -1674,7 +2181,7 @@
       }
     },
     {
-      infinitive: 'pevati', english: 'to sing',
+      infinitive: 'pevati', aspect: 'imp', english: 'to sing',
       conjugations: {
         present: { ja:'pevam',    ti:'pevaš',    on:'peva',    mi:'pevamo',    vi:'pevate',    oni:'pevaju'    },
         past:    { ja:'pevao sam',ti:'pevao si', on:'pevao je',mi:'pevali smo',vi:'pevali ste',oni:'pevali su' },
@@ -1682,7 +2189,7 @@
       }
     },
     {
-      infinitive: 'spavati', english: 'to sleep',
+      infinitive: 'spavati', aspect: 'imp', english: 'to sleep',
       conjugations: {
         present: { ja:'spavam',    ti:'spavaš',    on:'spava',    mi:'spavamo',    vi:'spavate',    oni:'spavaju'    },
         past:    { ja:'spavao sam',ti:'spavao si', on:'spavao je',mi:'spavali smo',vi:'spavali ste',oni:'spavali su' },
@@ -1690,7 +2197,7 @@
       }
     },
     {
-      infinitive: 'pitati', english: 'to ask',
+      infinitive: 'pitati', aspect: 'imp', english: 'to ask',
       conjugations: {
         present: { ja:'pitam',    ti:'pitaš',    on:'pita',    mi:'pitamo',    vi:'pitate',    oni:'pitaju'    },
         past:    { ja:'pitao sam',ti:'pitao si', on:'pitao je',mi:'pitali smo',vi:'pitali ste',oni:'pitali su' },
@@ -1698,7 +2205,7 @@
       }
     },
     {
-      infinitive: 'kuvati', english: 'to cook',
+      infinitive: 'kuvati', aspect: 'imp', english: 'to cook',
       conjugations: {
         present: { ja:'kuvam',    ti:'kuvaš',    on:'kuva',    mi:'kuvamo',    vi:'kuvate',    oni:'kuvaju'    },
         past:    { ja:'kuvao sam',ti:'kuvao si', on:'kuvao je',mi:'kuvali smo',vi:'kuvali ste',oni:'kuvali su' },
@@ -1706,7 +2213,7 @@
       }
     },
     {
-      infinitive: 'čekati', english: 'to wait',
+      infinitive: 'čekati', aspect: 'imp', english: 'to wait',
       conjugations: {
         present: { ja:'čekam',    ti:'čekaš',    on:'čeka',    mi:'čekamo',    vi:'čekate',    oni:'čekaju'    },
         past:    { ja:'čekao sam',ti:'čekao si', on:'čekao je',mi:'čekali smo',vi:'čekali ste',oni:'čekali su' },
@@ -1714,7 +2221,7 @@
       }
     },
     {
-      infinitive: 'plivati', english: 'to swim',
+      infinitive: 'plivati', aspect: 'imp', english: 'to swim',
       conjugations: {
         present: { ja:'plivam',    ti:'plivaš',    on:'pliva',    mi:'plivamo',    vi:'plivate',    oni:'plivaju'    },
         past:    { ja:'plivao sam',ti:'plivao si', on:'plivao je',mi:'plivali smo',vi:'plivali ste',oni:'plivali su' },
@@ -1722,7 +2229,7 @@
       }
     },
     {
-      infinitive: 'šetati', english: 'to walk / to stroll',
+      infinitive: 'šetati', aspect: 'imp', english: 'to walk / to stroll',
       conjugations: {
         present: { ja:'šetam',    ti:'šetaš',    on:'šeta',    mi:'šetamo',    vi:'šetate',    oni:'šetaju'    },
         past:    { ja:'šetao sam',ti:'šetao si', on:'šetao je',mi:'šetali smo',vi:'šetali ste',oni:'šetali su' },
@@ -1730,7 +2237,7 @@
       }
     },
     {
-      infinitive: 'crtati', english: 'to draw',
+      infinitive: 'crtati', aspect: 'imp', english: 'to draw',
       conjugations: {
         present: { ja:'crtam',    ti:'crtaš',    on:'crta',    mi:'crtamo',    vi:'crtate',    oni:'crtaju'    },
         past:    { ja:'crtao sam',ti:'crtao si', on:'crtao je',mi:'crtali smo',vi:'crtali ste',oni:'crtali su' },
@@ -1738,7 +2245,7 @@
       }
     },
     {
-      infinitive: 'mešati', english: 'to mix / to stir',
+      infinitive: 'mešati', aspect: 'imp', english: 'to mix / to stir',
       conjugations: {
         present: { ja:'mešam',    ti:'mešaš',    on:'meša',    mi:'mešamo',    vi:'mešate',    oni:'mešaju'    },
         past:    { ja:'mešao sam',ti:'mešao si', on:'mešao je',mi:'mešali smo',vi:'mešali ste',oni:'mešali su' },
@@ -1746,7 +2253,7 @@
       }
     },
     {
-      infinitive: 'birati', english: 'to choose / to select',
+      infinitive: 'birati', aspect: 'imp', english: 'to choose / to select',
       conjugations: {
         present: { ja:'biram',    ti:'biraš',    on:'bira',    mi:'biramo',    vi:'birate',    oni:'biraju'    },
         past:    { ja:'birao sam',ti:'birao si', on:'birao je',mi:'birali smo',vi:'birali ste',oni:'birali su' },
@@ -1754,7 +2261,7 @@
       }
     },
     {
-      infinitive: 'ručati', english: 'to have lunch',
+      infinitive: 'ručati', aspect: 'imp', english: 'to have lunch',
       conjugations: {
         present: { ja:'ručam',    ti:'ručaš',    on:'ruča',    mi:'ručamo',    vi:'ručate',    oni:'ručaju'    },
         past:    { ja:'ručao sam',ti:'ručao si', on:'ručao je',mi:'ručali smo',vi:'ručali ste',oni:'ručali su' },
@@ -1762,7 +2269,7 @@
       }
     },
     {
-      infinitive: 'večerati', english: 'to have dinner',
+      infinitive: 'večerati', aspect: 'imp', english: 'to have dinner',
       conjugations: {
         present: { ja:'večeram',    ti:'večeraš',    on:'večera',    mi:'večeramo',    vi:'večerate',    oni:'večeraju'    },
         past:    { ja:'večerao sam',ti:'večerao si', on:'večerao je',mi:'večerali smo',vi:'večerali ste',oni:'večerali su' },
@@ -1770,7 +2277,7 @@
       }
     },
     {
-      infinitive: 'vraćati', english: 'to return (frequently)',
+      infinitive: 'vraćati', aspect: 'imp', english: 'to return (frequently)',
       conjugations: {
         present: { ja:'vraćam',    ti:'vraćaš',    on:'vraća',    mi:'vraćamo',    vi:'vraćate',    oni:'vraćaju'    },
         past:    { ja:'vraćao sam',ti:'vraćao si', on:'vraćao je',mi:'vraćali smo',vi:'vraćali ste',oni:'vraćali su' },
@@ -1778,7 +2285,7 @@
       }
     },
     {
-      infinitive: 'plaćati', english: 'to pay',
+      infinitive: 'plaćati', aspect: 'imp', english: 'to pay',
       conjugations: {
         present: { ja:'plaćam',    ti:'plaćaš',    on:'plaća',    mi:'plaćamo',    vi:'plaćate',    oni:'plaćaju'    },
         past:    { ja:'plaćao sam',ti:'plaćao si', on:'plaćao je',mi:'plaćali smo',vi:'plaćali ste',oni:'plaćali su' },
@@ -1786,7 +2293,7 @@
       }
     },
     {
-      infinitive: 'skakati', english: 'to jump',
+      infinitive: 'skakati', aspect: 'imp', english: 'to jump',
       conjugations: {
         present: { ja:'skačem',    ti:'skačeš',    on:'skače',    mi:'skačemo',    vi:'skačete',    oni:'skaču'      },
         past:    { ja:'skakao sam',ti:'skakao si', on:'skakao je',mi:'skakali smo',vi:'skakali ste',oni:'skakali su' },
@@ -1794,7 +2301,7 @@
       }
     },
     {
-      infinitive: 'vikati', english: 'to shout / to yell',
+      infinitive: 'vikati', aspect: 'imp', english: 'to shout / to yell',
       conjugations: {
         present: { ja:'vičem',    ti:'vičeš',    on:'viče',    mi:'vičemo',    vi:'vičete',    oni:'viču'      },
         past:    { ja:'vikao sam',ti:'vikao si', on:'vikao je',mi:'vikali smo',vi:'vikali ste',oni:'vikali su' },
@@ -1802,7 +2309,7 @@
       }
     },
     {
-      infinitive: 'tražiti', english: 'to look for / to ask for',
+      infinitive: 'tražiti', aspect: 'imp', english: 'to look for / to ask for',
       conjugations: {
         present: { ja:'tražim',    ti:'tražiš',    on:'traži',    mi:'tražimo',    vi:'tražite',    oni:'traže'      },
         past:    { ja:'tražio sam',ti:'tražio si', on:'tražio je',mi:'tražili smo',vi:'tražili ste',oni:'tražili su' },
@@ -1810,7 +2317,7 @@
       }
     },
     {
-      infinitive: 'brisati', english: 'to wipe / to erase',
+      infinitive: 'brisati', aspect: 'imp', english: 'to wipe / to erase',
       conjugations: {
         present: { ja:'brišem',    ti:'brišeš',    on:'briše',    mi:'brišemo',    vi:'brišete',    oni:'brišu'      },
         past:    { ja:'brisao sam',ti:'brisao si', on:'brisao je',mi:'brisali smo',vi:'brisali ste',oni:'brisali su' },
@@ -1818,7 +2325,7 @@
       }
     },
     {
-      infinitive: 'razgovarati', english: 'to converse / to chat',
+      infinitive: 'razgovarati', aspect: 'imp', english: 'to converse / to chat',
       conjugations: {
         present: { ja:'razgovaram',    ti:'razgovaraš',    on:'razgovara',    mi:'razgovaramo',    vi:'razgovarate',    oni:'razgovaraju'    },
         past:    { ja:'razgovarao sam',ti:'razgovarao si', on:'razgovarao je',mi:'razgovarali smo',vi:'razgovarali ste',oni:'razgovarali su' },
@@ -1827,7 +2334,7 @@
     },
     // ── Group 3: -iti / -eti / -ati (pres: -im/-iš) verbs ─────────────────
     {
-      infinitive: 'govoriti', english: 'to speak / to say',
+      infinitive: 'govoriti', aspect: 'imp', english: 'to speak / to say',
       conjugations: {
         present: { ja:'govorim',    ti:'govoriš',    on:'govori',    mi:'govorimo',    vi:'govorite',    oni:'govore'      },
         past:    { ja:'govorio sam',ti:'govorio si', on:'govorio je',mi:'govorili smo',vi:'govorili ste',oni:'govorili su' },
@@ -1835,7 +2342,7 @@
       }
     },
     {
-      infinitive: 'živeti', english: 'to live',
+      infinitive: 'živeti', aspect: 'imp', english: 'to live',
       conjugations: {
         present: { ja:'živim',    ti:'živiš',    on:'živi',    mi:'živimo',    vi:'živite',    oni:'žive'      },
         past:    { ja:'živeo sam',ti:'živeo si', on:'živeo je',mi:'živeli smo',vi:'živeli ste',oni:'živeli su' },
@@ -1843,7 +2350,7 @@
       }
     },
     {
-      infinitive: 'voleti', english: 'to love / to like',
+      infinitive: 'voleti', aspect: 'imp', english: 'to love / to like',
       conjugations: {
         present: { ja:'volim',    ti:'voliš',    on:'voli',    mi:'volimo',    vi:'volite',    oni:'vole'      },
         past:    { ja:'voleo sam',ti:'voleo si', on:'voleo je',mi:'voleli smo',vi:'voleli ste',oni:'voleli su' },
@@ -1851,7 +2358,7 @@
       }
     },
     {
-      infinitive: 'razumeti', english: 'to understand',
+      infinitive: 'razumeti', aspect: 'imp', english: 'to understand',
       conjugations: {
         present: { ja:'razumem',    ti:'razumeš',    on:'razume',    mi:'razumemo',    vi:'razumete',    oni:'razumeju'    },
         past:    { ja:'razumeo sam',ti:'razumeo si', on:'razumeo je',mi:'razumeli smo',vi:'razumeli ste',oni:'razumeli su' },
@@ -1859,7 +2366,7 @@
       }
     },
     {
-      infinitive: 'nositi', english: 'to carry / to wear',
+      infinitive: 'nositi', aspect: 'imp', english: 'to carry / to wear',
       conjugations: {
         present: { ja:'nosim',    ti:'nosiš',    on:'nosi',    mi:'nosimo',    vi:'nosite',    oni:'nose'      },
         past:    { ja:'nosio sam',ti:'nosio si', on:'nosio je',mi:'nosili smo',vi:'nosili ste',oni:'nosili su' },
@@ -1867,7 +2374,7 @@
       }
     },
     {
-      infinitive: 'voziti', english: 'to drive',
+      infinitive: 'voziti', aspect: 'imp', english: 'to drive',
       conjugations: {
         present: { ja:'vozim',    ti:'voziš',    on:'vozi',    mi:'vozimo',    vi:'vozite',    oni:'voze'      },
         past:    { ja:'vozio sam',ti:'vozio si', on:'vozio je',mi:'vozili smo',vi:'vozili ste',oni:'vozili su' },
@@ -1875,7 +2382,7 @@
       }
     },
     {
-      infinitive: 'staviti', english: 'to put / to place',
+      infinitive: 'staviti', aspect: 'pfv', english: 'to put / to place',
       conjugations: {
         present: { ja:'stavim',    ti:'staviš',    on:'stavi',    mi:'stavimo',    vi:'stavite',    oni:'stave'      },
         past:    { ja:'stavio sam',ti:'stavio si', on:'stavio je',mi:'stavili smo',vi:'stavili ste',oni:'stavili su' },
@@ -1883,7 +2390,7 @@
       }
     },
     {
-      infinitive: 'platiti', english: 'to pay (once)',
+      infinitive: 'platiti', aspect: 'pfv', english: 'to pay (once)',
       conjugations: {
         present: { ja:'platim',    ti:'platiš',    on:'plati',    mi:'platimo',    vi:'platite',    oni:'plate'      },
         past:    { ja:'platio sam',ti:'platio si', on:'platio je',mi:'platili smo',vi:'platili ste',oni:'platili su' },
@@ -1891,7 +2398,7 @@
       }
     },
     {
-      infinitive: 'kupiti', english: 'to buy (once)',
+      infinitive: 'kupiti', aspect: 'pfv', english: 'to buy (once)',
       conjugations: {
         present: { ja:'kupim',    ti:'kupiš',    on:'kupi',    mi:'kupimo',    vi:'kupite',    oni:'kupe'      },
         past:    { ja:'kupio sam',ti:'kupio si', on:'kupio je',mi:'kupili smo',vi:'kupili ste',oni:'kupili su' },
@@ -1899,7 +2406,7 @@
       }
     },
     {
-      infinitive: 'pušiti', english: 'to smoke',
+      infinitive: 'pušiti', aspect: 'imp', english: 'to smoke',
       conjugations: {
         present: { ja:'pušim',    ti:'pušiš',    on:'puši',    mi:'pušimo',    vi:'pušite',    oni:'puše'      },
         past:    { ja:'pušio sam',ti:'pušio si', on:'pušio je',mi:'pušili smo',vi:'pušili ste',oni:'pušili su' },
@@ -1907,7 +2414,7 @@
       }
     },
     {
-      infinitive: 'zaboraviti', english: 'to forget',
+      infinitive: 'zaboraviti', aspect: 'pfv', english: 'to forget',
       conjugations: {
         present: { ja:'zaboravim',    ti:'zaboraviš',    on:'zaboravi',    mi:'zaboravimo',    vi:'zaboravite',    oni:'zaborave'      },
         past:    { ja:'zaboravio sam',ti:'zaboravio si', on:'zaboravio je',mi:'zaboravili smo',vi:'zaboravili ste',oni:'zaboravili su' },
@@ -1915,7 +2422,7 @@
       }
     },
     {
-      infinitive: 'sedeti', english: 'to sit',
+      infinitive: 'sedeti', aspect: 'imp', english: 'to sit',
       conjugations: {
         present: { ja:'sedim',    ti:'sediš',    on:'sedi',    mi:'sedimo',    vi:'sedite',    oni:'sede'      },
         past:    { ja:'sedeo sam',ti:'sedeo si', on:'sedeo je',mi:'sedeli smo',vi:'sedeli ste',oni:'sedeli su' },
@@ -1923,7 +2430,7 @@
       }
     },
     {
-      infinitive: 'stajati', english: 'to stand',
+      infinitive: 'stajati', aspect: 'imp', english: 'to stand',
       conjugations: {
         present: { ja:'stojim',    ti:'stojiš',    on:'stoji',    mi:'stojimo',    vi:'stojite',    oni:'stoje'      },
         past:    { ja:'stajao sam',ti:'stajao si', on:'stajao je',mi:'stajali smo',vi:'stajali ste',oni:'stajali su' },
@@ -1931,7 +2438,7 @@
       }
     },
     {
-      infinitive: 'ležati', english: 'to lie down',
+      infinitive: 'ležati', aspect: 'imp', english: 'to lie down',
       conjugations: {
         present: { ja:'ležim',    ti:'ležiš',    on:'leži',    mi:'ležimo',    vi:'ležite',    oni:'leže'      },
         past:    { ja:'ležao sam',ti:'ležao si', on:'ležao je',mi:'ležali smo',vi:'ležali ste',oni:'ležali su' },
@@ -1939,7 +2446,7 @@
       }
     },
     {
-      infinitive: 'trčati', english: 'to run',
+      infinitive: 'trčati', aspect: 'imp', english: 'to run',
       conjugations: {
         present: { ja:'trčim',    ti:'trčiš',    on:'trči',    mi:'trčimo',    vi:'trčite',    oni:'trče'      },
         past:    { ja:'trčao sam',ti:'trčao si', on:'trčao je',mi:'trčali smo',vi:'trčali ste',oni:'trčali su' },
@@ -1947,7 +2454,7 @@
       }
     },
     {
-      infinitive: 'leteti', english: 'to fly',
+      infinitive: 'leteti', aspect: 'imp', english: 'to fly',
       conjugations: {
         present: { ja:'letim',    ti:'letiš',    on:'leti',    mi:'letimo',    vi:'letite',    oni:'lete'      },
         past:    { ja:'leteo sam',ti:'leteo si', on:'leteo je',mi:'leteli smo',vi:'leteli ste',oni:'leteli su' },
@@ -1955,7 +2462,7 @@
       }
     },
     {
-      infinitive: 'učiti', english: 'to learn / to study',
+      infinitive: 'učiti', aspect: 'imp', english: 'to learn / to study',
       conjugations: {
         present: { ja:'učim',    ti:'učiš',    on:'uči',    mi:'učimo',    vi:'učite',    oni:'uče'      },
         past:    { ja:'učio sam',ti:'učio si', on:'učio je',mi:'učili smo',vi:'učili ste',oni:'učili su' },
@@ -1963,7 +2470,7 @@
       }
     },
     {
-      infinitive: 'odgovoriti', english: 'to answer / to reply',
+      infinitive: 'odgovoriti', aspect: 'pfv', english: 'to answer / to reply',
       conjugations: {
         present: { ja:'odgovorim',    ti:'odgovoriš',    on:'odgovori',    mi:'odgovorimo',    vi:'odgovorite',    oni:'odgovore'      },
         past:    { ja:'odgovorio sam',ti:'odgovorio si', on:'odgovorio je',mi:'odgovorili smo',vi:'odgovorili ste',oni:'odgovorili su' },
@@ -1971,7 +2478,7 @@
       }
     },
     {
-      infinitive: 'pomoći', english: 'to help',
+      infinitive: 'pomoći', aspect: 'pfv', english: 'to help',
       conjugations: {
         present: { ja:'pomognem',    ti:'pomogneš',    on:'pomogne',    mi:'pomognemo',    vi:'pomognete',    oni:'pomognu'      },
         past:    { ja:'pomogao sam', ti:'pomogao si',  on:'pomogao je', mi:'pomogli smo',  vi:'pomogli ste',  oni:'pomogli su'   },
@@ -1979,7 +2486,7 @@
       }
     },
     {
-      infinitive: 'vratiti', english: 'to return (something)',
+      infinitive: 'vratiti', aspect: 'pfv', english: 'to return (something)',
       conjugations: {
         present: { ja:'vratim',    ti:'vratiš',    on:'vrati',    mi:'vratimo',    vi:'vratite',    oni:'vrate'      },
         past:    { ja:'vratio sam',ti:'vratio si', on:'vratio je',mi:'vratili smo',vi:'vratili ste',oni:'vratili su' },
@@ -1987,7 +2494,7 @@
       }
     },
     {
-      infinitive: 'otvoriti', english: 'to open',
+      infinitive: 'otvoriti', aspect: 'pfv', english: 'to open',
       conjugations: {
         present: { ja:'otvorim',    ti:'otvoriš',    on:'otvori',    mi:'otvorimo',    vi:'otvorite',    oni:'otvore'      },
         past:    { ja:'otvorio sam',ti:'otvorio si', on:'otvorio je',mi:'otvorili smo',vi:'otvorili ste',oni:'otvorili su' },
@@ -1995,7 +2502,7 @@
       }
     },
     {
-      infinitive: 'zatvoriti', english: 'to close',
+      infinitive: 'zatvoriti', aspect: 'pfv', english: 'to close',
       conjugations: {
         present: { ja:'zatvorim',    ti:'zatvoriš',    on:'zatvori',    mi:'zatvorimo',    vi:'zatvorite',    oni:'zatvore'      },
         past:    { ja:'zatvorio sam',ti:'zatvorio si', on:'zatvorio je',mi:'zatvorili smo',vi:'zatvorili ste',oni:'zatvorili su' },
@@ -2003,7 +2510,7 @@
       }
     },
     {
-      infinitive: 'posetiti', english: 'to visit',
+      infinitive: 'posetiti', aspect: 'pfv', english: 'to visit',
       conjugations: {
         present: { ja:'posetim',    ti:'posetiš',    on:'poseti',    mi:'posetimo',    vi:'posetite',    oni:'posete'      },
         past:    { ja:'posetio sam',ti:'posetio si', on:'posetio je',mi:'posetili smo',vi:'posetili ste',oni:'posetili su' },
@@ -2011,7 +2518,7 @@
       }
     },
     {
-      infinitive: 'poznavati', english: 'to know (a person)',
+      infinitive: 'poznavati', aspect: 'imp', english: 'to know (a person)',
       conjugations: {
         present: { ja:'poznajem',    ti:'poznaješ',    on:'poznaje',    mi:'poznajemo',    vi:'poznajete',    oni:'poznaju'    },
         past:    { ja:'poznavao sam',ti:'poznavao si', on:'poznavao je',mi:'poznavali smo',vi:'poznavali ste',oni:'poznavali su' },
@@ -2020,7 +2527,7 @@
     },
     // ── Group 4: -ovati / -avati verbs ────────────────────────────────────
     {
-      infinitive: 'putovati', english: 'to travel',
+      infinitive: 'putovati', aspect: 'imp', english: 'to travel',
       conjugations: {
         present: { ja:'putujem',    ti:'putuješ',    on:'putuje',    mi:'putujemo',    vi:'putujete',    oni:'putuju'      },
         past:    { ja:'putovao sam',ti:'putovao si', on:'putovao je',mi:'putovali smo',vi:'putovali ste',oni:'putovali su' },
@@ -2028,7 +2535,7 @@
       }
     },
     {
-      infinitive: 'kupovati', english: 'to shop / to buy (repeatedly)',
+      infinitive: 'kupovati', aspect: 'imp', english: 'to shop / to buy (repeatedly)',
       conjugations: {
         present: { ja:'kupujem',    ti:'kupuješ',    on:'kupuje',    mi:'kupujemo',    vi:'kupujete',    oni:'kupuju'      },
         past:    { ja:'kupovao sam',ti:'kupovao si', on:'kupovao je',mi:'kupovali smo',vi:'kupovali ste',oni:'kupovali su' },
@@ -2036,7 +2543,7 @@
       }
     },
     {
-      infinitive: 'pokazivati', english: 'to show (repeatedly)',
+      infinitive: 'pokazivati', aspect: 'imp', english: 'to show (repeatedly)',
       conjugations: {
         present: { ja:'pokazujem',    ti:'pokazuješ',    on:'pokazuje',    mi:'pokazujemo',    vi:'pokazujete',    oni:'pokazuju'      },
         past:    { ja:'pokazivao sam',ti:'pokazivao si', on:'pokazivao je',mi:'pokazivali smo',vi:'pokazivali ste',oni:'pokazivali su' },
@@ -2044,7 +2551,7 @@
       }
     },
     {
-      infinitive: 'rokovati', english: 'to schedule / to set a date',
+      infinitive: 'rokovati', aspect: 'imp', english: 'to schedule / to set a date',
       conjugations: {
         present: { ja:'rokujem',    ti:'rokuješ',    on:'rokuje',    mi:'rokujemo',    vi:'rokujete',    oni:'rokuju'      },
         past:    { ja:'rokovao sam',ti:'rokovao si', on:'rokovao je',mi:'rokovali smo',vi:'rokovali ste',oni:'rokovali su' },
@@ -2052,7 +2559,7 @@
       }
     },
     {
-      infinitive: 'radovati se', english: 'to be glad / to look forward',
+      infinitive: 'radovati se', aspect: 'imp', english: 'to be glad / to look forward',
       conjugations: {
         present: { ja:'radujem se',    ti:'raduješ se',    on:'raduje se',    mi:'radujemo se',    vi:'radujete se',    oni:'raduju se'      },
         past:    { ja:'radovao sam se',ti:'radovao si se', on:'radovao se je',mi:'radovali smo se',vi:'radovali ste se',oni:'radovali su se' },
@@ -2060,7 +2567,7 @@
       }
     },
     {
-      infinitive: 'verovati', english: 'to believe',
+      infinitive: 'verovati', aspect: 'imp', english: 'to believe',
       conjugations: {
         present: { ja:'verujem',    ti:'veruješ',    on:'veruje',    mi:'verujemo',    vi:'verujete',    oni:'veruju'      },
         past:    { ja:'verovao sam',ti:'verovao si', on:'verovao je',mi:'verovali smo',vi:'verovali ste',oni:'verovali su' },
@@ -2068,7 +2575,7 @@
       }
     },
     {
-      infinitive: 'razvijati', english: 'to develop',
+      infinitive: 'razvijati', aspect: 'imp', english: 'to develop',
       conjugations: {
         present: { ja:'razvijam',    ti:'razvijaš',    on:'razvija',    mi:'razvijamo',    vi:'razvijate',    oni:'razvijaju'    },
         past:    { ja:'razvijao sam',ti:'razvijao si', on:'razvijao je',mi:'razvijali smo',vi:'razvijali ste',oni:'razvijali su' },
@@ -2076,7 +2583,7 @@
       }
     },
     {
-      infinitive: 'objašnjavati', english: 'to explain (repeatedly)',
+      infinitive: 'objašnjavati', aspect: 'imp', english: 'to explain (repeatedly)',
       conjugations: {
         present: { ja:'objašnjavam',    ti:'objašnjavaš',    on:'objašnjava',    mi:'objašnjavamo',    vi:'objašnjavate',    oni:'objašnjavaju'    },
         past:    { ja:'objašnjavao sam',ti:'objašnjavao si', on:'objašnjavao je',mi:'objašnjavali smo',vi:'objašnjavali ste',oni:'objašnjavali su' },
@@ -2085,7 +2592,7 @@
     },
     // ── Group 5: Mixed / common ────────────────────────────────────────────
     {
-      infinitive: 'čistiti', english: 'to clean',
+      infinitive: 'čistiti', aspect: 'imp', english: 'to clean',
       conjugations: {
         present: { ja:'čistim',    ti:'čistiš',    on:'čisti',    mi:'čistimo',    vi:'čistite',    oni:'čiste'      },
         past:    { ja:'čistio sam',ti:'čistio si', on:'čistio je',mi:'čistili smo',vi:'čistili ste',oni:'čistili su' },
@@ -2093,7 +2600,7 @@
       }
     },
     {
-      infinitive: 'pamtiti', english: 'to remember',
+      infinitive: 'pamtiti', aspect: 'imp', english: 'to remember',
       conjugations: {
         present: { ja:'pamtim',    ti:'pamtiš',    on:'pamti',    mi:'pamtimo',    vi:'pamtite',    oni:'pamte'      },
         past:    { ja:'pamtio sam',ti:'pamtio si', on:'pamtio je',mi:'pamtili smo',vi:'pamtili ste',oni:'pamtili su' },
@@ -2101,7 +2608,7 @@
       }
     },
     {
-      infinitive: 'početi', english: 'to begin / to start',
+      infinitive: 'početi', aspect: 'pfv', english: 'to begin / to start',
       conjugations: {
         present: { ja:'počnem',    ti:'počneš',    on:'počne',    mi:'počnemo',    vi:'počnete',    oni:'počnu'      },
         past:    { ja:'počeo sam', ti:'počeo si',  on:'počeo je', mi:'počeli smo', vi:'počeli ste', oni:'počeli su'  },
@@ -2109,7 +2616,7 @@
       }
     },
     {
-      infinitive: 'završiti', english: 'to finish / to end',
+      infinitive: 'završiti', aspect: 'pfv', english: 'to finish / to end',
       conjugations: {
         present: { ja:'završim',    ti:'završiš',    on:'završi',    mi:'završimo',    vi:'završite',    oni:'završe'      },
         past:    { ja:'završio sam',ti:'završio si', on:'završio je',mi:'završili smo',vi:'završili ste',oni:'završili su' },
@@ -2117,7 +2624,7 @@
       }
     },
     {
-      infinitive: 'pričekati', english: 'to wait (a bit)',
+      infinitive: 'pričekati', aspect: 'pfv', english: 'to wait (a bit)',
       conjugations: {
         present: { ja:'pričekam',    ti:'pričekaš',    on:'pričeka',    mi:'pričekamo',    vi:'pričekate',    oni:'pričekaju'    },
         past:    { ja:'pričekao sam',ti:'pričekao si', on:'pričekao je',mi:'pričekali smo',vi:'pričekali ste',oni:'pričekali su' },
@@ -2125,7 +2632,7 @@
       }
     },
     {
-      infinitive: 'preneti', english: 'to carry over / to transfer',
+      infinitive: 'preneti', aspect: 'pfv', english: 'to carry over / to transfer',
       conjugations: {
         present: { ja:'prnesem',    ti:'prneseš',    on:'prnese',    mi:'prnesemo',    vi:'prnesete',    oni:'prnesu'      },
         past:    { ja:'preneo sam', ti:'preneo si',  on:'preneo je', mi:'preneli smo', vi:'preneli ste', oni:'preneli su'  },
@@ -2133,7 +2640,7 @@
       }
     },
     {
-      infinitive: 'popiti', english: 'to drink up',
+      infinitive: 'popiti', aspect: 'pfv', english: 'to drink up',
       conjugations: {
         present: { ja:'popijem',   ti:'popiješ',   on:'popije',   mi:'popijemo',   vi:'popijete',   oni:'popiju'     },
         past:    { ja:'popio sam', ti:'popio si',  on:'popio je', mi:'popili smo', vi:'popili ste', oni:'popili su'  },
@@ -2141,7 +2648,7 @@
       }
     },
     {
-      infinitive: 'pojesti', english: 'to eat up',
+      infinitive: 'pojesti', aspect: 'pfv', english: 'to eat up',
       conjugations: {
         present: { ja:'pojedem',   ti:'pojedeš',   on:'pojede',   mi:'pojedemo',   vi:'pojedete',   oni:'pojedu'     },
         past:    { ja:'pojeo sam', ti:'pojeo si',  on:'pojeo je', mi:'pojeli smo', vi:'pojeli ste', oni:'pojeli su'  },
@@ -2149,7 +2656,7 @@
       }
     },
     {
-      infinitive: 'pozvati', english: 'to call / to invite',
+      infinitive: 'pozvati', aspect: 'pfv', english: 'to call / to invite',
       conjugations: {
         present: { ja:'pozovem',    ti:'pozoveš',    on:'pozove',    mi:'pozovemo',    vi:'pozovete',    oni:'pozovu'      },
         past:    { ja:'pozvao sam', ti:'pozvao si',  on:'pozvao je', mi:'pozvali smo', vi:'pozvali ste', oni:'pozvali su'  },
@@ -2157,7 +2664,7 @@
       }
     },
     {
-      infinitive: 'saznati', english: 'to find out / to learn',
+      infinitive: 'saznati', aspect: 'pfv', english: 'to find out / to learn',
       conjugations: {
         present: { ja:'saznam',    ti:'saznaš',    on:'sazna',    mi:'saznamo',    vi:'saznate',    oni:'saznaju'    },
         past:    { ja:'saznao sam',ti:'saznao si', on:'saznao je',mi:'saznali smo',vi:'saznali ste',oni:'saznali su' },
@@ -2165,7 +2672,7 @@
       }
     },
     {
-      infinitive: 'prihvatiti', english: 'to accept',
+      infinitive: 'prihvatiti', aspect: 'pfv', english: 'to accept',
       conjugations: {
         present: { ja:'prihvatim',    ti:'prihvatiš',    on:'prihvati',    mi:'prihvatimo',    vi:'prihvatite',    oni:'prihvate'      },
         past:    { ja:'prihvatio sam',ti:'prihvatio si', on:'prihvatio je',mi:'prihvatili smo',vi:'prihvatili ste',oni:'prihvatili su' },
@@ -2173,7 +2680,7 @@
       }
     },
     {
-      infinitive: 'objasniti', english: 'to explain (once)',
+      infinitive: 'objasniti', aspect: 'pfv', english: 'to explain (once)',
       conjugations: {
         present: { ja:'objasnim',    ti:'objasniš',    on:'objasni',    mi:'objasnimo',    vi:'objasnite',    oni:'objasne'      },
         past:    { ja:'objasnio sam',ti:'objasnio si', on:'objasnio je',mi:'objasnili smo',vi:'objasnili ste',oni:'objasnili su' },
@@ -2181,7 +2688,7 @@
       }
     },
     {
-      infinitive: 'otkazati', english: 'to cancel',
+      infinitive: 'otkazati', aspect: 'pfv', english: 'to cancel',
       conjugations: {
         present: { ja:'otkažem',    ti:'otkažeš',    on:'otkaže',    mi:'otkažemo',    vi:'otkažete',    oni:'otkažu'      },
         past:    { ja:'otkazao sam',ti:'otkazao si', on:'otkazao je',mi:'otkazali smo',vi:'otkazali ste',oni:'otkazali su' },
@@ -2189,7 +2696,7 @@
       }
     },
     {
-      infinitive: 'čuvati', english: 'to keep / to guard',
+      infinitive: 'čuvati', aspect: 'imp', english: 'to keep / to guard',
       conjugations: {
         present: { ja:'čuvam',    ti:'čuvaš',    on:'čuva',    mi:'čuvamo',    vi:'čuvate',    oni:'čuvaju'    },
         past:    { ja:'čuvao sam',ti:'čuvao si', on:'čuvao je',mi:'čuvali smo',vi:'čuvali ste',oni:'čuvali su' },
@@ -2197,7 +2704,7 @@
       }
     },
     {
-      infinitive: 'pokazati', english: 'to show (once)',
+      infinitive: 'pokazati', aspect: 'pfv', english: 'to show (once)',
       conjugations: {
         present: { ja:'pokažem',    ti:'pokažeš',    on:'pokaže',    mi:'pokažemo',    vi:'pokažete',    oni:'pokažu'      },
         past:    { ja:'pokazao sam',ti:'pokazao si', on:'pokazao je',mi:'pokazali smo',vi:'pokazali ste',oni:'pokazali su' },
@@ -2205,7 +2712,7 @@
       }
     },
     {
-      infinitive: 'baciti', english: 'to throw',
+      infinitive: 'baciti', aspect: 'pfv', english: 'to throw',
       conjugations: {
         present: { ja:'bacim',    ti:'baciš',    on:'baci',    mi:'bacimo',    vi:'bacite',    oni:'bace'      },
         past:    { ja:'bacio sam',ti:'bacio si', on:'bacio je',mi:'bacili smo',vi:'bacili ste',oni:'bacili su' },
@@ -2213,7 +2720,7 @@
       }
     },
     {
-      infinitive: 'popraviti', english: 'to fix / to repair',
+      infinitive: 'popraviti', aspect: 'pfv', english: 'to fix / to repair',
       conjugations: {
         present: { ja:'popravim',    ti:'popraviš',    on:'popravi',    mi:'popravimo',    vi:'popravite',    oni:'poprave'     },
         past:    { ja:'popravio sam',ti:'popravio si', on:'popravio je',mi:'popravili smo',vi:'popravili ste',oni:'popravili su' },
@@ -2221,7 +2728,7 @@
       }
     },
     {
-      infinitive: 'doručkovati', english: 'to have breakfast',
+      infinitive: 'doručkovati', aspect: 'imp', english: 'to have breakfast',
       conjugations: {
         present: { ja:'doručkujem',    ti:'doručkuješ',    on:'doručkuje',    mi:'doručkujemo',    vi:'doručkujete',    oni:'doručkuju'      },
         past:    { ja:'doručkovao sam',ti:'doručkovao si', on:'doručkovao je',mi:'doručkovali smo',vi:'doručkovali ste',oni:'doručkovali su' },
@@ -2263,10 +2770,93 @@
   }
 
   // ═══════════════════════════════════════════════════
+  //  FILL-IN DRILL DATA
+  // ═══════════════════════════════════════════════════
+  const SENTENCE_DRILLS = [
+    // ─── biti (to be) — present ───────────────────────
+    { sr:'Ja ___ student.',          en:'I am a student.',                answer:'sam',     options:['sam','si','je','smo'],               hint:'biti (to be) — 1st sg. present' },
+    { sr:'Ti ___ umoran.',           en:'You are tired. (masc.)',          answer:'si',      options:['sam','si','je','ste'],               hint:'biti (to be) — 2nd sg. present' },
+    { sr:'Ona ___ nastavnica.',      en:'She is a teacher.',               answer:'je',      options:['sam','je','smo','su'],               hint:'biti (to be) — 3rd sg. present' },
+    { sr:'Mi ___ srećni.',           en:'We are happy.',                   answer:'smo',     options:['sam','je','smo','su'],               hint:'biti (to be) — 1st pl. present' },
+    { sr:'Vi ___ dobri.',            en:'You (pl.) are good.',             answer:'ste',     options:['smo','ste','su','je'],               hint:'biti (to be) — 2nd pl. present' },
+    { sr:'Oni ___ ovde.',            en:'They are here.',                  answer:'su',      options:['smo','ste','su','je'],               hint:'biti (to be) — 3rd pl. present' },
+    // ─── imati (to have) — present ───────────────────
+    { sr:'Ja ___ psa.',              en:'I have a dog.',                   answer:'imam',    options:['imam','imaš','ima','imamo'],         hint:'imati (to have) — 1st sg. present' },
+    { sr:'Ti ___ brata.',            en:'You have a brother.',             answer:'imaš',    options:['imam','imaš','ima','imaju'],         hint:'imati (to have) — 2nd sg. present' },
+    { sr:'On ___ sestru.',           en:'He has a sister.',                answer:'ima',     options:['imam','imaš','ima','imamo'],         hint:'imati (to have) — 3rd sg. present' },
+    { sr:'Oni ___ kuću.',            en:'They have a house.',              answer:'imaju',   options:['ima','imamo','imate','imaju'],       hint:'imati (to have) — 3rd pl. present' },
+    // ─── govoriti (to speak) — present ───────────────
+    { sr:'Ja ___ srpski.',           en:'I speak Serbian.',                answer:'govorim', options:['govorim','govoriš','govori','govore'],   hint:'govoriti (to speak) — 1st sg. present' },
+    { sr:'Ti ___ brzo.',             en:'You speak fast.',                 answer:'govoriš', options:['govorim','govoriš','govori','govorimo'], hint:'govoriti (to speak) — 2nd sg. present' },
+    { sr:'Ona ___ engleski.',        en:'She speaks English.',             answer:'govori',  options:['govorim','govoriš','govori','govore'],   hint:'govoriti (to speak) — 3rd sg. present' },
+    { sr:'Oni ___ tiho.',            en:'They speak quietly.',             answer:'govore',  options:['govori','govorimo','govorite','govore'], hint:'govoriti (to speak) — 3rd pl. present' },
+    // ─── ići (to go) — present ───────────────────────
+    { sr:'Ja ___ u školu.',          en:'I am going to school.',           answer:'idem',    options:['idem','ideš','ide','idemo'],         hint:'ići (to go) — 1st sg. present' },
+    { sr:'Ona ___ kući.',            en:'She is going home.',              answer:'ide',     options:['idem','ideš','ide','idu'],           hint:'ići (to go) — 3rd sg. present' },
+    { sr:'Mi ___ u grad.',           en:'We are going to town.',           answer:'idemo',   options:['idem','idemo','idete','idu'],        hint:'ići (to go) — 1st pl. present' },
+    { sr:'Oni ___ na more.',         en:'They are going to the sea.',      answer:'idu',     options:['ide','idemo','idete','idu'],         hint:'ići (to go) — 3rd pl. present' },
+    // ─── raditi (to work) — present ──────────────────
+    { sr:'Ja ___ u banci.',          en:'I work in a bank.',               answer:'radim',   options:['radim','radiš','radi','rade'],       hint:'raditi (to work) — 1st sg. present' },
+    { sr:'Ti ___ svaki dan.',        en:'You work every day.',             answer:'radiš',   options:['radim','radiš','radi','radimo'],     hint:'raditi (to work) — 2nd sg. present' },
+    { sr:'On ___ u fabrici.',        en:'He works in a factory.',          answer:'radi',    options:['radim','radiš','radi','rade'],       hint:'raditi (to work) — 3rd sg. present' },
+    { sr:'Oni ___ zajedno.',         en:'They work together.',             answer:'rade',    options:['radi','radimo','radite','rade'],     hint:'raditi (to work) — 3rd pl. present' },
+    // ─── jesti (to eat) — present ────────────────────
+    { sr:'Ona ___ jabuku.',          en:'She is eating an apple.',         answer:'jede',    options:['jedem','jedeš','jede','jedu'],       hint:'jesti (to eat) — 3rd sg. present' },
+    { sr:'Mi ___ ručak.',            en:'We are eating lunch.',            answer:'jedemo',  options:['jede','jedemo','jedete','jedu'],     hint:'jesti (to eat) — 1st pl. present' },
+    { sr:'Oni ___ večeru.',          en:'They are eating dinner.',         answer:'jedu',    options:['jede','jedemo','jedete','jedu'],     hint:'jesti (to eat) — 3rd pl. present' },
+    // ─── piti (to drink) — present ───────────────────
+    { sr:'Ja ___ kafu.',             en:'I am drinking coffee.',           answer:'pijem',   options:['pijem','piješ','pije','pijemo'],     hint:'piti (to drink) — 1st sg. present' },
+    { sr:'Ona ___ vodu.',            en:'She is drinking water.',          answer:'pije',    options:['pijem','piješ','pije','piju'],       hint:'piti (to drink) — 3rd sg. present' },
+    { sr:'Oni ___ pivo.',            en:'They are drinking beer.',         answer:'piju',    options:['pije','pijemo','pijete','piju'],     hint:'piti (to drink) — 3rd pl. present' },
+    // ─── znati (to know) — present ───────────────────
+    { sr:'Ja ___ odgovor.',          en:'I know the answer.',              answer:'znam',    options:['znam','znaš','zna','znamo'],         hint:'znati (to know) — 1st sg. present' },
+    { sr:'On ___ srpski dobro.',     en:'He knows Serbian well.',          answer:'zna',     options:['znam','znaš','zna','znaju'],         hint:'znati (to know) — 3rd sg. present' },
+    { sr:'Mi ___ put.',              en:'We know the way.',                answer:'znamo',   options:['znam','zna','znamo','znaju'],        hint:'znati (to know) — 1st pl. present' },
+    // ─── videti (to see) — present ───────────────────
+    { sr:'Ja ___ planine.',          en:'I see the mountains.',            answer:'vidim',   options:['vidim','vidiš','vidi','vidimo'],     hint:'videti (to see) — 1st sg. present' },
+    { sr:'Ti ___ more.',             en:'You see the sea.',                answer:'vidiš',   options:['vidim','vidiš','vidi','vide'],       hint:'videti (to see) — 2nd sg. present' },
+    { sr:'Oni ___ park.',            en:'They see the park.',              answer:'vide',    options:['vidi','vidimo','vidite','vide'],     hint:'videti (to see) — 3rd pl. present' },
+    // ─── živeti (to live) — present ──────────────────
+    { sr:'Ona ___ u Beogradu.',      en:'She lives in Belgrade.',          answer:'živi',    options:['živim','živi','živimo','žive'],      hint:'živeti (to live) — 3rd sg. present' },
+    { sr:'Mi ___ u gradu.',          en:'We live in the city.',            answer:'živimo',  options:['živim','živi','živimo','žive'],      hint:'živeti (to live) — 1st pl. present' },
+    // ─── voleti (to love/like) — present ─────────────
+    { sr:'Ja ___ srpsku hranu.',     en:'I love Serbian food.',            answer:'volim',   options:['volim','voliš','voli','volimo'],     hint:'voleti (to love) — 1st sg. present' },
+    { sr:'Ona ___ muziku.',          en:'She loves music.',                answer:'voli',    options:['volim','voliš','voli','vole'],       hint:'voleti (to love) — 3rd sg. present' },
+    // ─── moći (to be able / can) — present ───────────
+    { sr:'Ja ___ da pomognem.',      en:'I can help.',                     answer:'mogu',    options:['mogu','možeš','može','možemo'],      hint:'moći (can) — 1st sg. present' },
+    { sr:'Ti ___ da dođeš.',         en:'You can come.',                   answer:'možeš',   options:['mogu','možeš','može','možemo'],      hint:'moći (can) — 2nd sg. present' },
+    { sr:'Ona ___ da peva.',         en:'She can sing.',                   answer:'može',    options:['mogu','možeš','može','možemo'],      hint:'moći (can) — 3rd sg. present' },
+    // ─── čitati (to read) — present ──────────────────
+    { sr:'Ona ___ knjigu.',          en:'She is reading a book.',          answer:'čita',    options:['čitam','čitaš','čita','čitaju'],     hint:'čitati (to read) — 3rd sg. present' },
+    { sr:'Ja ___ novine.',           en:'I am reading the newspaper.',     answer:'čitam',   options:['čitam','čitaš','čita','čitamo'],     hint:'čitati (to read) — 1st sg. present' },
+    // ─── pisati (to write) — present ─────────────────
+    { sr:'On ___ pismo.',            en:'He is writing a letter.',         answer:'piše',    options:['pišem','pišeš','piše','pišemo'],     hint:'pisati (to write) — 3rd sg. present' },
+    { sr:'Ja ___ email.',            en:'I am writing an email.',          answer:'pišem',   options:['pišem','pišeš','piše','pišu'],       hint:'pisati (to write) — 1st sg. present' },
+    // ─── učiti (to study/learn) — present ────────────
+    { sr:'Mi ___ srpski.',           en:'We are studying Serbian.',        answer:'učimo',   options:['učim','učiš','učimo','uče'],         hint:'učiti (to study) — 1st pl. present' },
+    { sr:'Ti ___ za ispit.',         en:'You are studying for an exam.',   answer:'učiš',    options:['učim','učiš','uči','učimo'],         hint:'učiti (to study) — 2nd sg. present' },
+    // ─── dolaziti (to come/arrive) — present ─────────
+    { sr:'Ona ___ kasno.',           en:'She is coming late.',             answer:'dolazi',  options:['dolazim','dolazi','dolazimo','dolaze'], hint:'dolaziti (to arrive) — 3rd sg. present' },
+    { sr:'Oni ___ sutra.',           en:'They are coming tomorrow.',       answer:'dolaze',  options:['dolazi','dolazimo','dolazite','dolaze'],hint:'dolaziti (to arrive) — 3rd pl. present' },
+    // ─── spavati (to sleep) — present ────────────────
+    { sr:'Beba ___.',                en:'The baby is sleeping.',           answer:'spava',   options:['spavam','spavaš','spava','spavamo'],  hint:'spavati (to sleep) — 3rd sg. present' },
+    { sr:'Ja ___ dobro.',            en:'I sleep well.',                   answer:'spavam',  options:['spavam','spavaš','spava','spavaju'],  hint:'spavati (to sleep) — 1st sg. present' },
+    // ─── čekati (to wait) — present ──────────────────
+    { sr:'Mi ___ autobus.',          en:'We are waiting for the bus.',     answer:'čekamo',  options:['čekam','čekaš','čekamo','čekaju'],   hint:'čekati (to wait) — 1st pl. present' },
+    { sr:'Ti ___ prijatelja.',       en:'You are waiting for a friend.',   answer:'čekaš',   options:['čekam','čekaš','čeka','čekamo'],     hint:'čekati (to wait) — 2nd sg. present' },
+    // ─── past tense ───────────────────────────────────
+    { sr:'On je ___ u Beogradu.',    en:'He lived in Belgrade.',           answer:'živeo',   options:['živeo','živela','živeli','živelo'],   hint:'živeti — past, masc. sg.' },
+    { sr:'Ona je ___ knjigu.',       en:'She read the book.',              answer:'čitala',  options:['čitao','čitala','čitali','čitale'],   hint:'čitati — past, fem. sg.' },
+    { sr:'Oni su ___ kafu.',         en:'They drank coffee.',              answer:'pili',    options:['pio','pila','pili','pile'],           hint:'piti — past, masc. pl.' },
+    { sr:'Ja sam ___ zadatak.',      en:'I wrote the assignment. (masc.)', answer:'pisao',   options:['pisao','pisala','pisali','pisale'],   hint:'pisati — past, masc. sg.' },
+    { sr:'Mi smo ___ zajedno.',      en:'We worked together.',             answer:'radili',  options:['radio','radila','radili','radile'],   hint:'raditi — past, pl.' },
+  ];
+
+  // ═══════════════════════════════════════════════════
   //  FLASHCARD STORAGE
   // ═══════════════════════════════════════════════════
   const STORAGE_KEY = 'serbian_cards';
-  const CARDS_VER   = '2';
+  const CARDS_VER   = '3';
 
   const DEFAULT_CARDS = [
     // ── GREETINGS ─────────────────────────────────────────────────────────
@@ -2553,6 +3143,60 @@
     { serbian:'pri',     english:'at / near / upon',       category:'Prepositions', note:'+ Locative\npri kraju  (near the end)' },
     { serbian:'o',       english:'about / concerning',     category:'Prepositions', note:'+ Locative\npričam o tome  (I talk about that)' },
     { serbian:'ka',      english:'toward (direction)',     category:'Prepositions', note:'+ Dative\nka moru  (toward the sea)' },
+    // ── PHRASES ───────────────────────────────────────────────────────────
+    { serbian:'Kako se zoveš?',              english:"What's your name? (inf.)",          category:'Phrases' },
+    { serbian:'Zovem se…',                   english:'My name is…',                        category:'Phrases' },
+    { serbian:'Odakle si?',                  english:'Where are you from? (inf.)',         category:'Phrases' },
+    { serbian:'Ja sam iz Amerike.',          english:'I am from America.',                 category:'Phrases' },
+    { serbian:'Koliko imaš godina?',         english:'How old are you? (inf.)',            category:'Phrases' },
+    { serbian:'Imam dvadeset godina.',       english:'I am twenty years old.',             category:'Phrases' },
+    { serbian:'Govorite li engleski?',       english:'Do you speak English? (formal)',     category:'Phrases' },
+    { serbian:'Ne govorim srpski.',          english:"I don't speak Serbian.",             category:'Phrases' },
+    { serbian:'Govorim malo srpski.',        english:'I speak a little Serbian.',          category:'Phrases' },
+    { serbian:'Molim, ponovite.',            english:'Please repeat that. (formal)',       category:'Phrases' },
+    { serbian:'Govorite sporije, molim.',    english:'Please speak more slowly.',          category:'Phrases' },
+    { serbian:'Nisam razumeo.',              english:"I didn't understand. (masc.)",       category:'Phrases' },
+    { serbian:'Možete li mi pomoći?',        english:'Can you help me? (formal)',          category:'Phrases' },
+    { serbian:'Gde je toalet?',              english:'Where is the bathroom?',             category:'Phrases' },
+    { serbian:'Koliko košta?',               english:'How much does it cost?',             category:'Phrases' },
+    { serbian:'Koliko je sati?',             english:'What time is it?',                   category:'Phrases' },
+    { serbian:'Kada kreće autobus?',         english:'When does the bus leave?',           category:'Phrases' },
+    { serbian:'Jedna karta do Beograda.',    english:'One ticket to Belgrade.',            category:'Phrases' },
+    { serbian:'Gde mogu da kupim karte?',    english:'Where can I buy tickets?',           category:'Phrases' },
+    { serbian:'Nazovite mi taksi, molim.',   english:'Please call me a taxi.',             category:'Phrases' },
+    { serbian:'Imam rezervaciju.',           english:'I have a reservation.',              category:'Phrases' },
+    { serbian:'Jedan sto za dvoje.',         english:'A table for two.',                   category:'Phrases' },
+    { serbian:'Šta preporučujete?',          english:'What do you recommend?',             category:'Phrases' },
+    { serbian:'Donesite mi račun, molim.',   english:'Bring me the bill, please.',         category:'Phrases' },
+    { serbian:'Bilo je ukusno.',             english:'It was delicious.',                  category:'Phrases' },
+    { serbian:'Živeli!',                     english:'Cheers!',                            category:'Phrases' },
+    { serbian:'Prijatno!',                   english:'Bon appétit!',                       category:'Phrases' },
+    { serbian:'Sviđa mi se.',                english:'I like it.',                         category:'Phrases' },
+    { serbian:'Ne sviđa mi se.',             english:"I don't like it.",                   category:'Phrases' },
+    { serbian:'Veoma je lepo.',              english:'It is very beautiful.',              category:'Phrases' },
+    { serbian:'Nema problema.',              english:'No problem.',                        category:'Phrases' },
+    { serbian:'Svejedno mi je.',             english:"I don't mind. / All the same.",      category:'Phrases' },
+    { serbian:'Sretan put!',                 english:'Have a good trip!',                  category:'Phrases' },
+    { serbian:'Srećan rođendan!',            english:'Happy birthday!',                    category:'Phrases' },
+    { serbian:'Srećna Nova Godina!',         english:'Happy New Year!',                    category:'Phrases' },
+    { serbian:'Čestitamo!',                  english:'Congratulations!',                   category:'Phrases' },
+    { serbian:'Sve najbolje!',               english:'All the best!',                      category:'Phrases' },
+    { serbian:'Boli me glava.',              english:'I have a headache.',                 category:'Phrases' },
+    { serbian:'Nisam dobro.',                english:"I'm not well.",                      category:'Phrases' },
+    { serbian:'Zovite doktora!',             english:'Call a doctor!',                     category:'Phrases' },
+    { serbian:'Izgubio sam se.',             english:"I'm lost. (masc.)",                  category:'Phrases' },
+    { serbian:'Izgubila sam se.',            english:"I'm lost. (fem.)",                   category:'Phrases' },
+    { serbian:'Pomozite!',                   english:'Help!',                              category:'Phrases' },
+    { serbian:'Volim te.',                   english:'I love you.',                        category:'Phrases' },
+    { serbian:'Nedostaješ mi.',              english:'I miss you.',                        category:'Phrases' },
+    { serbian:'Idemo zajedno.',              english:"Let's go together.",                 category:'Phrases' },
+    { serbian:'Šta radiš večeras?',          english:'What are you doing tonight?',        category:'Phrases' },
+    { serbian:'Želim da naručim…',           english:'I would like to order…',             category:'Phrases' },
+    { serbian:'Ima li slobodnih soba?',      english:'Are there any rooms available?',     category:'Phrases' },
+    { serbian:'Koliko dugo traje put?',      english:'How long does the trip take?',       category:'Phrases' },
+    { serbian:'Biće dobro.',                 english:'It will be okay.',                   category:'Phrases' },
+    { serbian:'Drago mi je.',                english:'Nice to meet you.',                  category:'Phrases' },
+    { serbian:'Gde se nalazimo?',            english:'Where are we?',                      category:'Phrases' },
   ];
 
   function loadCards() {
@@ -2626,6 +3270,15 @@
   }
   function saveUserAdjectives(a) { localStorage.setItem(ADJ_KEY, JSON.stringify(a)); }
 
+  const MISSED_KEY = 'serbian_missed_cards';
+  function loadMissedCards() {
+    try { return new Set(JSON.parse(localStorage.getItem(MISSED_KEY)) || []); }
+    catch(e) { return new Set(); }
+  }
+  function saveMissedCards() {
+    localStorage.setItem(MISSED_KEY, JSON.stringify([...missedCards]));
+  }
+
   // ═══════════════════════════════════════════════════
   //  STATE
   // ═══════════════════════════════════════════════════
@@ -2638,6 +3291,8 @@
   let index             = 0;
   let direction         = 'sr';
   let activeStudyGroups = new Set([...groups, '']); // '' = uncategorized
+  let missedCards       = loadMissedCards();
+  let missedOnlyMode    = false;
 
   // Grammar state
   let gIndex       = 0;
@@ -2653,6 +3308,7 @@
   let activeSubjects = new Set(['ja','ti','on','mi','vi','oni']);
   let vScore         = { correct: 0, total: 0 };
   let vScoredVerb    = false;
+  let addVerbAspect  = 'imp';
 
   // Adjective state
   let userAdjectives = loadUserAdjectives();
@@ -2663,47 +3319,564 @@
   let adjScore       = { correct: 0, total: 0 };
   let adjScoredAdj   = false;
 
+  // Aspect pairs state
+  let userAspectPairs  = loadUserAspectPairs();
+  let allAspectPairs   = [];
+  let apIndex          = 0;
+  let aspectDrillMode  = 'imp_pfv';
+  let apScore          = { correct: 0, total: 0 };
+  let apScoredPair     = false;
+
+  // ═══════════════════════════════════════════════════
+  //  SLAGALICA — state
+  // ═══════════════════════════════════════════════════
+  const SLAG_DIRECTIONS = [
+    { key: 'sr',  label: 'Srp → Eng' },
+    { key: 'en',  label: 'Eng → Srp' },
+    { key: 'mix', label: 'Mixed'      },
+  ];
+
+  let slagBest           = loadSlagBest();
+  let slagHistory        = loadSlagHistory();
+  let slagChain          = 0;
+  let slagDeck           = [];
+  let slagUsed           = new Set();
+  let slagCurrentCard    = null;
+  let slagDirection      = 'sr';
+  let slagActiveGroups   = new Set();
+  let slagGroupsInited   = false;
+  let slagAnswered       = false;
+  let slagMissedCards    = [];   // wrong cards accumulated this session
+  let slagMissedGameMode = false; // true when replaying only missed cards
+
+  function loadSlagBest() {
+    return parseInt(localStorage.getItem('slagalica-best-chain') || '0', 10);
+  }
+  function saveSlagBest() {
+    localStorage.setItem('slagalica-best-chain', String(slagBest));
+  }
+  function loadSlagHistory() {
+    try { return JSON.parse(localStorage.getItem('slagalica-history')) || []; }
+    catch(e) { return []; }
+  }
+  function saveSlagHistory() {
+    localStorage.setItem('slagalica-history', JSON.stringify(slagHistory));
+  }
+
+  // ─── Helpers ─────────────────────────────────────
+  function slagFilteredCards() {
+    if (slagActiveGroups.size === 0) return [];
+    return cards.filter(c => slagActiveGroups.has(c.category || ''));
+  }
+
+  function slagShuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function slagPickDistractors(correctCard, pool, dir) {
+    const correctText = (dir === 'sr' ? correctCard.english : correctCard.serbian) || '';
+    const getText = c => (dir === 'sr' ? c.english : c.serbian) || '';
+    const seen = new Set([correctText.toLowerCase()]);
+    const distractors = [];
+
+    // Phase 1: prefer same-category cards for harder distractors
+    const sameGroup = slagShuffle(
+      pool.filter(c => c !== correctCard && (c.category || '') === (correctCard.category || ''))
+    );
+    for (const c of sameGroup) {
+      const txt = getText(c);
+      if (txt && !seen.has(txt.toLowerCase())) {
+        seen.add(txt.toLowerCase());
+        distractors.push(txt);
+        if (distractors.length === 3) return distractors;
+      }
+    }
+
+    // Phase 2: fill remaining slots from other groups
+    const others = slagShuffle(
+      pool.filter(c => c !== correctCard && (c.category || '') !== (correctCard.category || ''))
+    );
+    for (const c of others) {
+      const txt = getText(c);
+      if (txt && !seen.has(txt.toLowerCase())) {
+        seen.add(txt.toLowerCase());
+        distractors.push(txt);
+        if (distractors.length === 3) break;
+      }
+    }
+    return distractors;
+  }
+
+  function slagRenderDots(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = '';
+    const last5 = slagHistory.slice(-5);
+    while (last5.length < 5) last5.unshift(null);
+    last5.forEach(val => {
+      const dot = document.createElement('span');
+      if (val === null) {
+        dot.className = 'slag-dot';
+      } else {
+        dot.className = 'slag-dot ' + (val > 0 ? 'win' : 'loss');
+        dot.title = `Chain: ${val}`;
+      }
+      el.appendChild(dot);
+    });
+  }
+
+  // ─── Lobby ───────────────────────────────────────
+  function renderSlagView() {
+    if (!slagGroupsInited) {
+      const allG = new Set(cards.map(c => c.category || ''));
+      allG.forEach(g => slagActiveGroups.add(g));
+      slagGroupsInited = true;
+    }
+    slagToLobby();
+  }
+
+  function slagToLobby() {
+    document.getElementById('slag-lobby').style.display = 'flex';
+    document.getElementById('slag-game').style.display  = 'none';
+    document.getElementById('slag-over').style.display  = 'none';
+    slagRenderLobby();
+  }
+
+  function slagRenderLobby() {
+    document.getElementById('slag-best-display').textContent = slagBest;
+    slagRenderDots('slag-dots');
+
+    // Direction buttons
+    const dirCont = document.getElementById('slag-dir-btns');
+    if (dirCont.children.length !== SLAG_DIRECTIONS.length) {
+      dirCont.innerHTML = '';
+      SLAG_DIRECTIONS.forEach(d => {
+        const btn = document.createElement('button');
+        btn.className  = 'tense-btn' + (d.key === slagDirection ? ' active' : '');
+        btn.textContent = d.label;
+        btn.dataset.key = d.key;
+        btn.addEventListener('click', () => {
+          slagDirection = d.key;
+          dirCont.querySelectorAll('.tense-btn').forEach(b =>
+            b.classList.toggle('active', b.dataset.key === slagDirection));
+        });
+        dirCont.appendChild(btn);
+      });
+    } else {
+      dirCont.querySelectorAll('.tense-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.key === slagDirection));
+    }
+
+    slagRenderGroupFilter();
+    slagCheckDeckSize();
+  }
+
+  function slagRenderGroupFilter() {
+    const container = document.getElementById('slag-group-toggles');
+    container.innerHTML = '';
+    const presentGroups = [...new Set(cards.map(c => c.category || ''))];
+    const bar = document.getElementById('slag-group-bar');
+    if (presentGroups.length === 0) { bar.style.display = 'none'; return; }
+    bar.style.display = '';
+
+    presentGroups.forEach(g => {
+      const label  = g || '(Uncategorized)';
+      const color  = getGroupColor(g);
+      const active = slagActiveGroups.has(g);
+      const pill   = document.createElement('button');
+      pill.className = 'group-pill' + (active ? ' active' : '');
+      pill.style.setProperty('--gc', color);
+      pill.textContent = label;
+      pill.addEventListener('click', () => {
+        if (slagActiveGroups.has(g)) {
+          slagActiveGroups.delete(g);
+          pill.classList.remove('active');
+        } else {
+          slagActiveGroups.add(g);
+          pill.classList.add('active');
+        }
+        slagCheckDeckSize();
+      });
+      container.appendChild(pill);
+    });
+  }
+
+  function slagSelectAllGroups() {
+    cards.forEach(c => slagActiveGroups.add(c.category || ''));
+    slagRenderGroupFilter();
+    slagCheckDeckSize();
+  }
+  function slagClearGroups() {
+    slagActiveGroups.clear();
+    slagRenderGroupFilter();
+    slagCheckDeckSize();
+  }
+
+  function slagCheckDeckSize() {
+    const pool   = slagFilteredCards();
+    const tooFew = pool.length < 8;
+    document.getElementById('slag-too-few').style.display = tooFew ? 'block' : 'none';
+    document.getElementById('slag-start-btn').disabled    = tooFew;
+  }
+
+  // ─── Game ────────────────────────────────────────
+  function startSlagGame() {
+    const pool = slagFilteredCards();
+    if (pool.length < 8) return;
+    slagChain          = 0;
+    slagUsed           = new Set();
+    slagDeck           = slagShuffle(pool);
+    slagMissedGameMode = false;
+    slagAnswered       = false;
+    document.getElementById('slag-lobby').style.display = 'none';
+    document.getElementById('slag-over').style.display  = 'none';
+    document.getElementById('slag-game').style.display  = 'flex';
+    document.getElementById('slag-game-best').textContent = slagBest;
+    showSlagQuestion();
+  }
+
+  function startSlagMissedGame() {
+    if (slagMissedCards.length < 1) return;
+    slagChain          = 0;
+    slagUsed           = new Set();
+    slagDeck           = slagShuffle([...slagMissedCards]);
+    slagMissedGameMode = true;
+    slagAnswered       = false;
+    document.getElementById('slag-lobby').style.display = 'none';
+    document.getElementById('slag-over').style.display  = 'none';
+    document.getElementById('slag-game').style.display  = 'flex';
+    document.getElementById('slag-game-best').textContent = slagBest;
+    showSlagQuestion();
+  }
+
+  function showSlagQuestion() {
+    slagAnswered = false;
+
+    // Pick next unused card; reshuffle if exhausted
+    let card = null;
+    for (const c of slagDeck) {
+      if (!slagUsed.has(c)) { card = c; break; }
+    }
+    if (!card) {
+      const refill = slagMissedGameMode ? [...slagMissedCards] : slagFilteredCards();
+      slagDeck = slagShuffle(refill);
+      slagUsed.clear();
+      card = slagDeck[0];
+    }
+    slagUsed.add(card);
+    slagCurrentCard = card;
+
+    // Resolve direction for this question
+    const dir = slagDirection === 'mix'
+      ? (Math.random() < 0.5 ? 'sr' : 'en')
+      : slagDirection;
+
+    // Counters
+    document.getElementById('slag-chain-num').textContent  = slagChain;
+    document.getElementById('slag-game-best').textContent  = slagBest;
+
+    // Direction badge
+    document.getElementById('slag-dir-badge').textContent =
+      dir === 'sr' ? 'Serbian → English' : 'English → Serbian';
+
+    // Restart card animation
+    const qCard = document.getElementById('slag-q-card');
+    qCard.style.animation = 'none';
+    void qCard.offsetHeight;
+    qCard.style.animation = '';
+
+    // Question text
+    document.getElementById('slag-q-label').textContent =
+      dir === 'sr' ? 'Translate to English' : 'Translate to Serbian';
+    if (dir === 'sr') {
+      document.getElementById('slag-q-word').textContent     = card.serbian;
+      document.getElementById('slag-q-cyrillic').textContent = latinToCyrillic(card.serbian);
+    } else {
+      document.getElementById('slag-q-word').textContent     = card.english;
+      document.getElementById('slag-q-cyrillic').textContent = '';
+    }
+    document.getElementById('slag-q-cat').textContent = '';
+
+    // Build 4 options
+    const correctText = (dir === 'sr' ? card.english : card.serbian) || '?';
+    const pool        = slagFilteredCards();
+    const distractors = slagPickDistractors(card, pool, dir);
+    while (distractors.length < 3) distractors.push('—');
+    const allOptions = slagShuffle([correctText, ...distractors]);
+
+    const optCont = document.getElementById('slag-options');
+    optCont.innerHTML = '';
+    allOptions.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className   = 'slag-option';
+      btn.textContent = opt;
+      btn.addEventListener('click', () =>
+        slagAnswer(btn, opt, correctText, card, dir));
+      optCont.appendChild(btn);
+    });
+  }
+
+  function slagAnswer(btn, chosen, correctText, card, dir) {
+    if (slagAnswered) return;
+    slagAnswered = true;
+
+    const isCorrect = chosen.toLowerCase() === correctText.toLowerCase();
+
+    // Reveal all correct/wrong states
+    document.querySelectorAll('.slag-option').forEach(b => {
+      b.disabled = true;
+      if (b.textContent.toLowerCase() === correctText.toLowerCase())
+        b.classList.add('correct');
+    });
+    if (!isCorrect) btn.classList.add('wrong');
+
+    if (isCorrect) {
+      slagChain++;
+      setTimeout(showSlagQuestion, 600);
+    } else {
+      setTimeout(() => endSlagGame(card, dir, correctText), 900);
+    }
+  }
+
+  function endSlagGame(wrongCard, dir, correctAnswer) {
+    const finalScore = slagChain;
+    const isRecord   = finalScore > 0 && finalScore > slagBest;
+    if (isRecord) { slagBest = finalScore; saveSlagBest(); }
+
+    slagHistory.push(finalScore);
+    if (slagHistory.length > 20) slagHistory = slagHistory.slice(-20);
+    saveSlagHistory();
+
+    // Accumulate missed card for this session
+    if (wrongCard && !slagMissedCards.includes(wrongCard)) {
+      slagMissedCards.push(wrongCard);
+    }
+    // Show / update "Replay Missed" button
+    const replayBtn = document.getElementById('slag-replay-missed-btn');
+    if (replayBtn) {
+      replayBtn.style.display  = slagMissedCards.length > 0 ? '' : 'none';
+      replayBtn.textContent    = `⚑ Replay Missed (${slagMissedCards.length})`;
+    }
+
+    document.getElementById('slag-game').style.display = 'none';
+    document.getElementById('slag-over').style.display = 'flex';
+
+    document.getElementById('slag-final-score').textContent = finalScore;
+
+    const recEl = document.getElementById('slag-record-msg');
+    if (finalScore === 0) {
+      recEl.textContent = '';
+    } else if (isRecord) {
+      recEl.textContent = '🏆 New record!';
+    } else {
+      recEl.textContent = `Best: ${slagBest}`;
+    }
+
+    // Wrong word box
+    if (wrongCard) {
+      const prompt = dir === 'sr' ? wrongCard.serbian : wrongCard.english;
+      const cyril  = dir === 'sr'
+        ? ` (${latinToCyrillic(wrongCard.serbian)})` : '';
+      document.getElementById('slag-wrong-q').innerHTML =
+        `You saw: <strong>${prompt}${cyril}</strong>`;
+      document.getElementById('slag-wrong-ans').innerHTML =
+        `Correct answer: <strong>${correctAnswer}</strong>`;
+      document.getElementById('slag-wrong-box').style.display = '';
+    } else {
+      document.getElementById('slag-wrong-box').style.display = 'none';
+    }
+
+    slagRenderDots('slag-over-dots');
+
+    // Refresh the lobby best for when they go back
+    if (document.getElementById('slag-best-display'))
+      document.getElementById('slag-best-display').textContent = slagBest;
+  }
+
+  function slagQuit() { slagToLobby(); }
+
   // ═══════════════════════════════════════════════════
   //  VIEW SWITCHER
   // ═══════════════════════════════════════════════════
   function showView(view) {
-    document.getElementById('study-view').style.display   = view === 'study'   ? 'flex' : 'none';
-    document.getElementById('grammar-view').style.display = view === 'grammar' ? 'flex' : 'none';
-    document.getElementById('verbs-view').style.display   = view === 'verbs'   ? 'flex' : 'none';
-    document.getElementById('adj-view').style.display     = view === 'adj'     ? 'flex' : 'none';
-    document.getElementById('manage-view').style.display  = view === 'manage'  ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','manage'].forEach(v =>
+    document.getElementById('study-view').style.display      = view === 'study'      ? 'flex' : 'none';
+    document.getElementById('grammar-view').style.display    = view === 'grammar'    ? 'flex' : 'none';
+    document.getElementById('verbs-view').style.display      = view === 'verbs'      ? 'flex' : 'none';
+    document.getElementById('adj-view').style.display        = view === 'adj'        ? 'flex' : 'none';
+    document.getElementById('drill-view').style.display      = view === 'drill'      ? 'flex' : 'none';
+    document.getElementById('aspect-view').style.display     = view === 'aspect'     ? 'flex' : 'none';
+    document.getElementById('slagalica-view').style.display  = view === 'slagalica'  ? 'flex' : 'none';
+    document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
+    ['study','grammar','verbs','adj','drill','aspect','slagalica','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
-    if (view === 'study')   renderStudy();
-    if (view === 'grammar') renderGrammarView();
-    if (view === 'verbs')   renderVerbView();
-    if (view === 'adj')     renderAdjView();
-    if (view === 'manage')  renderManage();
+    if (view === 'study')      renderStudy();
+    if (view === 'grammar')    renderGrammarView();
+    if (view === 'verbs')      renderVerbView();
+    if (view === 'adj')        renderAdjView();
+    if (view === 'drill')      renderDrillView();
+    if (view === 'aspect')     renderAspectView();
+    if (view === 'slagalica')  renderSlagView();
+    if (view === 'manage')     renderManage();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  FILL-IN DRILL
+  // ═══════════════════════════════════════════════════
+  let drillDeck     = [];
+  let drillIndex    = 0;
+  let drillScore    = { correct: 0, total: 0 };
+  let drillScoredQ  = false;
+  let drillAnswered = false;
+
+  function renderDrillView() {
+    if (drillDeck.length === 0) buildDrillDeck();
+    renderDrillCard();
+  }
+
+  function buildDrillDeck() {
+    drillDeck = SENTENCE_DRILLS.map((_, i) => i);
+    for (let i = drillDeck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [drillDeck[i], drillDeck[j]] = [drillDeck[j], drillDeck[i]];
+    }
+    drillIndex = 0;
+  }
+
+  function renderDrillCard() {
+    const drill = SENTENCE_DRILLS[drillDeck[drillIndex]];
+    const sentenceHtml = drill.sr.replace('___', '<span class="drill-blank">___</span>');
+    document.getElementById('drill-sentence-el').innerHTML = sentenceHtml;
+    document.getElementById('drill-english-el').textContent = drill.en;
+    document.getElementById('drill-hint-label').textContent = 'Complete the sentence';
+    document.getElementById('drill-progress').textContent =
+      `${drillIndex + 1} of ${drillDeck.length}`;
+    document.getElementById('drill-prev-btn').disabled = drillIndex === 0;
+    document.getElementById('drill-next-btn').disabled = drillIndex === drillDeck.length - 1;
+    const fb = document.getElementById('drill-feedback');
+    fb.style.display = 'none';
+    fb.className = 'drill-feedback';
+    drillScoredQ  = false;
+    drillAnswered = false;
+    buildDrillOptions(drill);
+    updateDrillScore();
+  }
+
+  function buildDrillOptions(drill) {
+    const container = document.getElementById('drill-options');
+    container.innerHTML = '';
+    const opts = [...drill.options];
+    for (let i = opts.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [opts[i], opts[j]] = [opts[j], opts[i]];
+    }
+    opts.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className   = 'drill-option';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => drillAnswer(opt, drill));
+      container.appendChild(btn);
+    });
+  }
+
+  function drillAnswer(chosen, drill) {
+    if (drillAnswered) return;
+    drillAnswered = true;
+    const isCorrect = chosen === drill.answer;
+
+    document.querySelectorAll('.drill-option').forEach(b => {
+      b.disabled = true;
+      if (b.textContent === drill.answer) b.classList.add('correct');
+    });
+    if (!isCorrect) {
+      document.querySelectorAll('.drill-option').forEach(b => {
+        if (b.textContent === chosen) b.classList.add('wrong');
+      });
+    }
+
+    // Fill the blank with the correct answer
+    const fillClass = isCorrect ? 'correct' : 'wrong';
+    document.getElementById('drill-sentence-el').innerHTML =
+      drill.sr.replace('___', `<span class="drill-blank-fill ${fillClass}">${drill.answer}</span>`);
+
+    // Reveal verb hint in the card label
+    document.getElementById('drill-hint-label').textContent = drill.hint;
+
+    // Feedback box
+    const fb = document.getElementById('drill-feedback');
+    fb.className = `drill-feedback ${isCorrect ? 'correct' : 'wrong'}`;
+    fb.innerHTML = isCorrect
+      ? `<strong style="color:#55efc4">✓ Correct!</strong><span class="df-hint">${drill.hint}</span>`
+      : `<strong style="color:#e94560">✗ You chose: ${chosen}</strong> — correct: <strong style="color:#55efc4">${drill.answer}</strong><span class="df-hint">${drill.hint}</span>`;
+    fb.style.display = '';
+
+    if (!drillScoredQ) {
+      if (isCorrect) drillScore.correct++;
+      drillScore.total++;
+      drillScoredQ = true;
+    }
+    updateDrillScore();
+  }
+
+  function updateDrillScore() {
+    document.getElementById('drill-score-val').textContent =
+      `${drillScore.correct} / ${drillScore.total}`;
+  }
+
+  function drillNext() {
+    if (drillIndex < drillDeck.length - 1) { drillIndex++; renderDrillCard(); }
+  }
+  function drillPrev() {
+    if (drillIndex > 0) { drillIndex--; renderDrillCard(); }
+  }
+  function shuffleDrill() {
+    for (let i = drillDeck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [drillDeck[i], drillDeck[j]] = [drillDeck[j], drillDeck[i]];
+    }
+    drillIndex = 0;
+    drillScore = { correct: 0, total: 0 };
+    renderDrillCard();
   }
 
   // ═══════════════════════════════════════════════════
   //  STUDY
   // ═══════════════════════════════════════════════════
   function buildDeck() {
-    const hasUncategorized = cards.some(c => !c.category);
-    deck = cards.reduce((acc, card, i) => {
-      const g = card.category || '';
-      if (activeStudyGroups.has(g)) acc.push(i);
-      return acc;
-    }, []);
+    if (missedOnlyMode) {
+      deck = [...missedCards].filter(i => i < cards.length);
+    } else {
+      deck = cards.reduce((acc, card, i) => {
+        const g = card.category || '';
+        if (activeStudyGroups.has(g)) acc.push(i);
+        return acc;
+      }, []);
+    }
     index = 0;
   }
 
   function renderStudy() {
     renderStudyGroupFilter();
+    if (missedOnlyMode) {
+      document.getElementById('group-filter-bar').style.display = 'none';
+    }
     buildDeck();
+    updateMissedCount();
 
     const has = deck.length > 0;
     document.getElementById('scene').style.display         = has ? 'block' : 'none';
     document.getElementById('progress').style.display      = has ? 'block' : 'none';
     document.querySelector('.study-controls').style.display = has ? 'flex'  : 'none';
-    document.getElementById('empty-study').style.display   = has ? 'none'  : 'block';
+    const emptyEl = document.getElementById('empty-study');
+    emptyEl.style.display = has ? 'none' : 'block';
+    if (!has) emptyEl.innerHTML = missedOnlyMode
+      ? 'No missed cards yet. Mark cards with the <strong>⚑ Mark</strong> button.'
+      : 'No cards match the selected groups.<br>Select more groups above or add cards in <strong>Manage Cards</strong>.';
     if (has) showCard();
   }
 
@@ -2774,6 +3947,9 @@
     document.getElementById('progress').textContent = `Card ${index + 1} of ${deck.length}`;
     document.getElementById('prev-btn').disabled = index === 0;
     document.getElementById('next-btn').disabled = index === deck.length - 1;
+    const cardIdx = deck[index];
+    const markBtn = document.getElementById('mark-missed-btn');
+    markBtn.classList.toggle('active', missedCards.has(cardIdx));
   }
 
   function flipCard()  { document.getElementById('scene').classList.toggle('flipped'); }
@@ -2793,6 +3969,49 @@
     document.getElementById('dir-sr').classList.toggle('active', dir === 'sr');
     document.getElementById('dir-en').classList.toggle('active', dir === 'en');
     showCard();
+  }
+
+  function toggleMissed() {
+    if (!deck.length) return;
+    const cardIdx = deck[index];
+    if (missedCards.has(cardIdx)) {
+      missedCards.delete(cardIdx);
+    } else {
+      missedCards.add(cardIdx);
+    }
+    saveMissedCards();
+    updateMissedCount();
+    const markBtn = document.getElementById('mark-missed-btn');
+    markBtn.classList.toggle('active', missedCards.has(cardIdx));
+  }
+
+  function toggleMissedMode() {
+    missedOnlyMode = !missedOnlyMode;
+    document.getElementById('dir-missed').classList.toggle('active', missedOnlyMode);
+    if (missedOnlyMode) {
+      document.getElementById('group-filter-bar').style.display = 'none';
+    } else {
+      const hasUncategorized = cards.some(c => !c.category);
+      const allPills = [...groups, ...(hasUncategorized ? [''] : [])];
+      if (allPills.length > 0) {
+        document.getElementById('group-filter-bar').style.display = 'flex';
+      }
+    }
+    buildDeck();
+    const has = deck.length > 0;
+    document.getElementById('scene').style.display         = has ? 'block' : 'none';
+    document.getElementById('progress').style.display      = has ? 'block' : 'none';
+    document.querySelector('.study-controls').style.display = has ? 'flex'  : 'none';
+    const emptyEl = document.getElementById('empty-study');
+    emptyEl.style.display = has ? 'none' : 'block';
+    if (!has) emptyEl.innerHTML = missedOnlyMode
+      ? 'No missed cards yet. Mark cards with the <strong>⚑ Mark</strong> button.'
+      : 'No cards match the selected groups.<br>Select more groups above or add cards in <strong>Manage Cards</strong>.';
+    if (has) showCard();
+  }
+
+  function updateMissedCount() {
+    document.getElementById('missed-count').textContent = missedCards.size;
   }
 
   // ═══════════════════════════════════════════════════
@@ -3095,6 +4314,11 @@
     document.getElementById('v-prev-btn').disabled = vIndex === 0;
     document.getElementById('v-next-btn').disabled = vIndex === allVerbs.length - 1;
 
+    const ab = document.getElementById('v-display-aspect');
+    const aspectLabels = { imp: 'imperfective', pfv: 'perfective', bi: 'biaspectual' };
+    ab.textContent = aspectLabels[verb.aspect] || '';
+    ab.className   = `aspect-badge aspect-${verb.aspect || ''}`;
+
     vScoredVerb = false;
     renderVerbInputs();
     updateVScore();
@@ -3173,6 +4397,13 @@
     renderVerbCard();
   }
 
+  function setVerbAspect(a) {
+    addVerbAspect = a;
+    ['imp','pfv','bi'].forEach(k => {
+      document.getElementById(`vn-asp-${k}`).classList.toggle('active', k === a);
+    });
+  }
+
   // ─── Manage: user verb CRUD ─────────────────────────────────────────────
   function addUserVerb() {
     const infinitive = document.getElementById('vn-infinitive').value.trim();
@@ -3195,7 +4426,7 @@
 
     if (missing.length) { alert(`Please fill in: ${missing.slice(0, 5).join(', ')}${missing.length > 5 ? '…' : ''}`); return; }
 
-    userVerbs.push({ infinitive, english, conjugations });
+    userVerbs.push({ infinitive, english, aspect: addVerbAspect, conjugations });
     saveUserVerbs(userVerbs);
     buildAllVerbs();
 
@@ -3254,33 +4485,8 @@
 
   function renderAdjView() {
     buildAllAdjectives();
-    buildAdjGenderBtns();
     buildAdjCaseToggles();
     renderAdjCard();
-  }
-
-  function buildAdjGenderBtns() {
-    const container = document.getElementById('adj-gender-btns');
-    if (container.children.length === GENDERS.length) {
-      container.querySelectorAll('.tense-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.key === adjGender);
-      });
-      return;
-    }
-    container.innerHTML = '';
-    GENDERS.forEach(g => {
-      const btn = document.createElement('button');
-      btn.className = 'tense-btn' + (g.key === adjGender ? ' active' : '');
-      btn.textContent = g.label;
-      btn.dataset.key = g.key;
-      btn.addEventListener('click', () => {
-        adjGender = g.key;
-        container.querySelectorAll('.tense-btn').forEach(b => b.classList.toggle('active', b.dataset.key === adjGender));
-        adjScoredAdj = false;
-        renderAdjInputs();
-      });
-      container.appendChild(btn);
-    });
   }
 
   function buildAdjCaseToggles() {
@@ -3335,26 +4541,42 @@
     container.innerHTML = '';
     if (!allAdjectives.length) return;
 
+    const genders = [
+      { key: 'masculine', label: 'Masc', cls: 'hdr-m' },
+      { key: 'feminine',  label: 'Fem',  cls: 'hdr-f' },
+      { key: 'neuter',    label: 'Neut', cls: 'hdr-n' },
+    ];
+
     CASES.forEach(c => {
       const row = document.createElement('div');
       row.className = 'case-row' + (adjActiveCases.has(c.key) ? '' : ' hidden');
       row.id = `adj-row-${c.key}`;
-      row.innerHTML = `
-        <div class="case-row-main">
-          <div class="case-label-col">
-            <button class="case-abbr-btn" onclick="openCaseModal('${c.key}')">${c.abbr}</button>
-            <span class="case-label-full">${c.label}</span>
-            <span class="case-hint">${c.hint}</span>
-          </div>
-          <input class="case-inp" id="adj-inp-${c.key}" type="text"
-            placeholder="${adjGender} form…"
+
+      const gCols = genders.map(g => `
+        <div class="adj-gender-col">
+          <span class="adj-col-hdr ${g.cls}">${g.label}</span>
+          <input class="case-inp" id="adj-inp-${c.key}-${g.key}" type="text"
+            placeholder="${g.label} form…"
             autocomplete="off" autocorrect="off" spellcheck="false" />
-          <div class="case-feedback" id="adj-fb-${c.key}"></div>
+          <div class="case-feedback" id="adj-fb-${c.key}-${g.key}"></div>
+        </div>
+      `).join('');
+
+      row.innerHTML = `
+        <div class="adj-row-main">
+          <div class="adj-case-info">
+            <button class="adj-case-abbr-btn" onclick="openCaseModal('${c.key}')">${c.abbr}</button>
+            <span class="adj-case-name">${c.label}</span>
+            <span class="adj-case-hint-txt">${c.hint}</span>
+          </div>
+          ${gCols}
         </div>
       `;
       container.appendChild(row);
-      document.getElementById(`adj-inp-${c.key}`).addEventListener('keydown', e => {
-        if (e.key === 'Enter') checkAdj();
+      genders.forEach(g => {
+        row.querySelector(`#adj-inp-${c.key}-${g.key}`).addEventListener('keydown', e => {
+          if (e.key === 'Enter') checkAdj();
+        });
       });
     });
   }
@@ -3362,21 +4584,24 @@
   function checkAdj() {
     if (!allAdjectives.length) return;
     const adj = allAdjectives[adjIndex];
+    const genders = ['masculine', 'feminine', 'neuter'];
     let correct = 0, total = 0;
     CASES.forEach(c => {
       if (!adjActiveCases.has(c.key)) return;
-      const inp = document.getElementById(`adj-inp-${c.key}`);
-      const fb  = document.getElementById(`adj-fb-${c.key}`);
-      if (!inp) return;
-      const expected = ((adj.forms || {})[adjGender] || {})[c.key] || '';
-      const ok = normalizeSerbian(inp.value.trim()) === normalizeSerbian(expected);
-      inp.classList.toggle('g-correct',   ok);
-      inp.classList.toggle('g-incorrect', !ok);
-      fb.innerHTML = ok
-        ? `<span class="fb-correct">✓</span>`
-        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${expected}<br><span style="color:#74b9ff;font-style:normal">${latinToCyrillic(expected)}</span></span>`;
-      total++;
-      if (ok) correct++;
+      genders.forEach(g => {
+        const inp = document.getElementById(`adj-inp-${c.key}-${g}`);
+        const fb  = document.getElementById(`adj-fb-${c.key}-${g}`);
+        if (!inp) return;
+        const expected = ((adj.forms || {})[g] || {})[c.key] || '';
+        const ok = normalizeSerbian(inp.value.trim()) === normalizeSerbian(expected);
+        inp.classList.toggle('g-correct',   ok);
+        inp.classList.toggle('g-incorrect', !ok);
+        fb.innerHTML = ok
+          ? `<span class="fb-correct">✓</span>`
+          : `<span class="fb-incorrect">✗</span><span class="fb-answer">${expected}<br><span style="color:#74b9ff;font-style:normal">${latinToCyrillic(expected)}</span></span>`;
+        total++;
+        if (ok) correct++;
+      });
     });
     if (!adjScoredAdj) {
       adjScore.correct += correct;
@@ -3476,6 +4701,271 @@
   }
 
   // ═══════════════════════════════════════════════════
+  //  ASPECT PAIRS — storage
+  // ═══════════════════════════════════════════════════
+  function loadUserAspectPairs() {
+    try { return JSON.parse(localStorage.getItem('serbian_user_aspect_pairs')) || []; }
+    catch(e) { return []; }
+  }
+  function saveUserAspectPairs() {
+    localStorage.setItem('serbian_user_aspect_pairs', JSON.stringify(userAspectPairs));
+  }
+
+  function buildAllAspectPairs() {
+    allAspectPairs = [...ASPECT_PAIRS, ...userAspectPairs];
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  ASPECT PAIRS — drill view
+  // ═══════════════════════════════════════════════════
+  function renderAspectView() {
+    buildAllAspectPairs();
+    buildAspectModeBtns();
+    renderAspectCard();
+  }
+
+  function buildAspectModeBtns() {
+    const container = document.getElementById('aspect-mode-btns');
+    if (container.children.length === ASPECT_MODES.length) {
+      container.querySelectorAll('.tense-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.key === aspectDrillMode);
+      });
+      return;
+    }
+    container.innerHTML = '';
+    ASPECT_MODES.forEach(m => {
+      const btn = document.createElement('button');
+      btn.className = 'tense-btn' + (m.key === aspectDrillMode ? ' active' : '');
+      btn.textContent = m.label;
+      btn.dataset.key = m.key;
+      btn.addEventListener('click', () => {
+        aspectDrillMode = m.key;
+        container.querySelectorAll('.tense-btn').forEach(b => b.classList.toggle('active', b.dataset.key === aspectDrillMode));
+        apScoredPair = false;
+        document.getElementById('ap-reveal').style.display = 'none';
+        renderAspectCard();
+        renderAspectInputs();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function renderAspectCard() {
+    const has = allAspectPairs.length > 0;
+    document.getElementById('ap-card').style.display           = has ? 'flex' : 'none';
+    document.getElementById('aspect-inputs').style.display     = has ? 'flex' : 'none';
+    document.querySelector('#aspect-view .grammar-controls').style.display = has ? 'flex' : 'none';
+    document.getElementById('ap-reveal').style.display         = 'none';
+    document.getElementById('empty-aspect').style.display      = has ? 'none'  : 'block';
+    if (!has) return;
+
+    if (apIndex >= allAspectPairs.length) apIndex = 0;
+    const pair = allAspectPairs[apIndex];
+    document.getElementById('ap-progress').textContent = `Pair ${apIndex + 1} of ${allAspectPairs.length}`;
+    document.getElementById('ap-prev-btn').disabled = apIndex === 0;
+    document.getElementById('ap-next-btn').disabled = apIndex === allAspectPairs.length - 1;
+
+    if (aspectDrillMode === 'imp_pfv') {
+      document.getElementById('ap-given-label').textContent  = 'Imperfective';
+      document.getElementById('ap-given-badge').textContent  = 'imp';
+      document.getElementById('ap-given-badge').className    = 'aspect-badge aspect-imp';
+      document.getElementById('ap-display-word').textContent = pair.imp;
+      document.getElementById('ap-display-cyrillic').textContent = latinToCyrillic(pair.imp);
+      document.getElementById('ap-display-en').textContent   = pair.english;
+    } else if (aspectDrillMode === 'pfv_imp') {
+      document.getElementById('ap-given-label').textContent  = 'Perfective';
+      document.getElementById('ap-given-badge').textContent  = 'pfv';
+      document.getElementById('ap-given-badge').className    = 'aspect-badge aspect-pfv';
+      document.getElementById('ap-display-word').textContent = pair.pfv;
+      document.getElementById('ap-display-cyrillic').textContent = latinToCyrillic(pair.pfv);
+      document.getElementById('ap-display-en').textContent   = pair.english;
+    } else {
+      // en_both: show English, hide word
+      document.getElementById('ap-given-label').textContent  = 'English';
+      document.getElementById('ap-given-badge').textContent  = '';
+      document.getElementById('ap-given-badge').className    = 'aspect-badge';
+      document.getElementById('ap-display-word').textContent = '';
+      document.getElementById('ap-display-cyrillic').textContent = '';
+      document.getElementById('ap-display-en').textContent   = pair.english;
+    }
+
+    apScoredPair = false;
+    renderAspectInputs();
+    updateApScore();
+  }
+
+  function renderAspectInputs() {
+    const container = document.getElementById('aspect-inputs');
+    container.innerHTML = '';
+    if (!allAspectPairs.length) return;
+
+    if (aspectDrillMode === 'imp_pfv') {
+      container.appendChild(makeApRow('pfv', 'Perfective', 'aspect-pfv'));
+    } else if (aspectDrillMode === 'pfv_imp') {
+      container.appendChild(makeApRow('imp', 'Imperfective', 'aspect-imp'));
+    } else {
+      container.appendChild(makeApRow('imp', 'Imperfective', 'aspect-imp'));
+      container.appendChild(makeApRow('pfv', 'Perfective',   'aspect-pfv'));
+    }
+  }
+
+  function makeApRow(key, label, badgeClass) {
+    const row = document.createElement('div');
+    row.className = 'case-row';
+    row.id = `ap-row-${key}`;
+    row.innerHTML = `
+      <div class="ap-answer-row">
+        <span class="ap-answer-label">
+          <span class="aspect-badge ${badgeClass}" style="margin-right:6px">${label === 'Imperfective' ? 'imp' : 'pfv'}</span>
+          ${label}
+        </span>
+        <input class="case-inp" id="ap-inp-${key}" type="text"
+          placeholder="${label} form…"
+          autocomplete="off" autocorrect="off" spellcheck="false" />
+        <div class="case-feedback" id="ap-fb-${key}"></div>
+      </div>
+    `;
+    row.querySelector(`#ap-inp-${key}`).addEventListener('keydown', e => {
+      if (e.key === 'Enter') checkAspectPair();
+    });
+    return row;
+  }
+
+  function checkAspectPair() {
+    if (!allAspectPairs.length) return;
+    const pair = allAspectPairs[apIndex];
+    let allCorrect = true;
+
+    function checkOne(key, answer) {
+      const inp = document.getElementById(`ap-inp-${key}`);
+      const fb  = document.getElementById(`ap-fb-${key}`);
+      if (!inp) return;
+      const val = inp.value.trim().toLowerCase();
+      const correct = val === answer.toLowerCase();
+      if (!correct) allCorrect = false;
+      inp.classList.remove('g-correct','g-incorrect');
+      inp.classList.add(correct ? 'g-correct' : 'g-incorrect');
+      fb.innerHTML = correct
+        ? '<span class="fb-correct">✓</span>'
+        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${answer}</span>`;
+    }
+
+    if (aspectDrillMode === 'imp_pfv') {
+      checkOne('pfv', pair.pfv);
+    } else if (aspectDrillMode === 'pfv_imp') {
+      checkOne('imp', pair.imp);
+    } else {
+      checkOne('imp', pair.imp);
+      checkOne('pfv', pair.pfv);
+    }
+
+    if (!apScoredPair) {
+      apScoredPair = true;
+      apScore.total++;
+      if (allCorrect) apScore.correct++;
+      updateApScore();
+    }
+
+    // Show reveal box
+    const reveal = document.getElementById('ap-reveal');
+    reveal.style.display = 'flex';
+    reveal.innerHTML = `
+      <div class="aspect-reveal-side">
+        <span class="aspect-reveal-label"><span class="aspect-badge aspect-imp" style="display:inline-block">imp</span> Imperfective</span>
+        <span class="aspect-reveal-word">${pair.imp}</span>
+        <span class="aspect-reveal-cyril">${latinToCyrillic(pair.imp)}</span>
+      </div>
+      <div style="color:#555; font-size:1.4rem; align-self:center">⇄</div>
+      <div class="aspect-reveal-side">
+        <span class="aspect-reveal-label"><span class="aspect-badge aspect-pfv" style="display:inline-block">pfv</span> Perfective</span>
+        <span class="aspect-reveal-word">${pair.pfv}</span>
+        <span class="aspect-reveal-cyril">${latinToCyrillic(pair.pfv)}</span>
+      </div>
+    `;
+  }
+
+  function updateApScore() {
+    document.getElementById('ap-score-val').textContent = `${apScore.correct} / ${apScore.total}`;
+  }
+
+  function apNext() {
+    if (apIndex < allAspectPairs.length - 1) {
+      apIndex++;
+      document.getElementById('ap-reveal').style.display = 'none';
+      renderAspectCard();
+    }
+  }
+  function apPrev() {
+    if (apIndex > 0) {
+      apIndex--;
+      document.getElementById('ap-reveal').style.display = 'none';
+      renderAspectCard();
+    }
+  }
+
+  function shuffleAspectPairs() {
+    buildAllAspectPairs();
+    for (let i = allAspectPairs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allAspectPairs[i], allAspectPairs[j]] = [allAspectPairs[j], allAspectPairs[i]];
+    }
+    apIndex = 0;
+    document.getElementById('ap-reveal').style.display = 'none';
+    renderAspectCard();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  ASPECT PAIRS — manage CRUD
+  // ═══════════════════════════════════════════════════
+  function addUserAspectPair() {
+    const imp = document.getElementById('ap-new-imp').value.trim();
+    const pfv = document.getElementById('ap-new-pfv').value.trim();
+    const english = document.getElementById('ap-new-en').value.trim();
+    if (!imp || !pfv || !english) { alert('Please fill in all three fields.'); return; }
+    userAspectPairs.push({ imp, pfv, english });
+    saveUserAspectPairs();
+    buildAllAspectPairs();
+    document.getElementById('ap-new-imp').value = '';
+    document.getElementById('ap-new-pfv').value = '';
+    document.getElementById('ap-new-en').value  = '';
+    document.getElementById('ap-new-imp').focus();
+    renderAspectPairList();
+  }
+
+  function deleteUserAspectPair(i) {
+    if (!confirm(`Delete "${userAspectPairs[i].imp} / ${userAspectPairs[i].pfv}"?`)) return;
+    userAspectPairs.splice(i, 1);
+    saveUserAspectPairs();
+    buildAllAspectPairs();
+    if (apIndex >= allAspectPairs.length) apIndex = Math.max(0, allAspectPairs.length - 1);
+    renderAspectPairList();
+  }
+
+  function renderAspectPairList() {
+    const list = document.getElementById('ap-list');
+    document.getElementById('ap-count').textContent = `(${userAspectPairs.length})`;
+    list.innerHTML = '';
+    if (userAspectPairs.length === 0) {
+      list.innerHTML = '<p style="color:#aaa">No user aspect pairs yet. Add one above!</p>';
+      return;
+    }
+    userAspectPairs.forEach((p, i) => {
+      const row = document.createElement('div');
+      row.className = 'card-row';
+      row.innerHTML = `
+        <span class="aspect-badge aspect-imp">imp</span>
+        <span class="c-serbian">${p.imp}</span>
+        <span style="color:#555; padding:0 4px">⇄</span>
+        <span class="aspect-badge aspect-pfv">pfv</span>
+        <span class="c-serbian">${p.pfv}</span>
+        <span class="c-english">${p.english}</span>
+        <button class="del-btn" onclick="deleteUserAspectPair(${i})">Delete</button>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  // ═══════════════════════════════════════════════════
   //  MANAGE — shared
   // ═══════════════════════════════════════════════════
   function showManageTab(tab) {
@@ -3483,10 +4973,12 @@
     document.getElementById('manage-grammar').style.display = tab === 'grammar' ? 'flex' : 'none';
     document.getElementById('manage-verbs').style.display   = tab === 'verbs'   ? 'flex' : 'none';
     document.getElementById('manage-adj').style.display     = tab === 'adj'     ? 'flex' : 'none';
+    document.getElementById('manage-aspect').style.display  = tab === 'aspect'  ? 'flex' : 'none';
     document.getElementById('mtab-cards').classList.toggle('active',   tab === 'cards');
     document.getElementById('mtab-grammar').classList.toggle('active', tab === 'grammar');
     document.getElementById('mtab-verbs').classList.toggle('active',   tab === 'verbs');
     document.getElementById('mtab-adj').classList.toggle('active',     tab === 'adj');
+    document.getElementById('mtab-aspect').classList.toggle('active',  tab === 'aspect');
   }
 
   function renderManage() {
@@ -3496,6 +4988,7 @@
     renderGrammarNounList();
     renderVerbList();
     renderAdjList();
+    renderAspectPairList();
   }
 
   // ═══════════════════════════════════════════════════
@@ -3743,6 +5236,8 @@
     const grammarVisible = document.getElementById('grammar-view').style.display !== 'none';
     const verbsVisible   = document.getElementById('verbs-view').style.display   !== 'none';
     const adjVisible     = document.getElementById('adj-view').style.display     !== 'none';
+    const drillVisible   = document.getElementById('drill-view').style.display   !== 'none';
+    const aspectVisible  = document.getElementById('aspect-view').style.display  !== 'none';
     if (studyVisible) {
       if (e.key === 'ArrowRight') nextCard();
       if (e.key === 'ArrowLeft')  prevCard();
@@ -3760,6 +5255,14 @@
       if (e.key === 'ArrowRight') adjNext();
       if (e.key === 'ArrowLeft')  adjPrev();
     }
+    if (drillVisible) {
+      if (e.key === 'ArrowRight') drillNext();
+      if (e.key === 'ArrowLeft')  drillPrev();
+    }
+    if (aspectVisible && document.activeElement.tagName !== 'INPUT') {
+      if (e.key === 'ArrowRight') apNext();
+      if (e.key === 'ArrowLeft')  apPrev();
+    }
   });
 
   // ═══════════════════════════════════════════════════
@@ -3767,6 +5270,7 @@
   // ═══════════════════════════════════════════════════
   buildAllVerbs();
   buildAllAdjectives();
+  buildAllAspectPairs();
   buildDeck();
   renderStudy();
 </script>
