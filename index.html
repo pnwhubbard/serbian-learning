@@ -162,9 +162,11 @@
     }
     .card-front { background: #16213e; border: 2px solid #0f3460; }
     .card-back  { background: #0f3460; border: 2px solid #e94560; transform: rotateY(180deg); }
-    .card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #aaa; }
-    .card-word  { font-size: 2.4rem; font-weight: 700; color: #fff; }
-    .card-hint  { font-size: 0.85rem; color: #aaa; }
+    .card-label    { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #aaa; }
+    .card-word     { font-size: 2.4rem; font-weight: 700; color: #fff; }
+    .card-cyrillic { font-size: 1.15rem; color: #74b9ff; font-weight: 400; margin-top: -8px; letter-spacing: 0.3px; min-height: 1.4em; }
+    .card-hint     { font-size: 0.85rem; color: #aaa; }
+    .noun-card-cyrillic { font-size: 1.4rem; color: #74b9ff; font-weight: 400; margin-top: -6px; }
     .card-note  {
       font-size: 0.72rem; color: #74b9ff; text-align: left;
       line-height: 1.6; white-space: pre-line;
@@ -413,6 +415,33 @@
     .noun-form-val  { font-size: 0.85rem; }
     .declension-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
 
+    /* ── VERBS ──────────────────────────────────────── */
+    #verbs-view { display: flex; flex-direction: column; gap: 24px; }
+
+    .tense-selector {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 16px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .tense-sel-label { font-size: 0.85rem; color: #aaa; white-space: nowrap; }
+    .tense-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .tense-btn {
+      padding: 7px 20px; border-radius: 8px; border: 2px solid #0f3460;
+      background: #0f3460; color: #aaa; cursor: pointer; font-size: 0.88rem; font-weight: 600;
+      transition: all 0.15s;
+    }
+    .tense-btn:hover  { border-color: #e94560; color: #e94560; }
+    .tense-btn.active { background: #e94560; border-color: #e94560; color: #fff; }
+
+    .subj-row-main {
+      display: grid;
+      grid-template-columns: 110px 1fr minmax(60px, auto);
+      gap: 10px; align-items: center;
+    }
+    .subj-label-col  { display: flex; flex-direction: column; gap: 1px; }
+    .subj-label-main { font-size: 0.9rem; font-weight: 700; color: #e94560; }
+    .subj-label-hint { font-size: 0.72rem; color: #666; font-style: italic; }
+
     /* ── MOBILE ──────────────────────────────────────── */
     @media (max-width: 600px) {
 
@@ -504,6 +533,10 @@
 
       /* 7. Tap targets — grammar controls */
       .grammar-controls .btn { min-height: 44px; }
+
+      /* 8. Verbs tab */
+      .tense-btn { min-height: 44px; }
+      .subj-row-main { grid-template-columns: 90px 1fr auto; }
     }
   </style>
 </head>
@@ -514,6 +547,7 @@
   <nav>
     <button class="active" id="nav-study"   onclick="showView('study')">Study</button>
     <button id="nav-grammar" onclick="showView('grammar')">Grammar</button>
+    <button id="nav-verbs"   onclick="showView('verbs')">Verbs</button>
     <button id="nav-manage"  onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
@@ -546,15 +580,17 @@
     <div class="scene" id="scene" onclick="flipCard()">
       <div class="card-inner">
         <div class="card-face card-front">
-          <span class="card-label" id="front-label">Serbian</span>
-          <span class="card-word"  id="front-word">—</span>
+          <span class="card-label"    id="front-label">Serbian</span>
+          <span class="card-word"     id="front-word">—</span>
+          <span class="card-cyrillic" id="front-cyrillic"></span>
           <span class="card-hint">click to reveal</span>
         </div>
         <div class="card-face card-back">
-          <span class="card-label" id="back-label">English</span>
-          <span class="card-word"  id="back-word">—</span>
-          <div class="card-note"   id="back-note" style="display:none"></div>
-          <span class="card-hint"  id="back-category"></span>
+          <span class="card-label"    id="back-label">English</span>
+          <span class="card-word"     id="back-word">—</span>
+          <span class="card-cyrillic" id="back-cyrillic"></span>
+          <div class="card-note"      id="back-note" style="display:none"></div>
+          <span class="card-hint"     id="back-category"></span>
         </div>
       </div>
     </div>
@@ -587,6 +623,7 @@
     <div class="noun-card" id="g-noun-card">
       <span class="noun-card-given">Given — Nominativ</span>
       <span class="noun-card-word" id="g-display-nom">—</span>
+      <span class="noun-card-cyrillic" id="g-display-cyrillic"></span>
       <div class="noun-card-sub">
         <span class="noun-card-en" id="g-display-en">—</span>
         <span class="gender-badge"  id="g-display-gender">—</span>
@@ -607,12 +644,58 @@
     </div>
   </div>
 
+  <!-- ═══════════════ VERBS VIEW ═══════════════ -->
+  <div id="verbs-view" style="display:none">
+
+    <!-- Tense selector -->
+    <div class="tense-selector">
+      <span class="tense-sel-label">Tense:</span>
+      <div class="tense-btns" id="tense-btns"></div>
+    </div>
+
+    <!-- Subject toggles -->
+    <div class="case-selector">
+      <span class="case-sel-label">Subjects:</span>
+      <div class="case-toggles" id="subject-toggles"></div>
+    </div>
+
+    <!-- Progress + score -->
+    <div class="g-header-row">
+      <span id="v-progress">Verb 1 of 1</span>
+      <span class="g-score-badge">Score: <span id="v-score-val">0 / 0</span></span>
+    </div>
+
+    <!-- Verb display card -->
+    <div class="noun-card" id="v-verb-card">
+      <span class="noun-card-given">Infinitive</span>
+      <span class="noun-card-word"    id="v-display-inf">—</span>
+      <span class="noun-card-cyrillic" id="v-display-cyrillic"></span>
+      <span class="noun-card-en"      id="v-display-en">—</span>
+    </div>
+
+    <!-- Subject input rows (dynamically generated) -->
+    <div class="case-inputs" id="verb-inputs"></div>
+
+    <!-- Controls -->
+    <div class="grammar-controls">
+      <button class="btn btn-secondary" id="v-prev-btn" onclick="vPrev()">← Prev</button>
+      <button class="btn btn-primary"   onclick="checkVerbs()">Check Answers</button>
+      <button class="btn btn-secondary" id="v-next-btn" onclick="vNext()">Next →</button>
+      <button class="btn btn-secondary" onclick="shuffleVerbs()">⇌ Shuffle</button>
+    </div>
+
+    <div id="empty-verbs" class="empty-msg" style="display:none">
+      No verbs available. Add some in <strong>Manage Cards → Verbs</strong>.
+    </div>
+  </div>
+
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
 
     <div class="manage-tabs">
       <button class="manage-tab-btn active" id="mtab-cards"   onclick="showManageTab('cards')">Flashcards</button>
       <button class="manage-tab-btn"        id="mtab-grammar" onclick="showManageTab('grammar')">Grammar Nouns</button>
+      <button class="manage-tab-btn"        id="mtab-verbs"   onclick="showManageTab('verbs')">Verbs</button>
     </div>
 
     <!-- ── Flashcards tab ── -->
@@ -708,6 +791,59 @@
       <div>
         <p class="section-title">All Grammar Nouns <span class="section-count" id="gn-count"></span></p>
         <div class="card-list" id="gn-list"></div>
+      </div>
+    </div>
+
+    <!-- ── Verbs tab ── -->
+    <div id="manage-verbs" class="manage-section" style="display:none">
+      <div>
+        <p class="section-title">Add a Verb</p>
+        <div class="form-row" style="margin-bottom:12px">
+          <div class="form-group">
+            <label for="vn-infinitive">Infinitive (Serbian)</label>
+            <input type="text" id="vn-infinitive" placeholder="e.g. raditi" />
+          </div>
+          <div class="form-group">
+            <label for="vn-english">English meaning</label>
+            <input type="text" id="vn-english" placeholder="e.g. to work / to do" />
+          </div>
+        </div>
+
+        <p style="font-size:0.82rem; color:#e94560; font-weight:600; margin-bottom:6px">Present (Sadašnje)</p>
+        <div class="declension-grid" style="margin-bottom:14px">
+          <div class="form-group"><label>ja</label>      <input type="text" id="vn-pres-ja"  placeholder="e.g. radim"   /></div>
+          <div class="form-group"><label>ti</label>      <input type="text" id="vn-pres-ti"  placeholder="e.g. radiš"   /></div>
+          <div class="form-group"><label>on/ona</label>  <input type="text" id="vn-pres-on"  placeholder="e.g. radi"    /></div>
+          <div class="form-group"><label>mi</label>      <input type="text" id="vn-pres-mi"  placeholder="e.g. radimo"  /></div>
+          <div class="form-group"><label>vi</label>      <input type="text" id="vn-pres-vi"  placeholder="e.g. radite"  /></div>
+          <div class="form-group"><label>oni/one</label> <input type="text" id="vn-pres-oni" placeholder="e.g. rade"    /></div>
+        </div>
+
+        <p style="font-size:0.82rem; color:#e94560; font-weight:600; margin-bottom:6px">Past — masc. form (Perfekat)</p>
+        <div class="declension-grid" style="margin-bottom:14px">
+          <div class="form-group"><label>ja</label>      <input type="text" id="vn-past-ja"  placeholder="e.g. radio sam"   /></div>
+          <div class="form-group"><label>ti</label>      <input type="text" id="vn-past-ti"  placeholder="e.g. radio si"    /></div>
+          <div class="form-group"><label>on/ona</label>  <input type="text" id="vn-past-on"  placeholder="e.g. radio je"    /></div>
+          <div class="form-group"><label>mi</label>      <input type="text" id="vn-past-mi"  placeholder="e.g. radili smo"  /></div>
+          <div class="form-group"><label>vi</label>      <input type="text" id="vn-past-vi"  placeholder="e.g. radili ste"  /></div>
+          <div class="form-group"><label>oni/one</label> <input type="text" id="vn-past-oni" placeholder="e.g. radili su"   /></div>
+        </div>
+
+        <p style="font-size:0.82rem; color:#e94560; font-weight:600; margin-bottom:6px">Future (Futur I)</p>
+        <div class="declension-grid" style="margin-bottom:16px">
+          <div class="form-group"><label>ja</label>      <input type="text" id="vn-fut-ja"   placeholder="e.g. radiću"    /></div>
+          <div class="form-group"><label>ti</label>      <input type="text" id="vn-fut-ti"   placeholder="e.g. radićeš"   /></div>
+          <div class="form-group"><label>on/ona</label>  <input type="text" id="vn-fut-on"   placeholder="e.g. radiće"    /></div>
+          <div class="form-group"><label>mi</label>      <input type="text" id="vn-fut-mi"   placeholder="e.g. radićemo"  /></div>
+          <div class="form-group"><label>vi</label>      <input type="text" id="vn-fut-vi"   placeholder="e.g. radićete"  /></div>
+          <div class="form-group"><label>oni/one</label> <input type="text" id="vn-fut-oni"  placeholder="e.g. radiće"    /></div>
+        </div>
+
+        <button class="btn btn-primary" onclick="addUserVerb()">Add Verb</button>
+      </div>
+      <div>
+        <p class="section-title">User Verbs <span class="section-count" id="vn-count"></span></p>
+        <div class="card-list" id="vn-list"></div>
       </div>
     </div>
 
@@ -812,6 +948,800 @@
       ],
       prepNote: 'Always requires a preposition — never appears alone. Key contrast: "u + accusative" = motion into; "u + locative" = static location inside.',
       example: (form, english) => ({ sr: `Pričam o ${form}.`, en: `I'm talking about the ${english}.` }),
+    },
+  ];
+
+  const SUBJECTS = [
+    { key: 'ja',  label: 'ja',         pronoun: 'I' },
+    { key: 'ti',  label: 'ti',         pronoun: 'you (sg.)' },
+    { key: 'on',  label: 'on/ona/ono', pronoun: 'he/she/it' },
+    { key: 'mi',  label: 'mi',         pronoun: 'we' },
+    { key: 'vi',  label: 'vi',         pronoun: 'you (pl.)' },
+    { key: 'oni', label: 'oni/one',    pronoun: 'they' },
+  ];
+
+  const TENSES = [
+    { key: 'present', label: 'Present', note: 'Sadašnje' },
+    { key: 'past',    label: 'Past',    note: 'Perfekat' },
+    { key: 'future',  label: 'Future',  note: 'Futur I' },
+  ];
+
+  // ═══════════════════════════════════════════════════
+  //  BUILT-IN VERBS
+  // ═══════════════════════════════════════════════════
+  const VERBS = [
+    // ── Group 1: Essential irregulars ─────────────────────────────────────
+    {
+      infinitive: 'biti', english: 'to be',
+      conjugations: {
+        present: { ja:'sam',    ti:'si',    on:'je',    mi:'smo',      vi:'ste',      oni:'su'       },
+        past:    { ja:'bio sam',ti:'bio si',on:'bio je',mi:'bili smo', vi:'bili ste', oni:'bili su'  },
+        future:  { ja:'biću',   ti:'bićeš', on:'biće',  mi:'bićemo',   vi:'bićete',   oni:'biće'     },
+      }
+    },
+    {
+      infinitive: 'imati', english: 'to have',
+      conjugations: {
+        present: { ja:'imam',    ti:'imaš',    on:'ima',    mi:'imamo',    vi:'imate',    oni:'imaju'    },
+        past:    { ja:'imao sam',ti:'imao si', on:'imao je',mi:'imali smo',vi:'imali ste',oni:'imali su' },
+        future:  { ja:'imaću',   ti:'imaćeš',  on:'imaće',  mi:'imaćemo',  vi:'imaćete',  oni:'imaće'    },
+      }
+    },
+    {
+      infinitive: 'ići', english: 'to go',
+      conjugations: {
+        present: { ja:'idem',     ti:'ideš',     on:'ide',     mi:'idemo',     vi:'idete',     oni:'idu'       },
+        past:    { ja:'išao sam', ti:'išao si',  on:'išao je', mi:'išli smo',  vi:'išli ste',  oni:'išli su'   },
+        future:  { ja:'ići ću',   ti:'ići ćeš',  on:'ići će',  mi:'ići ćemo',  vi:'ići ćete',  oni:'ići će'    },
+      }
+    },
+    {
+      infinitive: 'doći', english: 'to come',
+      conjugations: {
+        present: { ja:'dođem',     ti:'dođeš',     on:'dođe',     mi:'dođemo',     vi:'dođete',     oni:'dođu'       },
+        past:    { ja:'došao sam', ti:'došao si',  on:'došao je', mi:'došli smo',  vi:'došli ste',  oni:'došli su'   },
+        future:  { ja:'doći ću',   ti:'doći ćeš',  on:'doći će',  mi:'doći ćemo',  vi:'doći ćete',  oni:'doći će'    },
+      }
+    },
+    {
+      infinitive: 'hteti', english: 'to want',
+      conjugations: {
+        present: { ja:'hoću',    ti:'hoćeš',   on:'hoće',   mi:'hoćemo',   vi:'hoćete',   oni:'hoće'     },
+        past:    { ja:'hteo sam',ti:'hteo si', on:'hteo je',mi:'hteli smo',vi:'hteli ste',oni:'hteli su' },
+        future:  { ja:'hteću',   ti:'htećeš',  on:'hteće',  mi:'htećemo',  vi:'htećete',  oni:'hteće'    },
+      }
+    },
+    {
+      infinitive: 'moći', english: 'to be able to / can',
+      conjugations: {
+        present: { ja:'mogu',     ti:'možeš',    on:'može',    mi:'možemo',    vi:'možete',    oni:'mogu'      },
+        past:    { ja:'mogao sam',ti:'mogao si', on:'mogao je',mi:'mogli smo', vi:'mogli ste', oni:'mogli su'  },
+        future:  { ja:'moći ću',  ti:'moći ćeš', on:'moći će', mi:'moći ćemo', vi:'moći ćete', oni:'moći će'   },
+      }
+    },
+    {
+      infinitive: 'znati', english: 'to know',
+      conjugations: {
+        present: { ja:'znam',    ti:'znaš',    on:'zna',    mi:'znamo',    vi:'znate',    oni:'znaju'    },
+        past:    { ja:'znao sam',ti:'znao si', on:'znao je',mi:'znali smo',vi:'znali ste',oni:'znali su' },
+        future:  { ja:'znaću',   ti:'znaćeš',  on:'znaće',  mi:'znaćemo',  vi:'znaćete',  oni:'znaće'    },
+      }
+    },
+    {
+      infinitive: 'videti', english: 'to see',
+      conjugations: {
+        present: { ja:'vidim',    ti:'vidiš',    on:'vidi',    mi:'vidimo',    vi:'vidite',    oni:'vide'      },
+        past:    { ja:'video sam',ti:'video si', on:'video je',mi:'videli smo',vi:'videli ste',oni:'videli su' },
+        future:  { ja:'videću',   ti:'videćeš',  on:'videće',  mi:'videćemo',  vi:'videćete',  oni:'videće'    },
+      }
+    },
+    {
+      infinitive: 'jesti', english: 'to eat',
+      conjugations: {
+        present: { ja:'jedem',   ti:'jedeš',   on:'jede',   mi:'jedemo',   vi:'jedete',   oni:'jedu'     },
+        past:    { ja:'jeo sam', ti:'jeo si',  on:'jeo je', mi:'jeli smo', vi:'jeli ste', oni:'jeli su'  },
+        future:  { ja:'jesti ću',ti:'jesti ćeš',on:'jesti će',mi:'jesti ćemo',vi:'jesti ćete',oni:'jesti će' },
+      }
+    },
+    {
+      infinitive: 'piti', english: 'to drink',
+      conjugations: {
+        present: { ja:'pijem',   ti:'piješ',   on:'pije',   mi:'pijemo',   vi:'pijete',   oni:'piju'     },
+        past:    { ja:'pio sam', ti:'pio si',  on:'pio je', mi:'pili smo', vi:'pili ste', oni:'pili su'  },
+        future:  { ja:'piću',    ti:'pićeš',   on:'piće',   mi:'pićemo',   vi:'pićete',   oni:'piće'     },
+      }
+    },
+    {
+      infinitive: 'dati', english: 'to give',
+      conjugations: {
+        present: { ja:'dam',    ti:'daš',    on:'da',    mi:'damo',    vi:'date',    oni:'daju'    },
+        past:    { ja:'dao sam',ti:'dao si', on:'dao je',mi:'dali smo',vi:'dali ste',oni:'dali su' },
+        future:  { ja:'daću',   ti:'daćeš',  on:'daće',  mi:'daćemo',  vi:'daćete',  oni:'daće'    },
+      }
+    },
+    {
+      infinitive: 'uzeti', english: 'to take',
+      conjugations: {
+        present: { ja:'uzmem',    ti:'uzmeš',    on:'uzme',    mi:'uzmemo',    vi:'uzmete',    oni:'uzmu'      },
+        past:    { ja:'uzeo sam', ti:'uzeo si',  on:'uzeo je', mi:'uzeli smo', vi:'uzeli ste', oni:'uzeli su'  },
+        future:  { ja:'uzeću',    ti:'uzećeš',   on:'uzeće',   mi:'uzećemo',   vi:'uzećete',   oni:'uzeće'     },
+      }
+    },
+    {
+      infinitive: 'reći', english: 'to say / to tell',
+      conjugations: {
+        present: { ja:'kažem',    ti:'kažeš',    on:'kaže',    mi:'kažemo',    vi:'kažete',    oni:'kažu'      },
+        past:    { ja:'rekao sam',ti:'rekao si', on:'rekao je',mi:'rekli smo', vi:'rekli ste', oni:'rekli su'  },
+        future:  { ja:'reći ću',  ti:'reći ćeš', on:'reći će', mi:'reći ćemo', vi:'reći ćete', oni:'reći će'   },
+      }
+    },
+    {
+      infinitive: 'misliti', english: 'to think',
+      conjugations: {
+        present: { ja:'mislim',    ti:'misliš',    on:'misli',    mi:'mislimo',    vi:'mislite',    oni:'misle'      },
+        past:    { ja:'mislio sam',ti:'mislio si', on:'mislio je',mi:'mislili smo',vi:'mislili ste',oni:'mislili su' },
+        future:  { ja:'misliću',   ti:'mislićeš',  on:'misliće',  mi:'mislićemo',  vi:'mislićete',  oni:'misliće'    },
+      }
+    },
+    {
+      infinitive: 'čuti', english: 'to hear',
+      conjugations: {
+        present: { ja:'čujem',   ti:'čuješ',   on:'čuje',   mi:'čujemo',   vi:'čujete',   oni:'čuju'     },
+        past:    { ja:'čuo sam', ti:'čuo si',  on:'čuo je', mi:'čuli smo', vi:'čuli ste', oni:'čuli su'  },
+        future:  { ja:'čuću',    ti:'čućeš',   on:'čuće',   mi:'čućemo',   vi:'čućete',   oni:'čuće'     },
+      }
+    },
+    {
+      infinitive: 'ostati', english: 'to stay / to remain',
+      conjugations: {
+        present: { ja:'ostanem',    ti:'ostaneš',    on:'ostane',    mi:'ostanemo',    vi:'ostanete',    oni:'ostanu'      },
+        past:    { ja:'ostao sam',  ti:'ostao si',   on:'ostao je',  mi:'ostali smo',  vi:'ostali ste',  oni:'ostali su'   },
+        future:  { ja:'ostaću',     ti:'ostaćeš',    on:'ostaće',    mi:'ostaćemo',    vi:'ostaćete',    oni:'ostaće'      },
+      }
+    },
+    {
+      infinitive: 'naći', english: 'to find',
+      conjugations: {
+        present: { ja:'nađem',    ti:'nađeš',    on:'nađe',    mi:'nađemo',    vi:'nađete',    oni:'nađu'      },
+        past:    { ja:'našao sam',ti:'našao si', on:'našao je',mi:'našli smo', vi:'našli ste', oni:'našli su'  },
+        future:  { ja:'naći ću',  ti:'naći ćeš', on:'naći će', mi:'naći ćemo', vi:'naći ćete', oni:'naći će'   },
+      }
+    },
+    {
+      infinitive: 'otići', english: 'to leave / to go away',
+      conjugations: {
+        present: { ja:'otiđem',    ti:'otiđeš',    on:'otiđe',    mi:'otiđemo',    vi:'otiđete',    oni:'otiđu'      },
+        past:    { ja:'otišao sam',ti:'otišao si', on:'otišao je',mi:'otišli smo', vi:'otišli ste', oni:'otišli su'  },
+        future:  { ja:'otići ću',  ti:'otići ćeš', on:'otići će', mi:'otići ćemo', vi:'otići ćete', oni:'otići će'   },
+      }
+    },
+    {
+      infinitive: 'morati', english: 'to have to / must',
+      conjugations: {
+        present: { ja:'moram',    ti:'moraš',    on:'mora',    mi:'moramo',    vi:'morate',    oni:'moraju'    },
+        past:    { ja:'morao sam',ti:'morao si', on:'morao je',mi:'morali smo',vi:'morali ste',oni:'morali su' },
+        future:  { ja:'moraću',   ti:'moraćeš',  on:'moraće',  mi:'moraćemo',  vi:'moraćete',  oni:'moraće'    },
+      }
+    },
+    {
+      infinitive: 'trebati', english: 'to need / to be needed',
+      conjugations: {
+        present: { ja:'trebam',    ti:'trebaš',    on:'treba',    mi:'trebamo',    vi:'trebate',    oni:'trebaju'    },
+        past:    { ja:'trebao sam',ti:'trebao si', on:'trebao je',mi:'trebali smo',vi:'trebali ste',oni:'trebali su' },
+        future:  { ja:'trebaću',   ti:'trebaćeš',  on:'trebaće',  mi:'trebaćemo',  vi:'trebaćete',  oni:'trebaće'    },
+      }
+    },
+    // ── Group 2: -ati verbs ────────────────────────────────────────────────
+    {
+      infinitive: 'raditi', english: 'to work / to do',
+      conjugations: {
+        present: { ja:'radim',    ti:'radiš',    on:'radi',    mi:'radimo',    vi:'radite',    oni:'rade'      },
+        past:    { ja:'radio sam',ti:'radio si', on:'radio je',mi:'radili smo',vi:'radili ste',oni:'radili su' },
+        future:  { ja:'radiću',   ti:'radićeš',  on:'radiće',  mi:'radićemo',  vi:'radićete',  oni:'radiće'    },
+      }
+    },
+    {
+      infinitive: 'čitati', english: 'to read',
+      conjugations: {
+        present: { ja:'čitam',    ti:'čitaš',    on:'čita',    mi:'čitamo',    vi:'čitate',    oni:'čitaju'    },
+        past:    { ja:'čitao sam',ti:'čitao si', on:'čitao je',mi:'čitali smo',vi:'čitali ste',oni:'čitali su' },
+        future:  { ja:'čitaću',   ti:'čitaćeš',  on:'čitaće',  mi:'čitaćemo',  vi:'čitaćete',  oni:'čitaće'    },
+      }
+    },
+    {
+      infinitive: 'pisati', english: 'to write',
+      conjugations: {
+        present: { ja:'pišem',    ti:'pišeš',    on:'piše',    mi:'pišemo',    vi:'pišete',    oni:'pišu'      },
+        past:    { ja:'pisao sam',ti:'pisao si', on:'pisao je',mi:'pisali smo',vi:'pisali ste',oni:'pisali su' },
+        future:  { ja:'pisaću',   ti:'pisaćeš',  on:'pisaće',  mi:'pisaćemo',  vi:'pisaćete',  oni:'pisaće'    },
+      }
+    },
+    {
+      infinitive: 'gledati', english: 'to watch / to look',
+      conjugations: {
+        present: { ja:'gledam',    ti:'gledaš',    on:'gleda',    mi:'gledamo',    vi:'gledate',    oni:'gledaju'    },
+        past:    { ja:'gledao sam',ti:'gledao si', on:'gledao je',mi:'gledali smo',vi:'gledali ste',oni:'gledali su' },
+        future:  { ja:'gledaću',   ti:'gledaćeš',  on:'gledaće',  mi:'gledaćemo',  vi:'gledaćete',  oni:'gledaće'    },
+      }
+    },
+    {
+      infinitive: 'slušati', english: 'to listen',
+      conjugations: {
+        present: { ja:'slušam',    ti:'slušaš',    on:'sluša',    mi:'slušamo',    vi:'slušate',    oni:'slušaju'    },
+        past:    { ja:'slušao sam',ti:'slušao si', on:'slušao je',mi:'slušali smo',vi:'slušali ste',oni:'slušali su' },
+        future:  { ja:'slušaću',   ti:'slušaćeš',  on:'slušaće',  mi:'slušaćemo',  vi:'slušaćete',  oni:'slušaće'    },
+      }
+    },
+    {
+      infinitive: 'igrati', english: 'to play (sport/game)',
+      conjugations: {
+        present: { ja:'igram',    ti:'igraš',    on:'igra',    mi:'igramo',    vi:'igrate',    oni:'igraju'    },
+        past:    { ja:'igrao sam',ti:'igrao si', on:'igrao je',mi:'igrali smo',vi:'igrali ste',oni:'igrali su' },
+        future:  { ja:'igraću',   ti:'igraćeš',  on:'igraće',  mi:'igraćemo',  vi:'igraćete',  oni:'igraće'    },
+      }
+    },
+    {
+      infinitive: 'pričati', english: 'to talk / to tell',
+      conjugations: {
+        present: { ja:'pričam',    ti:'pričaš',    on:'priča',    mi:'pričamo',    vi:'pričate',    oni:'pričaju'    },
+        past:    { ja:'pričao sam',ti:'pričao si', on:'pričao je',mi:'pričali smo',vi:'pričali ste',oni:'pričali su' },
+        future:  { ja:'pričaću',   ti:'pričaćeš',  on:'pričaće',  mi:'pričaćemo',  vi:'pričaćete',  oni:'pričaće'    },
+      }
+    },
+    {
+      infinitive: 'pevati', english: 'to sing',
+      conjugations: {
+        present: { ja:'pevam',    ti:'pevaš',    on:'peva',    mi:'pevamo',    vi:'pevate',    oni:'pevaju'    },
+        past:    { ja:'pevao sam',ti:'pevao si', on:'pevao je',mi:'pevali smo',vi:'pevali ste',oni:'pevali su' },
+        future:  { ja:'pevaću',   ti:'pevaćeš',  on:'pevaće',  mi:'pevaćemo',  vi:'pevaćete',  oni:'pevaće'    },
+      }
+    },
+    {
+      infinitive: 'spavati', english: 'to sleep',
+      conjugations: {
+        present: { ja:'spavam',    ti:'spavaš',    on:'spava',    mi:'spavamo',    vi:'spavate',    oni:'spavaju'    },
+        past:    { ja:'spavao sam',ti:'spavao si', on:'spavao je',mi:'spavali smo',vi:'spavali ste',oni:'spavali su' },
+        future:  { ja:'spavaću',   ti:'spavaćeš',  on:'spavaće',  mi:'spavaćemo',  vi:'spavaćete',  oni:'spavaće'    },
+      }
+    },
+    {
+      infinitive: 'pitati', english: 'to ask',
+      conjugations: {
+        present: { ja:'pitam',    ti:'pitaš',    on:'pita',    mi:'pitamo',    vi:'pitate',    oni:'pitaju'    },
+        past:    { ja:'pitao sam',ti:'pitao si', on:'pitao je',mi:'pitali smo',vi:'pitali ste',oni:'pitali su' },
+        future:  { ja:'pitaću',   ti:'pitaćeš',  on:'pitaće',  mi:'pitaćemo',  vi:'pitaćete',  oni:'pitaće'    },
+      }
+    },
+    {
+      infinitive: 'kuvati', english: 'to cook',
+      conjugations: {
+        present: { ja:'kuvam',    ti:'kuvaš',    on:'kuva',    mi:'kuvamo',    vi:'kuvate',    oni:'kuvaju'    },
+        past:    { ja:'kuvao sam',ti:'kuvao si', on:'kuvao je',mi:'kuvali smo',vi:'kuvali ste',oni:'kuvali su' },
+        future:  { ja:'kuvaću',   ti:'kuvaćeš',  on:'kuvaće',  mi:'kuvaćemo',  vi:'kuvaćete',  oni:'kuvaće'    },
+      }
+    },
+    {
+      infinitive: 'čekati', english: 'to wait',
+      conjugations: {
+        present: { ja:'čekam',    ti:'čekaš',    on:'čeka',    mi:'čekamo',    vi:'čekate',    oni:'čekaju'    },
+        past:    { ja:'čekao sam',ti:'čekao si', on:'čekao je',mi:'čekali smo',vi:'čekali ste',oni:'čekali su' },
+        future:  { ja:'čekaću',   ti:'čekaćeš',  on:'čekaće',  mi:'čekaćemo',  vi:'čekaćete',  oni:'čekaće'    },
+      }
+    },
+    {
+      infinitive: 'plivati', english: 'to swim',
+      conjugations: {
+        present: { ja:'plivam',    ti:'plivaš',    on:'pliva',    mi:'plivamo',    vi:'plivate',    oni:'plivaju'    },
+        past:    { ja:'plivao sam',ti:'plivao si', on:'plivao je',mi:'plivali smo',vi:'plivali ste',oni:'plivali su' },
+        future:  { ja:'plivaću',   ti:'plivaćeš',  on:'plivaće',  mi:'plivaćemo',  vi:'plivaćete',  oni:'plivaće'    },
+      }
+    },
+    {
+      infinitive: 'šetati', english: 'to walk / to stroll',
+      conjugations: {
+        present: { ja:'šetam',    ti:'šetaš',    on:'šeta',    mi:'šetamo',    vi:'šetate',    oni:'šetaju'    },
+        past:    { ja:'šetao sam',ti:'šetao si', on:'šetao je',mi:'šetali smo',vi:'šetali ste',oni:'šetali su' },
+        future:  { ja:'šetaću',   ti:'šetaćeš',  on:'šetaće',  mi:'šetaćemo',  vi:'šetaćete',  oni:'šetaće'    },
+      }
+    },
+    {
+      infinitive: 'crtati', english: 'to draw',
+      conjugations: {
+        present: { ja:'crtam',    ti:'crtaš',    on:'crta',    mi:'crtamo',    vi:'crtate',    oni:'crtaju'    },
+        past:    { ja:'crtao sam',ti:'crtao si', on:'crtao je',mi:'crtali smo',vi:'crtali ste',oni:'crtali su' },
+        future:  { ja:'crtaću',   ti:'crtaćeš',  on:'crtaće',  mi:'crtaćemo',  vi:'crtaćete',  oni:'crtaće'    },
+      }
+    },
+    {
+      infinitive: 'mešati', english: 'to mix / to stir',
+      conjugations: {
+        present: { ja:'mešam',    ti:'mešaš',    on:'meša',    mi:'mešamo',    vi:'mešate',    oni:'mešaju'    },
+        past:    { ja:'mešao sam',ti:'mešao si', on:'mešao je',mi:'mešali smo',vi:'mešali ste',oni:'mešali su' },
+        future:  { ja:'mešaću',   ti:'mešaćeš',  on:'mešaće',  mi:'mešaćemo',  vi:'mešaćete',  oni:'mešaće'    },
+      }
+    },
+    {
+      infinitive: 'birati', english: 'to choose / to select',
+      conjugations: {
+        present: { ja:'biram',    ti:'biraš',    on:'bira',    mi:'biramo',    vi:'birate',    oni:'biraju'    },
+        past:    { ja:'birao sam',ti:'birao si', on:'birao je',mi:'birali smo',vi:'birali ste',oni:'birali su' },
+        future:  { ja:'biraću',   ti:'biraćeš',  on:'biraće',  mi:'biraćemo',  vi:'biraćete',  oni:'biraće'    },
+      }
+    },
+    {
+      infinitive: 'ručati', english: 'to have lunch',
+      conjugations: {
+        present: { ja:'ručam',    ti:'ručaš',    on:'ruča',    mi:'ručamo',    vi:'ručate',    oni:'ručaju'    },
+        past:    { ja:'ručao sam',ti:'ručao si', on:'ručao je',mi:'ručali smo',vi:'ručali ste',oni:'ručali su' },
+        future:  { ja:'ručaću',   ti:'ručaćeš',  on:'ručaće',  mi:'ručaćemo',  vi:'ručaćete',  oni:'ručaće'    },
+      }
+    },
+    {
+      infinitive: 'večerati', english: 'to have dinner',
+      conjugations: {
+        present: { ja:'večeram',    ti:'večeraš',    on:'večera',    mi:'večeramo',    vi:'večerate',    oni:'večeraju'    },
+        past:    { ja:'večerao sam',ti:'večerao si', on:'večerao je',mi:'večerali smo',vi:'večerali ste',oni:'večerali su' },
+        future:  { ja:'večeraću',   ti:'večeraćeš',  on:'večeraće',  mi:'večeraćemo',  vi:'večeraćete',  oni:'večeraće'    },
+      }
+    },
+    {
+      infinitive: 'vraćati', english: 'to return (frequently)',
+      conjugations: {
+        present: { ja:'vraćam',    ti:'vraćaš',    on:'vraća',    mi:'vraćamo',    vi:'vraćate',    oni:'vraćaju'    },
+        past:    { ja:'vraćao sam',ti:'vraćao si', on:'vraćao je',mi:'vraćali smo',vi:'vraćali ste',oni:'vraćali su' },
+        future:  { ja:'vraćaću',   ti:'vraćaćeš',  on:'vraćaće',  mi:'vraćaćemo',  vi:'vraćaćete',  oni:'vraćaće'    },
+      }
+    },
+    {
+      infinitive: 'plaćati', english: 'to pay',
+      conjugations: {
+        present: { ja:'plaćam',    ti:'plaćaš',    on:'plaća',    mi:'plaćamo',    vi:'plaćate',    oni:'plaćaju'    },
+        past:    { ja:'plaćao sam',ti:'plaćao si', on:'plaćao je',mi:'plaćali smo',vi:'plaćali ste',oni:'plaćali su' },
+        future:  { ja:'plaćaću',   ti:'plaćaćeš',  on:'plaćaće',  mi:'plaćaćemo',  vi:'plaćaćete',  oni:'plaćaće'    },
+      }
+    },
+    {
+      infinitive: 'skakati', english: 'to jump',
+      conjugations: {
+        present: { ja:'skačem',    ti:'skačeš',    on:'skače',    mi:'skačemo',    vi:'skačete',    oni:'skaču'      },
+        past:    { ja:'skakao sam',ti:'skakao si', on:'skakao je',mi:'skakali smo',vi:'skakali ste',oni:'skakali su' },
+        future:  { ja:'skakaću',   ti:'skakaćeš',  on:'skakaće',  mi:'skakaćemo',  vi:'skakaćete',  oni:'skakaće'    },
+      }
+    },
+    {
+      infinitive: 'vikati', english: 'to shout / to yell',
+      conjugations: {
+        present: { ja:'vičem',    ti:'vičeš',    on:'viče',    mi:'vičemo',    vi:'vičete',    oni:'viču'      },
+        past:    { ja:'vikao sam',ti:'vikao si', on:'vikao je',mi:'vikali smo',vi:'vikali ste',oni:'vikali su' },
+        future:  { ja:'vikaću',   ti:'vikaćeš',  on:'vikaće',  mi:'vikaćemo',  vi:'vikaćete',  oni:'vikaće'    },
+      }
+    },
+    {
+      infinitive: 'tražiti', english: 'to look for / to ask for',
+      conjugations: {
+        present: { ja:'tražim',    ti:'tražiš',    on:'traži',    mi:'tražimo',    vi:'tražite',    oni:'traže'      },
+        past:    { ja:'tražio sam',ti:'tražio si', on:'tražio je',mi:'tražili smo',vi:'tražili ste',oni:'tražili su' },
+        future:  { ja:'tražiću',   ti:'tražićeš',  on:'tražiće',  mi:'tražićemo',  vi:'tražićete',  oni:'tražiće'    },
+      }
+    },
+    {
+      infinitive: 'brisati', english: 'to wipe / to erase',
+      conjugations: {
+        present: { ja:'brišem',    ti:'brišeš',    on:'briše',    mi:'brišemo',    vi:'brišete',    oni:'brišu'      },
+        past:    { ja:'brisao sam',ti:'brisao si', on:'brisao je',mi:'brisali smo',vi:'brisali ste',oni:'brisali su' },
+        future:  { ja:'brisaću',   ti:'brisaćeš',  on:'brisaće',  mi:'brisaćemo',  vi:'brisaćete',  oni:'brisaće'    },
+      }
+    },
+    {
+      infinitive: 'razgovarati', english: 'to converse / to chat',
+      conjugations: {
+        present: { ja:'razgovaram',    ti:'razgovaraš',    on:'razgovara',    mi:'razgovaramo',    vi:'razgovarate',    oni:'razgovaraju'    },
+        past:    { ja:'razgovarao sam',ti:'razgovarao si', on:'razgovarao je',mi:'razgovarali smo',vi:'razgovarali ste',oni:'razgovarali su' },
+        future:  { ja:'razgovaraću',   ti:'razgovaraćeš',  on:'razgovaraće',  mi:'razgovaraćemo',  vi:'razgovaraćete',  oni:'razgovaraće'    },
+      }
+    },
+    // ── Group 3: -iti / -eti / -ati (pres: -im/-iš) verbs ─────────────────
+    {
+      infinitive: 'govoriti', english: 'to speak / to say',
+      conjugations: {
+        present: { ja:'govorim',    ti:'govoriš',    on:'govori',    mi:'govorimo',    vi:'govorite',    oni:'govore'      },
+        past:    { ja:'govorio sam',ti:'govorio si', on:'govorio je',mi:'govorili smo',vi:'govorili ste',oni:'govorili su' },
+        future:  { ja:'govoriću',   ti:'govorićeš',  on:'govoriće',  mi:'govorićemo',  vi:'govorićete',  oni:'govoriće'    },
+      }
+    },
+    {
+      infinitive: 'živeti', english: 'to live',
+      conjugations: {
+        present: { ja:'živim',    ti:'živiš',    on:'živi',    mi:'živimo',    vi:'živite',    oni:'žive'      },
+        past:    { ja:'živeo sam',ti:'živeo si', on:'živeo je',mi:'živeli smo',vi:'živeli ste',oni:'živeli su' },
+        future:  { ja:'živeću',   ti:'živećeš',  on:'živeće',  mi:'živećemo',  vi:'živećete',  oni:'živeće'    },
+      }
+    },
+    {
+      infinitive: 'voleti', english: 'to love / to like',
+      conjugations: {
+        present: { ja:'volim',    ti:'voliš',    on:'voli',    mi:'volimo',    vi:'volite',    oni:'vole'      },
+        past:    { ja:'voleo sam',ti:'voleo si', on:'voleo je',mi:'voleli smo',vi:'voleli ste',oni:'voleli su' },
+        future:  { ja:'voleću',   ti:'volećeš',  on:'voleće',  mi:'volećemo',  vi:'volećete',  oni:'voleće'    },
+      }
+    },
+    {
+      infinitive: 'razumeti', english: 'to understand',
+      conjugations: {
+        present: { ja:'razumem',    ti:'razumeš',    on:'razume',    mi:'razumemo',    vi:'razumete',    oni:'razumeju'    },
+        past:    { ja:'razumeo sam',ti:'razumeo si', on:'razumeo je',mi:'razumeli smo',vi:'razumeli ste',oni:'razumeli su' },
+        future:  { ja:'razumeću',   ti:'razumećeš',  on:'razumeće',  mi:'razumećemo',  vi:'razumećete',  oni:'razumeće'    },
+      }
+    },
+    {
+      infinitive: 'nositi', english: 'to carry / to wear',
+      conjugations: {
+        present: { ja:'nosim',    ti:'nosiš',    on:'nosi',    mi:'nosimo',    vi:'nosite',    oni:'nose'      },
+        past:    { ja:'nosio sam',ti:'nosio si', on:'nosio je',mi:'nosili smo',vi:'nosili ste',oni:'nosili su' },
+        future:  { ja:'nosiću',   ti:'nosićeš',  on:'nosiće',  mi:'nosićemo',  vi:'nosićete',  oni:'nosiće'    },
+      }
+    },
+    {
+      infinitive: 'voziti', english: 'to drive',
+      conjugations: {
+        present: { ja:'vozim',    ti:'voziš',    on:'vozi',    mi:'vozimo',    vi:'vozite',    oni:'voze'      },
+        past:    { ja:'vozio sam',ti:'vozio si', on:'vozio je',mi:'vozili smo',vi:'vozili ste',oni:'vozili su' },
+        future:  { ja:'voziću',   ti:'vozićeš',  on:'voziće',  mi:'vozićemo',  vi:'vozićete',  oni:'voziće'    },
+      }
+    },
+    {
+      infinitive: 'staviti', english: 'to put / to place',
+      conjugations: {
+        present: { ja:'stavim',    ti:'staviš',    on:'stavi',    mi:'stavimo',    vi:'stavite',    oni:'stave'      },
+        past:    { ja:'stavio sam',ti:'stavio si', on:'stavio je',mi:'stavili smo',vi:'stavili ste',oni:'stavili su' },
+        future:  { ja:'staviću',   ti:'stavićeš',  on:'staviće',  mi:'stavićemo',  vi:'stavićete',  oni:'staviće'    },
+      }
+    },
+    {
+      infinitive: 'platiti', english: 'to pay (once)',
+      conjugations: {
+        present: { ja:'platim',    ti:'platiš',    on:'plati',    mi:'platimo',    vi:'platite',    oni:'plate'      },
+        past:    { ja:'platio sam',ti:'platio si', on:'platio je',mi:'platili smo',vi:'platili ste',oni:'platili su' },
+        future:  { ja:'platiću',   ti:'platićeš',  on:'platiće',  mi:'platićemo',  vi:'platićete',  oni:'platiće'    },
+      }
+    },
+    {
+      infinitive: 'kupiti', english: 'to buy (once)',
+      conjugations: {
+        present: { ja:'kupim',    ti:'kupiš',    on:'kupi',    mi:'kupimo',    vi:'kupite',    oni:'kupe'      },
+        past:    { ja:'kupio sam',ti:'kupio si', on:'kupio je',mi:'kupili smo',vi:'kupili ste',oni:'kupili su' },
+        future:  { ja:'kupiću',   ti:'kupićeš',  on:'kupiće',  mi:'kupićemo',  vi:'kupićete',  oni:'kupiće'    },
+      }
+    },
+    {
+      infinitive: 'pušiti', english: 'to smoke',
+      conjugations: {
+        present: { ja:'pušim',    ti:'pušiš',    on:'puši',    mi:'pušimo',    vi:'pušite',    oni:'puše'      },
+        past:    { ja:'pušio sam',ti:'pušio si', on:'pušio je',mi:'pušili smo',vi:'pušili ste',oni:'pušili su' },
+        future:  { ja:'pušiću',   ti:'pušićeš',  on:'pušiće',  mi:'pušićemo',  vi:'pušićete',  oni:'pušiće'    },
+      }
+    },
+    {
+      infinitive: 'zaboraviti', english: 'to forget',
+      conjugations: {
+        present: { ja:'zaboravim',    ti:'zaboraviš',    on:'zaboravi',    mi:'zaboravimo',    vi:'zaboravite',    oni:'zaborave'      },
+        past:    { ja:'zaboravio sam',ti:'zaboravio si', on:'zaboravio je',mi:'zaboravili smo',vi:'zaboravili ste',oni:'zaboravili su' },
+        future:  { ja:'zaboraviću',   ti:'zaboravićeš',  on:'zaboraviće',  mi:'zaboravićemo',  vi:'zaboravićete',  oni:'zaboraviće'    },
+      }
+    },
+    {
+      infinitive: 'sedeti', english: 'to sit',
+      conjugations: {
+        present: { ja:'sedim',    ti:'sediš',    on:'sedi',    mi:'sedimo',    vi:'sedite',    oni:'sede'      },
+        past:    { ja:'sedeo sam',ti:'sedeo si', on:'sedeo je',mi:'sedeli smo',vi:'sedeli ste',oni:'sedeli su' },
+        future:  { ja:'sedeću',   ti:'sedećeš',  on:'sedeće',  mi:'sedećemo',  vi:'sedećete',  oni:'sedeće'    },
+      }
+    },
+    {
+      infinitive: 'stajati', english: 'to stand',
+      conjugations: {
+        present: { ja:'stojim',    ti:'stojiš',    on:'stoji',    mi:'stojimo',    vi:'stojite',    oni:'stoje'      },
+        past:    { ja:'stajao sam',ti:'stajao si', on:'stajao je',mi:'stajali smo',vi:'stajali ste',oni:'stajali su' },
+        future:  { ja:'stajati ću',ti:'stajati ćeš',on:'stajati će',mi:'stajati ćemo',vi:'stajati ćete',oni:'stajati će' },
+      }
+    },
+    {
+      infinitive: 'ležati', english: 'to lie down',
+      conjugations: {
+        present: { ja:'ležim',    ti:'ležiš',    on:'leži',    mi:'ležimo',    vi:'ležite',    oni:'leže'      },
+        past:    { ja:'ležao sam',ti:'ležao si', on:'ležao je',mi:'ležali smo',vi:'ležali ste',oni:'ležali su' },
+        future:  { ja:'ležati ću',ti:'ležati ćeš',on:'ležati će',mi:'ležati ćemo',vi:'ležati ćete',oni:'ležati će' },
+      }
+    },
+    {
+      infinitive: 'trčati', english: 'to run',
+      conjugations: {
+        present: { ja:'trčim',    ti:'trčiš',    on:'trči',    mi:'trčimo',    vi:'trčite',    oni:'trče'      },
+        past:    { ja:'trčao sam',ti:'trčao si', on:'trčao je',mi:'trčali smo',vi:'trčali ste',oni:'trčali su' },
+        future:  { ja:'trčati ću',ti:'trčati ćeš',on:'trčati će',mi:'trčati ćemo',vi:'trčati ćete',oni:'trčati će' },
+      }
+    },
+    {
+      infinitive: 'leteti', english: 'to fly',
+      conjugations: {
+        present: { ja:'letim',    ti:'letiš',    on:'leti',    mi:'letimo',    vi:'letite',    oni:'lete'      },
+        past:    { ja:'leteo sam',ti:'leteo si', on:'leteo je',mi:'leteli smo',vi:'leteli ste',oni:'leteli su' },
+        future:  { ja:'leteću',   ti:'letećeš',  on:'leteće',  mi:'letećemo',  vi:'letećete',  oni:'leteće'    },
+      }
+    },
+    {
+      infinitive: 'učiti', english: 'to learn / to study',
+      conjugations: {
+        present: { ja:'učim',    ti:'učiš',    on:'uči',    mi:'učimo',    vi:'učite',    oni:'uče'      },
+        past:    { ja:'učio sam',ti:'učio si', on:'učio je',mi:'učili smo',vi:'učili ste',oni:'učili su' },
+        future:  { ja:'učiću',   ti:'učićeš',  on:'učiće',  mi:'učićemo',  vi:'učićete',  oni:'učiće'    },
+      }
+    },
+    {
+      infinitive: 'odgovoriti', english: 'to answer / to reply',
+      conjugations: {
+        present: { ja:'odgovorim',    ti:'odgovoriš',    on:'odgovori',    mi:'odgovorimo',    vi:'odgovorite',    oni:'odgovore'      },
+        past:    { ja:'odgovorio sam',ti:'odgovorio si', on:'odgovorio je',mi:'odgovorili smo',vi:'odgovorili ste',oni:'odgovorili su' },
+        future:  { ja:'odgovoriću',   ti:'odgovorićeš',  on:'odgovoriće',  mi:'odgovorićemo',  vi:'odgovorićete',  oni:'odgovoriće'    },
+      }
+    },
+    {
+      infinitive: 'pomoći', english: 'to help',
+      conjugations: {
+        present: { ja:'pomognem',    ti:'pomogneš',    on:'pomogne',    mi:'pomognemo',    vi:'pomognete',    oni:'pomognu'      },
+        past:    { ja:'pomogao sam', ti:'pomogao si',  on:'pomogao je', mi:'pomogli smo',  vi:'pomogli ste',  oni:'pomogli su'   },
+        future:  { ja:'pomoći ću',   ti:'pomoći ćeš',  on:'pomoći će',  mi:'pomoći ćemo',  vi:'pomoći ćete',  oni:'pomoći će'    },
+      }
+    },
+    {
+      infinitive: 'vratiti', english: 'to return (something)',
+      conjugations: {
+        present: { ja:'vratim',    ti:'vratiš',    on:'vrati',    mi:'vratimo',    vi:'vratite',    oni:'vrate'      },
+        past:    { ja:'vratio sam',ti:'vratio si', on:'vratio je',mi:'vratili smo',vi:'vratili ste',oni:'vratili su' },
+        future:  { ja:'vratiću',   ti:'vratićeš',  on:'vratiće',  mi:'vratićemo',  vi:'vratićete',  oni:'vratiće'    },
+      }
+    },
+    {
+      infinitive: 'otvoriti', english: 'to open',
+      conjugations: {
+        present: { ja:'otvorim',    ti:'otvoriš',    on:'otvori',    mi:'otvorimo',    vi:'otvorite',    oni:'otvore'      },
+        past:    { ja:'otvorio sam',ti:'otvorio si', on:'otvorio je',mi:'otvorili smo',vi:'otvorili ste',oni:'otvorili su' },
+        future:  { ja:'otvoriću',   ti:'otvorićeš',  on:'otvoriće',  mi:'otvorićemo',  vi:'otvorićete',  oni:'otvoriće'    },
+      }
+    },
+    {
+      infinitive: 'zatvoriti', english: 'to close',
+      conjugations: {
+        present: { ja:'zatvorim',    ti:'zatvoriš',    on:'zatvori',    mi:'zatvorimo',    vi:'zatvorite',    oni:'zatvore'      },
+        past:    { ja:'zatvorio sam',ti:'zatvorio si', on:'zatvorio je',mi:'zatvorili smo',vi:'zatvorili ste',oni:'zatvorili su' },
+        future:  { ja:'zatvoriću',   ti:'zatvorićeš',  on:'zatvoriće',  mi:'zatvorićemo',  vi:'zatvorićete',  oni:'zatvoriće'    },
+      }
+    },
+    {
+      infinitive: 'posetiti', english: 'to visit',
+      conjugations: {
+        present: { ja:'posetim',    ti:'posetiš',    on:'poseti',    mi:'posetimo',    vi:'posetite',    oni:'posete'      },
+        past:    { ja:'posetio sam',ti:'posetio si', on:'posetio je',mi:'posetili smo',vi:'posetili ste',oni:'posetili su' },
+        future:  { ja:'posetiću',   ti:'posetićeš',  on:'posetiće',  mi:'posetićemo',  vi:'posetićete',  oni:'posetiće'    },
+      }
+    },
+    {
+      infinitive: 'poznavati', english: 'to know (a person)',
+      conjugations: {
+        present: { ja:'poznajem',    ti:'poznaješ',    on:'poznaje',    mi:'poznajemo',    vi:'poznajete',    oni:'poznaju'    },
+        past:    { ja:'poznavao sam',ti:'poznavao si', on:'poznavao je',mi:'poznavali smo',vi:'poznavali ste',oni:'poznavali su' },
+        future:  { ja:'poznaću',     ti:'poznaćeš',    on:'poznaće',    mi:'poznaćemo',    vi:'poznaćete',    oni:'poznaće'    },
+      }
+    },
+    // ── Group 4: -ovati / -avati verbs ────────────────────────────────────
+    {
+      infinitive: 'putovati', english: 'to travel',
+      conjugations: {
+        present: { ja:'putujem',    ti:'putuješ',    on:'putuje',    mi:'putujemo',    vi:'putujete',    oni:'putuju'      },
+        past:    { ja:'putovao sam',ti:'putovao si', on:'putovao je',mi:'putovali smo',vi:'putovali ste',oni:'putovali su' },
+        future:  { ja:'putovaću',   ti:'putovaćeš',  on:'putovaće',  mi:'putovaćemo',  vi:'putovaćete',  oni:'putovaće'    },
+      }
+    },
+    {
+      infinitive: 'kupovati', english: 'to shop / to buy (repeatedly)',
+      conjugations: {
+        present: { ja:'kupujem',    ti:'kupuješ',    on:'kupuje',    mi:'kupujemo',    vi:'kupujete',    oni:'kupuju'      },
+        past:    { ja:'kupovao sam',ti:'kupovao si', on:'kupovao je',mi:'kupovali smo',vi:'kupovali ste',oni:'kupovali su' },
+        future:  { ja:'kupovaću',   ti:'kupovaćeš',  on:'kupovaće',  mi:'kupovaćemo',  vi:'kupovaćete',  oni:'kupovaće'    },
+      }
+    },
+    {
+      infinitive: 'pokazivati', english: 'to show (repeatedly)',
+      conjugations: {
+        present: { ja:'pokazujem',    ti:'pokazuješ',    on:'pokazuje',    mi:'pokazujemo',    vi:'pokazujete',    oni:'pokazuju'      },
+        past:    { ja:'pokazivao sam',ti:'pokazivao si', on:'pokazivao je',mi:'pokazivali smo',vi:'pokazivali ste',oni:'pokazivali su' },
+        future:  { ja:'pokazivaću',   ti:'pokazivaćeš',  on:'pokazivaće',  mi:'pokazivaćemo',  vi:'pokazivaćete',  oni:'pokazivaće'    },
+      }
+    },
+    {
+      infinitive: 'rokovati', english: 'to schedule / to set a date',
+      conjugations: {
+        present: { ja:'rokujem',    ti:'rokuješ',    on:'rokuje',    mi:'rokujemo',    vi:'rokujete',    oni:'rokuju'      },
+        past:    { ja:'rokovao sam',ti:'rokovao si', on:'rokovao je',mi:'rokovali smo',vi:'rokovali ste',oni:'rokovali su' },
+        future:  { ja:'rokovaću',   ti:'rokovaćeš',  on:'rokovaće',  mi:'rokovaćemo',  vi:'rokovaćete',  oni:'rokovaće'    },
+      }
+    },
+    {
+      infinitive: 'radovati se', english: 'to be glad / to look forward',
+      conjugations: {
+        present: { ja:'radujem se',    ti:'raduješ se',    on:'raduje se',    mi:'radujemo se',    vi:'radujete se',    oni:'raduju se'      },
+        past:    { ja:'radovao sam se',ti:'radovao si se', on:'radovao se je',mi:'radovali smo se',vi:'radovali ste se',oni:'radovali su se' },
+        future:  { ja:'radovaću se',   ti:'radovaćeš se',  on:'radovaće se',  mi:'radovaćemo se',  vi:'radovaćete se',  oni:'radovaće se'    },
+      }
+    },
+    {
+      infinitive: 'verovati', english: 'to believe',
+      conjugations: {
+        present: { ja:'verujem',    ti:'veruješ',    on:'veruje',    mi:'verujemo',    vi:'verujete',    oni:'veruju'      },
+        past:    { ja:'verovao sam',ti:'verovao si', on:'verovao je',mi:'verovali smo',vi:'verovali ste',oni:'verovali su' },
+        future:  { ja:'verovaću',   ti:'verovaćeš',  on:'verovaće',  mi:'verovaćemo',  vi:'verovaćete',  oni:'verovaće'    },
+      }
+    },
+    {
+      infinitive: 'razvijati', english: 'to develop',
+      conjugations: {
+        present: { ja:'razvijam',    ti:'razvijaš',    on:'razvija',    mi:'razvijamo',    vi:'razvijate',    oni:'razvijaju'    },
+        past:    { ja:'razvijao sam',ti:'razvijao si', on:'razvijao je',mi:'razvijali smo',vi:'razvijali ste',oni:'razvijali su' },
+        future:  { ja:'razvijaću',   ti:'razvijaćeš',  on:'razvijaće',  mi:'razvijaćemo',  vi:'razvijaćete',  oni:'razvijaće'    },
+      }
+    },
+    {
+      infinitive: 'objašnjavati', english: 'to explain (repeatedly)',
+      conjugations: {
+        present: { ja:'objašnjavam',    ti:'objašnjavaš',    on:'objašnjava',    mi:'objašnjavamo',    vi:'objašnjavate',    oni:'objašnjavaju'    },
+        past:    { ja:'objašnjavao sam',ti:'objašnjavao si', on:'objašnjavao je',mi:'objašnjavali smo',vi:'objašnjavali ste',oni:'objašnjavali su' },
+        future:  { ja:'objašnjavaću',   ti:'objašnjavaćeš',  on:'objašnjavaće',  mi:'objašnjavaćemo',  vi:'objašnjavaćete',  oni:'objašnjavaće'    },
+      }
+    },
+    // ── Group 5: Mixed / common ────────────────────────────────────────────
+    {
+      infinitive: 'čistiti', english: 'to clean',
+      conjugations: {
+        present: { ja:'čistim',    ti:'čistiš',    on:'čisti',    mi:'čistimo',    vi:'čistite',    oni:'čiste'      },
+        past:    { ja:'čistio sam',ti:'čistio si', on:'čistio je',mi:'čistili smo',vi:'čistili ste',oni:'čistili su' },
+        future:  { ja:'čistiću',   ti:'čistićeš',  on:'čistiće',  mi:'čistićemo',  vi:'čistićete',  oni:'čistiće'    },
+      }
+    },
+    {
+      infinitive: 'pamtiti', english: 'to remember',
+      conjugations: {
+        present: { ja:'pamtim',    ti:'pamtiš',    on:'pamti',    mi:'pamtimo',    vi:'pamtite',    oni:'pamte'      },
+        past:    { ja:'pamtio sam',ti:'pamtio si', on:'pamtio je',mi:'pamtili smo',vi:'pamtili ste',oni:'pamtili su' },
+        future:  { ja:'pamtiću',   ti:'pamtićeš',  on:'pamtiće',  mi:'pamtićemo',  vi:'pamtićete',  oni:'pamtiće'    },
+      }
+    },
+    {
+      infinitive: 'početi', english: 'to begin / to start',
+      conjugations: {
+        present: { ja:'počnem',    ti:'počneš',    on:'počne',    mi:'počnemo',    vi:'počnete',    oni:'počnu'      },
+        past:    { ja:'počeo sam', ti:'počeo si',  on:'počeo je', mi:'počeli smo', vi:'počeli ste', oni:'počeli su'  },
+        future:  { ja:'počeću',    ti:'počećeš',   on:'počeće',   mi:'počećemo',   vi:'počećete',   oni:'počeće'     },
+      }
+    },
+    {
+      infinitive: 'završiti', english: 'to finish / to end',
+      conjugations: {
+        present: { ja:'završim',    ti:'završiš',    on:'završi',    mi:'završimo',    vi:'završite',    oni:'završe'      },
+        past:    { ja:'završio sam',ti:'završio si', on:'završio je',mi:'završili smo',vi:'završili ste',oni:'završili su' },
+        future:  { ja:'završiću',   ti:'završićeš',  on:'završiće',  mi:'završićemo',  vi:'završićete',  oni:'završiće'    },
+      }
+    },
+    {
+      infinitive: 'pričekati', english: 'to wait (a bit)',
+      conjugations: {
+        present: { ja:'pričekam',    ti:'pričekaš',    on:'pričeka',    mi:'pričekamo',    vi:'pričekate',    oni:'pričekaju'    },
+        past:    { ja:'pričekao sam',ti:'pričekao si', on:'pričekao je',mi:'pričekali smo',vi:'pričekali ste',oni:'pričekali su' },
+        future:  { ja:'pričekaću',   ti:'pričekaćeš',  on:'pričekaće',  mi:'pričekaćemo',  vi:'pričekaćete',  oni:'pričekaće'    },
+      }
+    },
+    {
+      infinitive: 'preneti', english: 'to carry over / to transfer',
+      conjugations: {
+        present: { ja:'prnesem',    ti:'prneseš',    on:'prnese',    mi:'prnesemo',    vi:'prnesete',    oni:'prnesu'      },
+        past:    { ja:'preneo sam', ti:'preneo si',  on:'preneo je', mi:'preneli smo', vi:'preneli ste', oni:'preneli su'  },
+        future:  { ja:'preneću',    ti:'prenećeš',   on:'preneće',   mi:'prenećemo',   vi:'prenećete',   oni:'preneće'     },
+      }
+    },
+    {
+      infinitive: 'popiti', english: 'to drink up',
+      conjugations: {
+        present: { ja:'popijem',   ti:'popiješ',   on:'popije',   mi:'popijemo',   vi:'popijete',   oni:'popiju'     },
+        past:    { ja:'popio sam', ti:'popio si',  on:'popio je', mi:'popili smo', vi:'popili ste', oni:'popili su'  },
+        future:  { ja:'popiću',    ti:'popićeš',   on:'popiće',   mi:'popićemo',   vi:'popićete',   oni:'popiće'     },
+      }
+    },
+    {
+      infinitive: 'pojesti', english: 'to eat up',
+      conjugations: {
+        present: { ja:'pojedem',   ti:'pojedeš',   on:'pojede',   mi:'pojedemo',   vi:'pojedete',   oni:'pojedu'     },
+        past:    { ja:'pojeo sam', ti:'pojeo si',  on:'pojeo je', mi:'pojeli smo', vi:'pojeli ste', oni:'pojeli su'  },
+        future:  { ja:'pojesti ću',ti:'pojesti ćeš',on:'pojesti će',mi:'pojesti ćemo',vi:'pojesti ćete',oni:'pojesti će' },
+      }
+    },
+    {
+      infinitive: 'pozvati', english: 'to call / to invite',
+      conjugations: {
+        present: { ja:'pozovem',    ti:'pozoveš',    on:'pozove',    mi:'pozovemo',    vi:'pozovete',    oni:'pozovu'      },
+        past:    { ja:'pozvao sam', ti:'pozvao si',  on:'pozvao je', mi:'pozvali smo', vi:'pozvali ste', oni:'pozvali su'  },
+        future:  { ja:'pozvaću',    ti:'pozvaćeš',   on:'pozvaće',   mi:'pozvaćemo',   vi:'pozvaćete',   oni:'pozvaće'     },
+      }
+    },
+    {
+      infinitive: 'saznati', english: 'to find out / to learn',
+      conjugations: {
+        present: { ja:'saznam',    ti:'saznaš',    on:'sazna',    mi:'saznamo',    vi:'saznate',    oni:'saznaju'    },
+        past:    { ja:'saznao sam',ti:'saznao si', on:'saznao je',mi:'saznali smo',vi:'saznali ste',oni:'saznali su' },
+        future:  { ja:'saznaću',   ti:'saznaćeš',  on:'saznaće',  mi:'saznaćemo',  vi:'saznaćete',  oni:'saznaće'    },
+      }
+    },
+    {
+      infinitive: 'prihvatiti', english: 'to accept',
+      conjugations: {
+        present: { ja:'prihvatim',    ti:'prihvatiš',    on:'prihvati',    mi:'prihvatimo',    vi:'prihvatite',    oni:'prihvate'      },
+        past:    { ja:'prihvatio sam',ti:'prihvatio si', on:'prihvatio je',mi:'prihvatili smo',vi:'prihvatili ste',oni:'prihvatili su' },
+        future:  { ja:'prihvatiću',   ti:'prihvatićeš',  on:'prihvatiće',  mi:'prihvatićemo',  vi:'prihvatićete',  oni:'prihvatiće'    },
+      }
+    },
+    {
+      infinitive: 'objasniti', english: 'to explain (once)',
+      conjugations: {
+        present: { ja:'objasnim',    ti:'objasniš',    on:'objasni',    mi:'objasnimo',    vi:'objasnite',    oni:'objasne'      },
+        past:    { ja:'objasnio sam',ti:'objasnio si', on:'objasnio je',mi:'objasnili smo',vi:'objasnili ste',oni:'objasnili su' },
+        future:  { ja:'objasniću',   ti:'objasnićeš',  on:'objasniće',  mi:'objasnićemo',  vi:'objasnićete',  oni:'objasniće'    },
+      }
+    },
+    {
+      infinitive: 'otkazati', english: 'to cancel',
+      conjugations: {
+        present: { ja:'otkažem',    ti:'otkažeš',    on:'otkaže',    mi:'otkažemo',    vi:'otkažete',    oni:'otkažu'      },
+        past:    { ja:'otkazao sam',ti:'otkazao si', on:'otkazao je',mi:'otkazali smo',vi:'otkazali ste',oni:'otkazali su' },
+        future:  { ja:'otkazaću',   ti:'otkazaćeš',  on:'otkazaće',  mi:'otkazaćemo',  vi:'otkazaćete',  oni:'otkazaće'    },
+      }
+    },
+    {
+      infinitive: 'čuvati', english: 'to keep / to guard',
+      conjugations: {
+        present: { ja:'čuvam',    ti:'čuvaš',    on:'čuva',    mi:'čuvamo',    vi:'čuvate',    oni:'čuvaju'    },
+        past:    { ja:'čuvao sam',ti:'čuvao si', on:'čuvao je',mi:'čuvali smo',vi:'čuvali ste',oni:'čuvali su' },
+        future:  { ja:'čuvaću',   ti:'čuvaćeš',  on:'čuvaće',  mi:'čuvaćemo',  vi:'čuvaćete',  oni:'čuvaće'    },
+      }
+    },
+    {
+      infinitive: 'pokazati', english: 'to show (once)',
+      conjugations: {
+        present: { ja:'pokažem',    ti:'pokažeš',    on:'pokaže',    mi:'pokažemo',    vi:'pokažete',    oni:'pokažu'      },
+        past:    { ja:'pokazao sam',ti:'pokazao si', on:'pokazao je',mi:'pokazali smo',vi:'pokazali ste',oni:'pokazali su' },
+        future:  { ja:'pokazaću',   ti:'pokazaćeš',  on:'pokazaće',  mi:'pokazaćemo',  vi:'pokazaćete',  oni:'pokazaće'    },
+      }
+    },
+    {
+      infinitive: 'baciti', english: 'to throw',
+      conjugations: {
+        present: { ja:'bacim',    ti:'baciš',    on:'baci',    mi:'bacimo',    vi:'bacite',    oni:'bace'      },
+        past:    { ja:'bacio sam',ti:'bacio si', on:'bacio je',mi:'bacili smo',vi:'bacili ste',oni:'bacili su' },
+        future:  { ja:'baciću',   ti:'bacićeš',  on:'baciće',  mi:'bacićemo',  vi:'bacićete',  oni:'baciće'    },
+      }
+    },
+    {
+      infinitive: 'popraviti', english: 'to fix / to repair',
+      conjugations: {
+        present: { ja:'popravim',    ti:'popraviš',    on:'popravi',    mi:'popravimo',    vi:'popravite',    oni:'poprave'     },
+        past:    { ja:'popravio sam',ti:'popravio si', on:'popravio je',mi:'popravili smo',vi:'popravili ste',oni:'popravili su' },
+        future:  { ja:'popraviću',   ti:'popravićeš',  on:'popraviće',  mi:'popravićemo',  vi:'popravićete',  oni:'popraviće'   },
+      }
+    },
+    {
+      infinitive: 'doručkovati', english: 'to have breakfast',
+      conjugations: {
+        present: { ja:'doručkujem',    ti:'doručkuješ',    on:'doručkuje',    mi:'doručkujemo',    vi:'doručkujete',    oni:'doručkuju'      },
+        past:    { ja:'doručkovao sam',ti:'doručkovao si', on:'doručkovao je',mi:'doručkovali smo',vi:'doručkovali ste',oni:'doručkovali su' },
+        future:  { ja:'doručkovaću',   ti:'doručkovaćeš',  on:'doručkovaće',  mi:'doručkovaćemo',  vi:'doručkovaćete',  oni:'doručkovaće'    },
+      }
     },
   ];
 
@@ -1195,6 +2125,16 @@
   function saveGrammarNouns(n) { localStorage.setItem(GRAMMAR_KEY, JSON.stringify(n)); }
 
   // ═══════════════════════════════════════════════════
+  //  USER VERB STORAGE
+  // ═══════════════════════════════════════════════════
+  const VERB_KEY = 'serbian_user_verbs';
+  function loadUserVerbs() {
+    const raw = localStorage.getItem(VERB_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }
+  function saveUserVerbs(v) { localStorage.setItem(VERB_KEY, JSON.stringify(v)); }
+
+  // ═══════════════════════════════════════════════════
   //  STATE
   // ═══════════════════════════════════════════════════
   let groups       = loadGroups();
@@ -1213,18 +2153,29 @@
   let gScore       = { correct: 0, total: 0 };
   let gScoredNoun  = false;
 
+  // Verb state
+  let userVerbs      = loadUserVerbs();
+  let allVerbs       = [];
+  let vIndex         = 0;
+  let activeTense    = 'present';
+  let activeSubjects = new Set(['ja','ti','on','mi','vi','oni']);
+  let vScore         = { correct: 0, total: 0 };
+  let vScoredVerb    = false;
+
   // ═══════════════════════════════════════════════════
   //  VIEW SWITCHER
   // ═══════════════════════════════════════════════════
   function showView(view) {
     document.getElementById('study-view').style.display   = view === 'study'   ? 'flex' : 'none';
     document.getElementById('grammar-view').style.display = view === 'grammar' ? 'flex' : 'none';
+    document.getElementById('verbs-view').style.display   = view === 'verbs'   ? 'flex' : 'none';
     document.getElementById('manage-view').style.display  = view === 'manage'  ? 'flex' : 'none';
-    ['study','grammar','manage'].forEach(v =>
+    ['study','grammar','verbs','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')   renderStudy();
     if (view === 'grammar') renderGrammarView();
+    if (view === 'verbs')   renderVerbView();
     if (view === 'manage')  renderManage();
   }
 
@@ -1444,6 +2395,35 @@
       .replace(/đ/g, 'd').replace(/dž/g, 'dz');
   }
 
+  // Serbian Latin → Cyrillic (1-to-1 mapping; digraphs handled first)
+  function latinToCyrillic(str) {
+    if (!str) return '';
+    const pairs = [
+      // Digraphs — must come before their component letters
+      ['LJ','Љ'], ['Lj','Љ'], ['lj','љ'],
+      ['NJ','Њ'], ['Nj','Њ'], ['nj','њ'],
+      ['DŽ','Џ'], ['Dž','Џ'], ['dž','џ'],
+      // Single characters
+      ['A','А'], ['a','а'], ['B','Б'], ['b','б'],
+      ['C','Ц'], ['c','ц'], ['Č','Ч'], ['č','ч'],
+      ['Ć','Ћ'], ['ć','ћ'], ['D','Д'], ['d','д'],
+      ['Đ','Ђ'], ['đ','ђ'], ['E','Е'], ['e','е'],
+      ['F','Ф'], ['f','ф'], ['G','Г'], ['g','г'],
+      ['H','Х'], ['h','х'], ['I','И'], ['i','и'],
+      ['J','Ј'], ['j','ј'], ['K','К'], ['k','к'],
+      ['L','Л'], ['l','л'], ['M','М'], ['m','м'],
+      ['N','Н'], ['n','н'], ['O','О'], ['o','о'],
+      ['P','П'], ['p','п'], ['R','Р'], ['r','р'],
+      ['S','С'], ['s','с'], ['Š','Ш'], ['š','ш'],
+      ['T','Т'], ['t','т'], ['U','У'], ['u','у'],
+      ['V','В'], ['v','в'], ['Z','З'], ['z','з'],
+      ['Ž','Ж'], ['ž','ж'],
+    ];
+    let result = str;
+    for (const [from, to] of pairs) result = result.split(from).join(to);
+    return result;
+  }
+
   function checkGrammar() {
     if (!grammarNouns.length) return;
     const noun = grammarNouns[gIndex];
@@ -1528,13 +2508,246 @@
   }
 
   // ═══════════════════════════════════════════════════
+  //  VERBS
+  // ═══════════════════════════════════════════════════
+  function buildAllVerbs() {
+    allVerbs = [...VERBS, ...userVerbs];
+  }
+
+  function renderVerbView() {
+    buildAllVerbs();
+    buildTenseButtons();
+    buildSubjectToggles();
+    renderVerbCard();
+  }
+
+  function buildTenseButtons() {
+    const container = document.getElementById('tense-btns');
+    if (container.children.length === TENSES.length) {
+      // Update active state only
+      container.querySelectorAll('.tense-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.key === activeTense);
+      });
+      return;
+    }
+    container.innerHTML = '';
+    TENSES.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'tense-btn' + (t.key === activeTense ? ' active' : '');
+      btn.textContent = `${t.label} — ${t.note}`;
+      btn.dataset.key = t.key;
+      btn.addEventListener('click', () => {
+        activeTense = t.key;
+        container.querySelectorAll('.tense-btn').forEach(b => b.classList.toggle('active', b.dataset.key === activeTense));
+        vScoredVerb = false;
+        renderVerbInputs();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function buildSubjectToggles() {
+    const container = document.getElementById('subject-toggles');
+    if (container.children.length === SUBJECTS.length) return;
+    container.innerHTML = '';
+    SUBJECTS.forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'case-toggle' + (activeSubjects.has(s.key) ? ' active' : '');
+      btn.textContent = s.key;
+      btn.dataset.key = s.key;
+      btn.dataset.tip = `${s.label} — ${s.pronoun}`;
+      btn.title = `${s.label} (${s.pronoun})`;
+      btn.addEventListener('click', () => {
+        if (activeSubjects.has(s.key)) {
+          if (activeSubjects.size === 1) return;
+          activeSubjects.delete(s.key);
+          btn.classList.remove('active');
+        } else {
+          activeSubjects.add(s.key);
+          btn.classList.add('active');
+        }
+        renderVerbInputs();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function renderVerbCard() {
+    const has = allVerbs.length > 0;
+    document.getElementById('v-verb-card').style.display       = has ? 'flex' : 'none';
+    document.getElementById('verb-inputs').style.display       = has ? 'flex' : 'none';
+    document.querySelector('#verbs-view .grammar-controls').style.display = has ? 'flex' : 'none';
+    document.getElementById('empty-verbs').style.display       = has ? 'none' : 'block';
+    if (!has) return;
+
+    if (vIndex >= allVerbs.length) vIndex = 0;
+    const verb = allVerbs[vIndex];
+    document.getElementById('v-display-inf').textContent = verb.infinitive;
+    document.getElementById('v-display-en').textContent  = verb.english;
+    document.getElementById('v-progress').textContent    = `Verb ${vIndex + 1} of ${allVerbs.length}`;
+    document.getElementById('v-prev-btn').disabled = vIndex === 0;
+    document.getElementById('v-next-btn').disabled = vIndex === allVerbs.length - 1;
+
+    vScoredVerb = false;
+    renderVerbInputs();
+    updateVScore();
+  }
+
+  function renderVerbInputs() {
+    const container = document.getElementById('verb-inputs');
+    container.innerHTML = '';
+    if (!allVerbs.length) return;
+    const verb = allVerbs[vIndex];
+
+    SUBJECTS.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'case-row' + (activeSubjects.has(s.key) ? '' : ' hidden');
+      row.id = `v-row-${s.key}`;
+      row.innerHTML = `
+        <div class="subj-row-main">
+          <div class="subj-label-col">
+            <span class="subj-label-main">${s.label}</span>
+            <span class="subj-label-hint">${s.pronoun}</span>
+          </div>
+          <input class="case-inp" id="v-inp-${s.key}" type="text"
+            placeholder="${activeTense} form…"
+            autocomplete="off" autocorrect="off" spellcheck="false" />
+          <div class="case-feedback" id="v-fb-${s.key}"></div>
+        </div>
+      `;
+      container.appendChild(row);
+      document.getElementById(`v-inp-${s.key}`).addEventListener('keydown', e => {
+        if (e.key === 'Enter') checkVerbs();
+      });
+    });
+  }
+
+  function checkVerbs() {
+    if (!allVerbs.length) return;
+    const verb = allVerbs[vIndex];
+    let correct = 0, total = 0;
+    SUBJECTS.forEach(s => {
+      if (!activeSubjects.has(s.key)) return;
+      const inp = document.getElementById(`v-inp-${s.key}`);
+      const fb  = document.getElementById(`v-fb-${s.key}`);
+      if (!inp) return;
+      const expected = (verb.conjugations[activeTense] || {})[s.key] || '';
+      const ok = normalizeSerbian(inp.value.trim()) === normalizeSerbian(expected);
+      inp.classList.toggle('g-correct',   ok);
+      inp.classList.toggle('g-incorrect', !ok);
+      fb.innerHTML = ok
+        ? `<span class="fb-correct">✓</span>`
+        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${expected}</span>`;
+      total++;
+      if (ok) correct++;
+    });
+    if (!vScoredVerb) {
+      vScore.correct += correct;
+      vScore.total   += total;
+      vScoredVerb = true;
+    }
+    updateVScore();
+  }
+
+  function updateVScore() {
+    document.getElementById('v-score-val').textContent = `${vScore.correct} / ${vScore.total}`;
+  }
+
+  function vNext() { if (vIndex < allVerbs.length - 1) { vIndex++; renderVerbCard(); } }
+  function vPrev() { if (vIndex > 0) { vIndex--; renderVerbCard(); } }
+
+  function shuffleVerbs() {
+    buildAllVerbs();
+    for (let i = allVerbs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allVerbs[i], allVerbs[j]] = [allVerbs[j], allVerbs[i]];
+    }
+    vIndex = 0;
+    renderVerbCard();
+  }
+
+  // ─── Manage: user verb CRUD ─────────────────────────────────────────────
+  function addUserVerb() {
+    const infinitive = document.getElementById('vn-infinitive').value.trim();
+    const english    = document.getElementById('vn-english').value.trim();
+    if (!infinitive || !english) { alert('Please fill in the infinitive and English meaning.'); return; }
+
+    const keys = ['ja','ti','on','mi','vi','oni'];
+    const tenses = ['pres','past','fut'];
+    const tenseMap = { pres: 'present', past: 'past', fut: 'future' };
+    const conjugations = { present: {}, past: {}, future: {} };
+    const missing = [];
+
+    tenses.forEach(t => {
+      keys.forEach(k => {
+        const val = document.getElementById(`vn-${t}-${k}`).value.trim();
+        if (!val) missing.push(`${tenseMap[t]}/${k}`);
+        conjugations[tenseMap[t]][k] = val;
+      });
+    });
+
+    if (missing.length) { alert(`Please fill in: ${missing.slice(0, 5).join(', ')}${missing.length > 5 ? '…' : ''}`); return; }
+
+    userVerbs.push({ infinitive, english, conjugations });
+    saveUserVerbs(userVerbs);
+    buildAllVerbs();
+
+    // Clear form
+    document.getElementById('vn-infinitive').value = '';
+    document.getElementById('vn-english').value = '';
+    [...tenses].forEach(t => keys.forEach(k => document.getElementById(`vn-${t}-${k}`).value = ''));
+    document.getElementById('vn-infinitive').focus();
+    renderVerbList();
+  }
+
+  function deleteUserVerb(i) {
+    if (!confirm(`Delete "${userVerbs[i].infinitive}"?`)) return;
+    userVerbs.splice(i, 1);
+    saveUserVerbs(userVerbs);
+    buildAllVerbs();
+    if (vIndex >= allVerbs.length) vIndex = Math.max(0, allVerbs.length - 1);
+    renderVerbList();
+  }
+
+  function renderVerbList() {
+    const list = document.getElementById('vn-list');
+    document.getElementById('vn-count').textContent = `(${userVerbs.length})`;
+    list.innerHTML = '';
+    if (userVerbs.length === 0) {
+      list.innerHTML = '<p style="color:#aaa">No user verbs yet. Add one above!</p>';
+      return;
+    }
+    userVerbs.forEach((v, i) => {
+      const row = document.createElement('div');
+      row.className = 'noun-row';
+      row.innerHTML = `
+        <div class="noun-row-top">
+          <span class="nom">${v.infinitive}</span>
+          <span class="eng">${v.english}</span>
+          <button class="del-btn" onclick="deleteUserVerb(${i})">Delete</button>
+        </div>
+        <div class="noun-row-forms" style="grid-template-columns:repeat(6,1fr)">
+          ${SUBJECTS.map(s => `
+            <div class="noun-form-cell">
+              <span class="noun-form-case">${s.key}</span>
+              <span class="noun-form-val">${(v.conjugations.present || {})[s.key] || '—'}</span>
+            </div>`).join('')}
+        </div>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  // ═══════════════════════════════════════════════════
   //  MANAGE — shared
   // ═══════════════════════════════════════════════════
   function showManageTab(tab) {
     document.getElementById('manage-cards').style.display   = tab === 'cards'   ? 'flex' : 'none';
     document.getElementById('manage-grammar').style.display = tab === 'grammar' ? 'flex' : 'none';
+    document.getElementById('manage-verbs').style.display   = tab === 'verbs'   ? 'flex' : 'none';
     document.getElementById('mtab-cards').classList.toggle('active',   tab === 'cards');
     document.getElementById('mtab-grammar').classList.toggle('active', tab === 'grammar');
+    document.getElementById('mtab-verbs').classList.toggle('active',   tab === 'verbs');
   }
 
   function renderManage() {
@@ -1542,6 +2755,7 @@
     refreshGroupDropdowns();
     renderCardList();
     renderGrammarNounList();
+    renderVerbList();
   }
 
   // ═══════════════════════════════════════════════════
@@ -1787,6 +3001,7 @@
     if (e.key === 'Escape') { closeCaseModal(); return; }
     const studyVisible   = document.getElementById('study-view').style.display   !== 'none';
     const grammarVisible = document.getElementById('grammar-view').style.display !== 'none';
+    const verbsVisible   = document.getElementById('verbs-view').style.display   !== 'none';
     if (studyVisible) {
       if (e.key === 'ArrowRight') nextCard();
       if (e.key === 'ArrowLeft')  prevCard();
@@ -1796,11 +3011,16 @@
       if (e.key === 'ArrowRight') gNext();
       if (e.key === 'ArrowLeft')  gPrev();
     }
+    if (verbsVisible && document.activeElement.tagName !== 'INPUT') {
+      if (e.key === 'ArrowRight') vNext();
+      if (e.key === 'ArrowLeft')  vPrev();
+    }
   });
 
   // ═══════════════════════════════════════════════════
   //  INIT
   // ═══════════════════════════════════════════════════
+  buildAllVerbs();
   buildDeck();
   renderStudy();
 </script>
