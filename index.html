@@ -4396,7 +4396,7 @@
   let deck              = [];
   let index             = 0;
   let direction         = 'sr';
-  let activeStudyGroups = new Set([...groups, '']); // '' = uncategorized
+  let activeStudyGroups = new Set();
   let missedCards       = loadMissedCards();
   let missedOnlyMode    = false;
 
@@ -4538,8 +4538,6 @@
   // ─── Lobby ───────────────────────────────────────
   function renderSlagView() {
     if (!slagGroupsInited) {
-      const allG = new Set(cards.map(c => c.category || ''));
-      allG.forEach(g => slagActiveGroups.add(g));
       slagGroupsInited = true;
     }
     slagToLobby();
