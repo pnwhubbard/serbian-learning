@@ -449,6 +449,7 @@
 
     /* ── MISSED CARDS ─────────────────────────────────── */
     #mark-missed-btn.active { background: #5c1a1a; color: #ff7070; }
+    #dir-clear-missed { display: none; }
 
     /* ── ASPECT BADGE ────────────────────────────────── */
     .aspect-badge {
@@ -814,6 +815,7 @@
       <button id="dir-sr" class="active" onclick="setDirection('sr')">Serbian → English</button>
       <button id="dir-en" onclick="setDirection('en')">English → Serbian</button>
       <button id="dir-missed" onclick="toggleMissedMode()">⚑ Missed (<span id="missed-count">0</span>)</button>
+      <button id="dir-clear-missed" onclick="clearMissedCards()" title="Clear missed list">✕ Clear Missed</button>
     </div>
 
     <!-- Group filter -->
@@ -1150,6 +1152,7 @@
         <div class="slag-over-btns">
           <button class="btn btn-primary"   onclick="startSlagGame()">↩ Try Again</button>
           <button class="btn btn-secondary" id="slag-replay-missed-btn" onclick="startSlagMissedGame()" style="display:none">⚑ Replay Missed (0)</button>
+          <button class="btn btn-secondary" id="slag-clear-missed-btn" onclick="clearSlagMissed()" style="display:none">✕ Clear Missed</button>
           <button class="btn btn-secondary" onclick="slagToLobby()">← Back</button>
         </div>
 
@@ -3206,11 +3209,14 @@
   //  GROUPS STORAGE
   // ═══════════════════════════════════════════════════
   const GROUPS_KEY  = 'serbian_groups';
-  const GROUPS_VER  = '2';
+  const GROUPS_VER  = '3';
 
   const DEFAULT_GROUPS = [
     'Greetings','Basics','Food & Drink','Places','Numbers','Animals',
     'People','Time','Colors','Body','Home','Verbs','Adjectives','Prepositions',
+    'Phrases','Verbs II','Transportation','Clothing','Nature & Weather','School & Work',
+    'Unit 1','Unit 2','Unit 3','Unit 4','Unit 5','Unit 6','Unit 7',
+    'Unit 8','Unit 9','Unit 10','Unit 11','Unit 12','Unit 13','Unit 14',
   ];
 
   function loadGroups() {
@@ -3365,7 +3371,7 @@
   //  FLASHCARD STORAGE
   // ═══════════════════════════════════════════════════
   const STORAGE_KEY = 'serbian_cards';
-  const CARDS_VER   = '4';
+  const CARDS_VER   = '5';
 
   const DEFAULT_CARDS = [
     // ── GREETINGS ─────────────────────────────────────────────────────────
@@ -3816,6 +3822,487 @@
     { serbian:'šef',           english:'boss',                      category:'School & Work' },
     { serbian:'firma',         english:'company / firm',            category:'School & Work' },
     { serbian:'penzija',       english:'retirement / pension',      category:'School & Work' },
+
+    // ── UNIT 1: NA AERODROMU ──────────────────────────────────────────────
+    { serbian:'pasoš',                    english:'passport',                         category:'Unit 1' },
+    { serbian:'turista',                  english:'tourist',                          category:'Unit 1' },
+    { serbian:'gospodin',                 english:'Mr. / sir',                        category:'Unit 1' },
+    { serbian:'gospođa',                  english:'Mrs. / ma\'am',                    category:'Unit 1' },
+    { serbian:'drago mi je',              english:'nice to meet you',                 category:'Unit 1' },
+    { serbian:'kako se zovete?',          english:'what is your name? (formal)',      category:'Unit 1' },
+    { serbian:'zovem se...',              english:'my name is...',                    category:'Unit 1' },
+    { serbian:'odakle ste?',              english:'where are you from?',              category:'Unit 1' },
+    { serbian:'gde živite?',              english:'where do you live?',               category:'Unit 1' },
+    { serbian:'šta radite?',              english:'what do you do?',                  category:'Unit 1' },
+    { serbian:'radim kao...',             english:'I work as...',                     category:'Unit 1' },
+    { serbian:'učim srpski',              english:'I\'m learning Serbian',            category:'Unit 1' },
+    { serbian:'govorim malo srpski',      english:'I speak a little Serbian',         category:'Unit 1' },
+    { serbian:'ne govorim srpski',        english:'I don\'t speak Serbian',           category:'Unit 1' },
+    { serbian:'razumem mnogo',            english:'I understand a lot',               category:'Unit 1' },
+    { serbian:'da li govorite engleski?', english:'do you speak English?',            category:'Unit 1' },
+    { serbian:'koji jezik govorite?',     english:'which language do you speak?',     category:'Unit 1' },
+    { serbian:'jezik',                    english:'language',                         category:'Unit 1' },
+    { serbian:'srpski jezik',             english:'the Serbian language',             category:'Unit 1' },
+    { serbian:'engleski jezik',           english:'the English language',             category:'Unit 1' },
+    { serbian:'ekonomista',               english:'economist',                        category:'Unit 1' },
+    { serbian:'Englez',                   english:'Englishman',                       category:'Unit 1' },
+    { serbian:'Engleskinja',              english:'Englishwoman',                     category:'Unit 1' },
+    { serbian:'ja sam iz...',             english:'I am from...',                     category:'Unit 1' },
+    { serbian:'živim u...',               english:'I live in...',                     category:'Unit 1' },
+    { serbian:'da li ste vi...?',         english:'are you...? (formal)',             category:'Unit 1' },
+    { serbian:'i ovo je...',              english:'and this is...',                   category:'Unit 1' },
+    { serbian:'moj muž',                  english:'my husband',                       category:'Unit 1' },
+    { serbian:'moja žena',                english:'my wife',                          category:'Unit 1' },
+    { serbian:'lepo',                     english:'nice / beautiful',                 category:'Unit 1' },
+    { serbian:'prijatno',                 english:'pleasant / nice to meet you',      category:'Unit 1' },
+
+    // ── UNIT 2: U KAFEU ───────────────────────────────────────────────────
+    { serbian:'kafa',                     english:'coffee',                           category:'Unit 2' },
+    { serbian:'čaj',                      english:'tea',                              category:'Unit 2' },
+    { serbian:'voda',                     english:'water',                            category:'Unit 2' },
+    { serbian:'gazirana voda',            english:'sparkling water',                  category:'Unit 2' },
+    { serbian:'negazirana voda',          english:'still water',                      category:'Unit 2' },
+    { serbian:'sok',                      english:'juice',                            category:'Unit 2' },
+    { serbian:'vino',                     english:'wine',                             category:'Unit 2' },
+    { serbian:'belo vino',                english:'white wine',                       category:'Unit 2' },
+    { serbian:'crno vino',                english:'red wine',                         category:'Unit 2' },
+    { serbian:'pivo',                     english:'beer',                             category:'Unit 2' },
+    { serbian:'rakija',                   english:'brandy / rakia',                   category:'Unit 2' },
+    { serbian:'sendvič',                  english:'sandwich',                         category:'Unit 2' },
+    { serbian:'kolač',                    english:'cake / pastry',                    category:'Unit 2' },
+    { serbian:'šećer',                    english:'sugar',                            category:'Unit 2' },
+    { serbian:'mleko',                    english:'milk',                             category:'Unit 2' },
+    { serbian:'šoljica',                  english:'(small) cup',                      category:'Unit 2' },
+    { serbian:'čaša',                     english:'glass',                            category:'Unit 2' },
+    { serbian:'flaša',                    english:'bottle',                           category:'Unit 2' },
+    { serbian:'konobar',                  english:'waiter',                           category:'Unit 2' },
+    { serbian:'kelnerica',                english:'waitress',                         category:'Unit 2' },
+    { serbian:'račun',                    english:'bill / check',                     category:'Unit 2' },
+    { serbian:'koliko košta?',            english:'how much does it cost?',           category:'Unit 2' },
+    { serbian:'još nešto?',               english:'anything else?',                   category:'Unit 2' },
+    { serbian:'ništa više, hvala',        english:'nothing more, thank you',          category:'Unit 2' },
+    { serbian:'dajte mi...',              english:'give me... / I\'ll have...',       category:'Unit 2' },
+    { serbian:'želim...',                 english:'I want... / I\'d like...',         category:'Unit 2' },
+    { serbian:'molim vas',                english:'please (formal) / excuse me',      category:'Unit 2' },
+    { serbian:'izvolite',                 english:'here you go / go ahead',           category:'Unit 2' },
+    { serbian:'kafu bez šećera',          english:'coffee without sugar',             category:'Unit 2' },
+    { serbian:'šta želite da popijete?',  english:'what would you like to drink?',    category:'Unit 2' },
+    { serbian:'ima li...?',               english:'do you have...?',                  category:'Unit 2' },
+
+    // ── UNIT 3: TIPIČAN DAN STIVA BONDA ──────────────────────────────────
+    { serbian:'novine',                   english:'newspaper(s)',                     category:'Unit 3' },
+    { serbian:'televizor',                english:'television set / TV',              category:'Unit 3' },
+    { serbian:'televizija',               english:'television',                       category:'Unit 3' },
+    { serbian:'radio',                    english:'radio',                            category:'Unit 3' },
+    { serbian:'automobil',                english:'car',                              category:'Unit 3' },
+    { serbian:'kompjuter',                english:'computer',                         category:'Unit 3' },
+    { serbian:'posao',                    english:'work / job',                       category:'Unit 3' },
+    { serbian:'firma',                    english:'company / firm',                   category:'Unit 3' },
+    { serbian:'kancelarija',              english:'office',                           category:'Unit 3' },
+    { serbian:'sastanak',                 english:'meeting',                          category:'Unit 3' },
+    { serbian:'dokument',                 english:'document',                         category:'Unit 3' },
+    { serbian:'svaki dan',                english:'every day',                        category:'Unit 3' },
+    { serbian:'svakog jutra',             english:'every morning',                    category:'Unit 3' },
+    { serbian:'teško',                    english:'difficult / hard',                 category:'Unit 3' },
+    { serbian:'lako',                     english:'easy',                             category:'Unit 3' },
+    { serbian:'samo',                     english:'only / just',                      category:'Unit 3' },
+    { serbian:'sve',                      english:'everything / all',                 category:'Unit 3' },
+    { serbian:'čitati',                   english:'to read',                          category:'Unit 3' },
+    { serbian:'gledati',                  english:'to watch / to look at',            category:'Unit 3' },
+    { serbian:'slušati',                  english:'to listen (to)',                   category:'Unit 3' },
+    { serbian:'raditi',                   english:'to work',                          category:'Unit 3' },
+    { serbian:'učiti',                    english:'to study / to learn',              category:'Unit 3' },
+    { serbian:'govoriti',                 english:'to speak',                         category:'Unit 3' },
+    { serbian:'razumeti',                 english:'to understand',                    category:'Unit 3' },
+    { serbian:'voleti',                   english:'to like / to love',                category:'Unit 3' },
+    { serbian:'ići',                      english:'to go',                            category:'Unit 3' },
+    { serbian:'biti',                     english:'to be',                            category:'Unit 3' },
+    { serbian:'imati',                    english:'to have',                          category:'Unit 3' },
+    { serbian:'telefonirati',             english:'to telephone / to call',           category:'Unit 3' },
+    { serbian:'jutro',                    english:'morning',                          category:'Unit 3' },
+    { serbian:'veče',                     english:'evening',                          category:'Unit 3' },
+    { serbian:'noć',                      english:'night',                            category:'Unit 3' },
+
+    // ── UNIT 4: GDE JE...? ────────────────────────────────────────────────
+    { serbian:'muzej',                    english:'museum',                           category:'Unit 4' },
+    { serbian:'pošta',                    english:'post office',                      category:'Unit 4' },
+    { serbian:'pozorište',                english:'theater',                          category:'Unit 4' },
+    { serbian:'crkva',                    english:'church',                           category:'Unit 4' },
+    { serbian:'prodavnica',               english:'store / shop',                     category:'Unit 4' },
+    { serbian:'bolnica',                  english:'hospital',                         category:'Unit 4' },
+    { serbian:'kafić',                    english:'café',                             category:'Unit 4' },
+    { serbian:'bioskop',                  english:'cinema / movie theater',           category:'Unit 4' },
+    { serbian:'pijaca',                   english:'market / marketplace',             category:'Unit 4' },
+    { serbian:'menjačnica',               english:'currency exchange office',         category:'Unit 4' },
+    { serbian:'trg',                      english:'square / plaza',                   category:'Unit 4' },
+    { serbian:'ulica',                    english:'street',                           category:'Unit 4' },
+    { serbian:'ugao',                     english:'corner',                           category:'Unit 4' },
+    { serbian:'zgrada',                   english:'building',                         category:'Unit 4' },
+    { serbian:'kuća',                     english:'house',                            category:'Unit 4' },
+    { serbian:'stan',                     english:'apartment / flat',                 category:'Unit 4' },
+    { serbian:'reka',                     english:'river',                            category:'Unit 4' },
+    { serbian:'most',                     english:'bridge',                           category:'Unit 4' },
+    { serbian:'levo',                     english:'left',                             category:'Unit 4' },
+    { serbian:'desno',                    english:'right',                            category:'Unit 4' },
+    { serbian:'pravo',                    english:'straight ahead',                   category:'Unit 4' },
+    { serbian:'blizu',                    english:'near / close by',                  category:'Unit 4' },
+    { serbian:'daleko',                   english:'far',                              category:'Unit 4' },
+    { serbian:'na uglu',                  english:'on the corner',                    category:'Unit 4' },
+    { serbian:'na kraju',                 english:'at the end',                       category:'Unit 4' },
+    { serbian:'prekoputa',                english:'opposite / across from',           category:'Unit 4' },
+    { serbian:'kako da dođem do...?',     english:'how do I get to...?',             category:'Unit 4' },
+    { serbian:'idite pravo',              english:'go straight',                      category:'Unit 4' },
+    { serbian:'skrenite levo',            english:'turn left',                        category:'Unit 4' },
+    { serbian:'skrenite desno',           english:'turn right',                       category:'Unit 4' },
+    { serbian:'mogu li da idem peške?',   english:'can I walk there?',               category:'Unit 4' },
+
+    // ── UNIT 5: U SOBI ────────────────────────────────────────────────────
+    { serbian:'soba',                     english:'room',                             category:'Unit 5' },
+    { serbian:'dnevna soba',              english:'living room',                      category:'Unit 5' },
+    { serbian:'spavaća soba',             english:'bedroom',                          category:'Unit 5' },
+    { serbian:'kuhinja',                  english:'kitchen',                          category:'Unit 5' },
+    { serbian:'kupatilo',                 english:'bathroom',                         category:'Unit 5' },
+    { serbian:'hodnik',                   english:'hallway / corridor',               category:'Unit 5' },
+    { serbian:'sto',                      english:'table',                            category:'Unit 5' },
+    { serbian:'stolica',                  english:'chair',                            category:'Unit 5' },
+    { serbian:'krevet',                   english:'bed',                              category:'Unit 5' },
+    { serbian:'orman',                    english:'wardrobe / closet',                category:'Unit 5' },
+    { serbian:'polica',                   english:'shelf',                            category:'Unit 5' },
+    { serbian:'komoda',                   english:'dresser / chest of drawers',       category:'Unit 5' },
+    { serbian:'fotelja',                  english:'armchair',                         category:'Unit 5' },
+    { serbian:'sofa',                     english:'sofa / couch',                     category:'Unit 5' },
+    { serbian:'tepih',                    english:'carpet / rug',                     category:'Unit 5' },
+    { serbian:'sat',                      english:'clock / watch / hour',             category:'Unit 5' },
+    { serbian:'slika',                    english:'picture / painting',               category:'Unit 5' },
+    { serbian:'ogledalo',                 english:'mirror',                           category:'Unit 5' },
+    { serbian:'zid',                      english:'wall',                             category:'Unit 5' },
+    { serbian:'pod',                      english:'floor (surface)',                  category:'Unit 5' },
+    { serbian:'plafon',                   english:'ceiling',                          category:'Unit 5' },
+    { serbian:'prozor',                   english:'window',                           category:'Unit 5' },
+    { serbian:'vrata',                    english:'door(s)',                          category:'Unit 5' },
+    { serbian:'zavese',                   english:'curtains',                         category:'Unit 5' },
+    { serbian:'lampa',                    english:'lamp',                             category:'Unit 5' },
+    { serbian:'sprat',                    english:'floor / storey',                   category:'Unit 5' },
+    { serbian:'prizemlje',                english:'ground floor',                     category:'Unit 5' },
+    { serbian:'udoban',                   english:'comfortable',                      category:'Unit 5' },
+    { serbian:'velik',                    english:'big / large',                      category:'Unit 5' },
+    { serbian:'mali',                     english:'small / little',                   category:'Unit 5' },
+    { serbian:'svetao',                   english:'bright / light',                   category:'Unit 5' },
+
+    // ── UNIT 6: KUPOVINA HRANE ────────────────────────────────────────────
+    { serbian:'pijaca',                   english:'outdoor market',                   category:'Unit 6' },
+    { serbian:'mesara',                   english:'butcher\'s shop',                  category:'Unit 6' },
+    { serbian:'pekara',                   english:'bakery',                           category:'Unit 6' },
+    { serbian:'samoposluga',              english:'supermarket / self-service shop',  category:'Unit 6' },
+    { serbian:'sir',                      english:'cheese',                           category:'Unit 6' },
+    { serbian:'jogurt',                   english:'yogurt',                           category:'Unit 6' },
+    { serbian:'pavlaka',                  english:'sour cream',                       category:'Unit 6' },
+    { serbian:'puter',                    english:'butter',                           category:'Unit 6' },
+    { serbian:'meso',                     english:'meat',                             category:'Unit 6' },
+    { serbian:'piletina',                 english:'chicken',                          category:'Unit 6' },
+    { serbian:'šunka',                    english:'ham',                              category:'Unit 6' },
+    { serbian:'jaja',                     english:'eggs',                             category:'Unit 6' },
+    { serbian:'riba',                     english:'fish',                             category:'Unit 6' },
+    { serbian:'hleb',                     english:'bread',                            category:'Unit 6' },
+    { serbian:'kifla',                    english:'bread roll / croissant',           category:'Unit 6' },
+    { serbian:'jabuka',                   english:'apple',                            category:'Unit 6' },
+    { serbian:'jagoda',                   english:'strawberry',                       category:'Unit 6' },
+    { serbian:'grožđe',                   english:'grapes',                           category:'Unit 6' },
+    { serbian:'pomorandža',               english:'orange',                           category:'Unit 6' },
+    { serbian:'kruška',                   english:'pear',                             category:'Unit 6' },
+    { serbian:'krompir',                  english:'potato',                           category:'Unit 6' },
+    { serbian:'luk',                      english:'onion',                            category:'Unit 6' },
+    { serbian:'paradajz',                 english:'tomato',                           category:'Unit 6' },
+    { serbian:'šargarepa',                english:'carrot',                           category:'Unit 6' },
+    { serbian:'krastavac',                english:'cucumber',                         category:'Unit 6' },
+    { serbian:'paprika',                  english:'pepper (vegetable)',               category:'Unit 6' },
+    { serbian:'kupus',                    english:'cabbage',                          category:'Unit 6' },
+    { serbian:'treba mi...',              english:'I need...',                        category:'Unit 6' },
+    { serbian:'dajte mi...',              english:'give me... / I\'ll take...',       category:'Unit 6' },
+    { serbian:'kusur',                    english:'change (money returned)',          category:'Unit 6' },
+    { serbian:'skupo',                    english:'expensive',                        category:'Unit 6' },
+    { serbian:'jeftino',                  english:'cheap / inexpensive',              category:'Unit 6' },
+    { serbian:'svež',                     english:'fresh',                            category:'Unit 6' },
+
+    // ── UNIT 7: DOĐITE U GOSTE! ───────────────────────────────────────────
+    { serbian:'ponedeljak',               english:'Monday',                           category:'Unit 7' },
+    { serbian:'utorak',                   english:'Tuesday',                          category:'Unit 7' },
+    { serbian:'sreda',                    english:'Wednesday',                        category:'Unit 7' },
+    { serbian:'četvrtak',                 english:'Thursday',                         category:'Unit 7' },
+    { serbian:'petak',                    english:'Friday',                           category:'Unit 7' },
+    { serbian:'subota',                   english:'Saturday',                         category:'Unit 7' },
+    { serbian:'nedelja',                  english:'Sunday / week',                    category:'Unit 7' },
+    { serbian:'ujutro',                   english:'in the morning',                   category:'Unit 7' },
+    { serbian:'prepodne',                 english:'before noon / in the morning',     category:'Unit 7' },
+    { serbian:'podne',                    english:'noon / midday',                    category:'Unit 7' },
+    { serbian:'posle podne',              english:'afternoon',                        category:'Unit 7' },
+    { serbian:'uveče',                    english:'in the evening',                   category:'Unit 7' },
+    { serbian:'juče',                     english:'yesterday',                        category:'Unit 7' },
+    { serbian:'danas',                    english:'today',                            category:'Unit 7' },
+    { serbian:'sutra',                    english:'tomorrow',                         category:'Unit 7' },
+    { serbian:'slobodan',                 english:'free / available',                 category:'Unit 7' },
+    { serbian:'zauzet',                   english:'busy / occupied',                  category:'Unit 7' },
+    { serbian:'nažalost',                 english:'unfortunately',                    category:'Unit 7' },
+    { serbian:'važi',                     english:'agreed / OK / it\'s a deal',       category:'Unit 7' },
+    { serbian:'može',                     english:'it\'s possible / OK / sure',       category:'Unit 7' },
+    { serbian:'vidimo se',                english:'see you / we\'ll see each other',  category:'Unit 7' },
+    { serbian:'dođite u goste',           english:'come visit / come over',           category:'Unit 7' },
+    { serbian:'dođite kod nas',           english:'come to our place',                category:'Unit 7' },
+    { serbian:'vrlo rado',                english:'with great pleasure / sure!',      category:'Unit 7' },
+    { serbian:'žao mi je, ne mogu',       english:'I\'m sorry, I can\'t',            category:'Unit 7' },
+    { serbian:'za koliko sati?',          english:'in how many hours?',              category:'Unit 7' },
+    { serbian:'u koliko sati?',           english:'at what time?',                   category:'Unit 7' },
+    { serbian:'vikend',                   english:'weekend',                          category:'Unit 7' },
+    { serbian:'pozivam vas',              english:'I invite you (formal)',            category:'Unit 7' },
+    { serbian:'prijatan vikend',          english:'have a nice weekend',              category:'Unit 7' },
+
+    // ── UNIT 8: U RESTORANU ───────────────────────────────────────────────
+    { serbian:'doručak',                  english:'breakfast',                        category:'Unit 8' },
+    { serbian:'ručak',                    english:'lunch',                            category:'Unit 8' },
+    { serbian:'večera',                   english:'dinner',                           category:'Unit 8' },
+    { serbian:'jelovnik',                 english:'menu',                             category:'Unit 8' },
+    { serbian:'predjelo',                 english:'starter / appetizer',              category:'Unit 8' },
+    { serbian:'supa',                     english:'clear soup',                       category:'Unit 8' },
+    { serbian:'čorba',                    english:'thick soup (Serbian style)',        category:'Unit 8' },
+    { serbian:'salata',                   english:'salad',                            category:'Unit 8' },
+    { serbian:'glavno jelo',              english:'main course',                      category:'Unit 8' },
+    { serbian:'desert',                   english:'dessert',                          category:'Unit 8' },
+    { serbian:'piće',                     english:'drink / beverage',                 category:'Unit 8' },
+    { serbian:'govedina',                 english:'beef',                             category:'Unit 8' },
+    { serbian:'svinjetina',               english:'pork',                             category:'Unit 8' },
+    { serbian:'jagnjetina',               english:'lamb',                             category:'Unit 8' },
+    { serbian:'srpska salata',            english:'Serbian salad (tomato & pepper)',  category:'Unit 8' },
+    { serbian:'šopska salata',            english:'Shopska salad (with feta)',        category:'Unit 8' },
+    { serbian:'kajmak',                   english:'kajmak (Serbian cream cheese)',     category:'Unit 8' },
+    { serbian:'pljeskavica',              english:'Serbian burger patty',             category:'Unit 8' },
+    { serbian:'doručkovati',              english:'to have breakfast',                category:'Unit 8' },
+    { serbian:'ručati',                   english:'to have lunch',                    category:'Unit 8' },
+    { serbian:'večerati',                 english:'to have dinner',                   category:'Unit 8' },
+    { serbian:'naručiti',                 english:'to order',                         category:'Unit 8' },
+    { serbian:'rezervisati sto',          english:'to reserve a table',               category:'Unit 8' },
+    { serbian:'sto za dvoje',             english:'table for two',                    category:'Unit 8' },
+    { serbian:'molim vas, račun',         english:'the bill please',                  category:'Unit 8' },
+    { serbian:'uključen u cenu',          english:'included in the price',            category:'Unit 8' },
+    { serbian:'dobar tek!',               english:'enjoy your meal! / bon appétit!',  category:'Unit 8' },
+    { serbian:'živeli!',                  english:'cheers!',                          category:'Unit 8' },
+    { serbian:'restoran',                 english:'restaurant',                       category:'Unit 8' },
+    { serbian:'kafana',                   english:'Serbian tavern / pub',             category:'Unit 8' },
+
+    // ── UNIT 9: TIPIČAN DAN ───────────────────────────────────────────────
+    { serbian:'ustajati',                 english:'to get up (impf.)',                category:'Unit 9' },
+    { serbian:'ustati',                   english:'to get up (pf.)',                  category:'Unit 9' },
+    { serbian:'tuširati se',              english:'to have a shower',                 category:'Unit 9' },
+    { serbian:'oblačiti se',              english:'to get dressed',                   category:'Unit 9' },
+    { serbian:'spremati',                 english:'to prepare',                       category:'Unit 9' },
+    { serbian:'odmаrati se',              english:'to rest / to relax',               category:'Unit 9' },
+    { serbian:'spavati',                  english:'to sleep',                         category:'Unit 9' },
+    { serbian:'doručkovati',              english:'to have breakfast',                category:'Unit 9' },
+    { serbian:'ručati',                   english:'to have lunch',                    category:'Unit 9' },
+    { serbian:'večerati',                 english:'to have dinner',                   category:'Unit 9' },
+    { serbian:'pauza',                    english:'break / pause',                    category:'Unit 9' },
+    { serbian:'rano',                     english:'early',                            category:'Unit 9' },
+    { serbian:'kasno',                    english:'late',                             category:'Unit 9' },
+    { serbian:'često',                    english:'often',                            category:'Unit 9' },
+    { serbian:'obično',                   english:'usually',                          category:'Unit 9' },
+    { serbian:'nekad',                    english:'sometimes',                        category:'Unit 9' },
+    { serbian:'nikad',                    english:'never',                            category:'Unit 9' },
+    { serbian:'pre',                      english:'before',                           category:'Unit 9' },
+    { serbian:'posle',                    english:'after',                            category:'Unit 9' },
+    { serbian:'od ... do ...',            english:'from ... until ...',               category:'Unit 9' },
+    { serbian:'ceo dan',                  english:'all day / the whole day',          category:'Unit 9' },
+    { serbian:'svakog jutra',             english:'every morning',                    category:'Unit 9' },
+    { serbian:'svako veče',              english:'every evening',                    category:'Unit 9' },
+    { serbian:'radni dan',               english:'weekday / working day',            category:'Unit 9' },
+    { serbian:'telefonirati',             english:'to make a phone call',             category:'Unit 9' },
+    { serbian:'domaći zadatak',           english:'homework',                         category:'Unit 9' },
+    { serbian:'voziti se',                english:'to commute / to ride',             category:'Unit 9' },
+    { serbian:'ići peške',                english:'to go on foot / to walk',          category:'Unit 9' },
+    { serbian:'imati mnogo posla',        english:'to have a lot of work',            category:'Unit 9' },
+    { serbian:'oko sedam sati',           english:'around seven o\'clock',            category:'Unit 9' },
+
+    // ── UNIT 10: PORODICA ─────────────────────────────────────────────────
+    { serbian:'majka',                    english:'mother',                           category:'Unit 10' },
+    { serbian:'otac',                     english:'father',                           category:'Unit 10' },
+    { serbian:'sin',                      english:'son',                              category:'Unit 10' },
+    { serbian:'ćerka',                    english:'daughter',                         category:'Unit 10' },
+    { serbian:'brat',                     english:'brother',                          category:'Unit 10' },
+    { serbian:'sestra',                   english:'sister',                           category:'Unit 10' },
+    { serbian:'muž',                      english:'husband',                          category:'Unit 10' },
+    { serbian:'žena',                     english:'wife / woman',                     category:'Unit 10' },
+    { serbian:'suprug',                   english:'husband (formal)',                 category:'Unit 10' },
+    { serbian:'supruga',                  english:'wife (formal)',                    category:'Unit 10' },
+    { serbian:'roditelji',                english:'parents',                          category:'Unit 10' },
+    { serbian:'deca',                     english:'children',                         category:'Unit 10' },
+    { serbian:'beba',                     english:'baby',                             category:'Unit 10' },
+    { serbian:'deda',                     english:'grandfather',                      category:'Unit 10' },
+    { serbian:'baka',                     english:'grandmother',                      category:'Unit 10' },
+    { serbian:'ujak',                     english:'uncle (mother\'s brother)',         category:'Unit 10' },
+    { serbian:'tetka',                    english:'aunt',                             category:'Unit 10' },
+    { serbian:'bratić / sestrična',       english:'cousin (m/f)',                     category:'Unit 10' },
+    { serbian:'pravnik',                  english:'lawyer',                           category:'Unit 10' },
+    { serbian:'bibliotekar',              english:'librarian',                        category:'Unit 10' },
+    { serbian:'lekar',                    english:'doctor / physician',               category:'Unit 10' },
+    { serbian:'kuvati',                   english:'to cook',                          category:'Unit 10' },
+    { serbian:'putovati',                 english:'to travel',                        category:'Unit 10' },
+    { serbian:'igrati',                   english:'to play',                          category:'Unit 10' },
+    { serbian:'šetati',                   english:'to walk / to stroll',              category:'Unit 10' },
+    { serbian:'bašta',                    english:'garden',                           category:'Unit 10' },
+    { serbian:'po profesiji',             english:'by profession',                    category:'Unit 10' },
+    { serbian:'udata',                    english:'married (woman)',                  category:'Unit 10' },
+    { serbian:'oženjen',                  english:'married (man)',                    category:'Unit 10' },
+    { serbian:'u penziji',                english:'retired',                          category:'Unit 10' },
+    { serbian:'studirati',                english:'to study (at university)',          category:'Unit 10' },
+
+    // ── UNIT 11: LJADI / STAN ─────────────────────────────────────────────
+    { serbian:'pas',                      english:'dog',                              category:'Unit 11' },
+    { serbian:'mačka',                    english:'cat',                              category:'Unit 11' },
+    { serbian:'prijatelj',                english:'friend (m)',                        category:'Unit 11' },
+    { serbian:'prijateljica',             english:'friend (f)',                        category:'Unit 11' },
+    { serbian:'drugarica',                english:'(female) friend / companion',       category:'Unit 11' },
+    { serbian:'ime',                      english:'name',                             category:'Unit 11' },
+    { serbian:'voziti',                   english:'to drive',                         category:'Unit 11' },
+    { serbian:'voziti bicikl',            english:'to ride a bike',                   category:'Unit 11' },
+    { serbian:'devojčica',                english:'girl',                             category:'Unit 11' },
+    { serbian:'dečak',                    english:'boy',                              category:'Unit 11' },
+    { serbian:'zajedno',                  english:'together',                         category:'Unit 11' },
+    { serbian:'razgovarati',              english:'to talk / to chat',                category:'Unit 11' },
+    { serbian:'izlaziti',                 english:'to go out',                        category:'Unit 11' },
+    { serbian:'sedeti',                   english:'to sit',                           category:'Unit 11' },
+    { serbian:'trpezarija',               english:'dining room',                      category:'Unit 11' },
+    { serbian:'predgrađe',                english:'suburb',                           category:'Unit 11' },
+    { serbian:'nameštaj',                 english:'furniture',                        category:'Unit 11' },
+    { serbian:'namešten',                 english:'furnished',                        category:'Unit 11' },
+    { serbian:'miran',                    english:'quiet / peaceful',                 category:'Unit 11' },
+    { serbian:'pogled na...',             english:'view of...',                       category:'Unit 11' },
+    { serbian:'tražiti',                  english:'to look for / to seek',            category:'Unit 11' },
+    { serbian:'pisati',                   english:'to write',                         category:'Unit 11' },
+    { serbian:'pismo',                    english:'letter (written)',                 category:'Unit 11' },
+    { serbian:'mejl',                     english:'email',                            category:'Unit 11' },
+    { serbian:'odmah',                    english:'immediately / right away',         category:'Unit 11' },
+    { serbian:'pored reke',               english:'by the river / along the river',   category:'Unit 11' },
+    { serbian:'dvosoban stan',            english:'two-room apartment',               category:'Unit 11' },
+    { serbian:'trosoban stan',            english:'three-room apartment',             category:'Unit 11' },
+    { serbian:'živeti',                   english:'to live',                          category:'Unit 11' },
+    { serbian:'košarka',                  english:'basketball',                       category:'Unit 11' },
+    { serbian:'fudbal',                   english:'football / soccer',               category:'Unit 11' },
+    { serbian:'tenis',                    english:'tennis',                           category:'Unit 11' },
+
+    // ── UNIT 12: NARODI I JEZICI ──────────────────────────────────────────
+    { serbian:'Engleska',                 english:'England',                          category:'Unit 12' },
+    { serbian:'Srbija',                   english:'Serbia',                           category:'Unit 12' },
+    { serbian:'Francuska',                english:'France',                           category:'Unit 12' },
+    { serbian:'Nemačka',                  english:'Germany',                          category:'Unit 12' },
+    { serbian:'Rusija',                   english:'Russia',                           category:'Unit 12' },
+    { serbian:'Amerika',                  english:'America / USA',                    category:'Unit 12' },
+    { serbian:'Grčka',                    english:'Greece',                           category:'Unit 12' },
+    { serbian:'Italija',                  english:'Italy',                            category:'Unit 12' },
+    { serbian:'Španija',                  english:'Spain',                            category:'Unit 12' },
+    { serbian:'Holandija',                english:'Netherlands / Holland',            category:'Unit 12' },
+    { serbian:'Kina',                     english:'China',                            category:'Unit 12' },
+    { serbian:'Japan',                    english:'Japan',                            category:'Unit 12' },
+    { serbian:'Srbin / Srpkinja',         english:'Serbian man / Serbian woman',      category:'Unit 12' },
+    { serbian:'Englez / Engleskinja',     english:'Englishman / Englishwoman',        category:'Unit 12' },
+    { serbian:'Francuz / Francuskinja',   english:'Frenchman / Frenchwoman',          category:'Unit 12' },
+    { serbian:'Nemac / Nemica',           english:'German man / German woman',        category:'Unit 12' },
+    { serbian:'Italijan / Italijanka',    english:'Italian man / Italian woman',      category:'Unit 12' },
+    { serbian:'Španac / Špankinja',       english:'Spanish man / Spanish woman',      category:'Unit 12' },
+    { serbian:'srpski',                   english:'Serbian (language)',               category:'Unit 12' },
+    { serbian:'francuski',                english:'French (language)',                category:'Unit 12' },
+    { serbian:'nemački',                  english:'German (language)',                category:'Unit 12' },
+    { serbian:'italijanski',              english:'Italian (language)',               category:'Unit 12' },
+    { serbian:'grčki',                    english:'Greek (language)',                 category:'Unit 12' },
+    { serbian:'rečnik',                   english:'dictionary',                       category:'Unit 12' },
+    { serbian:'kurs',                     english:'course',                           category:'Unit 12' },
+    { serbian:'čas',                      english:'class / lesson / hour',            category:'Unit 12' },
+    { serbian:'tri puta nedeljno',        english:'three times a week',               category:'Unit 12' },
+    { serbian:'odlično',                  english:'excellent',                        category:'Unit 12' },
+    { serbian:'slabo',                    english:'poorly / weakly',                  category:'Unit 12' },
+    { serbian:'retko',                    english:'rarely',                           category:'Unit 12' },
+    { serbian:'knjižara',                 english:'bookstore',                        category:'Unit 12' },
+    { serbian:'pričati',                  english:'to talk / to tell',                category:'Unit 12' },
+    { serbian:'probati',                  english:'to try',                           category:'Unit 12' },
+
+    // ── UNIT 13: KAKO JE BILO JUČE? ───────────────────────────────────────
+    { serbian:'juče',                     english:'yesterday',                        category:'Unit 13' },
+    { serbian:'prošle nedelje',           english:'last week',                        category:'Unit 13' },
+    { serbian:'prošle godine',            english:'last year',                        category:'Unit 13' },
+    { serbian:'pre pet minuta',           english:'five minutes ago',                 category:'Unit 13' },
+    { serbian:'pre dva sata',             english:'two hours ago',                    category:'Unit 13' },
+    { serbian:'bio / bila sam',           english:'I was (m / f)',                    category:'Unit 13' },
+    { serbian:'umoran / umorna',          english:'tired (m / f)',                    category:'Unit 13' },
+    { serbian:'bazen',                    english:'swimming pool',                    category:'Unit 13' },
+    { serbian:'plivanje',                 english:'swimming',                         category:'Unit 13' },
+    { serbian:'plivati',                  english:'to swim',                          category:'Unit 13' },
+    { serbian:'baviti se',                english:'to be engaged in / to do (a sport)',category:'Unit 13' },
+    { serbian:'prestati',                 english:'to stop / to cease',               category:'Unit 13' },
+    { serbian:'parkirati',                english:'to park',                          category:'Unit 13' },
+    { serbian:'doći',                     english:'to come / to arrive',              category:'Unit 13' },
+    { serbian:'otići',                    english:'to leave / to go',                 category:'Unit 13' },
+    { serbian:'poći',                     english:'to set off / to leave',            category:'Unit 13' },
+    { serbian:'vratiti se',               english:'to return / to come back',         category:'Unit 13' },
+    { serbian:'naručiti',                 english:'to order',                         category:'Unit 13' },
+    { serbian:'rešiti',                   english:'to decide / to solve',             category:'Unit 13' },
+    { serbian:'dogovor',                  english:'agreement / arrangement',          category:'Unit 13' },
+    { serbian:'izveštaj',                 english:'report',                           category:'Unit 13' },
+    { serbian:'izlog',                    english:'shop window / display window',     category:'Unit 13' },
+    { serbian:'stvar',                    english:'thing / item',                     category:'Unit 13' },
+    { serbian:'nekoliko',                 english:'a few / several',                  category:'Unit 13' },
+    { serbian:'brzo',                     english:'quickly / fast',                   category:'Unit 13' },
+    { serbian:'bolje',                    english:'better',                           category:'Unit 13' },
+    { serbian:'kao i obično',             english:'as usual',                         category:'Unit 13' },
+    { serbian:'ponoć',                    english:'midnight',                         category:'Unit 13' },
+    { serbian:'prošli tjedan',            english:'last week (alternative)',          category:'Unit 13' },
+    { serbian:'seminar',                  english:'seminar / workshop',               category:'Unit 13' },
+    { serbian:'celе nedelje',             english:'the whole week',                   category:'Unit 13' },
+
+    // ── UNIT 14: KAKVO JE DANAS VREME? ───────────────────────────────────
+    { serbian:'vreme',                    english:'weather / time',                   category:'Unit 14' },
+    { serbian:'proleće',                  english:'spring',                           category:'Unit 14' },
+    { serbian:'leto',                     english:'summer',                           category:'Unit 14' },
+    { serbian:'jesen',                    english:'autumn / fall',                    category:'Unit 14' },
+    { serbian:'zima',                     english:'winter',                           category:'Unit 14' },
+    { serbian:'godišnje doba',            english:'season (of the year)',             category:'Unit 14' },
+    { serbian:'pada kiša',                english:'it\'s raining',                    category:'Unit 14' },
+    { serbian:'pada sneg',                english:'it\'s snowing',                    category:'Unit 14' },
+    { serbian:'sunce sjа',                english:'the sun is shining',               category:'Unit 14' },
+    { serbian:'nebo je vedro',            english:'the sky is clear',                 category:'Unit 14' },
+    { serbian:'vetar duva',               english:'the wind is blowing',              category:'Unit 14' },
+    { serbian:'mraz',                     english:'frost',                            category:'Unit 14' },
+    { serbian:'magla',                    english:'fog',                              category:'Unit 14' },
+    { serbian:'sunčano',                  english:'sunny',                            category:'Unit 14' },
+    { serbian:'oblačno',                  english:'cloudy',                           category:'Unit 14' },
+    { serbian:'vruće',                    english:'hot',                              category:'Unit 14' },
+    { serbian:'toplo',                    english:'warm',                             category:'Unit 14' },
+    { serbian:'prohladno',                english:'chilly / cool',                    category:'Unit 14' },
+    { serbian:'hladno',                   english:'cold',                             category:'Unit 14' },
+    { serbian:'vetrovito',                english:'windy',                            category:'Unit 14' },
+    { serbian:'vlažno',                   english:'humid',                            category:'Unit 14' },
+    { serbian:'suvo',                     english:'dry',                              category:'Unit 14' },
+    { serbian:'stepen',                   english:'degree (temperature)',             category:'Unit 14' },
+    { serbian:'temperatura',              english:'temperature',                      category:'Unit 14' },
+    { serbian:'prognoza',                 english:'forecast',                         category:'Unit 14' },
+    { serbian:'sever',                    english:'north',                            category:'Unit 14' },
+    { serbian:'jug',                      english:'south',                            category:'Unit 14' },
+    { serbian:'istok',                    english:'east',                             category:'Unit 14' },
+    { serbian:'zapad',                    english:'west',                             category:'Unit 14' },
+    { serbian:'planina',                  english:'mountain',                         category:'Unit 14' },
+    { serbian:'priroda',                  english:'nature / countryside',             category:'Unit 14' },
+    { serbian:'omiljеn',                  english:'favourite / beloved',              category:'Unit 14' },
+    { serbian:'napolju',                  english:'outside / outdoors',               category:'Unit 14' },
+    { serbian:'gužva',                    english:'crowd / crowded place',            category:'Unit 14' },
+    { serbian:'skijati se',               english:'to ski',                           category:'Unit 14' },
+    { serbian:'januar',                   english:'January',                          category:'Unit 14' },
+    { serbian:'februar',                  english:'February',                         category:'Unit 14' },
+    { serbian:'mart',                     english:'March',                            category:'Unit 14' },
+    { serbian:'april',                    english:'April',                            category:'Unit 14' },
+    { serbian:'maj',                      english:'May',                              category:'Unit 14' },
+    { serbian:'jun',                      english:'June',                             category:'Unit 14' },
+    { serbian:'jul',                      english:'July',                             category:'Unit 14' },
+    { serbian:'avgust',                   english:'August',                           category:'Unit 14' },
+    { serbian:'septembar',                english:'September',                        category:'Unit 14' },
+    { serbian:'oktobar',                  english:'October',                          category:'Unit 14' },
+    { serbian:'novembar',                 english:'November',                         category:'Unit 14' },
+    { serbian:'decembar',                 english:'December',                         category:'Unit 14' },
   ];
 
   function loadCards() {
@@ -4274,11 +4761,15 @@
     if (wrongCard && !slagMissedCards.includes(wrongCard)) {
       slagMissedCards.push(wrongCard);
     }
-    // Show / update "Replay Missed" button
+    // Show / update "Replay Missed" and "Clear Missed" buttons
     const replayBtn = document.getElementById('slag-replay-missed-btn');
+    const clearBtn  = document.getElementById('slag-clear-missed-btn');
     if (replayBtn) {
-      replayBtn.style.display  = slagMissedCards.length > 0 ? '' : 'none';
-      replayBtn.textContent    = `⚑ Replay Missed (${slagMissedCards.length})`;
+      replayBtn.style.display = slagMissedCards.length > 0 ? '' : 'none';
+      replayBtn.textContent   = `⚑ Replay Missed (${slagMissedCards.length})`;
+    }
+    if (clearBtn) {
+      clearBtn.style.display  = slagMissedCards.length > 0 ? '' : 'none';
     }
 
     document.getElementById('slag-game').style.display = 'none';
@@ -4630,6 +5121,24 @@
 
   function updateMissedCount() {
     document.getElementById('missed-count').textContent = missedCards.size;
+    document.getElementById('dir-clear-missed').style.display = missedCards.size > 0 ? 'inline-block' : 'none';
+  }
+
+  function clearMissedCards() {
+    missedCards.clear();
+    saveMissedCards();
+    // If currently in missed-only mode, exit it first
+    if (missedOnlyMode) toggleMissedMode();
+    updateMissedCount();
+    // Update the mark button state for the current card
+    const markBtn = document.getElementById('mark-missed-btn');
+    if (deck.length) markBtn.classList.remove('active');
+  }
+
+  function clearSlagMissed() {
+    slagMissedCards = [];
+    document.getElementById('slag-replay-missed-btn').style.display = 'none';
+    document.getElementById('slag-clear-missed-btn').style.display  = 'none';
   }
 
   // ═══════════════════════════════════════════════════
