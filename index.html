@@ -459,24 +459,53 @@
     .aspect-pfv { background: #3a1a2e; color: #fd79a8; border: 1px solid #7a2e50; }
     .aspect-bi  { background: #2a2a1a; color: #fdcb6e; border: 1px solid #6a5a1a; }
 
-    /* ── ASPECT VIEW ─────────────────────────────────── */
+    /* ── CONTEXT CHOOSER VIEW ────────────────────────── */
     #aspect-view { display: flex; flex-direction: column; gap: 24px; }
 
-    .aspect-reveal-box {
-      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
-      padding: 16px 20px; display: flex; gap: 32px; justify-content: center;
-      flex-wrap: wrap; align-items: center;
+    .ctx-card { gap: 14px; }
+    .ctx-sentence {
+      font-size: 1.25rem; font-weight: 600; color: #f0f0f0;
+      text-align: center; line-height: 1.5;
     }
-    .aspect-reveal-side { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .aspect-reveal-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; }
-    .aspect-reveal-word  { font-size: 1.3rem; font-weight: 700; }
-    .aspect-reveal-cyril { font-size: 0.95rem; color: #74b9ff; }
+    .ctx-sr-sentence { color: #74b9ff; font-size: 1.1rem; font-style: italic; }
+    .ctx-blank { color: #e94560; font-weight: 800; border-bottom: 2px solid #e94560; padding: 0 6px; }
+    .ctx-blank-filled-correct { color: #55efc4; font-weight: 800; border-bottom: 2px solid #27ae60; padding: 0 6px; }
+    .ctx-blank-filled-wrong   { color: #ff7070; font-weight: 800; border-bottom: 2px solid #e94560; padding: 0 6px; }
 
-    .ap-answer-row {
-      display: grid; grid-template-columns: 130px 1fr minmax(60px, auto);
-      gap: 10px; align-items: center;
+    .ctx-choices {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
     }
-    .ap-answer-label { font-size: 0.85rem; font-weight: 700; color: #e94560; }
+    .ctx-choice {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 18px 12px; border-radius: 14px; cursor: pointer;
+      border: 2px solid transparent; transition: transform 0.1s, border-color 0.15s;
+      background: #16213e;
+    }
+    .ctx-choice:hover:not(:disabled) { transform: translateY(-2px); }
+    .ctx-choice:disabled { cursor: default; opacity: 0.8; }
+    .ctx-choice-imp { border-color: #2d5a8e; }
+    .ctx-choice-pfv { border-color: #7a2e50; }
+    .ctx-choice-verb { font-size: 1.3rem; font-weight: 800; color: #f0f0f0; }
+    .ctx-choice-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #aaa; }
+
+    .ctx-choice.ctx-correct { background: #0d2b1a; border-color: #27ae60; }
+    .ctx-choice.ctx-correct .ctx-choice-verb { color: #55efc4; }
+    .ctx-choice.ctx-wrong   { background: #2b0d1a; border-color: #e94560; }
+    .ctx-choice.ctx-wrong   .ctx-choice-verb { color: #ff7070; }
+    .ctx-choice.ctx-show-correct { background: #0d2b1a; border-color: #27ae60; }
+    .ctx-choice.ctx-show-correct .ctx-choice-verb { color: #55efc4; }
+
+    .ctx-feedback {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 16px 20px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .ctx-feedback.ctx-feedback-correct { border-color: #27ae60; }
+    .ctx-feedback.ctx-feedback-wrong   { border-color: #e94560; }
+    .ctx-feedback-rule {
+      font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em;
+      font-weight: 700; color: #74b9ff;
+    }
+    .ctx-feedback-note { font-size: 0.95rem; color: #ccc; line-height: 1.5; }
 
     /* ── SLAGALICA ───────────────────────────────────── */
     #slagalica-view { display: flex; flex-direction: column; gap: 24px; }
@@ -768,7 +797,7 @@
     <button id="nav-grammar" onclick="showView('grammar')">Noun Agreement</button>
     <button id="nav-verbs"   onclick="showView('verbs')">Verbs</button>
     <button id="nav-adj"     onclick="showView('adj')">Adjectives</button>
-    <button id="nav-aspect"     onclick="showView('aspect')">Aspect</button>
+    <button id="nav-aspect"     onclick="showView('aspect')">Context</button>
     <button id="nav-drill"      onclick="showView('drill')">Fill-in</button>
     <button id="nav-slagalica"  onclick="showView('slagalica')">Slagalica</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
@@ -980,41 +1009,44 @@
 
   </div>
 
-  <!-- ═══════════════ ASPECT VIEW ═══════════════ -->
+  <!-- ═══════════════ CONTEXT CHOOSER VIEW ═══════════════ -->
   <div id="aspect-view" style="display:none">
 
-    <div class="tense-selector">
-      <span class="tense-sel-label">Drill:</span>
-      <div class="tense-btns" id="aspect-mode-btns"></div>
-    </div>
-
     <div class="g-header-row">
-      <span id="ap-progress">Pair 1 of 1</span>
-      <span class="g-score-badge">Score: <span id="ap-score-val">0 / 0</span></span>
+      <span id="ctx-progress">1 of 1</span>
+      <span class="g-score-badge">Score: <span id="ctx-score-val">0 / 0</span></span>
     </div>
 
-    <div class="noun-card" id="ap-card">
-      <span class="noun-card-given" id="ap-given-label">Imperfective</span>
-      <span class="aspect-badge"    id="ap-given-badge"></span>
-      <span class="noun-card-word"     id="ap-display-word">—</span>
-      <span class="noun-card-cyrillic" id="ap-display-cyrillic"></span>
-      <span class="noun-card-en"       id="ap-display-en">—</span>
+    <div class="noun-card ctx-card" id="ctx-card">
+      <span class="noun-card-given">Which aspect fits the context?</span>
+      <div class="ctx-sentence" id="ctx-en-sentence"></div>
+      <div class="ctx-sentence ctx-sr-sentence" id="ctx-sr-sentence"></div>
     </div>
 
-    <div class="case-inputs" id="aspect-inputs"></div>
+    <div class="ctx-choices" id="ctx-choices">
+      <button class="ctx-choice ctx-choice-imp" id="ctx-btn-imp" onclick="ctxAnswer('imp')">
+        <span class="aspect-badge aspect-imp">imp</span>
+        <span class="ctx-choice-verb" id="ctx-imp-verb">—</span>
+        <span class="ctx-choice-label">imperfective</span>
+      </button>
+      <button class="ctx-choice ctx-choice-pfv" id="ctx-btn-pfv" onclick="ctxAnswer('pfv')">
+        <span class="aspect-badge aspect-pfv">pfv</span>
+        <span class="ctx-choice-verb" id="ctx-pfv-verb">—</span>
+        <span class="ctx-choice-label">perfective</span>
+      </button>
+    </div>
+
+    <div class="ctx-feedback" id="ctx-feedback" style="display:none">
+      <div class="ctx-feedback-rule" id="ctx-feedback-rule"></div>
+      <div class="ctx-feedback-note" id="ctx-feedback-note"></div>
+    </div>
 
     <div class="grammar-controls">
-      <button class="btn btn-secondary" id="ap-prev-btn" onclick="apPrev()">← Prev</button>
-      <button class="btn btn-primary"   onclick="checkAspectPair()">Check</button>
-      <button class="btn btn-secondary" id="ap-next-btn" onclick="apNext()">Next →</button>
-      <button class="btn btn-secondary" onclick="shuffleAspectPairs()">⇌ Shuffle</button>
+      <button class="btn btn-secondary" id="ctx-prev-btn" onclick="ctxPrev()">← Prev</button>
+      <button class="btn btn-secondary" id="ctx-next-btn" onclick="ctxNext()">Next →</button>
+      <button class="btn btn-secondary" onclick="shuffleCtx()">⇌ Shuffle</button>
     </div>
 
-    <div id="ap-reveal" style="display:none" class="aspect-reveal-box"></div>
-
-    <div id="empty-aspect" class="empty-msg" style="display:none">
-      No pairs available. Add some in <strong>Manage Cards → Aspect Pairs</strong>.
-    </div>
   </div>
 
   <!-- ═══════════════ SLAGALICA VIEW ═══════════════ -->
@@ -1134,7 +1166,6 @@
       <button class="manage-tab-btn"        id="mtab-grammar" onclick="showManageTab('grammar')">Nouns</button>
       <button class="manage-tab-btn"        id="mtab-verbs"   onclick="showManageTab('verbs')">Verbs</button>
       <button class="manage-tab-btn"        id="mtab-adj"     onclick="showManageTab('adj')">Adjectives</button>
-      <button class="manage-tab-btn"        id="mtab-aspect"  onclick="showManageTab('aspect')">Aspect Pairs</button>
     </div>
 
     <!-- ── Flashcards tab ── -->
@@ -1350,31 +1381,6 @@
     </div>
 
     <!-- ── Aspect Pairs tab ── -->
-    <div id="manage-aspect" class="manage-section" style="display:none">
-      <div>
-        <p class="section-title">Add an Aspect Pair</p>
-        <div class="form-row" style="margin-bottom:12px">
-          <div class="form-group">
-            <label for="ap-new-imp">Imperfective (infinitive)</label>
-            <input type="text" id="ap-new-imp" placeholder="e.g. gledati" />
-          </div>
-          <div class="form-group">
-            <label for="ap-new-pfv">Perfective (infinitive)</label>
-            <input type="text" id="ap-new-pfv" placeholder="e.g. pogledati" />
-          </div>
-          <div class="form-group">
-            <label for="ap-new-en">English meaning</label>
-            <input type="text" id="ap-new-en" placeholder="e.g. to watch / to glance" />
-          </div>
-        </div>
-        <button class="btn btn-primary" onclick="addUserAspectPair()">Add Pair</button>
-      </div>
-      <div>
-        <p class="section-title">User Aspect Pairs <span class="section-count" id="ap-count"></span></p>
-        <div class="card-list" id="ap-list"></div>
-      </div>
-    </div>
-
   </div><!-- /manage-view -->
 
 </main>
@@ -1877,85 +1883,343 @@
   ];
 
   // ═══════════════════════════════════════════════════
-  //  ASPECT PAIRS
+  //  CONTEXT CHOOSER
   // ═══════════════════════════════════════════════════
-  const ASPECT_MODES = [
-    { key: 'imp_pfv', label: 'Imp → Pfv' },
-    { key: 'pfv_imp', label: 'Pfv → Imp' },
-    { key: 'en_both', label: 'Eng → Both' },
-  ];
+  // Each entry: english sentence, serbian sentence with ___, imp/pfv infinitives,
+  //   answer ('imp'|'pfv'), fill (conjugated form that goes in the blank),
+  //   rule (short label), note (explanation).
+  const CONTEXT_DRILLS = [
+    // ── piti / popiti ──────────────────────────────────────────────
+    { english: 'Every morning I drink coffee.',
+      serbian: 'Svako jutro ___ kafu.',
+      imp: 'piti', pfv: 'popiti', answer: 'imp', fill: 'pijem',
+      rule: 'Habitual action',
+      note: 'A routine that repeats every morning → imperfective.' },
+    { english: 'She drank the whole cup.',
+      serbian: 'Ona je ___ celu šolju.',
+      imp: 'piti', pfv: 'popiti', answer: 'pfv', fill: 'popila',
+      rule: 'Completed action',
+      note: 'The cup is empty — action reached its endpoint → perfective.' },
+    { english: 'He was drinking tea when the phone rang.',
+      serbian: 'On je ___ čaj kada je zazvonio telefon.',
+      imp: 'piti', pfv: 'popiti', answer: 'imp', fill: 'pio',
+      rule: 'Ongoing action interrupted',
+      note: 'The activity was in progress when something else happened → imperfective.' },
 
-  const ASPECT_PAIRS = [
-    // po- prefix
-    { imp: 'gledati',       pfv: 'pogledati',    english: 'to watch / to glance' },
-    { imp: 'piti',          pfv: 'popiti',        english: 'to drink / to drink up' },
-    { imp: 'jesti',         pfv: 'pojesti',       english: 'to eat / to eat up' },
-    { imp: 'zvati',         pfv: 'pozvati',       english: 'to call / to invite' },
-    { imp: 'kvariti',       pfv: 'pokvariti',     english: 'to damage / to ruin' },
-    { imp: 'slati',         pfv: 'poslati',       english: 'to send' },
-    { imp: 'slušati',       pfv: 'poslušati',     english: 'to listen / to obey' },
-    { imp: 'pitati',        pfv: 'zapitati',      english: 'to ask / to wonder' },
-    { imp: 'pomagati',      pfv: 'pomoći',        english: 'to help' },
-    // pro- prefix
-    { imp: 'čitati',        pfv: 'pročitati',     english: 'to read / to finish reading' },
-    // na- prefix
-    { imp: 'pisati',        pfv: 'napisati',      english: 'to write / to finish writing' },
-    { imp: 'učiti',         pfv: 'naučiti',       english: 'to learn / to master' },
-    // u- prefix
-    { imp: 'raditi',        pfv: 'uraditi',       english: 'to do / to accomplish' },
-    // za- prefix
-    { imp: 'kasniti',       pfv: 'zakasniti',     english: 'to be late' },
-    { imp: 'pamtiti',       pfv: 'zapamtiti',     english: 'to remember / to memorize' },
-    // s- prefix
-    { imp: 'kuvati',        pfv: 'skuvati',       english: 'to cook / to finish cooking' },
-    { imp: 'skakati',       pfv: 'skočiti',       english: 'to jump' },
-    // o- prefix
-    { imp: 'čistiti',       pfv: 'očistiti',      english: 'to clean / to clean completely' },
-    // ot- prefix
-    { imp: 'pevati',        pfv: 'otpevati',      english: 'to sing / to perform a song' },
-    // Root-change pairs
-    { imp: 'govoriti',      pfv: 'reći',          english: 'to speak / to say' },
-    { imp: 'uzimati',       pfv: 'uzeti',         english: 'to take' },
-    { imp: 'davati',        pfv: 'dati',          english: 'to give' },
-    { imp: 'dolaziti',      pfv: 'doći',          english: 'to come / to arrive' },
-    { imp: 'odlaziti',      pfv: 'otići',         english: 'to leave / to go away' },
-    { imp: 'ulaziti',       pfv: 'ući',           english: 'to enter' },
-    { imp: 'izlaziti',      pfv: 'izaći',         english: 'to exit / to go out' },
-    { imp: 'sedati',        pfv: 'sesti',         english: 'to sit down' },
-    { imp: 'ustajati',      pfv: 'ustati',        english: 'to get up / to stand up' },
-    { imp: 'vraćati se',    pfv: 'vratiti se',    english: 'to return / to come back' },
-    { imp: 'počinjati',     pfv: 'početi',        english: 'to begin / to start' },
-    { imp: 'završavati',    pfv: 'završiti',      english: 'to finish / to end' },
-    { imp: 'padati',        pfv: 'pasti',         english: 'to fall' },
-    { imp: 'tražiti',       pfv: 'naći',          english: 'to look for / to find' },
-    // -avati/-iti alternations
-    { imp: 'otvarati',      pfv: 'otvoriti',      english: 'to open' },
-    { imp: 'zatvarati',     pfv: 'zatvoriti',     english: 'to close' },
-    { imp: 'plaćati',       pfv: 'platiti',       english: 'to pay' },
-    { imp: 'pokazivati',    pfv: 'pokazati',      english: 'to show' },
-    { imp: 'objašnjavati',  pfv: 'objasniti',     english: 'to explain' },
-    { imp: 'odgovarati',    pfv: 'odgovoriti',    english: 'to answer / to reply' },
-    { imp: 'obećavati',     pfv: 'obećati',       english: 'to promise' },
-    { imp: 'odlučivati se', pfv: 'odlučiti se',   english: 'to decide' },
-    { imp: 'birati',        pfv: 'izabrati',      english: 'to choose / to select' },
-    { imp: 'kupovati',      pfv: 'kupiti',        english: 'to buy / to shop' },
-    { imp: 'prodavati',     pfv: 'prodati',       english: 'to sell' },
-    { imp: 'popravljati',   pfv: 'popraviti',     english: 'to fix / to repair' },
-    { imp: 'oblačiti se',   pfv: 'obući se',      english: 'to get dressed' },
-    { imp: 'stavljati',     pfv: 'staviti',       english: 'to put / to place' },
-    { imp: 'vraćati',       pfv: 'vratiti',       english: 'to return (something)' },
-    { imp: 'prihvatati',    pfv: 'prihvatiti',    english: 'to accept' },
-    { imp: 'bacati',        pfv: 'baciti',        english: 'to throw' },
-    { imp: 'posećivati',    pfv: 'posetiti',      english: 'to visit' },
-    { imp: 'zaboravljati',  pfv: 'zaboraviti',    english: 'to forget' },
-    { imp: 'čuvati',        pfv: 'sačuvati',      english: 'to keep / to preserve' },
-    { imp: 'otkazivati',    pfv: 'otkazati',      english: 'to cancel' },
-    { imp: 'čekati',        pfv: 'pričekati',     english: 'to wait / to wait briefly' },
-    { imp: 'razvijati',     pfv: 'razviti',       english: 'to develop' },
-    { imp: 'verovati',      pfv: 'poverovati',    english: 'to believe / to come to believe' },
-    { imp: 'nositi',        pfv: 'doneti',        english: 'to carry / to bring' },
-    { imp: 'voziti',        pfv: 'odvesti',       english: 'to drive / to take (by car)' },
-    { imp: 'živeti',        pfv: 'preživeti',     english: 'to live / to survive' },
+    // ── čitati / pročitati ─────────────────────────────────────────
+    { english: 'I usually read before bed.',
+      serbian: 'Obično ___ pre spavanja.',
+      imp: 'čitati', pfv: 'pročitati', answer: 'imp', fill: 'čitam',
+      rule: 'Habitual action',
+      note: 'A regular nightly habit → imperfective.' },
+    { english: 'She read the whole book in one day.',
+      serbian: 'Ona je ___ celu knjigu za jedan dan.',
+      imp: 'čitati', pfv: 'pročitati', answer: 'pfv', fill: 'pročitala',
+      rule: 'Completed action',
+      note: 'The entire book finished — clear endpoint → perfective.' },
+    { english: 'He was reading for hours.',
+      serbian: 'On je ___ satima.',
+      imp: 'čitati', pfv: 'pročitati', answer: 'imp', fill: 'čitao',
+      rule: 'Duration without stated end',
+      note: 'Extended activity with no stated endpoint → imperfective.' },
+
+    // ── pisati / napisati ──────────────────────────────────────────
+    { english: 'She writes in her diary every evening.',
+      serbian: 'Ona ___ u dnevnik svako veče.',
+      imp: 'pisati', pfv: 'napisati', answer: 'imp', fill: 'piše',
+      rule: 'Habitual action',
+      note: 'Recurring evening habit → imperfective.' },
+    { english: 'He finally wrote the email.',
+      serbian: 'On je konačno ___ mejl.',
+      imp: 'pisati', pfv: 'napisati', answer: 'pfv', fill: 'napisao',
+      rule: 'Completed result',
+      note: '"Finally" signals a completed, bounded action → perfective.' },
+    { english: 'I was writing a letter all afternoon.',
+      serbian: '___ pismo celo popodne.',
+      imp: 'pisati', pfv: 'napisati', answer: 'imp', fill: 'Pisao sam',
+      rule: 'Activity over a duration',
+      note: 'Focus on the activity itself over time, not on finishing it → imperfective.' },
+
+    // ── učiti / naučiti ────────────────────────────────────────────
+    { english: 'I study Serbian every day.',
+      serbian: '___ srpski svaki dan.',
+      imp: 'učiti', pfv: 'naučiti', answer: 'imp', fill: 'Učim',
+      rule: 'Habitual action',
+      note: 'Daily ongoing study → imperfective.' },
+    { english: 'I finally learned the alphabet.',
+      serbian: 'Konačno sam ___ azbuku.',
+      imp: 'učiti', pfv: 'naučiti', answer: 'pfv', fill: 'naučio',
+      rule: 'Achieved result',
+      note: 'Mastery reached — a clear endpoint → perfective.' },
+
+    // ── jesti / pojesti ────────────────────────────────────────────
+    { english: 'We eat lunch at noon every day.',
+      serbian: '___ ručak u podne svakog dana.',
+      imp: 'jesti', pfv: 'pojesti', answer: 'imp', fill: 'Jedemo',
+      rule: 'Habitual action',
+      note: 'A regular lunchtime routine → imperfective.' },
+    { english: 'She ate the whole pizza.',
+      serbian: 'Ona je ___ celu picu.',
+      imp: 'jesti', pfv: 'pojesti', answer: 'pfv', fill: 'pojela',
+      rule: 'Completed action',
+      note: 'The pizza is gone — action complete → perfective.' },
+
+    // ── gledati / pogledati ────────────────────────────────────────
+    { english: 'We watch TV every night.',
+      serbian: '___ televiziju svako veče.',
+      imp: 'gledati', pfv: 'pogledati', answer: 'imp', fill: 'Gledamo',
+      rule: 'Habitual action',
+      note: 'Nightly routine → imperfective.' },
+    { english: 'He glanced at the clock.',
+      serbian: 'On je ___ na sat.',
+      imp: 'gledati', pfv: 'pogledati', answer: 'pfv', fill: 'pogledao',
+      rule: 'Single brief action',
+      note: 'One quick look — a bounded, momentary action → perfective.' },
+    { english: 'She was watching the rain.',
+      serbian: 'Ona je ___ kišu.',
+      imp: 'gledati', pfv: 'pogledati', answer: 'imp', fill: 'gledala',
+      rule: 'Ongoing / progressive',
+      note: 'Sustained watching with no defined endpoint → imperfective.' },
+
+    // ── kuvati / skuvati ───────────────────────────────────────────
+    { english: 'Mom cooks dinner every day.',
+      serbian: 'Mama ___ večeru svaki dan.',
+      imp: 'kuvati', pfv: 'skuvati', answer: 'imp', fill: 'kuva',
+      rule: 'Habitual action',
+      note: 'Daily cooking routine → imperfective.' },
+    { english: 'I cooked the soup.',
+      serbian: 'Ja sam ___ supu.',
+      imp: 'kuvati', pfv: 'skuvati', answer: 'pfv', fill: 'skuvao',
+      rule: 'Completed result',
+      note: 'The soup is ready — task done → perfective.' },
+
+    // ── čistiti / očistiti ─────────────────────────────────────────
+    { english: 'She cleans the apartment every week.',
+      serbian: 'Ona ___ stan svake nedelje.',
+      imp: 'čistiti', pfv: 'očistiti', answer: 'imp', fill: 'čisti',
+      rule: 'Habitual action',
+      note: 'Weekly cleaning routine → imperfective.' },
+    { english: 'He cleaned the whole apartment.',
+      serbian: 'On je ___ ceo stan.',
+      imp: 'čistiti', pfv: 'očistiti', answer: 'pfv', fill: 'očistio',
+      rule: 'Completed action',
+      note: 'Entire apartment done — action complete → perfective.' },
+
+    // ── zvati / pozvati ────────────────────────────────────────────
+    { english: 'She calls her mom every Sunday.',
+      serbian: 'Ona ___ mamu svake nedelje.',
+      imp: 'zvati', pfv: 'pozvati', answer: 'imp', fill: 'zove',
+      rule: 'Habitual action',
+      note: 'Regular weekly call → imperfective.' },
+    { english: 'He invited me to the party.',
+      serbian: 'On me je ___ na žurku.',
+      imp: 'zvati', pfv: 'pozvati', answer: 'pfv', fill: 'pozvao',
+      rule: 'Completed action',
+      note: 'The invitation happened and is done → perfective.' },
+
+    // ── dolaziti / doći ────────────────────────────────────────────
+    { english: 'She comes to work by train.',
+      serbian: 'Ona ___ na posao vozom.',
+      imp: 'dolaziti', pfv: 'doći', answer: 'imp', fill: 'dolazi',
+      rule: 'Habitual action',
+      note: 'Regular commute method → imperfective.' },
+    { english: 'She finally arrived!',
+      serbian: 'Ona je konačno ___!',
+      imp: 'dolaziti', pfv: 'doći', answer: 'pfv', fill: 'došla',
+      rule: 'Completed arrival',
+      note: 'She is here now — the arrival is complete → perfective.' },
+
+    // ── odlaziti / otići ───────────────────────────────────────────
+    { english: 'He leaves work at five every day.',
+      serbian: 'On ___ s posla u pet svakog dana.',
+      imp: 'odlaziti', pfv: 'otići', answer: 'imp', fill: 'odlazi',
+      rule: 'Habitual action',
+      note: 'Regular departure time → imperfective.' },
+    { english: 'She left without saying goodbye.',
+      serbian: 'Ona je ___ bez pozdrava.',
+      imp: 'odlaziti', pfv: 'otići', answer: 'pfv', fill: 'otišla',
+      rule: 'Completed departure',
+      note: 'She is gone — the action is complete → perfective.' },
+
+    // ── kupovati / kupiti ──────────────────────────────────────────
+    { english: 'I buy groceries on Saturdays.',
+      serbian: '___ namirnice subotom.',
+      imp: 'kupovati', pfv: 'kupiti', answer: 'imp', fill: 'Kupujem',
+      rule: 'Habitual action',
+      note: 'Weekly shopping routine → imperfective.' },
+    { english: 'I bought a new phone.',
+      serbian: 'Ja sam ___ novi telefon.',
+      imp: 'kupovati', pfv: 'kupiti', answer: 'pfv', fill: 'kupio',
+      rule: 'Completed purchase',
+      note: 'The transaction is done → perfective.' },
+
+    // ── vraćati se / vratiti se ────────────────────────────────────
+    { english: 'He returns home every evening.',
+      serbian: 'On se ___ kući svako veče.',
+      imp: 'vraćati se', pfv: 'vratiti se', answer: 'imp', fill: 'vraća',
+      rule: 'Habitual action',
+      note: 'Daily evening return → imperfective.' },
+    { english: 'She returned from vacation.',
+      serbian: 'Ona se ___ s odmora.',
+      imp: 'vraćati se', pfv: 'vratiti se', answer: 'pfv', fill: 'vratila',
+      rule: 'Completed return',
+      note: 'The trip is over and she is back → perfective.' },
+
+    // ── otvarati / otvoriti ────────────────────────────────────────
+    { english: 'The store opens at nine every day.',
+      serbian: 'Prodavnica se ___ u devet svakog dana.',
+      imp: 'otvarati', pfv: 'otvoriti', answer: 'imp', fill: 'otvara',
+      rule: 'Habitual action',
+      note: 'Regular daily opening → imperfective.' },
+    { english: 'He opened the window.',
+      serbian: 'On je ___ prozor.',
+      imp: 'otvarati', pfv: 'otvoriti', answer: 'pfv', fill: 'otvorio',
+      rule: 'Single completed action',
+      note: 'The window is open now — action done → perfective.' },
+
+    // ── plaćati / platiti ──────────────────────────────────────────
+    { english: 'She always pays with a card.',
+      serbian: 'Ona uvek ___ karticom.',
+      imp: 'plaćati', pfv: 'platiti', answer: 'imp', fill: 'plaća',
+      rule: 'Habitual action',
+      note: 'Consistent payment habit → imperfective.' },
+    { english: 'He paid the bill.',
+      serbian: 'On je ___ račun.',
+      imp: 'plaćati', pfv: 'platiti', answer: 'pfv', fill: 'platio',
+      rule: 'Completed action',
+      note: 'Bill settled — action complete → perfective.' },
+
+    // ── raditi / uraditi ───────────────────────────────────────────
+    { english: 'I work from home on Fridays.',
+      serbian: '___ od kuće petkom.',
+      imp: 'raditi', pfv: 'uraditi', answer: 'imp', fill: 'Radim',
+      rule: 'Habitual action',
+      note: 'Regular Friday arrangement → imperfective.' },
+    { english: 'She did her homework.',
+      serbian: 'Ona je ___ domaći zadatak.',
+      imp: 'raditi', pfv: 'uraditi', answer: 'pfv', fill: 'uradila',
+      rule: 'Completed task',
+      note: 'Homework finished → perfective.' },
+
+    // ── govoriti / reći ────────────────────────────────────────────
+    { english: 'He speaks slowly and clearly.',
+      serbian: 'On ___ polako i jasno.',
+      imp: 'govoriti', pfv: 'reći', answer: 'imp', fill: 'govori',
+      rule: 'Ongoing manner / state',
+      note: 'Describes how someone communicates — a habitual style → imperfective.' },
+    { english: 'She said something important.',
+      serbian: 'Ona je ___ nešto važno.',
+      imp: 'govoriti', pfv: 'reći', answer: 'pfv', fill: 'rekla',
+      rule: 'Single completed utterance',
+      note: 'A specific statement made at a point in time → perfective.' },
+
+    // ── čekati / pričekati ─────────────────────────────────────────
+    { english: 'I wait for the bus every morning.',
+      serbian: '___ bus svako jutro.',
+      imp: 'čekati', pfv: 'pričekati', answer: 'imp', fill: 'Čekam',
+      rule: 'Habitual action',
+      note: 'Regular morning wait → imperfective.' },
+    { english: 'Wait for me just a moment!',
+      serbian: '___ me trenutak!',
+      imp: 'čekati', pfv: 'pričekati', answer: 'pfv', fill: 'Pričekaj',
+      rule: 'Brief bounded action',
+      note: 'A short, defined wait (just a moment) → perfective.' },
+
+    // ── slušati / poslušati ────────────────────────────────────────
+    { english: 'He listens to music while cooking.',
+      serbian: 'On ___ muziku dok kuva.',
+      imp: 'slušati', pfv: 'poslušati', answer: 'imp', fill: 'sluša',
+      rule: 'Ongoing background activity',
+      note: 'Continuous listening alongside another action → imperfective.' },
+    { english: 'She listened to the whole album.',
+      serbian: 'Ona je ___ ceo album.',
+      imp: 'slušati', pfv: 'poslušati', answer: 'pfv', fill: 'poslušala',
+      rule: 'Completed listening',
+      note: 'The whole album done from start to finish → perfective.' },
+
+    // ── tražiti / naći ─────────────────────────────────────────────
+    { english: 'I look for my keys every morning.',
+      serbian: '___ ključeve svako jutro.',
+      imp: 'tražiti', pfv: 'naći', answer: 'imp', fill: 'Tražim',
+      rule: 'Ongoing / habitual search',
+      note: 'Recurring frustrated search — process only → imperfective.' },
+    { english: 'I found my keys!',
+      serbian: '___ ključeve!',
+      imp: 'tražiti', pfv: 'naći', answer: 'pfv', fill: 'Našao sam',
+      rule: 'Achieved result',
+      note: 'The search is over — success achieved → perfective.' },
+
+    // ── završavati / završiti ──────────────────────────────────────
+    { english: 'She finishes work at six.',
+      serbian: 'Ona ___ s posla u šest.',
+      imp: 'završavati', pfv: 'završiti', answer: 'imp', fill: 'završava',
+      rule: 'Habitual action',
+      note: 'Regular end-of-day time → imperfective.' },
+    { english: 'He finished the project.',
+      serbian: 'On je ___ projekat.',
+      imp: 'završavati', pfv: 'završiti', answer: 'pfv', fill: 'završio',
+      rule: 'Completed achievement',
+      note: 'Project done — clear endpoint reached → perfective.' },
+
+    // ── pevati / otpevati ──────────────────────────────────────────────
+    { english: 'She sings in a choir every week.',
+      serbian: 'Ona ___ u horu svake nedelje.',
+      imp: 'pevati', pfv: 'otpevati', answer: 'imp', fill: 'peva',
+      rule: 'Habitual action',
+      note: 'Regular weekly choir practice → imperfective.' },
+    { english: 'She performed the whole song.',
+      serbian: 'Ona je ___ celu pesmu.',
+      imp: 'pevati', pfv: 'otpevati', answer: 'pfv', fill: 'otpevala',
+      rule: 'Completed performance',
+      note: 'The song was sung all the way through to the end → perfective.' },
+
+    // ── padati / pasti ─────────────────────────────────────────────────
+    { english: 'Snow falls every winter.',
+      serbian: 'Sneg ___ svake zime.',
+      imp: 'padati', pfv: 'pasti', answer: 'imp', fill: 'pada',
+      rule: 'Habitual / recurring event',
+      note: 'A seasonal pattern that repeats every year → imperfective.' },
+    { english: 'He fell off his bicycle.',
+      serbian: 'On je ___ s bicikla.',
+      imp: 'padati', pfv: 'pasti', answer: 'pfv', fill: 'pao',
+      rule: 'Single completed event',
+      note: 'A specific, bounded fall that happened at a moment → perfective.' },
+
+    // ── zatvarati / zatvoriti ──────────────────────────────────────────
+    { english: 'The store closes at eight every evening.',
+      serbian: 'Prodavnica se ___ u osam svako veče.',
+      imp: 'zatvarati', pfv: 'zatvoriti', answer: 'imp', fill: 'zatvara',
+      rule: 'Habitual action',
+      note: 'Regular daily closing routine → imperfective.' },
+    { english: 'She closed the door.',
+      serbian: 'Ona je ___ vrata.',
+      imp: 'zatvarati', pfv: 'zatvoriti', answer: 'pfv', fill: 'zatvorila',
+      rule: 'Single completed action',
+      note: 'The door is now closed — action done → perfective.' },
+
+    // ── zaboravljati / zaboraviti ──────────────────────────────────────
+    { english: 'He always forgets things.',
+      serbian: 'On uvek ___ stvari.',
+      imp: 'zaboravljati', pfv: 'zaboraviti', answer: 'imp', fill: 'zaboravlja',
+      rule: 'Habitual tendency',
+      note: '"Always" with a repeated pattern → imperfective.' },
+    { english: 'She forgot her keys.',
+      serbian: 'Ona je ___ ključeve.',
+      imp: 'zaboravljati', pfv: 'zaboraviti', answer: 'pfv', fill: 'zaboravila',
+      rule: 'Specific completed instance',
+      note: 'A single specific act of forgetting → perfective.' },
+
+    // ── sećati se / setiti se ──────────────────────────────────────────
+    { english: 'I often think back to my childhood.',
+      serbian: 'Često se ___ detinjstva.',
+      imp: 'sećati se', pfv: 'setiti se', answer: 'imp', fill: 'sećam',
+      rule: 'Habitual / ongoing',
+      note: 'Recurring memory that comes up frequently → imperfective.' },
+    { english: 'I suddenly remembered his name.',
+      serbian: 'Odjednom sam se ___ njegovog imena.',
+      imp: 'sećati se', pfv: 'setiti se', answer: 'pfv', fill: 'setio',
+      rule: 'Sudden recollection',
+      note: 'A single, instantaneous moment of recall → perfective.' },
   ];
 
   // ═══════════════════════════════════════════════════
@@ -2735,6 +2999,207 @@
         future:  { ja:'doručkovaću',   ti:'doručkovaćeš',  on:'doručkovaće',  mi:'doručkovaćemo',  vi:'doručkovaćete',  oni:'doručkovaće'    },
       }
     },
+    // ── Verbs II additions ─────────────────────────────────────────────────
+    {
+      infinitive: 'misliti', aspect: 'imp', english: 'to think',
+      conjugations: {
+        present: { ja:'mislim',    ti:'misliš',    on:'misli',    mi:'mislimo',    vi:'mislite',    oni:'misle'      },
+        past:    { ja:'mislio sam',ti:'mislio si', on:'mislio je',mi:'mislili smo',vi:'mislili ste',oni:'mislili su' },
+        future:  { ja:'misliću',   ti:'mislićeš',  on:'misliće',  mi:'mislićemo',  vi:'mislićete',  oni:'misliće'    },
+      }
+    },
+    {
+      infinitive: 'čekati', aspect: 'imp', english: 'to wait',
+      conjugations: {
+        present: { ja:'čekam',    ti:'čekaš',    on:'čeka',    mi:'čekamo',    vi:'čekate',    oni:'čekaju'     },
+        past:    { ja:'čekao sam',ti:'čekao si', on:'čekao je',mi:'čekali smo',vi:'čekali ste',oni:'čekali su'  },
+        future:  { ja:'čekaću',   ti:'čekaćeš',  on:'čekaće',  mi:'čekaćemo',  vi:'čekaćete',  oni:'čekaće'     },
+      }
+    },
+    {
+      infinitive: 'pričati', aspect: 'imp', english: 'to talk / to tell',
+      conjugations: {
+        present: { ja:'pričam',    ti:'pričaš',    on:'priča',    mi:'pričamo',    vi:'pričate',    oni:'pričaju'     },
+        past:    { ja:'pričao sam',ti:'pričao si', on:'pričao je',mi:'pričali smo',vi:'pričali ste',oni:'pričali su'  },
+        future:  { ja:'pričaću',   ti:'pričaćeš',  on:'pričaće',  mi:'pričaćemo',  vi:'pričaćete',  oni:'pričaće'     },
+      }
+    },
+    {
+      infinitive: 'slušati', aspect: 'imp', english: 'to listen',
+      conjugations: {
+        present: { ja:'slušam',    ti:'slušaš',    on:'sluša',    mi:'slušamo',    vi:'slušate',    oni:'slušaju'     },
+        past:    { ja:'slušao sam',ti:'slušao si', on:'slušao je',mi:'slušali smo',vi:'slušali ste',oni:'slušali su'  },
+        future:  { ja:'slušaću',   ti:'slušaćeš',  on:'slušaće',  mi:'slušaćemo',  vi:'slušaćete',  oni:'slušaće'     },
+      }
+    },
+    {
+      infinitive: 'gledati', aspect: 'imp', english: 'to watch / to look at',
+      conjugations: {
+        present: { ja:'gledam',    ti:'gledaš',    on:'gleda',    mi:'gledamo',    vi:'gledate',    oni:'gledaju'     },
+        past:    { ja:'gledao sam',ti:'gledao si', on:'gledao je',mi:'gledali smo',vi:'gledali ste',oni:'gledali su'  },
+        future:  { ja:'gledaću',   ti:'gledaćeš',  on:'gledaće',  mi:'gledaćemo',  vi:'gledaćete',  oni:'gledaće'     },
+      }
+    },
+    {
+      infinitive: 'sedeti', aspect: 'imp', english: 'to sit',
+      conjugations: {
+        present: { ja:'sedim',    ti:'sediš',    on:'sedi',    mi:'sedimo',    vi:'sedite',    oni:'sede'      },
+        past:    { ja:'sedeo sam',ti:'sedeo si', on:'sedeo je',mi:'sedeli smo',vi:'sedeli ste',oni:'sedeli su' },
+        future:  { ja:'sediću',   ti:'sedićeš',  on:'sediće',  mi:'sedićemo',  vi:'sedićete',  oni:'sediće'    },
+      }
+    },
+    {
+      infinitive: 'stajati', aspect: 'imp', english: 'to stand',
+      conjugations: {
+        present: { ja:'stojim',    ti:'stojiš',    on:'stoji',    mi:'stojimo',    vi:'stojite',    oni:'stoje'      },
+        past:    { ja:'stajao sam',ti:'stajao si', on:'stajao je',mi:'stajali smo',vi:'stajali ste',oni:'stajali su' },
+        future:  { ja:'stajaću',   ti:'stajaćeš',  on:'stajaće',  mi:'stajaćemo',  vi:'stajaćete',  oni:'stajaće'    },
+      }
+    },
+    {
+      infinitive: 'hodati', aspect: 'imp', english: 'to walk',
+      conjugations: {
+        present: { ja:'hodam',    ti:'hodaš',    on:'hoda',    mi:'hodamo',    vi:'hodate',    oni:'hodaju'     },
+        past:    { ja:'hodao sam',ti:'hodao si', on:'hodao je',mi:'hodali smo',vi:'hodali ste',oni:'hodali su'  },
+        future:  { ja:'hodaću',   ti:'hodaćeš',  on:'hodaće',  mi:'hodaćemo',  vi:'hodaćete',  oni:'hodaće'     },
+      }
+    },
+    {
+      infinitive: 'trčati', aspect: 'imp', english: 'to run',
+      conjugations: {
+        present: { ja:'trčim',    ti:'trčiš',    on:'trči',    mi:'trčimo',    vi:'trčite',    oni:'trče'      },
+        past:    { ja:'trčao sam',ti:'trčao si', on:'trčao je',mi:'trčali smo',vi:'trčali ste',oni:'trčali su' },
+        future:  { ja:'trčaću',   ti:'trčaćeš',  on:'trčaće',  mi:'trčaćemo',  vi:'trčaćete',  oni:'trčaće'    },
+      }
+    },
+    {
+      infinitive: 'plakati', aspect: 'imp', english: 'to cry',
+      conjugations: {
+        present: { ja:'plačem',    ti:'plačeš',    on:'plače',    mi:'plačemo',    vi:'plačete',    oni:'plaču'      },
+        past:    { ja:'plakao sam',ti:'plakao si', on:'plakao je',mi:'plakali smo',vi:'plakali ste',oni:'plakali su' },
+        future:  { ja:'plakaću',   ti:'plakaćeš',  on:'plakaće',  mi:'plakaćemo',  vi:'plakaćete',  oni:'plakaće'    },
+      }
+    },
+    {
+      infinitive: 'smejati se', aspect: 'imp', english: 'to laugh',
+      conjugations: {
+        present: { ja:'smejem se',    ti:'smeješ se',    on:'smeje se',    mi:'smejemo se',    vi:'smejete se',    oni:'smeju se'      },
+        past:    { ja:'smejao sam se',ti:'smejao si se', on:'smejao se',   mi:'smejali smo se',vi:'smejali ste se',oni:'smejali su se' },
+        future:  { ja:'smejaću se',   ti:'smejaćeš se',  on:'smejaće se',  mi:'smejaćemo se',  vi:'smejaćete se',  oni:'smejaće se'    },
+      }
+    },
+    {
+      infinitive: 'pevati', aspect: 'imp', english: 'to sing',
+      conjugations: {
+        present: { ja:'pevam',    ti:'pevaš',    on:'peva',    mi:'pevamo',    vi:'pevate',    oni:'pevaju'     },
+        past:    { ja:'pevao sam',ti:'pevao si', on:'pevao je',mi:'pevali smo',vi:'pevali ste',oni:'pevali su'  },
+        future:  { ja:'pevaću',   ti:'pevaćeš',  on:'pevaće',  mi:'pevaćemo',  vi:'pevaćete',  oni:'pevaće'     },
+      }
+    },
+    {
+      infinitive: 'igrati se', aspect: 'imp', english: 'to play',
+      conjugations: {
+        present: { ja:'igram se',    ti:'igraš se',    on:'igra se',    mi:'igramo se',    vi:'igrate se',    oni:'igraju se'      },
+        past:    { ja:'igrao sam se',ti:'igrao si se', on:'igrao se',   mi:'igrali smo se',vi:'igrali ste se',oni:'igrali su se'    },
+        future:  { ja:'igraću se',   ti:'igraćeš se',  on:'igraće se',  mi:'igraćemo se',  vi:'igraćete se',  oni:'igraće se'      },
+      }
+    },
+    {
+      infinitive: 'učiti', aspect: 'imp', english: 'to study / to learn',
+      conjugations: {
+        present: { ja:'učim',    ti:'učiš',    on:'uči',    mi:'učimo',    vi:'učite',    oni:'uče'      },
+        past:    { ja:'učio sam',ti:'učio si', on:'učio je',mi:'učili smo',vi:'učili ste',oni:'učili su' },
+        future:  { ja:'učiću',   ti:'učićeš',  on:'učiće',  mi:'učićemo',  vi:'učićete',  oni:'učiće'    },
+      }
+    },
+    {
+      infinitive: 'otvoriti', aspect: 'pfv', english: 'to open',
+      conjugations: {
+        present: { ja:'otvorim',    ti:'otvoriš',    on:'otvori',    mi:'otvorimo',    vi:'otvorite',    oni:'otvore'       },
+        past:    { ja:'otvorio sam',ti:'otvorio si', on:'otvorio je',mi:'otvorili smo',vi:'otvorili ste',oni:'otvorili su'  },
+        future:  { ja:'otvoriću',   ti:'otvorićeš',  on:'otvoriće',  mi:'otvorićemo',  vi:'otvorićete',  oni:'otvoriće'     },
+      }
+    },
+    {
+      infinitive: 'zatvoriti', aspect: 'pfv', english: 'to close',
+      conjugations: {
+        present: { ja:'zatvorim',    ti:'zatvoriš',    on:'zatvori',    mi:'zatvorimo',    vi:'zatvorite',    oni:'zatvore'       },
+        past:    { ja:'zatvorio sam',ti:'zatvorio si', on:'zatvorio je',mi:'zatvorili smo',vi:'zatvorili ste',oni:'zatvorili su'  },
+        future:  { ja:'zatvoriću',   ti:'zatvorićeš',  on:'zatvoriće',  mi:'zatvorićemo',  vi:'zatvorićete',  oni:'zatvoriće'     },
+      }
+    },
+    {
+      infinitive: 'platiti', aspect: 'pfv', english: 'to pay',
+      conjugations: {
+        present: { ja:'platim',    ti:'platiš',    on:'plati',    mi:'platimo',    vi:'platite',    oni:'plate'      },
+        past:    { ja:'platio sam',ti:'platio si', on:'platio je',mi:'platili smo',vi:'platili ste',oni:'platili su' },
+        future:  { ja:'platiću',   ti:'platićeš',  on:'platiće',  mi:'platićemo',  vi:'platićete',  oni:'platiće'    },
+      }
+    },
+    {
+      infinitive: 'nositi', aspect: 'imp', english: 'to carry / to wear',
+      conjugations: {
+        present: { ja:'nosim',    ti:'nosiš',    on:'nosi',    mi:'nosimo',    vi:'nosite',    oni:'nose'      },
+        past:    { ja:'nosio sam',ti:'nosio si', on:'nosio je',mi:'nosili smo',vi:'nosili ste',oni:'nosili su' },
+        future:  { ja:'nosiću',   ti:'nosićeš',  on:'nosiće',  mi:'nosićemo',  vi:'nosićete',  oni:'nosiće'    },
+      }
+    },
+    {
+      infinitive: 'padati', aspect: 'imp', english: 'to fall',
+      conjugations: {
+        present: { ja:'padam',    ti:'padaš',    on:'pada',    mi:'padamo',    vi:'padate',    oni:'padaju'     },
+        past:    { ja:'padao sam',ti:'padao si', on:'padao je',mi:'padali smo',vi:'padali ste',oni:'padali su'  },
+        future:  { ja:'padaću',   ti:'padaćeš',  on:'padaće',  mi:'padaćemo',  vi:'padaćete',  oni:'padaće'     },
+      }
+    },
+    {
+      infinitive: 'brinuti se', aspect: 'imp', english: 'to worry',
+      conjugations: {
+        present: { ja:'brinem se',    ti:'brineš se',    on:'brine se',    mi:'brinemo se',    vi:'brinete se',    oni:'brinu se'      },
+        past:    { ja:'brinuo sam se',ti:'brinuo si se', on:'brinuo se',   mi:'brinuli smo se',vi:'brinuli ste se',oni:'brinuli su se' },
+        future:  { ja:'brinuću se',   ti:'brinućeš se',  on:'brinuće se',  mi:'brinućemo se',  vi:'brinućete se',  oni:'brinuće se'    },
+      }
+    },
+    {
+      infinitive: 'čuvati', aspect: 'imp', english: 'to take care of / to keep',
+      conjugations: {
+        present: { ja:'čuvam',    ti:'čuvaš',    on:'čuva',    mi:'čuvamo',    vi:'čuvate',    oni:'čuvaju'     },
+        past:    { ja:'čuvao sam',ti:'čuvao si', on:'čuvao je',mi:'čuvali smo',vi:'čuvali ste',oni:'čuvali su'  },
+        future:  { ja:'čuvaću',   ti:'čuvaćeš',  on:'čuvaće',  mi:'čuvaćemo',  vi:'čuvaćete',  oni:'čuvaće'     },
+      }
+    },
+    {
+      infinitive: 'sećati se', aspect: 'imp', english: 'to remember',
+      conjugations: {
+        present: { ja:'sećam se',    ti:'sećaš se',    on:'seća se',    mi:'sećamo se',    vi:'sećate se',    oni:'sećaju se'      },
+        past:    { ja:'sećao sam se',ti:'sećao si se', on:'sećao se',   mi:'sećali smo se',vi:'sećali ste se',oni:'sećali su se'   },
+        future:  { ja:'sećaću se',   ti:'sećaćeš se',  on:'sećaće se',  mi:'sećaćemo se',  vi:'sećaćete se',  oni:'sećaće se'      },
+      }
+    },
+    {
+      infinitive: 'zaboraviti', aspect: 'pfv', english: 'to forget',
+      conjugations: {
+        present: { ja:'zaboravim',    ti:'zaboraviš',    on:'zaboravi',    mi:'zaboravimo',    vi:'zaboravite',    oni:'zaborave'       },
+        past:    { ja:'zaboravio sam',ti:'zaboravio si', on:'zaboravio je',mi:'zaboravili smo',vi:'zaboravili ste',oni:'zaboravili su'  },
+        future:  { ja:'zaboraviću',   ti:'zaboravićeš',  on:'zaboraviće',  mi:'zaboravićemo',  vi:'zaboravićete',  oni:'zaboraviće'     },
+      }
+    },
+    {
+      infinitive: 'objasniti', aspect: 'pfv', english: 'to explain',
+      conjugations: {
+        present: { ja:'objasnim',    ti:'objasniš',    on:'objasni',    mi:'objasnimo',    vi:'objasnite',    oni:'objasne'       },
+        past:    { ja:'objasnio sam',ti:'objasnio si', on:'objasnio je',mi:'objasnili smo',vi:'objasnili ste',oni:'objasnili su'  },
+        future:  { ja:'objasniću',   ti:'objasnićeš',  on:'objasniće',  mi:'objasnićemo',  vi:'objasnićete',  oni:'objasniće'     },
+      }
+    },
+    {
+      infinitive: 'pozvati', aspect: 'pfv', english: 'to invite / to call',
+      conjugations: {
+        present: { ja:'pozovem',    ti:'pozoveš',    on:'pozove',    mi:'pozovemo',    vi:'pozovete',    oni:'pozovu'      },
+        past:    { ja:'pozvao sam',ti:'pozvao si', on:'pozvao je',mi:'pozvali smo',vi:'pozvali ste',oni:'pozvali su'  },
+        future:  { ja:'pozvaću',   ti:'pozvaćeš',  on:'pozvaće',  mi:'pozvaćemo',  vi:'pozvaćete',  oni:'pozvaće'     },
+      }
+    },
   ];
 
   // ═══════════════════════════════════════════════════
@@ -2850,13 +3315,57 @@
     { sr:'Oni su ___ kafu.',         en:'They drank coffee.',              answer:'pili',    options:['pio','pila','pili','pile'],           hint:'piti — past, masc. pl.' },
     { sr:'Ja sam ___ zadatak.',      en:'I wrote the assignment. (masc.)', answer:'pisao',   options:['pisao','pisala','pisali','pisale'],   hint:'pisati — past, masc. sg.' },
     { sr:'Mi smo ___ zajedno.',      en:'We worked together.',             answer:'radili',  options:['radio','radila','radili','radile'],   hint:'raditi — past, pl.' },
+    // ─── misliti (to think) ───────────────────────────
+    { sr:'Ja ___ da je to dobra ideja.',  en:'I think that is a good idea.',    answer:'mislim',  options:['mislim','misliš','misli','misle'],        hint:'misliti (to think) — 1st sg. present' },
+    { sr:'Šta ___ o tome?',               en:'What do you think about it?',     answer:'misliš',  options:['mislim','misliš','misli','mislimo'],       hint:'misliti (to think) — 2nd sg. present' },
+    { sr:'Ona je ___ o porodici.',        en:'She was thinking about her family.', answer:'mislila', options:['mislio','mislila','mislili','mislile'],   hint:'misliti — past, fem. sg.' },
+    // ─── pričati (to talk) ────────────────────────────
+    { sr:'Oni ___ ceo dan.',              en:'They talk all day.',               answer:'pričaju', options:['pričam','pričaš','priča','pričaju'],       hint:'pričati (to talk) — 3rd pl. present' },
+    { sr:'Ona ___ o svom putu.',          en:'She is talking about her trip.',   answer:'priča',   options:['pričam','pričaš','priča','pričamo'],       hint:'pričati (to talk) — 3rd sg. present' },
+    // ─── slušati (to listen) ──────────────────────────
+    { sr:'Ja ___ muziku svaki dan.',      en:'I listen to music every day.',     answer:'slušam',  options:['slušam','slušaš','sluša','slušaju'],       hint:'slušati (to listen) — 1st sg. present' },
+    { sr:'Deca ___ učitelja.',            en:'The children are listening to the teacher.', answer:'slušaju', options:['slušam','sluša','slušamo','slušaju'], hint:'slušati (to listen) — 3rd pl. present' },
+    // ─── gledati (to watch) ───────────────────────────
+    { sr:'Mi ___ film zajedno.',          en:'We are watching a movie together.',answer:'gledamo', options:['gledam','gledaš','gledamo','gledaju'],      hint:'gledati (to watch) — 1st pl. present' },
+    { sr:'Ona je ___ televiziju celo veče.', en:'She watched TV all evening.',   answer:'gledala', options:['gledao','gledala','gledali','gledalo'],     hint:'gledati — past, fem. sg.' },
+    // ─── sedeti (to sit) ──────────────────────────────
+    { sr:'On ___ u parku i čita.',        en:'He sits in the park and reads.',   answer:'sedi',    options:['sedim','sediš','sedi','sede'],             hint:'sedeti (to sit) — 3rd sg. present' },
+    // ─── stajati (to stand) ───────────────────────────
+    { sr:'Ona ___ ispred vrata.',         en:'She is standing in front of the door.', answer:'stoji', options:['stojim','stojiš','stoji','stoje'],      hint:'stajati (to stand) — 3rd sg. present' },
+    // ─── hodati (to walk) ─────────────────────────────
+    { sr:'Ona ___ po gradu svako jutro.', en:'She walks around the city every morning.', answer:'hoda', options:['hodam','hodaš','hoda','hodaju'],    hint:'hodati (to walk) — 3rd sg. present' },
+    // ─── trčati (to run) ──────────────────────────────
+    { sr:'Ja ___ u parku svako jutro.',   en:'I run in the park every morning.', answer:'trčim',   options:['trčim','trčiš','trči','trče'],             hint:'trčati (to run) — 1st sg. present' },
+    // ─── plakati (to cry) ─────────────────────────────
+    { sr:'Beba ___.',                     en:'The baby is crying.',              answer:'plače',   options:['plačem','plačeš','plače','plačemo'],       hint:'plakati (to cry) — 3rd sg. present' },
+    { sr:'Ona je ___ od sreće.',          en:'She cried from joy.',              answer:'plakala', options:['plakao','plakala','plakali','plakale'],     hint:'plakati — past, fem. sg.' },
+    // ─── smejati se (to laugh) ────────────────────────
+    { sr:'Svi se ___ na tu šalu.',        en:'Everyone is laughing at that joke.',answer:'smeju',  options:['smejem','smeješ','smeje','smeju'],         hint:'smejati se (to laugh) — 3rd pl. present' },
+    // ─── pevati (to sing) ─────────────────────────────
+    { sr:'Ona lepo ___.',                 en:'She sings beautifully.',           answer:'peva',    options:['pevam','pevaš','peva','pevaju'],           hint:'pevati (to sing) — 3rd sg. present' },
+    { sr:'Oni su ___ celu noć.',          en:'They sang all night.',             answer:'pevali',  options:['pevao','pevala','pevali','pevale'],         hint:'pevati — past, masc. pl.' },
+    // ─── nositi (to carry/wear) ───────────────────────
+    { sr:'On ___ tešku torbu.',           en:'He is carrying a heavy bag.',      answer:'nosi',    options:['nosim','nosiš','nosi','nose'],             hint:'nositi (to carry) — 3rd sg. present' },
+    { sr:'Ona ___ lepu haljinu.',         en:'She is wearing a beautiful dress.',answer:'nosi',    options:['nosim','nosiš','nosi','nose'],             hint:'nositi (to wear) — 3rd sg. present' },
+    // ─── brinuti se (to worry) ────────────────────────
+    { sr:'Mama se uvek ___ za nas.',      en:'Mom always worries about us.',     answer:'brine',   options:['brinem','brineš','brine','brinu'],         hint:'brinuti se (to worry) — 3rd sg. present' },
+    // ─── čuvati (to take care of) ─────────────────────
+    { sr:'Ona ___ decu dok smo odsutni.',en:'She takes care of the kids while we are away.', answer:'čuva', options:['čuvam','čuvaš','čuva','čuvaju'], hint:'čuvati (to take care of) — 3rd sg. present' },
+    // ─── sećati se (to remember) ──────────────────────
+    { sr:'Ona se ___ prvog dana.',        en:'She remembers the first day.',     answer:'seća',    options:['sećam','sećaš','seća','sećaju'],           hint:'sećati se (to remember) — 3rd sg. present' },
+    // ─── zaboraviti (to forget) ───────────────────────
+    { sr:'Ja sam ___ da kupim hleb.',     en:'I forgot to buy bread. (masc.)',   answer:'zaboravio', options:['zaboravio','zaboravila','zaboravili','zaboraviti'], hint:'zaboraviti (to forget) — past, masc. sg.' },
+    // ─── objasniti (to explain) ───────────────────────
+    { sr:'Ona je ___ pravila igre.',      en:'She explained the rules of the game.', answer:'objasnila', options:['objasnio','objasnila','objasnili','objasnile'], hint:'objasniti (to explain) — past, fem. sg.' },
+    // ─── pozvati (to invite) ──────────────────────────
+    { sr:'On je ___ sve prijatelje.',     en:'He invited all his friends.',      answer:'pozvao',  options:['pozvao','pozvala','pozvali','pozvale'],     hint:'pozvati (to invite) — past, masc. sg.' },
   ];
 
   // ═══════════════════════════════════════════════════
   //  FLASHCARD STORAGE
   // ═══════════════════════════════════════════════════
   const STORAGE_KEY = 'serbian_cards';
-  const CARDS_VER   = '3';
+  const CARDS_VER   = '4';
 
   const DEFAULT_CARDS = [
     // ── GREETINGS ─────────────────────────────────────────────────────────
@@ -3197,6 +3706,116 @@
     { serbian:'Biće dobro.',                 english:'It will be okay.',                   category:'Phrases' },
     { serbian:'Drago mi je.',                english:'Nice to meet you.',                  category:'Phrases' },
     { serbian:'Gde se nalazimo?',            english:'Where are we?',                      category:'Phrases' },
+    // ── VERBS II ──────────────────────────────────────────────────────────
+    { serbian:'misliti',       english:'to think',                  category:'Verbs II' },
+    { serbian:'čekati',        english:'to wait',                   category:'Verbs II' },
+    { serbian:'pričati',       english:'to talk / to tell',         category:'Verbs II' },
+    { serbian:'slušati',       english:'to listen',                 category:'Verbs II' },
+    { serbian:'gledati',       english:'to watch / to look at',     category:'Verbs II' },
+    { serbian:'sedeti',        english:'to sit',                    category:'Verbs II' },
+    { serbian:'stajati',       english:'to stand',                  category:'Verbs II' },
+    { serbian:'hodati',        english:'to walk',                   category:'Verbs II' },
+    { serbian:'trčati',        english:'to run',                    category:'Verbs II' },
+    { serbian:'plakati',       english:'to cry',                    category:'Verbs II' },
+    { serbian:'smejati se',    english:'to laugh',                  category:'Verbs II' },
+    { serbian:'pevati',        english:'to sing',                   category:'Verbs II' },
+    { serbian:'igrati se',     english:'to play',                   category:'Verbs II' },
+    { serbian:'učiti',         english:'to study / to learn',       category:'Verbs II' },
+    { serbian:'otvoriti',      english:'to open',                   category:'Verbs II' },
+    { serbian:'zatvoriti',     english:'to close',                  category:'Verbs II' },
+    { serbian:'platiti',       english:'to pay',                    category:'Verbs II' },
+    { serbian:'nositi',        english:'to carry / to wear',        category:'Verbs II' },
+    { serbian:'padati',        english:'to fall',                   category:'Verbs II' },
+    { serbian:'brinuti se',    english:'to worry',                  category:'Verbs II' },
+    { serbian:'čuvati',        english:'to take care of / to keep', category:'Verbs II' },
+    { serbian:'sećati se',     english:'to remember',               category:'Verbs II' },
+    { serbian:'zaboraviti',    english:'to forget',                 category:'Verbs II' },
+    { serbian:'objasniti',     english:'to explain',                category:'Verbs II' },
+    { serbian:'pozvati',       english:'to invite / to call',       category:'Verbs II' },
+    // ── TRANSPORTATION ────────────────────────────────────────────────────
+    { serbian:'voz',           english:'train',                     category:'Transportation' },
+    { serbian:'autobus',       english:'bus',                       category:'Transportation' },
+    { serbian:'tramvaj',       english:'tram',                      category:'Transportation' },
+    { serbian:'taksi',         english:'taxi',                      category:'Transportation' },
+    { serbian:'auto',          english:'car',                       category:'Transportation' },
+    { serbian:'avion',         english:'airplane',                  category:'Transportation' },
+    { serbian:'brod',          english:'ship / boat',               category:'Transportation' },
+    { serbian:'bicikl',        english:'bicycle',                   category:'Transportation' },
+    { serbian:'karta',         english:'ticket',                    category:'Transportation' },
+    { serbian:'polazak',       english:'departure',                 category:'Transportation' },
+    { serbian:'dolazak',       english:'arrival',                   category:'Transportation' },
+    { serbian:'vozni red',     english:'timetable / schedule',      category:'Transportation' },
+    { serbian:'peron',         english:'platform',                  category:'Transportation' },
+    { serbian:'autoput',       english:'highway / motorway',        category:'Transportation' },
+    { serbian:'raskrsnica',    english:'intersection / crossroads', category:'Transportation' },
+    { serbian:'semafor',       english:'traffic light',             category:'Transportation' },
+    { serbian:'kašnjenje',     english:'delay',                     category:'Transportation' },
+    { serbian:'let',           english:'flight',                    category:'Transportation' },
+    { serbian:'levo',          english:'left',                      category:'Transportation' },
+    { serbian:'desno',         english:'right',                     category:'Transportation' },
+    // ── CLOTHING ──────────────────────────────────────────────────────────
+    { serbian:'košulja',       english:'shirt',                     category:'Clothing' },
+    { serbian:'majica',        english:'t-shirt',                   category:'Clothing' },
+    { serbian:'pantalone',     english:'pants / trousers',          category:'Clothing' },
+    { serbian:'farmerke',      english:'jeans',                     category:'Clothing' },
+    { serbian:'haljina',       english:'dress',                     category:'Clothing' },
+    { serbian:'suknja',        english:'skirt',                     category:'Clothing' },
+    { serbian:'jakna',         english:'jacket',                    category:'Clothing' },
+    { serbian:'kaput',         english:'coat',                      category:'Clothing' },
+    { serbian:'čarape',        english:'socks',                     category:'Clothing' },
+    { serbian:'cipele',        english:'shoes',                     category:'Clothing' },
+    { serbian:'čizme',         english:'boots',                     category:'Clothing' },
+    { serbian:'patike',        english:'sneakers',                  category:'Clothing' },
+    { serbian:'kapa',          english:'hat / cap',                 category:'Clothing' },
+    { serbian:'šal',           english:'scarf',                     category:'Clothing' },
+    { serbian:'rukavice',      english:'gloves',                    category:'Clothing' },
+    { serbian:'džemper',       english:'sweater / jumper',          category:'Clothing' },
+    { serbian:'duks',          english:'hoodie / sweatshirt',       category:'Clothing' },
+    { serbian:'torbica',       english:'bag / handbag',             category:'Clothing' },
+    { serbian:'pojas',         english:'belt',                      category:'Clothing' },
+    { serbian:'naočare',       english:'glasses',                   category:'Clothing' },
+    // ── NATURE & WEATHER ──────────────────────────────────────────────────
+    { serbian:'sunce',         english:'sun',                       category:'Nature & Weather' },
+    { serbian:'zvezda',        english:'star',                      category:'Nature & Weather' },
+    { serbian:'oblak',         english:'cloud',                     category:'Nature & Weather' },
+    { serbian:'kiša',          english:'rain',                      category:'Nature & Weather' },
+    { serbian:'sneg',          english:'snow',                      category:'Nature & Weather' },
+    { serbian:'vetar',         english:'wind',                      category:'Nature & Weather' },
+    { serbian:'oluja',         english:'storm',                     category:'Nature & Weather' },
+    { serbian:'grmljavina',    english:'thunder',                   category:'Nature & Weather' },
+    { serbian:'munja',         english:'lightning',                 category:'Nature & Weather' },
+    { serbian:'magla',         english:'fog',                       category:'Nature & Weather' },
+    { serbian:'led',           english:'ice',                       category:'Nature & Weather' },
+    { serbian:'nebo',          english:'sky',                       category:'Nature & Weather' },
+    { serbian:'vatra',         english:'fire',                      category:'Nature & Weather' },
+    { serbian:'kamen',         english:'stone / rock',              category:'Nature & Weather' },
+    { serbian:'pesak',         english:'sand',                      category:'Nature & Weather' },
+    { serbian:'jezero',        english:'lake',                      category:'Nature & Weather' },
+    { serbian:'polje',         english:'field',                     category:'Nature & Weather' },
+    { serbian:'brdo',          english:'hill',                      category:'Nature & Weather' },
+    { serbian:'trava',         english:'grass',                     category:'Nature & Weather' },
+    { serbian:'cvet',          english:'flower',                    category:'Nature & Weather' },
+    // ── SCHOOL & WORK ─────────────────────────────────────────────────────
+    { serbian:'škola',         english:'school',                    category:'School & Work' },
+    { serbian:'fakultet',      english:'university',                category:'School & Work' },
+    { serbian:'razred',        english:'class / classroom',         category:'School & Work' },
+    { serbian:'sveska',        english:'notebook',                  category:'School & Work' },
+    { serbian:'olovka',        english:'pencil',                    category:'School & Work' },
+    { serbian:'tabla',         english:'board / blackboard',        category:'School & Work' },
+    { serbian:'ispit',         english:'exam',                      category:'School & Work' },
+    { serbian:'ocena',         english:'grade / mark',              category:'School & Work' },
+    { serbian:'odmor',         english:'break / vacation',          category:'School & Work' },
+    { serbian:'posao',         english:'job / work',                category:'School & Work' },
+    { serbian:'kancelarija',   english:'office',                    category:'School & Work' },
+    { serbian:'kompjuter',     english:'computer',                  category:'School & Work' },
+    { serbian:'telefon',       english:'phone',                     category:'School & Work' },
+    { serbian:'mejl',          english:'email',                     category:'School & Work' },
+    { serbian:'sastanak',      english:'meeting',                   category:'School & Work' },
+    { serbian:'plata',         english:'salary / wages',            category:'School & Work' },
+    { serbian:'kolega',        english:'colleague',                 category:'School & Work' },
+    { serbian:'šef',           english:'boss',                      category:'School & Work' },
+    { serbian:'firma',         english:'company / firm',            category:'School & Work' },
+    { serbian:'penzija',       english:'retirement / pension',      category:'School & Work' },
   ];
 
   function loadCards() {
@@ -3319,13 +3938,12 @@
   let adjScore       = { correct: 0, total: 0 };
   let adjScoredAdj   = false;
 
-  // Aspect pairs state
-  let userAspectPairs  = loadUserAspectPairs();
-  let allAspectPairs   = [];
-  let apIndex          = 0;
-  let aspectDrillMode  = 'imp_pfv';
-  let apScore          = { correct: 0, total: 0 };
-  let apScoredPair     = false;
+  // Context Chooser state
+  let ctxDeck      = [...CONTEXT_DRILLS];
+  let ctxIndex     = 0;
+  let ctxScore     = { correct: 0, total: 0 };
+  let ctxScoredQ   = false;
+  let ctxAnswered  = false;
 
   // ═══════════════════════════════════════════════════
   //  SLAGALICA — state
@@ -3720,7 +4338,7 @@
     if (view === 'verbs')      renderVerbView();
     if (view === 'adj')        renderAdjView();
     if (view === 'drill')      renderDrillView();
-    if (view === 'aspect')     renderAspectView();
+    if (view === 'aspect')     renderContextView();
     if (view === 'slagalica')  renderSlagView();
     if (view === 'manage')     renderManage();
   }
@@ -4701,268 +5319,119 @@
   }
 
   // ═══════════════════════════════════════════════════
-  //  ASPECT PAIRS — storage
+  //  CONTEXT CHOOSER — functions
   // ═══════════════════════════════════════════════════
-  function loadUserAspectPairs() {
-    try { return JSON.parse(localStorage.getItem('serbian_user_aspect_pairs')) || []; }
-    catch(e) { return []; }
-  }
-  function saveUserAspectPairs() {
-    localStorage.setItem('serbian_user_aspect_pairs', JSON.stringify(userAspectPairs));
+  function renderContextView() {
+    ctxAnswered = false;
+    renderCtxCard();
   }
 
-  function buildAllAspectPairs() {
-    allAspectPairs = [...ASPECT_PAIRS, ...userAspectPairs];
+  function renderCtxCard() {
+    if (ctxIndex >= ctxDeck.length) ctxIndex = 0;
+    const drill = ctxDeck[ctxIndex];
+
+    document.getElementById('ctx-progress').textContent =
+      `${ctxIndex + 1} of ${ctxDeck.length}`;
+    document.getElementById('ctx-prev-btn').disabled = ctxIndex === 0;
+    document.getElementById('ctx-next-btn').disabled = ctxIndex === ctxDeck.length - 1;
+
+    // English sentence (plain)
+    document.getElementById('ctx-en-sentence').textContent = drill.english;
+
+    // Serbian sentence with styled blank
+    document.getElementById('ctx-sr-sentence').innerHTML =
+      drill.serbian.replace('___', '<span class="ctx-blank">___</span>');
+
+    // Buttons
+    document.getElementById('ctx-imp-verb').textContent = drill.imp;
+    document.getElementById('ctx-pfv-verb').textContent = drill.pfv;
+    const impBtn = document.getElementById('ctx-btn-imp');
+    const pfvBtn = document.getElementById('ctx-btn-pfv');
+    impBtn.disabled = false;
+    pfvBtn.disabled = false;
+    impBtn.className = 'ctx-choice ctx-choice-imp';
+    pfvBtn.className = 'ctx-choice ctx-choice-pfv';
+
+    // Hide feedback
+    document.getElementById('ctx-feedback').style.display = 'none';
+    document.getElementById('ctx-feedback').className = 'ctx-feedback';
+
+    ctxAnswered = false;
+    ctxScoredQ  = false;
+    updateCtxScore();
   }
 
-  // ═══════════════════════════════════════════════════
-  //  ASPECT PAIRS — drill view
-  // ═══════════════════════════════════════════════════
-  function renderAspectView() {
-    buildAllAspectPairs();
-    buildAspectModeBtns();
-    renderAspectCard();
-  }
+  function ctxAnswer(chosen) {
+    if (ctxAnswered) return;
+    ctxAnswered = true;
+    const drill    = ctxDeck[ctxIndex];
+    const correct  = chosen === drill.answer;
+    const impBtn   = document.getElementById('ctx-btn-imp');
+    const pfvBtn   = document.getElementById('ctx-btn-pfv');
 
-  function buildAspectModeBtns() {
-    const container = document.getElementById('aspect-mode-btns');
-    if (container.children.length === ASPECT_MODES.length) {
-      container.querySelectorAll('.tense-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.key === aspectDrillMode);
-      });
-      return;
-    }
-    container.innerHTML = '';
-    ASPECT_MODES.forEach(m => {
-      const btn = document.createElement('button');
-      btn.className = 'tense-btn' + (m.key === aspectDrillMode ? ' active' : '');
-      btn.textContent = m.label;
-      btn.dataset.key = m.key;
-      btn.addEventListener('click', () => {
-        aspectDrillMode = m.key;
-        container.querySelectorAll('.tense-btn').forEach(b => b.classList.toggle('active', b.dataset.key === aspectDrillMode));
-        apScoredPair = false;
-        document.getElementById('ap-reveal').style.display = 'none';
-        renderAspectCard();
-        renderAspectInputs();
-      });
-      container.appendChild(btn);
-    });
-  }
+    impBtn.disabled = true;
+    pfvBtn.disabled = true;
 
-  function renderAspectCard() {
-    const has = allAspectPairs.length > 0;
-    document.getElementById('ap-card').style.display           = has ? 'flex' : 'none';
-    document.getElementById('aspect-inputs').style.display     = has ? 'flex' : 'none';
-    document.querySelector('#aspect-view .grammar-controls').style.display = has ? 'flex' : 'none';
-    document.getElementById('ap-reveal').style.display         = 'none';
-    document.getElementById('empty-aspect').style.display      = has ? 'none'  : 'block';
-    if (!has) return;
+    // Highlight chosen and show correct
+    const chosenBtn  = chosen === 'imp' ? impBtn : pfvBtn;
+    const correctBtn = drill.answer === 'imp' ? impBtn : pfvBtn;
 
-    if (apIndex >= allAspectPairs.length) apIndex = 0;
-    const pair = allAspectPairs[apIndex];
-    document.getElementById('ap-progress').textContent = `Pair ${apIndex + 1} of ${allAspectPairs.length}`;
-    document.getElementById('ap-prev-btn').disabled = apIndex === 0;
-    document.getElementById('ap-next-btn').disabled = apIndex === allAspectPairs.length - 1;
-
-    if (aspectDrillMode === 'imp_pfv') {
-      document.getElementById('ap-given-label').textContent  = 'Imperfective';
-      document.getElementById('ap-given-badge').textContent  = 'imp';
-      document.getElementById('ap-given-badge').className    = 'aspect-badge aspect-imp';
-      document.getElementById('ap-display-word').textContent = pair.imp;
-      document.getElementById('ap-display-cyrillic').textContent = latinToCyrillic(pair.imp);
-      document.getElementById('ap-display-en').textContent   = pair.english;
-    } else if (aspectDrillMode === 'pfv_imp') {
-      document.getElementById('ap-given-label').textContent  = 'Perfective';
-      document.getElementById('ap-given-badge').textContent  = 'pfv';
-      document.getElementById('ap-given-badge').className    = 'aspect-badge aspect-pfv';
-      document.getElementById('ap-display-word').textContent = pair.pfv;
-      document.getElementById('ap-display-cyrillic').textContent = latinToCyrillic(pair.pfv);
-      document.getElementById('ap-display-en').textContent   = pair.english;
+    if (correct) {
+      chosenBtn.classList.add('ctx-correct');
     } else {
-      // en_both: show English, hide word
-      document.getElementById('ap-given-label').textContent  = 'English';
-      document.getElementById('ap-given-badge').textContent  = '';
-      document.getElementById('ap-given-badge').className    = 'aspect-badge';
-      document.getElementById('ap-display-word').textContent = '';
-      document.getElementById('ap-display-cyrillic').textContent = '';
-      document.getElementById('ap-display-en').textContent   = pair.english;
+      chosenBtn.classList.add('ctx-wrong');
+      correctBtn.classList.add('ctx-show-correct');
     }
 
-    apScoredPair = false;
-    renderAspectInputs();
-    updateApScore();
-  }
+    // Fill in the blank in the Serbian sentence
+    const srEl = document.getElementById('ctx-sr-sentence');
+    srEl.innerHTML = drill.serbian.replace(
+      '___',
+      `<span class="${correct ? 'ctx-blank-filled-correct' : 'ctx-blank-filled-wrong'}">${drill.fill}</span>`
+    );
 
-  function renderAspectInputs() {
-    const container = document.getElementById('aspect-inputs');
-    container.innerHTML = '';
-    if (!allAspectPairs.length) return;
+    // Show feedback
+    const fb = document.getElementById('ctx-feedback');
+    fb.style.display = 'flex';
+    fb.className = `ctx-feedback ${correct ? 'ctx-feedback-correct' : 'ctx-feedback-wrong'}`;
+    document.getElementById('ctx-feedback-rule').textContent =
+      (correct ? '✓ ' : '✗ ') + drill.rule;
+    document.getElementById('ctx-feedback-note').textContent = drill.note;
 
-    if (aspectDrillMode === 'imp_pfv') {
-      container.appendChild(makeApRow('pfv', 'Perfective', 'aspect-pfv'));
-    } else if (aspectDrillMode === 'pfv_imp') {
-      container.appendChild(makeApRow('imp', 'Imperfective', 'aspect-imp'));
-    } else {
-      container.appendChild(makeApRow('imp', 'Imperfective', 'aspect-imp'));
-      container.appendChild(makeApRow('pfv', 'Perfective',   'aspect-pfv'));
-    }
-  }
-
-  function makeApRow(key, label, badgeClass) {
-    const row = document.createElement('div');
-    row.className = 'case-row';
-    row.id = `ap-row-${key}`;
-    row.innerHTML = `
-      <div class="ap-answer-row">
-        <span class="ap-answer-label">
-          <span class="aspect-badge ${badgeClass}" style="margin-right:6px">${label === 'Imperfective' ? 'imp' : 'pfv'}</span>
-          ${label}
-        </span>
-        <input class="case-inp" id="ap-inp-${key}" type="text"
-          placeholder="${label} form…"
-          autocomplete="off" autocorrect="off" spellcheck="false" />
-        <div class="case-feedback" id="ap-fb-${key}"></div>
-      </div>
-    `;
-    row.querySelector(`#ap-inp-${key}`).addEventListener('keydown', e => {
-      if (e.key === 'Enter') checkAspectPair();
-    });
-    return row;
-  }
-
-  function checkAspectPair() {
-    if (!allAspectPairs.length) return;
-    const pair = allAspectPairs[apIndex];
-    let allCorrect = true;
-
-    function checkOne(key, answer) {
-      const inp = document.getElementById(`ap-inp-${key}`);
-      const fb  = document.getElementById(`ap-fb-${key}`);
-      if (!inp) return;
-      const val = inp.value.trim().toLowerCase();
-      const correct = val === answer.toLowerCase();
-      if (!correct) allCorrect = false;
-      inp.classList.remove('g-correct','g-incorrect');
-      inp.classList.add(correct ? 'g-correct' : 'g-incorrect');
-      fb.innerHTML = correct
-        ? '<span class="fb-correct">✓</span>'
-        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${answer}</span>`;
-    }
-
-    if (aspectDrillMode === 'imp_pfv') {
-      checkOne('pfv', pair.pfv);
-    } else if (aspectDrillMode === 'pfv_imp') {
-      checkOne('imp', pair.imp);
-    } else {
-      checkOne('imp', pair.imp);
-      checkOne('pfv', pair.pfv);
-    }
-
-    if (!apScoredPair) {
-      apScoredPair = true;
-      apScore.total++;
-      if (allCorrect) apScore.correct++;
-      updateApScore();
-    }
-
-    // Show reveal box
-    const reveal = document.getElementById('ap-reveal');
-    reveal.style.display = 'flex';
-    reveal.innerHTML = `
-      <div class="aspect-reveal-side">
-        <span class="aspect-reveal-label"><span class="aspect-badge aspect-imp" style="display:inline-block">imp</span> Imperfective</span>
-        <span class="aspect-reveal-word">${pair.imp}</span>
-        <span class="aspect-reveal-cyril">${latinToCyrillic(pair.imp)}</span>
-      </div>
-      <div style="color:#555; font-size:1.4rem; align-self:center">⇄</div>
-      <div class="aspect-reveal-side">
-        <span class="aspect-reveal-label"><span class="aspect-badge aspect-pfv" style="display:inline-block">pfv</span> Perfective</span>
-        <span class="aspect-reveal-word">${pair.pfv}</span>
-        <span class="aspect-reveal-cyril">${latinToCyrillic(pair.pfv)}</span>
-      </div>
-    `;
-  }
-
-  function updateApScore() {
-    document.getElementById('ap-score-val').textContent = `${apScore.correct} / ${apScore.total}`;
-  }
-
-  function apNext() {
-    if (apIndex < allAspectPairs.length - 1) {
-      apIndex++;
-      document.getElementById('ap-reveal').style.display = 'none';
-      renderAspectCard();
-    }
-  }
-  function apPrev() {
-    if (apIndex > 0) {
-      apIndex--;
-      document.getElementById('ap-reveal').style.display = 'none';
-      renderAspectCard();
+    // Score (once per card)
+    if (!ctxScoredQ) {
+      ctxScoredQ = true;
+      ctxScore.total++;
+      if (correct) ctxScore.correct++;
+      updateCtxScore();
     }
   }
 
-  function shuffleAspectPairs() {
-    buildAllAspectPairs();
-    for (let i = allAspectPairs.length - 1; i > 0; i--) {
+  function updateCtxScore() {
+    document.getElementById('ctx-score-val').textContent =
+      `${ctxScore.correct} / ${ctxScore.total}`;
+  }
+
+  function ctxNext() {
+    if (ctxIndex < ctxDeck.length - 1) {
+      ctxIndex++;
+      renderCtxCard();
+    }
+  }
+  function ctxPrev() {
+    if (ctxIndex > 0) {
+      ctxIndex--;
+      renderCtxCard();
+    }
+  }
+
+  function shuffleCtx() {
+    for (let i = ctxDeck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [allAspectPairs[i], allAspectPairs[j]] = [allAspectPairs[j], allAspectPairs[i]];
+      [ctxDeck[i], ctxDeck[j]] = [ctxDeck[j], ctxDeck[i]];
     }
-    apIndex = 0;
-    document.getElementById('ap-reveal').style.display = 'none';
-    renderAspectCard();
-  }
-
-  // ═══════════════════════════════════════════════════
-  //  ASPECT PAIRS — manage CRUD
-  // ═══════════════════════════════════════════════════
-  function addUserAspectPair() {
-    const imp = document.getElementById('ap-new-imp').value.trim();
-    const pfv = document.getElementById('ap-new-pfv').value.trim();
-    const english = document.getElementById('ap-new-en').value.trim();
-    if (!imp || !pfv || !english) { alert('Please fill in all three fields.'); return; }
-    userAspectPairs.push({ imp, pfv, english });
-    saveUserAspectPairs();
-    buildAllAspectPairs();
-    document.getElementById('ap-new-imp').value = '';
-    document.getElementById('ap-new-pfv').value = '';
-    document.getElementById('ap-new-en').value  = '';
-    document.getElementById('ap-new-imp').focus();
-    renderAspectPairList();
-  }
-
-  function deleteUserAspectPair(i) {
-    if (!confirm(`Delete "${userAspectPairs[i].imp} / ${userAspectPairs[i].pfv}"?`)) return;
-    userAspectPairs.splice(i, 1);
-    saveUserAspectPairs();
-    buildAllAspectPairs();
-    if (apIndex >= allAspectPairs.length) apIndex = Math.max(0, allAspectPairs.length - 1);
-    renderAspectPairList();
-  }
-
-  function renderAspectPairList() {
-    const list = document.getElementById('ap-list');
-    document.getElementById('ap-count').textContent = `(${userAspectPairs.length})`;
-    list.innerHTML = '';
-    if (userAspectPairs.length === 0) {
-      list.innerHTML = '<p style="color:#aaa">No user aspect pairs yet. Add one above!</p>';
-      return;
-    }
-    userAspectPairs.forEach((p, i) => {
-      const row = document.createElement('div');
-      row.className = 'card-row';
-      row.innerHTML = `
-        <span class="aspect-badge aspect-imp">imp</span>
-        <span class="c-serbian">${p.imp}</span>
-        <span style="color:#555; padding:0 4px">⇄</span>
-        <span class="aspect-badge aspect-pfv">pfv</span>
-        <span class="c-serbian">${p.pfv}</span>
-        <span class="c-english">${p.english}</span>
-        <button class="del-btn" onclick="deleteUserAspectPair(${i})">Delete</button>
-      `;
-      list.appendChild(row);
-    });
+    ctxIndex = 0;
+    renderCtxCard();
   }
 
   // ═══════════════════════════════════════════════════
@@ -4973,12 +5442,10 @@
     document.getElementById('manage-grammar').style.display = tab === 'grammar' ? 'flex' : 'none';
     document.getElementById('manage-verbs').style.display   = tab === 'verbs'   ? 'flex' : 'none';
     document.getElementById('manage-adj').style.display     = tab === 'adj'     ? 'flex' : 'none';
-    document.getElementById('manage-aspect').style.display  = tab === 'aspect'  ? 'flex' : 'none';
     document.getElementById('mtab-cards').classList.toggle('active',   tab === 'cards');
     document.getElementById('mtab-grammar').classList.toggle('active', tab === 'grammar');
     document.getElementById('mtab-verbs').classList.toggle('active',   tab === 'verbs');
     document.getElementById('mtab-adj').classList.toggle('active',     tab === 'adj');
-    document.getElementById('mtab-aspect').classList.toggle('active',  tab === 'aspect');
   }
 
   function renderManage() {
@@ -4988,7 +5455,6 @@
     renderGrammarNounList();
     renderVerbList();
     renderAdjList();
-    renderAspectPairList();
   }
 
   // ═══════════════════════════════════════════════════
@@ -5259,9 +5725,9 @@
       if (e.key === 'ArrowRight') drillNext();
       if (e.key === 'ArrowLeft')  drillPrev();
     }
-    if (aspectVisible && document.activeElement.tagName !== 'INPUT') {
-      if (e.key === 'ArrowRight') apNext();
-      if (e.key === 'ArrowLeft')  apPrev();
+    if (aspectVisible) {
+      if (e.key === 'ArrowRight') ctxNext();
+      if (e.key === 'ArrowLeft')  ctxPrev();
     }
   });
 
@@ -5270,7 +5736,6 @@
   // ═══════════════════════════════════════════════════
   buildAllVerbs();
   buildAllAdjectives();
-  buildAllAspectPairs();
   buildDeck();
   renderStudy();
 </script>
