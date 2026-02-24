@@ -854,7 +854,162 @@
       /* 11. Fill-in Drill on mobile */
       .drill-options { grid-template-columns: 1fr; }
       .drill-option  { font-size: 1.1rem; padding: 16px 12px; min-height: 44px; }
+
+      /* 12. Cyrillic Reading on mobile */
+      .cyr-options   { grid-template-columns: 1fr; }
+      .cyr-flash-text { font-size: 2.4rem; }
+      .cyr-option    { font-size: 1rem; }
     }
+
+    /* ══════════════ CYRILLIC READING VIEW ══════════════ */
+    @keyframes cyr-drain {
+      from { transform: scaleX(1); }
+      to   { transform: scaleX(0); }
+    }
+    @keyframes cyr-fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    #cyrillic-view {
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+      max-width: 640px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .cyr-settings {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .cyr-settings-group {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .cyr-settings-label {
+      font-size: 0.8rem;
+      color: #a0a0b0;
+      margin-right: 4px;
+    }
+    .cyr-pill {
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #0f3460;
+      background: #0d1b2a;
+      color: #a0c4ff;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .cyr-pill.active {
+      background: #1a4a80;
+      color: #fff;
+      border-color: #2a6aaa;
+    }
+    .cyr-pill:hover:not(.active) { background: #0f2a4a; }
+
+    .cyr-progress-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #a0a0b0;
+    }
+    .cyr-score { color: #74b9ff; font-weight: 600; }
+
+    .cyr-flash-card {
+      background: #0d1b2a;
+      border: 1px solid #0f3460;
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .cyr-flash-text {
+      font-size: 3.2rem;
+      color: #74b9ff;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      animation: cyr-fade-in 0.3s ease;
+    }
+    .cyr-timer-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: #1a1a2e;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .cyr-timer-bar {
+      height: 100%;
+      width: 100%;
+      background: #e74c3c;
+      transform-origin: left center;
+      transform: scaleX(1);
+    }
+    .cyr-timer-bar.draining {
+      animation: cyr-drain linear forwards;
+    }
+
+    .cyr-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .cyr-option {
+      position: relative;
+      padding: 16px 12px 16px 36px;
+      background: #0d1b2a;
+      border: 1px solid #0f3460;
+      border-radius: 8px;
+      color: #e0e0f0;
+      font-size: 1.15rem;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .cyr-option:hover:not(:disabled) { background: #0f2a4a; border-color: #1a5080; }
+    .cyr-option::before {
+      content: attr(data-key);
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      font-size: 0.7rem;
+      color: #4a6a8a;
+      background: #0a1520;
+      border: 1px solid #0f3460;
+      border-radius: 3px;
+      padding: 1px 4px;
+      line-height: 1.4;
+    }
+    .cyr-option.correct { background: #0d2e1a; border-color: #27ae60; color: #2ecc71; }
+    .cyr-option.wrong   { background: #2e0d0d; border-color: #c0392b; color: #e74c3c; }
+    .cyr-option.reveal  { background: #0d2e1a; border-color: #27ae60; color: #2ecc71; }
+
+    .cyr-reinforce {
+      background: #0a1520;
+      border: 1px solid #0f3460;
+      border-radius: 8px;
+      padding: 16px 20px;
+      text-align: center;
+      animation: cyr-fade-in 0.3s ease;
+    }
+    .cyr-reinforce-cyr { font-size: 2rem; color: #74b9ff; font-weight: 700; margin-bottom: 4px; }
+    .cyr-reinforce-lat { font-size: 1rem; color: #a0c4ff; }
+
+    .cyr-feedback { text-align: center; font-size: 1rem; min-height: 1.4em; }
+    .cyr-feedback.correct { color: #2ecc71; }
+    .cyr-feedback.wrong   { color: #e74c3c; }
+
+    .cyr-nav { display: flex; gap: 8px; justify-content: center; }
   </style>
 </head>
 <body>
@@ -869,6 +1024,7 @@
     <button id="nav-aspect"     onclick="showView('aspect')">Context</button>
     <button id="nav-drill"      onclick="showView('drill')">Fill-in</button>
     <button id="nav-slagalica"  onclick="showView('slagalica')">Slagalica</button>
+    <button id="nav-cyrillic"   onclick="showView('cyrillic')">Cyrillic</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
@@ -1251,6 +1407,60 @@
     </div><!-- /slag-over -->
 
   </div><!-- /slagalica-view -->
+
+  <!-- ═══════════════ CYRILLIC READING VIEW ═══════════════ -->
+  <div id="cyrillic-view" style="display:none">
+
+    <!-- Settings bar -->
+    <div class="cyr-settings">
+      <div class="cyr-settings-group">
+        <span class="cyr-settings-label">Level:</span>
+        <button class="cyr-pill active" id="cyr-diff-easy"   onclick="setCyrDiff('easy')">Easy</button>
+        <button class="cyr-pill"        id="cyr-diff-medium" onclick="setCyrDiff('medium')">Medium</button>
+        <button class="cyr-pill"        id="cyr-diff-hard"   onclick="setCyrDiff('hard')">Hard</button>
+      </div>
+      <div class="cyr-settings-group">
+        <span class="cyr-settings-label">Flash:</span>
+        <button class="cyr-pill"        id="cyr-time-2" onclick="setCyrTime(2)">2s</button>
+        <button class="cyr-pill active" id="cyr-time-3" onclick="setCyrTime(3)">3s</button>
+        <button class="cyr-pill"        id="cyr-time-4" onclick="setCyrTime(4)">4s</button>
+      </div>
+    </div>
+
+    <!-- Progress row -->
+    <div class="cyr-progress-row">
+      <span id="cyr-progress">1 of 20</span>
+      <span>Score: <span class="cyr-score" id="cyr-score-val">0 / 0</span></span>
+    </div>
+
+    <!-- Flash card -->
+    <div class="cyr-flash-card" id="cyr-flash-card">
+      <div class="cyr-flash-text" id="cyr-flash-text"></div>
+      <div class="cyr-timer-bar-wrap" id="cyr-timer-bar-wrap" style="display:none">
+        <div class="cyr-timer-bar" id="cyr-timer-bar"></div>
+      </div>
+    </div>
+
+    <!-- Options grid -->
+    <div class="cyr-options" id="cyr-options" style="display:none"></div>
+
+    <!-- Reinforce panel -->
+    <div class="cyr-reinforce" id="cyr-reinforce" style="display:none">
+      <div class="cyr-reinforce-cyr" id="cyr-reinforce-cyr"></div>
+      <div class="cyr-reinforce-lat" id="cyr-reinforce-lat"></div>
+    </div>
+
+    <!-- Feedback line -->
+    <div class="cyr-feedback" id="cyr-feedback"></div>
+
+    <!-- Nav controls -->
+    <div class="cyr-nav">
+      <button class="btn btn-secondary" id="cyr-prev-btn" onclick="cyrPrev()">← Prev</button>
+      <button class="btn btn-secondary" onclick="shuffleCyr()">⇌ Shuffle</button>
+      <button class="btn btn-primary"   id="cyr-next-btn" onclick="cyrNext()">Next →</button>
+    </div>
+
+  </div><!-- /cyrillic-view -->
 
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
@@ -4705,6 +4915,65 @@
   }
 
   // ═══════════════════════════════════════════════════
+  //  CYRILLIC READING DATA
+  //  options[0] = correct answer; shuffled at render time
+  //  All 4 options share the same first letter as the correct answer
+  // ═══════════════════════════════════════════════════
+  const CYRILLIC_READING = {
+    easy: [
+      { lat: 'zdravo',  options: ['zdravo','zdrevo','zdrava','zdravu']   }, // hello
+      { lat: 'hvala',   options: ['hvala','hvale','hvali','hvalu']        }, // thanks
+      { lat: 'voda',    options: ['voda','vode','vodi','vodu']            }, // water
+      { lat: 'kuća',    options: ['kuća','kuće','kući','kuce']            }, // house
+      { lat: 'majka',   options: ['majka','majke','majki','majku']        }, // mother
+      { lat: 'otac',    options: ['otac','otec','otic','otić']            }, // father
+      { lat: 'brat',    options: ['brat','bret','brit','brot']            }, // brother
+      { lat: 'sestra',  options: ['sestra','sestre','sestri','sestro']    }, // sister
+      { lat: 'grad',    options: ['grad','gred','grid','grod']            }, // city
+      { lat: 'ulica',   options: ['ulica','ulice','ulicu','utica']        }, // street
+      { lat: 'hrana',   options: ['hrana','hrane','hranu','hrona']        }, // food
+      { lat: 'knjiga',  options: ['knjiga','knjige','knjigi','knjuga']    }, // book
+      { lat: 'škola',   options: ['škola','škole','školi','škelu']        }, // school
+      { lat: 'dobar',   options: ['dobar','dobri','dobra','dober']        }, // good (m.)
+      { lat: 'veliki',  options: ['veliki','velika','veliku','veloki']    }, // big
+      { lat: 'mali',    options: ['mali','male','malu','melo']            }, // small
+      { lat: 'lepo',    options: ['lepo','lipo','lepa','lepe']            }, // nice (neut.)
+      { lat: 'brzo',    options: ['brzo','brza','brze','brzu']            }, // fast
+      { lat: 'piti',    options: ['piti','peti','puti','pati']            }, // to drink (peti=to sing)
+      { lat: 'jesti',   options: ['jesti','josti','jaste','jeste']        }, // to eat
+    ],
+    medium: [
+      { lat: 'dobro jutro',    options: ['dobro jutro','dobro jetre','dobro jutru','dobra jutro']      }, // good morning
+      { lat: 'kako si',        options: ['kako si','kako se','kako su','kako sa']                      }, // how are you
+      { lat: 'hvala lepo',     options: ['hvala lepo','hvala lipo','hvala lepa','hvala lepe']          }, // thank you kindly
+      { lat: 'ne razumem',     options: ['ne razumem','ne razimem','ne razomem','ne rozumem']          }, // I don't understand
+      { lat: 'govori srpski',  options: ['govori srpski','govori srpske','govori sripski','govori srpsku'] }, // speak Serbian
+      { lat: 'idem kući',      options: ['idem kući','idem kuće','idem kuci','idem kuce']              }, // I'm going home
+      { lat: 'volim kafu',     options: ['volim kafu','volim kavu','volim kofu','valim kafu']          }, // I like coffee
+      { lat: 'lep dan',        options: ['lep dan','lep din','lep den','lip dan']                      }, // nice day
+      { lat: 'koliko košta',   options: ['koliko košta','koliko kosta','koliku košta','koloko košta']  }, // how much does it cost
+      { lat: 'gde si bio',     options: ['gde si bio','gde si bia','gde si beo','gde se bio']          }, // where were you
+      { lat: 'ja sam tu',      options: ['ja sam tu','ja sam to','ja sam ta','je sam tu']              }, // I am here
+      { lat: 'čekaj malo',     options: ['čekaj malo','čekaj mali','čekaj melo','čekaj malu']          }, // wait a moment
+      { lat: 'daj mi to',      options: ['daj mi to','daj mi ta','daj mi tu','dej mi to']              }, // give me that
+      { lat: 'u redu je',      options: ['u redu je','u ridu je','u redu ja','u redu ji']              }, // it's okay
+      { lat: 'sutra ujutro',   options: ['sutra ujutro','sutra ujetre','sutra ujutru','sutre ujutro']  }, // tomorrow morning
+    ],
+    hard: [
+      { lat: 'Volim da učim srpski',     options: ['Volim da učim srpski','Volim da učem srpski','Volim da učim srpske','Velim da učim srpski']              }, // I like learning Serbian
+      { lat: 'Idemo na pijac sutra',     options: ['Idemo na pijac sutra','Idemo na pijec sutra','Idemo na pijac sutre','Idome na pijac sutra']              }, // We're going to the market tomorrow
+      { lat: 'Ona govori veoma brzo',    options: ['Ona govori veoma brzo','Ona govori veoma brza','Ona govori veame brzo','One govori veoma brzo']           }, // She speaks very fast
+      { lat: 'Mogu li da ti pomognem',   options: ['Mogu li da ti pomognem','Mogu li da ti pomagnem','Mogu li da te pomognem','Mogu li da ti pomegnem']       }, // Can I help you
+      { lat: 'Koliko dugo živiš ovde',   options: ['Koliko dugo živiš ovde','Koliko duge živiš ovde','Koliku dugo živiš ovde','Koliko dugo živiš onde']       }, // How long have you lived here
+      { lat: 'Sutra idem u školu',       options: ['Sutra idem u školu','Sutra idem u škole','Sutra idem u školi','Sutre idem u školu']                       }, // Tomorrow I'm going to school
+      { lat: 'Pišem pismo prijatelju',   options: ['Pišem pismo prijatelju','Pišem pismu prijatelju','Pišem pismo prijatelji','Pošem pismo prijatelju']       }, // I'm writing a letter to a friend
+      { lat: 'Brat i sestra su kod kuće', options: ['Brat i sestra su kod kuće','Brat i sestre su kod kuće','Brat i sestra su kod kući','Brat i sestra su ked kuće'] }, // Brother and sister are at home
+      { lat: 'Ne mogu da spavam noću',   options: ['Ne mogu da spavam noću','Ne mogu da spavem noću','Ne mogu da spavam noći','Ne znam da spavam noću']        }, // I can't sleep at night
+      { lat: 'Gde možemo da jedemo',     options: ['Gde možemo da jedemo','Gde možemo da jedimo','Gde možemo da jademo','Gde mozemo da jedemo']               }, // Where can we eat
+    ],
+  };
+
+  // ═══════════════════════════════════════════════════
   //  STATE
   // ═══════════════════════════════════════════════════
   let groups       = loadGroups();
@@ -4753,6 +5022,16 @@
   let ctxScoredQ       = false;
   let ctxAnswered      = false;
   let ctxActiveFilters = new Set(['po', 'o', 'za', 'iz', 'na', 'pro', 'u', 'irregular']);
+
+  // Cyrillic Reading state
+  let cyrDeck      = [];
+  let cyrIndex     = 0;
+  let cyrScore     = { correct: 0, total: 0 };
+  let cyrScoredQ   = false;
+  let cyrAnswered  = false;
+  let cyrDiff      = 'easy';
+  let cyrFlashTime = 3;
+  let cyrTimerID   = null;
 
   const CTX_PREFIX_MAP = {
     'popiti':'po', 'pojesti':'po', 'pogledati':'po', 'pozvati':'po', 'poslušati':'po',
@@ -5277,8 +5556,9 @@
     document.getElementById('drill-view').style.display      = view === 'drill'      ? 'flex' : 'none';
     document.getElementById('aspect-view').style.display     = view === 'aspect'     ? 'flex' : 'none';
     document.getElementById('slagalica-view').style.display  = view === 'slagalica'  ? 'flex' : 'none';
+    document.getElementById('cyrillic-view').style.display   = view === 'cyrillic'   ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','slagalica','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -5288,6 +5568,7 @@
     if (view === 'drill')      renderDrillView();
     if (view === 'aspect')     renderContextView();
     if (view === 'slagalica')  renderSlagView();
+    if (view === 'cyrillic')   renderCyrView();
     if (view === 'manage')     renderManage();
   }
 
@@ -6553,6 +6834,209 @@
   }
 
   // ═══════════════════════════════════════════════════
+  //  CYRILLIC READING DRILL
+  // ═══════════════════════════════════════════════════
+  function setCyrDiff(diff) {
+    cyrDiff = diff;
+    cyrScore = { correct: 0, total: 0 };
+    ['easy','medium','hard'].forEach(d => {
+      document.getElementById(`cyr-diff-${d}`).classList.toggle('active', d === diff);
+    });
+    buildCyrDeck();
+    renderCyrView();
+  }
+
+  function setCyrTime(secs) {
+    cyrFlashTime = secs;
+    [2,3,4].forEach(s => {
+      document.getElementById(`cyr-time-${s}`).classList.toggle('active', s === secs);
+    });
+  }
+
+  function buildCyrDeck() {
+    const len = CYRILLIC_READING[cyrDiff].length;
+    cyrDeck = Array.from({ length: len }, (_, i) => i);
+    for (let i = cyrDeck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cyrDeck[i], cyrDeck[j]] = [cyrDeck[j], cyrDeck[i]];
+    }
+    cyrIndex    = 0;
+    cyrScoredQ  = false;
+    cyrAnswered = false;
+  }
+
+  function renderCyrView() {
+    if (cyrDeck.length === 0) buildCyrDeck();
+    updateCyrScore();
+    renderCyrCard();
+  }
+
+  function renderCyrCard() {
+    if (cyrTimerID !== null) { clearTimeout(cyrTimerID); cyrTimerID = null; }
+
+    cyrAnswered = false;
+    cyrScoredQ  = false;
+
+    const item = CYRILLIC_READING[cyrDiff][cyrDeck[cyrIndex]];
+    const total = cyrDeck.length;
+
+    // Progress
+    document.getElementById('cyr-progress').textContent = `${cyrIndex + 1} of ${total}`;
+
+    // Reset feedback & reinforce
+    const fb = document.getElementById('cyr-feedback');
+    fb.textContent = '';
+    fb.className   = 'cyr-feedback';
+    document.getElementById('cyr-reinforce').style.display = 'none';
+
+    // Hide options
+    document.getElementById('cyr-options').style.display = 'none';
+
+    // Show Cyrillic text
+    const flashText = document.getElementById('cyr-flash-text');
+    flashText.textContent = latinToCyrillic(item.lat);
+    // Restart fade-in animation
+    flashText.style.animation = 'none';
+    void flashText.offsetWidth; // force reflow
+    flashText.style.animation = '';
+    document.getElementById('cyr-flash-card').style.display = 'flex';
+
+    // Start drain bar
+    const barWrap = document.getElementById('cyr-timer-bar-wrap');
+    const bar     = document.getElementById('cyr-timer-bar');
+    barWrap.style.display = 'block';
+    bar.classList.remove('draining');
+    void bar.offsetWidth; // force reflow to restart animation
+    bar.style.animationDuration = cyrFlashTime + 's';
+    bar.classList.add('draining');
+
+    // Timer to hide flash and show options
+    cyrTimerID = setTimeout(cyrTimerExpired, cyrFlashTime * 1000);
+  }
+
+  function cyrTimerExpired() {
+    cyrTimerID = null;
+    const item = CYRILLIC_READING[cyrDiff][cyrDeck[cyrIndex]];
+
+    // Hide Cyrillic text and timer bar
+    document.getElementById('cyr-flash-text').textContent = '';
+    document.getElementById('cyr-timer-bar-wrap').style.display = 'none';
+
+    // Update flash card to prompt label
+    // (card stays visible as a container but text is gone)
+
+    // Build and show options
+    buildCyrOptions(item);
+    document.getElementById('cyr-options').style.display = 'grid';
+  }
+
+  function buildCyrOptions(item) {
+    const container = document.getElementById('cyr-options');
+    container.innerHTML = '';
+
+    // Shuffle the 4 options (first is always correct in data)
+    const shuffled = [...item.options];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    shuffled.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className    = 'cyr-option';
+      btn.textContent  = opt;
+      btn.dataset.key  = idx + 1;
+      btn.onclick      = () => cyrAnswer(opt, item);
+      container.appendChild(btn);
+    });
+  }
+
+  function cyrAnswer(chosen, item) {
+    if (cyrAnswered) return;
+    cyrAnswered = true;
+
+    const correct  = item.options[0]; // options[0] is always correct
+    const isRight  = chosen === correct;
+    const fb       = document.getElementById('cyr-feedback');
+
+    // Mark buttons
+    const btns = document.querySelectorAll('.cyr-option');
+    btns.forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === correct) {
+        btn.classList.add(isRight ? 'correct' : 'reveal');
+      } else if (btn.textContent === chosen && !isRight) {
+        btn.classList.add('wrong');
+      }
+    });
+
+    // Score (only once per card visit)
+    if (!cyrScoredQ) {
+      cyrScoredQ = true;
+      cyrScore.total++;
+      if (isRight) cyrScore.correct++;
+    }
+
+    // Re-queue if wrong
+    if (!isRight) {
+      cyrDeck.push(cyrDeck[cyrIndex]);
+    }
+
+    // Update score display
+    updateCyrScore();
+
+    // Feedback text
+    if (isRight) {
+      fb.textContent = '✓ Correct!';
+      fb.className   = 'cyr-feedback correct';
+    } else {
+      fb.textContent = `✗ You chose "${chosen}" — correct: "${correct}"`;
+      fb.className   = 'cyr-feedback wrong';
+    }
+
+    // Show reinforcement panel
+    const reinforce = document.getElementById('cyr-reinforce');
+    document.getElementById('cyr-reinforce-cyr').textContent = latinToCyrillic(item.lat);
+    document.getElementById('cyr-reinforce-lat').textContent = item.lat;
+    reinforce.style.display = 'block';
+    // Restart fade-in
+    reinforce.style.animation = 'none';
+    void reinforce.offsetWidth;
+    reinforce.style.animation = '';
+  }
+
+  function cyrNext() {
+    if (cyrTimerID !== null) { clearTimeout(cyrTimerID); cyrTimerID = null; }
+    if (cyrIndex < cyrDeck.length - 1) {
+      cyrIndex++;
+    } else {
+      // End of deck — rebuild and loop
+      buildCyrDeck();
+    }
+    renderCyrCard();
+  }
+
+  function cyrPrev() {
+    if (cyrTimerID !== null) { clearTimeout(cyrTimerID); cyrTimerID = null; }
+    if (cyrIndex > 0) {
+      cyrIndex--;
+      renderCyrCard();
+    }
+  }
+
+  function shuffleCyr() {
+    if (cyrTimerID !== null) { clearTimeout(cyrTimerID); cyrTimerID = null; }
+    cyrScore = { correct: 0, total: 0 };
+    buildCyrDeck();
+    renderCyrView();
+  }
+
+  function updateCyrScore() {
+    document.getElementById('cyr-score-val').textContent =
+      `${cyrScore.correct} / ${cyrScore.total}`;
+  }
+
+  // ═══════════════════════════════════════════════════
   //  MANAGE — shared
   // ═══════════════════════════════════════════════════
   function showManageTab(tab) {
@@ -6846,6 +7330,18 @@
     if (aspectVisible) {
       if (e.key === 'ArrowRight') ctxNext();
       if (e.key === 'ArrowLeft')  ctxPrev();
+    }
+    const cyrVisible = document.getElementById('cyrillic-view').style.display !== 'none';
+    if (cyrVisible) {
+      if (e.key === 'ArrowRight' && cyrAnswered) cyrNext();
+      if (e.key === 'ArrowLeft')                 cyrPrev();
+      const optBtns = document.querySelectorAll('.cyr-option:not(:disabled)');
+      if (optBtns.length > 0) {
+        if (e.key === '1' && optBtns[0]) optBtns[0].click();
+        if (e.key === '2' && optBtns[1]) optBtns[1].click();
+        if (e.key === '3' && optBtns[2]) optBtns[2].click();
+        if (e.key === '4' && optBtns[3]) optBtns[3].click();
+      }
     }
   });
 
