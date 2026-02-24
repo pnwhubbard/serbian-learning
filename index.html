@@ -447,6 +447,28 @@
     .adj-col-hdr.hdr-f { color: #fd79a8; }
     .adj-col-hdr.hdr-n { color: #55efc4; }
 
+    /* ── MULTIPLE CHOICE ─────────────────────────────── */
+    .mc-case-header {
+      display: flex; align-items: center; gap: 10px; padding: 2px 0 4px;
+    }
+    .mc-options {
+      display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 0 4px;
+    }
+    .mc-btn {
+      padding: 9px 16px; border-radius: 8px;
+      border: 2px solid #0f3460; background: #16213e; color: #eee;
+      cursor: pointer; font-size: 0.9rem; flex: 1; min-width: 70px;
+      text-align: center; transition: border-color 0.15s, background 0.15s;
+    }
+    .mc-btn:hover:not(:disabled) { border-color: #74b9ff; }
+    .mc-btn:disabled { cursor: default; }
+    .mc-btn.mc-correct { border-color: #27ae60 !important; background: #0d2b1a !important; color: #55efc4 !important; }
+    .mc-btn.mc-wrong   { border-color: #e94560 !important; background: #2b0d1a !important; color: #e94560 !important; }
+    .mc-btn.mc-reveal  { border-color: #27ae60 !important; background: #0d2b1a !important; color: #55efc4 !important; }
+    .adj-example { font-size: 0.75rem; margin-top: 4px; line-height: 1.5; }
+    .ex-sr-adj { color: #7eac92; }
+    .ex-en-adj { color: #4a6a56; font-style: italic; }
+
     /* ── MISSED CARDS ─────────────────────────────────── */
     #mark-missed-btn.active { background: #5c1a1a; color: #ff7070; }
     #dir-clear-missed { display: none; }
@@ -636,6 +658,22 @@
     /* ── SENTENCE FILL-IN DRILL ─────────────────────── */
     #drill-view { display: flex; flex-direction: column; gap: 24px; }
 
+    .drill-tense-bar {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      background: #16213e; border: 1px solid #0f3460; border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .drill-tense-label { font-size: 0.82rem; color: #aaa; white-space: nowrap; }
+    .drill-tense-toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+    .drill-tense-btn {
+      padding: 6px 16px; border-radius: 20px;
+      border: 2px solid #0f3460; background: transparent;
+      color: #aaa; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+      transition: all 0.15s;
+    }
+    .drill-tense-btn.active { background: #e94560; border-color: #e94560; color: #fff; }
+    .drill-tense-btn:hover:not(.active) { border-color: #e94560; color: #e94560; }
+
     .drill-sentence {
       font-size: 1.4rem; font-weight: 600; color: #fff;
       text-align: center; line-height: 1.6;
@@ -775,8 +813,7 @@
         border-bottom: 1px solid #0f3460; margin-bottom: 2px;
       }
       .adj-gender-col {
-        display: grid; grid-template-columns: 55px 1fr auto;
-        align-items: center; gap: 6px;
+        display: flex; flex-direction: column; gap: 4px;
       }
       .adj-col-hdr { font-size: 0.75rem; text-align: right; }
 
@@ -987,6 +1024,15 @@
 
   <!-- ═══════════════ FILL-IN DRILL VIEW ════════════ -->
   <div id="drill-view" style="display:none">
+
+    <div class="drill-tense-bar">
+      <span class="drill-tense-label">Tense:</span>
+      <div class="drill-tense-toggles">
+        <button class="drill-tense-btn active" id="tense-btn-present" onclick="toggleDrillTense('present', this)">Present</button>
+        <button class="drill-tense-btn active" id="tense-btn-past"    onclick="toggleDrillTense('past', this)">Past</button>
+        <button class="drill-tense-btn active" id="tense-btn-future"  onclick="toggleDrillTense('future', this)">Future</button>
+      </div>
+    </div>
 
     <div class="g-header-row">
       <span id="drill-progress">1 of 58</span>
@@ -3365,6 +3411,18 @@
     { sr:'Ona je ___ pravila igre.',      en:'She explained the rules of the game.', answer:'objasnila', options:['objasnio','objasnila','objasnili','objasnile'], hint:'objasniti (to explain) — past, fem. sg.' },
     // ─── pozvati (to invite) ──────────────────────────
     { sr:'On je ___ sve prijatelje.',     en:'He invited all his friends.',      answer:'pozvao',  options:['pozvao','pozvala','pozvali','pozvale'],     hint:'pozvati (to invite) — past, masc. sg.' },
+    // ─── future tense ─────────────────────────────────
+    { sr:'Ja ___ raditi sutra.',          en:'I will work tomorrow.',            answer:'ću',      options:['ću','ćeš','će','ćemo'],                    hint:'future I (ću) — 1st sg.' },
+    { sr:'Ti ___ govoriti srpski.',       en:'You will speak Serbian.',          answer:'ćeš',     options:['ću','ćeš','će','ćete'],                    hint:'future I (ćeš) — 2nd sg.' },
+    { sr:'Ona ___ doći sutra.',           en:'She will come tomorrow.',          answer:'će',      options:['ću','ćeš','će','ćemo'],                    hint:'future I (će) — 3rd sg.' },
+    { sr:'Mi ___ putovati leti.',         en:'We will travel in the summer.',    answer:'ćemo',    options:['ću','će','ćemo','ćete'],                   hint:'future I (ćemo) — 1st pl.' },
+    { sr:'Vi ___ naučiti srpski.',        en:'You (pl.) will learn Serbian.',    answer:'ćete',    options:['ću','ćeš','ćemo','ćete'],                  hint:'future I (ćete) — 2nd pl.' },
+    { sr:'Oni ___ stići na vreme.',       en:'They will arrive on time.',        answer:'će',      options:['ću','ćeš','će','ćemo'],                    hint:'future I (će) — 3rd pl.' },
+    { sr:'Ja ___ da kupim hleb.',         en:'I will buy bread.',                answer:'ću',      options:['ću','ćeš','će','ćemo'],                    hint:'future I with da (ću) — 1st sg.' },
+    { sr:'On ___ da pita nastavnika.',    en:'He will ask the teacher.',         answer:'će',      options:['ću','ćeš','će','ćemo'],                    hint:'future I with da (će) — 3rd sg.' },
+    { sr:'Mi ___ da učimo zajedno.',      en:'We will study together.',          answer:'ćemo',    options:['ću','će','ćemo','ćete'],                   hint:'future I with da (ćemo) — 1st pl.' },
+    { sr:'Sutra ___ lepo vreme.',         en:'Tomorrow the weather will be nice.',answer:'će biti', options:['će biti','ću biti','ćemo biti','ćete biti'], hint:'future I (će biti) — 3rd sg.' },
+    { sr:'Ona ___ u Beograd sledeće nedelje.', en:'She will go to Belgrade next week.', answer:'će ići', options:['će ići','ću ići','ćemo ići','ćete ići'], hint:'future I (će ići) — 3rd sg.' },
   ];
 
   // ═══════════════════════════════════════════════════
@@ -4403,8 +4461,9 @@
   // Grammar state
   let gIndex       = 0;
   let activeCases  = new Set(CASES.map(c => c.key));
-  let gScore       = { correct: 0, total: 0 };
-  let gScoredNoun  = false;
+  let gScore         = { correct: 0, total: 0 };
+  let gScoredNoun    = false;
+  let gCasesAnswered = new Set();
 
   // Verb state
   let userVerbs      = loadUserVerbs();
@@ -4422,8 +4481,9 @@
   let adjIndex       = 0;
   let adjGender      = 'masculine';
   let adjActiveCases = new Set(CASES.map(c => c.key));
-  let adjScore       = { correct: 0, total: 0 };
-  let adjScoredAdj   = false;
+  let adjScore         = { correct: 0, total: 0 };
+  let adjScoredAdj     = false;
+  let adjCasesAnswered = new Set();
 
   // Context Chooser state
   let ctxDeck      = [...CONTEXT_DRILLS];
@@ -4835,11 +4895,33 @@
   // ═══════════════════════════════════════════════════
   //  FILL-IN DRILL
   // ═══════════════════════════════════════════════════
-  let drillDeck     = [];
-  let drillIndex    = 0;
-  let drillScore    = { correct: 0, total: 0 };
-  let drillScoredQ  = false;
-  let drillAnswered = false;
+  let drillDeck          = [];
+  let drillIndex         = 0;
+  let drillScore         = { correct: 0, total: 0 };
+  let drillScoredQ       = false;
+  let drillAnswered      = false;
+  let drillActiveTenses  = new Set(['present', 'past', 'future']);
+
+  function getDrillTense(drill) {
+    const h = drill.hint.toLowerCase();
+    if (h.includes('future')) return 'future';
+    if (h.includes('past'))   return 'past';
+    return 'present';
+  }
+
+  function toggleDrillTense(tense, btn) {
+    if (drillActiveTenses.has(tense) && drillActiveTenses.size === 1) return;
+    if (drillActiveTenses.has(tense)) {
+      drillActiveTenses.delete(tense);
+      btn.classList.remove('active');
+    } else {
+      drillActiveTenses.add(tense);
+      btn.classList.add('active');
+    }
+    drillScore = { correct: 0, total: 0 };
+    buildDrillDeck();
+    renderDrillCard();
+  }
 
   function renderDrillView() {
     if (drillDeck.length === 0) buildDrillDeck();
@@ -4847,7 +4929,10 @@
   }
 
   function buildDrillDeck() {
-    drillDeck = SENTENCE_DRILLS.map((_, i) => i);
+    drillDeck = SENTENCE_DRILLS.reduce((acc, d, i) => {
+      if (drillActiveTenses.has(getDrillTense(d))) acc.push(i);
+      return acc;
+    }, []);
     for (let i = drillDeck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [drillDeck[i], drillDeck[j]] = [drillDeck[j], drillDeck[i]];
@@ -5218,9 +5303,48 @@
     genderEl.textContent = noun.gender;
     genderEl.className   = 'gender-badge ' + { masculine:'gender-m', feminine:'gender-f', neuter:'gender-n' }[noun.gender];
 
-    gScoredNoun = false;
+    gCasesAnswered = new Set();
     renderCaseInputs();
     updateGScore();
+  }
+
+  function shuffleArr(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function getNounDistractors(correct, caseKey, nounIdx) {
+    const pool = new Set();
+    grammarNouns.forEach((n, i) => {
+      if (i !== nounIdx) pool.add(n.forms[caseKey]);
+    });
+    CASES.forEach(c => {
+      if (c.key !== caseKey) pool.add(grammarNouns[nounIdx].forms[c.key]);
+    });
+    pool.delete(correct);
+    return shuffleArr([...pool].filter(Boolean)).slice(0, 3);
+  }
+
+  function getAdjDistractors(correct, caseKey, genderKey, adjIdx) {
+    const pool = new Set();
+    allAdjectives.forEach((a, i) => {
+      if (i !== adjIdx && a.forms && a.forms[genderKey]) pool.add(a.forms[genderKey][caseKey]);
+    });
+    const adj = allAdjectives[adjIdx];
+    if (adj && adj.forms) {
+      ['masculine', 'feminine', 'neuter'].forEach(g => {
+        if (g !== genderKey && adj.forms[g]) pool.add(adj.forms[g][caseKey]);
+      });
+      CASES.forEach(c => {
+        if (c.key !== caseKey && adj.forms[genderKey]) pool.add(adj.forms[genderKey][c.key]);
+      });
+    }
+    pool.delete(correct);
+    return shuffleArr([...pool].filter(Boolean)).slice(0, 3);
   }
 
   function renderCaseInputs() {
@@ -5231,34 +5355,70 @@
       const row = document.createElement('div');
       row.className = 'case-row' + (activeCases.has(c.key) ? '' : ' hidden');
       row.id = `g-row-${c.key}`;
-      const form = noun ? noun.forms[c.key] : null;
-      const ex = noun ? c.example(form, noun.english) : null;
-      const exSr = ex ? ex.sr.replace(form, '…') : null;
-      row.innerHTML = `
-        <div class="case-row-main">
-          <span class="case-abbr">${c.abbr}</span>
-          <div class="case-name-col">
-            <span class="case-name-main">${c.label}</span>
-            <span class="case-name-hint">${c.hint}</span>
-          </div>
-          <input class="case-inp" id="g-inp-${c.key}" type="text"
-            placeholder="type the ${c.label.toLowerCase()} form…"
-            autocomplete="off" autocorrect="off" spellcheck="false" />
-          <button class="case-info-btn" onclick="showCaseModal('${c.key}')" title="About the ${c.label}">?</button>
-          <div class="case-feedback" id="g-fb-${c.key}"></div>
+
+      const correct = noun ? noun.forms[c.key] : '';
+      const distractors = getNounDistractors(correct, c.key, gIndex);
+      const options = shuffleArr([correct, ...distractors]);
+      const ex = noun ? c.example(correct, noun.english) : null;
+      const exSr = ex ? ex.sr.replace(correct, '…') : null;
+
+      const header = document.createElement('div');
+      header.className = 'mc-case-header';
+      header.innerHTML = `
+        <span class="case-abbr">${c.abbr}</span>
+        <div class="case-name-col">
+          <span class="case-name-main">${c.label}</span>
+          <span class="case-name-hint">${c.hint}</span>
         </div>
-        ${ex ? `<div class="case-example">
+        <button class="case-info-btn" onclick="showCaseModal('${c.key}')" title="About the ${c.label}">?</button>
+      `;
+      row.appendChild(header);
+
+      const mcDiv = document.createElement('div');
+      mcDiv.className = 'mc-options';
+      mcDiv.id = `g-mc-${c.key}`;
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'mc-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => nounMCClick(btn, mcDiv, c.key, correct));
+        mcDiv.appendChild(btn);
+      });
+      row.appendChild(mcDiv);
+
+      if (ex) {
+        const exDiv = document.createElement('div');
+        exDiv.className = 'case-example';
+        exDiv.innerHTML = `
           <span class="ex-arrow">→</span>
           <span class="ex-sr">${exSr}</span>
           <span class="ex-sep">—</span>
           <span class="ex-en">${ex.en}</span>
-        </div>` : ''}
-      `;
+        `;
+        row.appendChild(exDiv);
+      }
+
       container.appendChild(row);
-      document.getElementById(`g-inp-${c.key}`).addEventListener('keydown', e => {
-        if (e.key === 'Enter') checkGrammar();
-      });
     });
+  }
+
+  function nounMCClick(clickedBtn, mcDiv, caseKey, correct) {
+    mcDiv.querySelectorAll('.mc-btn').forEach(b => b.disabled = true);
+    const ok = normalizeSerbian(clickedBtn.textContent) === normalizeSerbian(correct);
+    if (ok) {
+      clickedBtn.classList.add('mc-correct');
+    } else {
+      clickedBtn.classList.add('mc-wrong');
+      mcDiv.querySelectorAll('.mc-btn').forEach(b => {
+        if (normalizeSerbian(b.textContent) === normalizeSerbian(correct)) b.classList.add('mc-reveal');
+      });
+    }
+    if (!gCasesAnswered.has(caseKey)) {
+      gCasesAnswered.add(caseKey);
+      gScore.correct += ok ? 1 : 0;
+      gScore.total   += 1;
+      updateGScore();
+    }
   }
 
   function normalizeSerbian(str) {
@@ -5300,27 +5460,18 @@
   function checkGrammar() {
     if (!grammarNouns.length) return;
     const noun = grammarNouns[gIndex];
-    let correct = 0, total = 0;
     CASES.forEach(c => {
       if (!activeCases.has(c.key)) return;
-      const inp = document.getElementById(`g-inp-${c.key}`);
-      const fb  = document.getElementById(`g-fb-${c.key}`);
-      if (!inp) return;
-      const ok = normalizeSerbian(inp.value.trim()) === normalizeSerbian(noun.forms[c.key]);
-      inp.classList.toggle('g-correct',   ok);
-      inp.classList.toggle('g-incorrect', !ok);
-      fb.innerHTML = ok
-        ? `<span class="fb-correct">✓</span>`
-        : `<span class="fb-incorrect">✗</span><span class="fb-answer">${noun.forms[c.key]}<br><span style="color:#74b9ff;font-style:normal">${latinToCyrillic(noun.forms[c.key])}</span></span>`;
-      total++;
-      if (ok) correct++;
+      if (gCasesAnswered.has(c.key)) return;
+      const mcDiv = document.getElementById(`g-mc-${c.key}`);
+      if (!mcDiv) return;
+      const correct = noun.forms[c.key];
+      mcDiv.querySelectorAll('.mc-btn').forEach(b => {
+        b.disabled = true;
+        if (normalizeSerbian(b.textContent) === normalizeSerbian(correct)) b.classList.add('mc-reveal');
+      });
+      gCasesAnswered.add(c.key);
     });
-    if (!gScoredNoun) {
-      gScore.correct += correct;
-      gScore.total   += total;
-      gScoredNoun = true;
-    }
-    updateGScore();
   }
 
   function updateGScore() {
@@ -5679,10 +5830,17 @@
     document.getElementById('adj-prev-btn').disabled = adjIndex === 0;
     document.getElementById('adj-next-btn').disabled = adjIndex === allAdjectives.length - 1;
 
-    adjScoredAdj = false;
+    adjCasesAnswered = new Set();
     renderAdjInputs();
     updateAdjScore();
   }
+
+  const ADJ_EX_NOUNS = {
+    masculine: { nominativ:'čovek', genitiv:'čoveka', dativ:'čoveku',  akuzativ:'čoveka', vokativ:'čoveče', instrumental:'čovekom',  lokativ:'čoveku'  },
+    feminine:  { nominativ:'žena',  genitiv:'žene',   dativ:'ženi',    akuzativ:'ženu',   vokativ:'ženo',   instrumental:'ženom',    lokativ:'ženi'    },
+    neuter:    { nominativ:'dete',  genitiv:'deteta', dativ:'detetu',  akuzativ:'dete',   vokativ:'dete',   instrumental:'detetom',  lokativ:'detetu'  },
+  };
+  const ADJ_EX_NOUNS_EN = { masculine: 'man', feminine: 'woman', neuter: 'child' };
 
   function renderAdjInputs() {
     const container = document.getElementById('adj-inputs');
@@ -5695,68 +5853,103 @@
       { key: 'neuter',    label: 'Neut', cls: 'hdr-n' },
     ];
 
+    const adj = allAdjectives[adjIndex];
     CASES.forEach(c => {
       const row = document.createElement('div');
       row.className = 'case-row' + (adjActiveCases.has(c.key) ? '' : ' hidden');
       row.id = `adj-row-${c.key}`;
 
-      const gCols = genders.map(g => `
-        <div class="adj-gender-col">
-          <span class="adj-col-hdr ${g.cls}">${g.label}</span>
-          <input class="case-inp" id="adj-inp-${c.key}-${g.key}" type="text"
-            placeholder="${g.label} form…"
-            autocomplete="off" autocorrect="off" spellcheck="false" />
-          <div class="case-feedback" id="adj-fb-${c.key}-${g.key}"></div>
-        </div>
-      `).join('');
+      const rowMain = document.createElement('div');
+      rowMain.className = 'adj-row-main';
 
-      row.innerHTML = `
-        <div class="adj-row-main">
-          <div class="adj-case-info">
-            <button class="adj-case-abbr-btn" onclick="openCaseModal('${c.key}')">${c.abbr}</button>
-            <span class="adj-case-name">${c.label}</span>
-            <span class="adj-case-hint-txt">${c.hint}</span>
-          </div>
-          ${gCols}
-        </div>
+      const caseInfo = document.createElement('div');
+      caseInfo.className = 'adj-case-info';
+      caseInfo.innerHTML = `
+        <button class="adj-case-abbr-btn" onclick="showCaseModal('${c.key}')">${c.abbr}</button>
+        <span class="adj-case-name">${c.label}</span>
+        <span class="adj-case-hint-txt">${c.hint}</span>
       `;
-      container.appendChild(row);
+      rowMain.appendChild(caseInfo);
+
       genders.forEach(g => {
-        row.querySelector(`#adj-inp-${c.key}-${g.key}`).addEventListener('keydown', e => {
-          if (e.key === 'Enter') checkAdj();
+        const correct = ((adj.forms || {})[g.key] || {})[c.key] || '';
+        const distractors = getAdjDistractors(correct, c.key, g.key, adjIndex);
+        const options = shuffleArr([correct, ...distractors]);
+        const nounForm = ADJ_EX_NOUNS[g.key][c.key];
+        const ex = c.example(`${correct} ${nounForm}`, `${adj.english} ${ADJ_EX_NOUNS_EN[g.key]}`);
+
+        const col = document.createElement('div');
+        col.className = 'adj-gender-col';
+
+        const hdr = document.createElement('span');
+        hdr.className = `adj-col-hdr ${g.cls}`;
+        hdr.textContent = g.label;
+        col.appendChild(hdr);
+
+        const mcDiv = document.createElement('div');
+        mcDiv.className = 'mc-options';
+        mcDiv.id = `adj-mc-${c.key}-${g.key}`;
+        options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'mc-btn';
+          btn.textContent = opt;
+          btn.addEventListener('click', () => adjMCClick(btn, mcDiv, c.key, g.key, correct));
+          mcDiv.appendChild(btn);
         });
+        col.appendChild(mcDiv);
+
+        const exDiv = document.createElement('div');
+        exDiv.className = 'adj-example';
+        exDiv.innerHTML = `<span class="ex-sr-adj">${ex.sr}</span><br><span class="ex-en-adj">${ex.en}</span>`;
+        col.appendChild(exDiv);
+
+        rowMain.appendChild(col);
       });
+
+      row.appendChild(rowMain);
+      container.appendChild(row);
     });
+  }
+
+  function adjMCClick(clickedBtn, mcDiv, caseKey, genderKey, correct) {
+    mcDiv.querySelectorAll('.mc-btn').forEach(b => b.disabled = true);
+    const ok = normalizeSerbian(clickedBtn.textContent) === normalizeSerbian(correct);
+    if (ok) {
+      clickedBtn.classList.add('mc-correct');
+    } else {
+      clickedBtn.classList.add('mc-wrong');
+      mcDiv.querySelectorAll('.mc-btn').forEach(b => {
+        if (normalizeSerbian(b.textContent) === normalizeSerbian(correct)) b.classList.add('mc-reveal');
+      });
+    }
+    const key = `${caseKey}-${genderKey}`;
+    if (!adjCasesAnswered.has(key)) {
+      adjCasesAnswered.add(key);
+      adjScore.correct += ok ? 1 : 0;
+      adjScore.total   += 1;
+      updateAdjScore();
+    }
   }
 
   function checkAdj() {
     if (!allAdjectives.length) return;
     const adj = allAdjectives[adjIndex];
     const genders = ['masculine', 'feminine', 'neuter'];
-    let correct = 0, total = 0;
     CASES.forEach(c => {
       if (!adjActiveCases.has(c.key)) return;
       genders.forEach(g => {
-        const inp = document.getElementById(`adj-inp-${c.key}-${g}`);
-        const fb  = document.getElementById(`adj-fb-${c.key}-${g}`);
-        if (!inp) return;
-        const expected = ((adj.forms || {})[g] || {})[c.key] || '';
-        const ok = normalizeSerbian(inp.value.trim()) === normalizeSerbian(expected);
-        inp.classList.toggle('g-correct',   ok);
-        inp.classList.toggle('g-incorrect', !ok);
-        fb.innerHTML = ok
-          ? `<span class="fb-correct">✓</span>`
-          : `<span class="fb-incorrect">✗</span><span class="fb-answer">${expected}<br><span style="color:#74b9ff;font-style:normal">${latinToCyrillic(expected)}</span></span>`;
-        total++;
-        if (ok) correct++;
+        const key = `${c.key}-${g}`;
+        if (adjCasesAnswered.has(key)) return;
+        const mcDiv = document.getElementById(`adj-mc-${c.key}-${g}`);
+        if (!mcDiv) return;
+        const correct = ((adj.forms || {})[g] || {})[c.key] || '';
+        mcDiv.querySelectorAll('.mc-btn').forEach(b => {
+          b.disabled = true;
+          if (normalizeSerbian(b.textContent) === normalizeSerbian(correct)) b.classList.add('mc-reveal');
+        });
+        adjCasesAnswered.add(key);
       });
     });
-    if (!adjScoredAdj) {
-      adjScore.correct += correct;
-      adjScore.total   += total;
-      adjScoredAdj = true;
-    }
-    updateAdjScore();
   }
 
   function updateAdjScore() {
