@@ -1421,6 +1421,7 @@
       </div>
       <div class="cyr-settings-group">
         <span class="cyr-settings-label">Flash:</span>
+        <button class="cyr-pill"        id="cyr-time-1" onclick="setCyrTime(1)">1s</button>
         <button class="cyr-pill"        id="cyr-time-2" onclick="setCyrTime(2)">2s</button>
         <button class="cyr-pill active" id="cyr-time-3" onclick="setCyrTime(3)">3s</button>
         <button class="cyr-pill"        id="cyr-time-4" onclick="setCyrTime(4)">4s</button>
@@ -6848,7 +6849,7 @@
 
   function setCyrTime(secs) {
     cyrFlashTime = secs;
-    [2,3,4].forEach(s => {
+    [1,2,3,4].forEach(s => {
       document.getElementById(`cyr-time-${s}`).classList.toggle('active', s === secs);
     });
   }
