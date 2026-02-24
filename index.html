@@ -5319,9 +5319,7 @@
 
   function getNounDistractors(correct, caseKey, nounIdx) {
     const pool = new Set();
-    grammarNouns.forEach((n, i) => {
-      if (i !== nounIdx) pool.add(n.forms[caseKey]);
-    });
+    // Only use other case forms of the same noun
     CASES.forEach(c => {
       if (c.key !== caseKey) pool.add(grammarNouns[nounIdx].forms[c.key]);
     });
@@ -5331,16 +5329,16 @@
 
   function getAdjDistractors(correct, caseKey, genderKey, adjIdx) {
     const pool = new Set();
-    allAdjectives.forEach((a, i) => {
-      if (i !== adjIdx && a.forms && a.forms[genderKey]) pool.add(a.forms[genderKey][caseKey]);
-    });
+    // Only use other forms of the same adjective
     const adj = allAdjectives[adjIdx];
     if (adj && adj.forms) {
-      ['masculine', 'feminine', 'neuter'].forEach(g => {
-        if (g !== genderKey && adj.forms[g]) pool.add(adj.forms[g][caseKey]);
-      });
+      // Other cases, same gender
       CASES.forEach(c => {
         if (c.key !== caseKey && adj.forms[genderKey]) pool.add(adj.forms[genderKey][c.key]);
+      });
+      // Same case, other genders
+      ['masculine', 'feminine', 'neuter'].forEach(g => {
+        if (g !== genderKey && adj.forms[g]) pool.add(adj.forms[g][caseKey]);
       });
     }
     pool.delete(correct);
@@ -5900,7 +5898,8 @@
 
         const exDiv = document.createElement('div');
         exDiv.className = 'adj-example';
-        exDiv.innerHTML = `<span class="ex-sr-adj">${ex.sr}</span><br><span class="ex-en-adj">${ex.en}</span>`;
+        const exSrAdj = ex.sr.replace(correct, '...');
+        exDiv.innerHTML = `<span class="ex-sr-adj">${exSrAdj}</span><br><span class="ex-en-adj">${ex.en}</span>`;
         col.appendChild(exDiv);
 
         rowMain.appendChild(col);
