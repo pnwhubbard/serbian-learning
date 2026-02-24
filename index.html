@@ -279,6 +279,37 @@
 
     .grammar-controls { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
+    /* ── PREFIX INFO BUTTON & MODAL ──────────────────── */
+    .ctx-prefix-group { display: inline-flex; align-items: center; }
+    .ctx-info-btn {
+      background: none; border: none; color: #74b9ff;
+      font-size: 0.82rem; cursor: pointer; padding: 1px 4px;
+      opacity: 0.55; line-height: 1; transition: opacity 0.15s;
+    }
+    .ctx-info-btn:hover { opacity: 1; }
+    #prefix-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.72); z-index: 200;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    #prefix-modal-overlay.open { display: flex; }
+    #prefix-modal {
+      background: #16213e; border: 1px solid #e9456044;
+      border-radius: 16px; width: 100%; max-width: 480px;
+      max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+      animation: modal-in 0.18s ease;
+    }
+    .prefix-example-pair {
+      display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline;
+      font-size: 0.88rem; padding: 7px 0; border-bottom: 1px solid #0f3460;
+    }
+    .prefix-example-pair:last-child { border-bottom: none; }
+    .pex-imp   { color: #74b9ff; font-style: italic; }
+    .pex-arrow { color: #444; }
+    .pex-pfv   { color: #55efc4; font-style: italic; }
+    .pex-en    { color: #777; font-size: 0.8rem; }
+
     /* ── CASE INFO MODAL ──────────────────────────────── */
     #case-modal-overlay {
       display: none; position: fixed; inset: 0;
@@ -1059,6 +1090,20 @@
 
   <!-- ═══════════════ CONTEXT CHOOSER VIEW ═══════════════ -->
   <div id="aspect-view" style="display:none">
+
+    <div class="drill-tense-bar">
+      <span class="drill-tense-label">Prefix:</span>
+      <div class="drill-tense-toggles">
+        <span class="ctx-prefix-group"><button class="drill-tense-btn active" onclick="toggleCtxPrefix('po', this)">po-</button><button class="ctx-info-btn" onclick="showPrefixInfo('po')">ⓘ</button></span>
+        <span class="ctx-prefix-group"><button class="drill-tense-btn active" onclick="toggleCtxPrefix('o', this)">o-</button><button class="ctx-info-btn" onclick="showPrefixInfo('o')">ⓘ</button></span>
+        <span class="ctx-prefix-group"><button class="drill-tense-btn active" onclick="toggleCtxPrefix('za', this)">za-</button><button class="ctx-info-btn" onclick="showPrefixInfo('za')">ⓘ</button></span>
+        <span class="ctx-prefix-group"><button class="drill-tense-btn active" onclick="toggleCtxPrefix('iz', this)">iz-</button><button class="ctx-info-btn" onclick="showPrefixInfo('iz')">ⓘ</button></span>
+        <span class="ctx-prefix-group"><button class="drill-tense-btn active" onclick="toggleCtxPrefix('na', this)">na-</button><button class="ctx-info-btn" onclick="showPrefixInfo('na')">ⓘ</button></span>
+        <span class="ctx-prefix-group"><button class="drill-tense-btn active" onclick="toggleCtxPrefix('pro', this)">pro-</button><button class="ctx-info-btn" onclick="showPrefixInfo('pro')">ⓘ</button></span>
+        <span class="ctx-prefix-group"><button class="drill-tense-btn active" onclick="toggleCtxPrefix('u', this)">u-</button><button class="ctx-info-btn" onclick="showPrefixInfo('u')">ⓘ</button></span>
+        <span class="ctx-prefix-group"><button class="drill-tense-btn active" onclick="toggleCtxPrefix('irregular', this)">irregular</button><button class="ctx-info-btn" onclick="showPrefixInfo('irregular')">ⓘ</button></span>
+      </div>
+    </div>
 
     <div class="g-header-row">
       <span id="ctx-progress">1 of 1</span>
@@ -2269,6 +2314,222 @@
       imp: 'sećati se', pfv: 'setiti se', answer: 'pfv', fill: 'setio',
       rule: 'Sudden recollection',
       note: 'A single, instantaneous moment of recall → perfective.' },
+
+    // ── gledati / ogledati  [o-: once through / survey] ──────────
+    { english: 'She carefully looked over the contract before signing.',
+      serbian: 'Ona je pažljivo ___ ugovor pre potpisivanja.',
+      imp: 'gledati', pfv: 'ogledati', answer: 'pfv', fill: 'ogledala',
+      rule: 'Thorough once-through action',
+      note: 'o- marks doing something all the way through — examining carefully from start to finish → perfective.' },
+    { english: 'He kept looking at the map.',
+      serbian: 'On je stalno ___ mapu.',
+      imp: 'gledati', pfv: 'ogledati', answer: 'imp', fill: 'gledao',
+      rule: 'Ongoing / repeated activity',
+      note: 'Repeated looking without a defined endpoint → imperfective.' },
+
+    // ── pevati / zapevati  [za-: onset of action] ─────────────────
+    { english: 'She suddenly burst into song.',
+      serbian: 'Ona je odjednom ___.',
+      imp: 'pevati', pfv: 'zapevati', answer: 'pfv', fill: 'zapevala',
+      rule: 'Onset of action',
+      note: 'za- marks the beginning of an activity — she started singing at that moment → perfective.' },
+    { english: 'She sings at every family gathering.',
+      serbian: 'Ona ___ na svakom porodičnom skupu.',
+      imp: 'pevati', pfv: 'zapevati', answer: 'imp', fill: 'peva',
+      rule: 'Habitual action',
+      note: 'A repeated occasion — no single start moment → imperfective.' },
+
+    // ── plakati / zaplakati  [za-: onset of action] ───────────────
+    { english: 'She burst into tears when she heard the news.',
+      serbian: 'Ona je ___ kad je čula vesti.',
+      imp: 'plakati', pfv: 'zaplakati', answer: 'pfv', fill: 'zaplakala',
+      rule: 'Onset of action',
+      note: 'za- marks the moment crying begins — she suddenly started crying → perfective.' },
+    { english: 'The baby cries every night.',
+      serbian: 'Beba ___ svake noći.',
+      imp: 'plakati', pfv: 'zaplakati', answer: 'imp', fill: 'plače',
+      rule: 'Habitual action',
+      note: 'A repeated nightly occurrence → imperfective.' },
+
+    // ── graditi / izgraditi  [iz-: do something completely] ───────
+    { english: 'They are building a new school.',
+      serbian: 'Oni ___ novu školu.',
+      imp: 'graditi', pfv: 'izgraditi', answer: 'imp', fill: 'grade',
+      rule: 'Ongoing process',
+      note: 'Construction still in progress — no endpoint reached yet → imperfective.' },
+    { english: 'They built the whole bridge in one year.',
+      serbian: 'Oni su ___ ceo most za godinu dana.',
+      imp: 'graditi', pfv: 'izgraditi', answer: 'pfv', fill: 'izgradili',
+      rule: 'Completed construction',
+      note: 'iz- implies carrying something through to full completion — the bridge is done → perfective.' },
+
+    // ── govoriti / izgovoriti  [iz-: outward / to completion] ─────
+    { english: 'He speaks every sentence slowly.',
+      serbian: 'On ___ svaku rečenicu polako.',
+      imp: 'govoriti', pfv: 'izgovoriti', answer: 'imp', fill: 'govori',
+      rule: 'Habitual manner',
+      note: 'Describes a consistent speaking style, not a single utterance → imperfective.' },
+    { english: 'She pronounced every word clearly.',
+      serbian: 'Ona je jasno ___ svaku reč.',
+      imp: 'govoriti', pfv: 'izgovoriti', answer: 'pfv', fill: 'izgovorila',
+      rule: 'Completed utterance',
+      note: 'iz- marks something spoken outward to completion — every word fully articulated → perfective.' },
+
+    // ── praviti / napraviti  [na-: accumulation / finished result] ─
+    { english: 'She makes a cake for every birthday.',
+      serbian: 'Ona ___ tortu za svaki rođendan.',
+      imp: 'praviti', pfv: 'napraviti', answer: 'imp', fill: 'pravi',
+      rule: 'Habitual action',
+      note: 'Regular occasion-based making → imperfective.' },
+    { english: 'He made a model airplane.',
+      serbian: 'On je ___ maketu aviona.',
+      imp: 'praviti', pfv: 'napraviti', answer: 'pfv', fill: 'napravio',
+      rule: 'Completed creation',
+      note: 'na- marks effort accumulated to a finished result — the model is complete → perfective.' },
+
+    // ── hodati / prohodati  [pro-: through / entering new state] ──
+    { english: 'She walks to work every day.',
+      serbian: 'Ona ___ na posao svaki dan.',
+      imp: 'hodati', pfv: 'prohodati', answer: 'imp', fill: 'hoda',
+      rule: 'Habitual action',
+      note: 'A regular daily commute → imperfective.' },
+    { english: 'The baby finally started walking!',
+      serbian: 'Beba je konačno ___!',
+      imp: 'hodati', pfv: 'prohodati', answer: 'pfv', fill: 'prohodala',
+      rule: 'Crossing into a new state',
+      note: 'pro- can mark achieving something for the first time — entering a new ability → perfective.' },
+
+    // ── leteti / uleteti  [u-: motion into / entering] ───────────
+    { english: 'Eagles fly above the mountains.',
+      serbian: 'Orlovi ___ iznad planina.',
+      imp: 'leteti', pfv: 'uleteti', answer: 'imp', fill: 'lete',
+      rule: 'Ongoing activity',
+      note: 'General flight with no specific destination or endpoint → imperfective.' },
+    { english: 'A bird flew into the room.',
+      serbian: 'Ptica je ___ u sobu.',
+      imp: 'leteti', pfv: 'uleteti', answer: 'pfv', fill: 'uletela',
+      rule: 'Bounded motion into a space',
+      note: 'u- marks entering a defined space — the bird is now inside → perfective.' },
+
+    // ── davati / dati  [irregular: suppletive pair] ───────────────
+    { english: 'She gives her children an allowance every week.',
+      serbian: 'Ona ___ deci džeparac svake nedelje.',
+      imp: 'davati', pfv: 'dati', answer: 'imp', fill: 'daje',
+      rule: 'Habitual action',
+      note: 'Regular weekly giving — davati/dati is a suppletive pair with completely different stems → imperfective.' },
+    { english: 'He gave her a book for her birthday.',
+      serbian: 'On joj je ___ knjigu za rođendan.',
+      imp: 'davati', pfv: 'dati', answer: 'pfv', fill: 'dao',
+      rule: 'Completed gift',
+      note: 'davati/dati is suppletive (unrelated stems). A single completed act of giving → perfective.' },
+
+    // ── uzimati / uzeti  [irregular: suppletive pair] ─────────────
+    { english: 'He takes the bus to work every day.',
+      serbian: 'On svaki dan ___ bus za posao.',
+      imp: 'uzimati', pfv: 'uzeti', answer: 'imp', fill: 'uzima',
+      rule: 'Habitual action',
+      note: 'Daily commuting habit — uzimati/uzeti is suppletive → imperfective.' },
+    { english: 'She took the last piece of cake.',
+      serbian: 'Ona je ___ poslednji komad torte.',
+      imp: 'uzimati', pfv: 'uzeti', answer: 'pfv', fill: 'uzela',
+      rule: 'Completed action',
+      note: 'uzimati/uzeti are suppletive — unrelated stems. Taking one specific piece → perfective.' },
+
+    // ── ustajati / ustati  [u-: entering a new state] ─────────────
+    { english: 'He gets up at seven every morning.',
+      serbian: 'On ___ u sedam svako jutro.',
+      imp: 'ustajati', pfv: 'ustati', answer: 'imp', fill: 'ustaje',
+      rule: 'Habitual action',
+      note: 'A regular morning routine → imperfective.' },
+    { english: 'She got up and left the room.',
+      serbian: 'Ona je ___ i izašla iz sobe.',
+      imp: 'ustajati', pfv: 'ustati', answer: 'pfv', fill: 'ustala',
+      rule: 'Single completed action',
+      note: 'u- marks entering a new state — she rose from sitting to standing at that moment → perfective.' },
+
+    // ── hvatati / uhvatiti  [u-: catching / grasping into] ────────
+    { english: 'He always tries to catch the ball.',
+      serbian: 'On uvek ___ loptu.',
+      imp: 'hvatati', pfv: 'uhvatiti', answer: 'imp', fill: 'hvata',
+      rule: 'Habitual / ongoing attempt',
+      note: 'Repeated attempts without guaranteed success → imperfective.' },
+    { english: 'She caught the ball perfectly.',
+      serbian: 'Ona je savršeno ___ loptu.',
+      imp: 'hvatati', pfv: 'uhvatiti', answer: 'pfv', fill: 'uhvatila',
+      rule: 'Completed successful action',
+      note: 'u- marks catching something into one\'s grasp — success achieved → perfective.' },
+
+    // ── sedati / sesti  [irregular: root alternation sed-/ses-] ───
+    { english: 'She always sits by the window.',
+      serbian: 'Ona uvek ___ pored prozora.',
+      imp: 'sedati', pfv: 'sesti', answer: 'imp', fill: 'seda',
+      rule: 'Habitual preference',
+      note: 'A repeated seating choice — sedati/sesti have different roots (sed-/ses-) → imperfective.' },
+    { english: 'He sat down and opened his laptop.',
+      serbian: 'On je ___ i otvorio laptop.',
+      imp: 'sedati', pfv: 'sesti', answer: 'pfv', fill: 'seo',
+      rule: 'Single completed action',
+      note: 'The act of sitting down at one specific moment — root alternation pair → perfective.' },
+
+    // ── legati / leći  [irregular: root alternation leg-/leć-] ────
+    { english: 'He lies down for a nap every afternoon.',
+      serbian: 'On ___ da odspava svako popodne.',
+      imp: 'legati', pfv: 'leći', answer: 'imp', fill: 'leže',
+      rule: 'Habitual routine',
+      note: 'Regular afternoon nap habit — legati/leći have different roots (leg-/leć-) → imperfective.' },
+    { english: 'She lay down and fell asleep immediately.',
+      serbian: 'Ona je ___ i odmah zaspala.',
+      imp: 'legati', pfv: 'leći', answer: 'pfv', fill: 'legla',
+      rule: 'Single completed action',
+      note: 'Lying down at one specific moment — root alternation pair → perfective.' },
+
+    // ── skakati / skočiti  [irregular: suppletive skak-/skoč-] ────
+    { english: 'The children jump rope at every recess.',
+      serbian: 'Deca ___ konopac na svakom odmoru.',
+      imp: 'skakati', pfv: 'skočiti', answer: 'imp', fill: 'skaču',
+      rule: 'Habitual / repeated action',
+      note: 'Ongoing jumping activity with no single endpoint — skakati/skočiti have different roots → imperfective.' },
+    { english: 'He jumped over the puddle.',
+      serbian: 'On je ___ preko lokve.',
+      imp: 'skakati', pfv: 'skočiti', answer: 'pfv', fill: 'skočio',
+      rule: 'Single bounded action',
+      note: 'One specific jump with a clear start and landing — suppletive pair → perfective.' },
+
+    // ── oblačiti se / obući se  [irregular: suppletive oblač-/obuć-]
+    { english: 'She gets dressed quickly every morning.',
+      serbian: 'Ona se brzo ___ svako jutro.',
+      imp: 'oblačiti se', pfv: 'obući se', answer: 'imp', fill: 'oblači',
+      rule: 'Habitual action',
+      note: 'A daily morning routine — oblačiti se/obući se are suppletive (different roots) → imperfective.' },
+    { english: 'He got dressed and left the house.',
+      serbian: 'On se ___ i izašao iz kuće.',
+      imp: 'oblačiti se', pfv: 'obući se', answer: 'pfv', fill: 'obukao',
+      rule: 'Completed action',
+      note: 'Fully dressed at one moment — suppletive pair → perfective.' },
+
+    // ── vikati / viknuti  [irregular: -nu- perfective suffix] ─────
+    { english: 'He shouts at his team all the time.',
+      serbian: 'On stalno ___ na svoju ekipu.',
+      imp: 'vikati', pfv: 'viknuti', answer: 'imp', fill: 'viče',
+      rule: 'Habitual / repeated action',
+      note: 'Ongoing shouting pattern — vikati/viknuti use the rare -nu- suffix → imperfective.' },
+    { english: 'She shouted his name across the street.',
+      serbian: 'Ona je ___ njegovo ime preko ulice.',
+      imp: 'vikati', pfv: 'viknuti', answer: 'pfv', fill: 'viknula',
+      rule: 'Single brief shout',
+      note: 'One specific shout at one moment — -nu- marks a single perfective event → perfective.' },
+
+    // ── javljati se / javiti se  [irregular: uncommon ja- formation]
+    { english: 'She calls home every week.',
+      serbian: 'Ona se ___ kući svake nedelje.',
+      imp: 'javljati se', pfv: 'javiti se', answer: 'imp', fill: 'javlja',
+      rule: 'Habitual action',
+      note: 'Regular weekly contact — javljati se/javiti se use an uncommon formation → imperfective.' },
+    { english: 'She called to say she had arrived safely.',
+      serbian: 'Ona se ___ da je stigla bezbedno.',
+      imp: 'javljati se', pfv: 'javiti se', answer: 'pfv', fill: 'javila',
+      rule: 'Single completed call',
+      note: 'One specific call at one moment → perfective.' },
   ];
 
   // ═══════════════════════════════════════════════════
@@ -4486,11 +4747,149 @@
   let adjCasesAnswered = new Set();
 
   // Context Chooser state
-  let ctxDeck      = [...CONTEXT_DRILLS];
-  let ctxIndex     = 0;
-  let ctxScore     = { correct: 0, total: 0 };
-  let ctxScoredQ   = false;
-  let ctxAnswered  = false;
+  let ctxDeck          = [];
+  let ctxIndex         = 0;
+  let ctxScore         = { correct: 0, total: 0 };
+  let ctxScoredQ       = false;
+  let ctxAnswered      = false;
+  let ctxActiveFilters = new Set(['po', 'o', 'za', 'iz', 'na', 'pro', 'u', 'irregular']);
+
+  const CTX_PREFIX_MAP = {
+    'popiti':'po', 'pojesti':'po', 'pogledati':'po', 'pozvati':'po', 'poslušati':'po',
+    'pročitati':'pro', 'prohodati':'pro',
+    'napisati':'na', 'naučiti':'na', 'napraviti':'na',
+    'očistiti':'o', 'otvoriti':'o', 'ogledati':'o',
+    'izgraditi':'iz', 'izgovoriti':'iz',
+    'zapevati':'za', 'zaplakati':'za', 'završiti':'za', 'zatvoriti':'za', 'zaboraviti':'za',
+    'uraditi':'u', 'uleteti':'u', 'ustati':'u', 'uhvatiti':'u',
+  };
+
+  const PREFIX_INFO = {
+    'po': {
+      title: 'Simple completion',
+      desc: 'The most common perfective prefix in Serbian. Usually marks straightforward completion — doing something once or to a satisfying degree. It rarely changes the core meaning; it mainly signals "done."',
+      examples: [
+        { imp:'piti',    pfv:'popiti',    en:'drink → drink up' },
+        { imp:'jesti',   pfv:'pojesti',   en:'eat → eat up' },
+        { imp:'gledati', pfv:'pogledati', en:'watch → take a look' },
+        { imp:'zvati',   pfv:'pozvati',   en:'call → invite' },
+      ]
+    },
+    'o': {
+      title: 'Around / once through',
+      desc: 'Marks doing something "around" or "once through" — surveying, examining, or covering something comprehensively in a single pass. Often implies thoroughness rather than mere completion.',
+      examples: [
+        { imp:'čistiti',  pfv:'očistiti', en:'clean → clean thoroughly' },
+        { imp:'gledati',  pfv:'ogledati', en:'watch → look over / survey' },
+        { imp:'otvarati', pfv:'otvoriti', en:'open (habit) → open (once)' },
+      ]
+    },
+    'za': {
+      title: 'Onset or enclosure',
+      desc: 'Two main uses: (1) marking the onset of an action — the moment something starts (zapevati = start singing, zaplakati = burst into tears); (2) marking closing, securing, or forgetting (zatvoriti, zaboraviti). Context determines which applies.',
+      examples: [
+        { imp:'pevati',   pfv:'zapevati',   en:'sing → burst into song' },
+        { imp:'plakati',  pfv:'zaplakati',  en:'cry → burst into tears' },
+        { imp:'zatvarati',pfv:'zatvoriti',  en:'close (habit) → shut (once)' },
+        { imp:'završavati',pfv:'završiti',  en:'finish (habit) → finish (once)' },
+      ]
+    },
+    'iz': {
+      title: 'Completely / outward',
+      desc: 'Marks doing something completely or outward — carrying an action through to the end, or expressing motion or expression outward. Often implies building up, extracting, or articulating fully.',
+      examples: [
+        { imp:'graditi',  pfv:'izgraditi',   en:'build → build up / complete' },
+        { imp:'govoriti', pfv:'izgovoriti',  en:'speak → pronounce / utter' },
+      ]
+    },
+    'na': {
+      title: 'Accumulation / enough',
+      desc: 'Marks accumulation — doing something to a sufficient or satisfying degree, filling up, or achieving a completed result. Often implies effort that builds up to something finished.',
+      examples: [
+        { imp:'pisati',  pfv:'napisati',  en:'write → write / finish writing' },
+        { imp:'učiti',   pfv:'naučiti',   en:'study → learn / master' },
+        { imp:'praviti', pfv:'napraviti', en:'make → make / complete' },
+      ]
+    },
+    'pro': {
+      title: 'Through / new state',
+      desc: 'Marks passing through time or space, spending time doing something, or crossing into a new state. Can also mark achieving something for the very first time — as when a toddler takes their first steps.',
+      examples: [
+        { imp:'čitati', pfv:'pročitati', en:'read → read through / finish' },
+        { imp:'hodati', pfv:'prohodati', en:'walk → start walking (first steps)' },
+      ]
+    },
+    'u': {
+      title: 'Into / entering a state',
+      desc: 'Marks entering a state, doing something into something, or transitioning into a new condition. Often implies motion inward or the successful result of an action.',
+      examples: [
+        { imp:'raditi',  pfv:'uraditi',  en:'work → complete a task' },
+        { imp:'leteti',  pfv:'uleteti',  en:'fly → fly into' },
+        { imp:'ustajati',pfv:'ustati',   en:'get up (habit) → get up (once)' },
+        { imp:'hvatati', pfv:'uhvatiti', en:'try to catch → catch / grab' },
+      ]
+    },
+    'irregular': {
+      title: 'Suppletive & uncommon prefixes',
+      desc: 'These pairs don\'t follow a standard prefix pattern. Suppletive pairs have imperfective and perfective forms from completely different roots. Others use less common prefixes (s-, pri-, ot-). These require memorization — there\'s no shortcut.',
+      examples: [
+        { imp:'govoriti',   pfv:'reći',      en:'speak → say (completely different roots)' },
+        { imp:'dolaziti',   pfv:'doći',      en:'come (habit) → arrive (once)' },
+        { imp:'davati',     pfv:'dati',      en:'give (habit) → give (once)' },
+        { imp:'oblačiti se',pfv:'obući se',  en:'get dressed (habit) → get dressed (once)' },
+        { imp:'skakati',    pfv:'skočiti',   en:'jump (habit) → jump (once)' },
+      ]
+    },
+  };
+
+  function showPrefixInfo(prefix) {
+    const info = PREFIX_INFO[prefix];
+    if (!info) return;
+    document.getElementById('pm-abbr').textContent  = prefix === 'irregular' ? 'irregular' : prefix + '-';
+    document.getElementById('pm-title').textContent = info.title;
+    document.getElementById('pm-desc').textContent  = info.desc;
+    document.getElementById('pm-examples').innerHTML = info.examples.map(e =>
+      `<div class="prefix-example-pair">
+        <span class="pex-imp">${e.imp}</span>
+        <span class="pex-arrow">→</span>
+        <span class="pex-pfv">${e.pfv}</span>
+        <span class="pex-en">— ${e.en}</span>
+      </div>`
+    ).join('');
+    document.getElementById('prefix-modal-overlay').classList.add('open');
+  }
+
+  function closePrefixModal() {
+    document.getElementById('prefix-modal-overlay').classList.remove('open');
+  }
+
+  function getCtxPrefix(drill) {
+    return CTX_PREFIX_MAP[drill.pfv] || 'irregular';
+  }
+
+  function buildCtxDeck() {
+    const filtered = CONTEXT_DRILLS.filter(d => ctxActiveFilters.has(getCtxPrefix(d)));
+    for (let i = filtered.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+    }
+    ctxDeck  = filtered;
+    ctxIndex = 0;
+  }
+
+  function toggleCtxPrefix(prefix, btn) {
+    if (ctxActiveFilters.has(prefix) && ctxActiveFilters.size === 1) return;
+    if (ctxActiveFilters.has(prefix)) {
+      ctxActiveFilters.delete(prefix);
+      btn.classList.remove('active');
+    } else {
+      ctxActiveFilters.add(prefix);
+      btn.classList.add('active');
+    }
+    ctxScore = { correct: 0, total: 0 };
+    buildCtxDeck();
+    renderCtxCard();
+  }
 
   // ═══════════════════════════════════════════════════
   //  SLAGALICA — state
@@ -6044,6 +6443,7 @@
   //  CONTEXT CHOOSER — functions
   // ═══════════════════════════════════════════════════
   function renderContextView() {
+    if (ctxDeck.length === 0) buildCtxDeck();
     ctxAnswered = false;
     renderCtxCard();
   }
@@ -6148,11 +6548,7 @@
   }
 
   function shuffleCtx() {
-    for (let i = ctxDeck.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [ctxDeck[i], ctxDeck[j]] = [ctxDeck[j], ctxDeck[i]];
-    }
-    ctxIndex = 0;
+    buildCtxDeck();
     renderCtxCard();
   }
 
@@ -6461,6 +6857,29 @@
   buildDeck();
   renderStudy();
 </script>
+
+<!-- ═══════════════ PREFIX INFO MODAL ══════════════ -->
+<div id="prefix-modal-overlay" onclick="closePrefixModal()">
+  <div id="prefix-modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-case-abbr" id="pm-abbr">po-</span>
+        <span class="modal-case-name" id="pm-title"></span>
+      </div>
+      <button class="modal-close" onclick="closePrefixModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <p class="modal-section-label">How it works</p>
+        <p id="pm-desc"></p>
+      </div>
+      <div class="modal-section">
+        <p class="modal-section-label">Examples from this section</p>
+        <div id="pm-examples"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════ CASE INFO MODAL ═══════════════ -->
 <div id="case-modal-overlay" onclick="closeCaseModal()">
