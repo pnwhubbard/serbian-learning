@@ -4921,56 +4921,59 @@
   //  All 4 options share the same first letter as the correct answer
   // ═══════════════════════════════════════════════════
   const CYRILLIC_READING = {
+    // All 4 options are real Serbian words/phrases — no invented forms.
+    // Distractors are semantic/grammatical neighbours so you can't eliminate
+    // them by "knowing Serbian"; you must actually read the Cyrillic.
     easy: [
-      { lat: 'zdravo',  options: ['zdravo','zdrevo','zdrava','zdravu']   }, // hello
-      { lat: 'hvala',   options: ['hvala','hvale','hvali','hvalu']        }, // thanks
-      { lat: 'voda',    options: ['voda','vode','vodi','vodu']            }, // water
-      { lat: 'kuća',    options: ['kuća','kuće','kući','kuce']            }, // house
-      { lat: 'majka',   options: ['majka','majke','majki','majku']        }, // mother
-      { lat: 'otac',    options: ['otac','otec','otic','otić']            }, // father
-      { lat: 'brat',    options: ['brat','bret','brit','brot']            }, // brother
-      { lat: 'sestra',  options: ['sestra','sestre','sestri','sestro']    }, // sister
-      { lat: 'grad',    options: ['grad','gred','grid','grod']            }, // city
-      { lat: 'ulica',   options: ['ulica','ulice','ulicu','utica']        }, // street
-      { lat: 'hrana',   options: ['hrana','hrane','hranu','hrona']        }, // food
-      { lat: 'knjiga',  options: ['knjiga','knjige','knjigi','knjuga']    }, // book
-      { lat: 'škola',   options: ['škola','škole','školi','škelu']        }, // school
-      { lat: 'dobar',   options: ['dobar','dobri','dobra','dober']        }, // good (m.)
-      { lat: 'veliki',  options: ['veliki','velika','veliku','veloki']    }, // big
-      { lat: 'mali',    options: ['mali','male','malu','melo']            }, // small
-      { lat: 'lepo',    options: ['lepo','lipo','lepa','lepe']            }, // nice (neut.)
-      { lat: 'brzo',    options: ['brzo','brza','brze','brzu']            }, // fast
-      { lat: 'piti',    options: ['piti','peti','puti','pati']            }, // to drink (peti=to sing)
-      { lat: 'jesti',   options: ['jesti','josti','jaste','jeste']        }, // to eat
+      { lat: 'zdravo',  options: ['zdravo','zdravlje','zdravica','zdravi']   }, // zdravlje=health, zdravica=toast, zdravi=healthy(pl)
+      { lat: 'hvala',   options: ['hvala','hvalim','hvali','hvalisav']        }, // hvalim=I praise, hvali=praises, hvalisav=boastful
+      { lat: 'voda',    options: ['voda','volja','vatra','vuna']              }, // volja=will, vatra=fire, vuna=wool
+      { lat: 'kuća',    options: ['kuća','kula','kuhinja','kuma']             }, // kula=tower, kuhinja=kitchen, kuma=godmother
+      { lat: 'majka',   options: ['majka','mačka','maska','marka']            }, // mačka=cat (č≠j in Cyrillic), maska=mask, marka=stamp
+      { lat: 'otac',    options: ['otac','orao','orah','ovca']                }, // orao=eagle, orah=walnut, ovca=sheep
+      { lat: 'brat',    options: ['brat','brada','brdo','briga']              }, // brada=beard, brdo=mountain, briga=worry
+      { lat: 'sestra',  options: ['sestra','srebro','slava','sunce']          }, // srebro=silver, slava=celebration, sunce=sun
+      { lat: 'grad',    options: ['grad','grlo','gruda','grana']              }, // grlo=throat, gruda=clod, grana=branch
+      { lat: 'ulica',   options: ['ulica','uloga','uvala','ugao']             }, // uloga=role, uvala=bay, ugao=corner
+      { lat: 'hrana',   options: ['hrana','hrast','hleb','hvala']             }, // hrast=oak, hleb=bread, hvala=thanks
+      { lat: 'knjiga',  options: ['knjiga','kolač','korpa','kaput']           }, // kolač=cake, korpa=basket, kaput=coat
+      { lat: 'škola',   options: ['škola','šuma','šolja','šešir']             }, // šuma=forest, šolja=cup, šešir=hat
+      { lat: 'dobar',   options: ['dobar','divan','dubok','dalek']            }, // divan=wonderful, dubok=deep, dalek=far
+      { lat: 'veliki',  options: ['veliki','visoki','vedri','vrući']          }, // visoki=tall, vedri=clear/cheerful, vrući=hot
+      { lat: 'mali',    options: ['mali','mladi','mirni','mutni']             }, // mladi=young, mirni=peaceful, mutni=murky
+      { lat: 'lepo',    options: ['lepo','lako','loše','ludo']                }, // lako=easily, loše=badly, ludo=crazily
+      { lat: 'brzo',    options: ['brzo','blago','blizu','bedno']             }, // blago=gently, blizu=nearby, bedno=miserably
+      { lat: 'piti',    options: ['piti','peti','pasti','prati']              }, // peti=to climb, pasti=to fall, prati=to wash
+      { lat: 'jesti',   options: ['jesti','juriti','jahati','javiti']         }, // juriti=to chase, jahati=to ride, javiti=to notify
     ],
     medium: [
-      { lat: 'dobro jutro',    options: ['dobro jutro','dobro jetre','dobro jutru','dobra jutro']      }, // good morning
-      { lat: 'kako si',        options: ['kako si','kako se','kako su','kako sa']                      }, // how are you
-      { lat: 'hvala lepo',     options: ['hvala lepo','hvala lipo','hvala lepa','hvala lepe']          }, // thank you kindly
-      { lat: 'ne razumem',     options: ['ne razumem','ne razimem','ne razomem','ne rozumem']          }, // I don't understand
-      { lat: 'govori srpski',  options: ['govori srpski','govori srpske','govori sripski','govori srpsku'] }, // speak Serbian
-      { lat: 'idem kući',      options: ['idem kući','idem kuće','idem kuci','idem kuce']              }, // I'm going home
-      { lat: 'volim kafu',     options: ['volim kafu','volim kavu','volim kofu','valim kafu']          }, // I like coffee
-      { lat: 'lep dan',        options: ['lep dan','lep din','lep den','lip dan']                      }, // nice day
-      { lat: 'koliko košta',   options: ['koliko košta','koliko kosta','koliku košta','koloko košta']  }, // how much does it cost
-      { lat: 'gde si bio',     options: ['gde si bio','gde si bia','gde si beo','gde se bio']          }, // where were you
-      { lat: 'ja sam tu',      options: ['ja sam tu','ja sam to','ja sam ta','je sam tu']              }, // I am here
-      { lat: 'čekaj malo',     options: ['čekaj malo','čekaj mali','čekaj melo','čekaj malu']          }, // wait a moment
-      { lat: 'daj mi to',      options: ['daj mi to','daj mi ta','daj mi tu','dej mi to']              }, // give me that
-      { lat: 'u redu je',      options: ['u redu je','u ridu je','u redu ja','u redu ji']              }, // it's okay
-      { lat: 'sutra ujutro',   options: ['sutra ujutro','sutra ujetre','sutra ujutru','sutre ujutro']  }, // tomorrow morning
+      { lat: 'dobro jutro',   options: ['dobro jutro','dobro veče','dobro podne','dobro jutarnje']       }, // all real greetings/time phrases
+      { lat: 'kako si',       options: ['kako si','kako ste','kako je','kako smo']                        }, // si/ste/je/smo — must read the verb ending
+      { lat: 'hvala lepo',    options: ['hvala lepo','hvala puno','hvala bogu','hvala svima']             }, // all real "hvala ___" phrases
+      { lat: 'ne razumem',    options: ['ne razumem','ne znam','ne mogu','ne vidim']                      }, // all real "ne + verb" negations
+      { lat: 'govori srpski', options: ['govori srpski','govori polako','govori glasno','govori tačno']   }, // all real "govori ___" imperatives
+      { lat: 'idem kući',     options: ['idem kući','idem spavati','idem kupiti','idem odmah']            }, // all real "idem ___" phrases
+      { lat: 'volim kafu',    options: ['volim kafu','volim čaj','volim pivo','volim vino']               }, // beverages: kafu/čaj/pivo/vino — must read the noun
+      { lat: 'lep dan',       options: ['lep dan','lep čovek','lep grad','lep put']                       }, // all masc. "lep ___" phrases
+      { lat: 'koliko košta',  options: ['koliko košta','koliko traje','koliko ima','koliko znači']         }, // all real "koliko ___" questions
+      { lat: 'gde si bio',    options: ['gde si bio','gde si bila','gde ćeš biti','gde si sedeo']         }, // bio/bila/biti/sedeo — tense & gender shift
+      { lat: 'ja sam tu',     options: ['ja sam tu','ja sam ovde','ja sam blizu','ja sam spreman']         }, // tu/ovde/blizu/spreman — all real
+      { lat: 'čekaj malo',    options: ['čekaj malo','čekaj sekund','čekaj ovde','čekaj me']              }, // all real "čekaj ___" imperatives
+      { lat: 'daj mi to',     options: ['daj mi to','daj mi ovo','daj mi ruku','daj mi mir']              }, // to/ovo/ruku/mir — all real objects
+      { lat: 'u redu je',     options: ['u redu je','u redu si','u redu smo','u redu ste']                }, // je/si/smo/ste — must read the copula
+      { lat: 'sutra ujutro',  options: ['sutra ujutro','sutra uveče','sutra u podne','sutra popodne']     }, // all real time-of-day expressions
     ],
     hard: [
-      { lat: 'Volim da učim srpski',     options: ['Volim da učim srpski','Volim da učem srpski','Volim da učim srpske','Velim da učim srpski']              }, // I like learning Serbian
-      { lat: 'Idemo na pijac sutra',     options: ['Idemo na pijac sutra','Idemo na pijec sutra','Idemo na pijac sutre','Idome na pijac sutra']              }, // We're going to the market tomorrow
-      { lat: 'Ona govori veoma brzo',    options: ['Ona govori veoma brzo','Ona govori veoma brza','Ona govori veame brzo','One govori veoma brzo']           }, // She speaks very fast
-      { lat: 'Mogu li da ti pomognem',   options: ['Mogu li da ti pomognem','Mogu li da ti pomagnem','Mogu li da te pomognem','Mogu li da ti pomegnem']       }, // Can I help you
-      { lat: 'Koliko dugo živiš ovde',   options: ['Koliko dugo živiš ovde','Koliko duge živiš ovde','Koliku dugo živiš ovde','Koliko dugo živiš onde']       }, // How long have you lived here
-      { lat: 'Sutra idem u školu',       options: ['Sutra idem u školu','Sutra idem u škole','Sutra idem u školi','Sutre idem u školu']                       }, // Tomorrow I'm going to school
-      { lat: 'Pišem pismo prijatelju',   options: ['Pišem pismo prijatelju','Pišem pismu prijatelju','Pišem pismo prijatelji','Pošem pismo prijatelju']       }, // I'm writing a letter to a friend
-      { lat: 'Brat i sestra su kod kuće', options: ['Brat i sestra su kod kuće','Brat i sestre su kod kuće','Brat i sestra su kod kući','Brat i sestra su ked kuće'] }, // Brother and sister are at home
-      { lat: 'Ne mogu da spavam noću',   options: ['Ne mogu da spavam noću','Ne mogu da spavem noću','Ne mogu da spavam noći','Ne znam da spavam noću']        }, // I can't sleep at night
-      { lat: 'Gde možemo da jedemo',     options: ['Gde možemo da jedemo','Gde možemo da jedimo','Gde možemo da jademo','Gde mozemo da jedemo']               }, // Where can we eat
+      { lat: 'Volim da učim srpski',      options: ['Volim da učim srpski','Volim da pričam srpski','Volim da slušam srpski','Volim da čitam srpski']          }, // učim/pričam/slušam/čitam — all plausible
+      { lat: 'Idemo na pijac sutra',      options: ['Idemo na pijac sutra','Idemo na posao sutra','Idemo na more sutra','Idemo na odmor sutra']                }, // pijac/posao/more/odmor — all destinations
+      { lat: 'Ona govori veoma brzo',     options: ['Ona govori veoma brzo','Ona govori veoma tiho','Ona govori veoma glasno','Ona govori veoma lepo']         }, // brzo/tiho/glasno/lepo — all manner adverbs
+      { lat: 'Mogu li da ti pomognem',    options: ['Mogu li da ti pomognem','Mogu li da te čujem','Mogu li da te vidim','Mogu li da ti kažem']                }, // pomognem/čujem/vidim/kažem — all real offers
+      { lat: 'Koliko dugo živiš ovde',    options: ['Koliko dugo živiš ovde','Koliko dugo radiš ovde','Koliko dugo čekaš ovde','Koliko dugo sediš ovde']       }, // živiš/radiš/čekaš/sediš — must read the verb
+      { lat: 'Sutra idem u školu',        options: ['Sutra idem u školu','Sutra idem u posetu','Sutra idem u bioskop','Sutra idem u šetnju']                   }, // školu/posetu/bioskop/šetnju — all destinations
+      { lat: 'Pišem pismo prijatelju',    options: ['Pišem pismo prijatelju','Pišem poruku prijatelju','Pišem pismo roditeljima','Pišem pesmu prijatelju']     }, // pismo/poruku/pesmu differ by one vowel in Cyrillic
+      { lat: 'Brat i sestra su kod kuće', options: ['Brat i sestra su kod kuće','Brat i sestra su u školi','Brat i sestra su na poslu','Brat i sestra su u gradu'] }, // location changes
+      { lat: 'Ne mogu da spavam noću',    options: ['Ne mogu da spavam noću','Ne mogu da jedem noću','Ne mogu da spavam danju','Ne mogu da spavam uopšte']      }, // verb & time both change
+      { lat: 'Gde možemo da jedemo',      options: ['Gde možemo da jedemo','Gde možemo da sedemo','Gde možemo da idemo','Gde možemo da spavamo']               }, // jedemo/sedemo/idemo/spavamo — similar endings
     ],
   };
 
