@@ -1062,6 +1062,7 @@
           <span class="card-label"    id="front-label">Serbian</span>
           <span class="card-word"     id="front-word">—</span>
           <span class="card-cyrillic" id="front-cyrillic"></span>
+          <div class="card-note"      id="front-note" style="display:none"></div>
           <span class="card-hint">click to reveal</span>
         </div>
         <div class="card-face card-back">
@@ -2418,15 +2419,15 @@
       rule: 'Single completed utterance',
       note: 'A specific statement made at a point in time → perfective.' },
 
-    // ── čekati / pričekati ─────────────────────────────────────────
+    // ── čekati / sačekati ─────────────────────────────────────────
     { english: 'I wait for the bus every morning.',
       serbian: '___ bus svako jutro.',
-      imp: 'čekati', pfv: 'pričekati', answer: 'imp', fill: 'Čekam', distractor: 'Pričekam',
+      imp: 'čekati', pfv: 'sačekati', answer: 'imp', fill: 'Čekam', distractor: 'Sačekam',
       rule: 'Habitual action',
       note: 'Regular morning wait → imperfective.' },
     { english: 'Wait for me just a moment!',
       serbian: '___ me trenutak!',
-      imp: 'čekati', pfv: 'pričekati', answer: 'pfv', fill: 'Pričekaj', distractor: 'Čekaj',
+      imp: 'čekati', pfv: 'sačekati', answer: 'pfv', fill: 'Sačekaj', distractor: 'Čekaj',
       rule: 'Brief bounded action',
       note: 'A short, defined wait (just a moment) → perfective.' },
 
@@ -3336,11 +3337,11 @@
       }
     },
     {
-      infinitive: 'rokovati', aspect: 'imp', english: 'to schedule / to set a date',
+      infinitive: 'zakazivati', aspect: 'imp', english: 'to schedule / to make an appointment',
       conjugations: {
-        present: { ja:'rokujem',    ti:'rokuješ',    on:'rokuje',    mi:'rokujemo',    vi:'rokujete',    oni:'rokuju'      },
-        past:    { ja:'rokovao sam',ti:'rokovao si', on:'rokovao je',mi:'rokovali smo',vi:'rokovali ste',oni:'rokovali su' },
-        future:  { ja:'rokovaću',   ti:'rokovaćeš',  on:'rokovaće',  mi:'rokovaćemo',  vi:'rokovaćete',  oni:'rokovaće'    },
+        present: { ja:'zakazujem',    ti:'zakazuješ',    on:'zakazuje',    mi:'zakazujemo',    vi:'zakazujete',    oni:'zakazuju'      },
+        past:    { ja:'zakazivao sam',ti:'zakazivao si', on:'zakazivao je',mi:'zakazivali smo',vi:'zakazivali ste',oni:'zakazivali su' },
+        future:  { ja:'zakazivaću',   ti:'zakazivaćeš',  on:'zakazivaće',  mi:'zakazivaćemo',  vi:'zakazivaćete',  oni:'zakazivaće'    },
       }
     },
     {
@@ -3409,11 +3410,11 @@
       }
     },
     {
-      infinitive: 'pričekati', aspect: 'pfv', english: 'to wait (a bit)',
+      infinitive: 'sačekati', aspect: 'pfv', english: 'to wait (for)',
       conjugations: {
-        present: { ja:'pričekam',    ti:'pričekaš',    on:'pričeka',    mi:'pričekamo',    vi:'pričekate',    oni:'pričekaju'    },
-        past:    { ja:'pričekao sam',ti:'pričekao si', on:'pričekao je',mi:'pričekali smo',vi:'pričekali ste',oni:'pričekali su' },
-        future:  { ja:'pričekaću',   ti:'pričekaćeš',  on:'pričekaće',  mi:'pričekaćemo',  vi:'pričekaćete',  oni:'pričekaće'    },
+        present: { ja:'sačekam',    ti:'sačekaš',    on:'sačeka',    mi:'sačekamo',    vi:'sačekate',    oni:'sačekaju'    },
+        past:    { ja:'sačekao sam',ti:'sačekao si', on:'sačekao je',mi:'sačekali smo',vi:'sačekali ste',oni:'sačekali su' },
+        future:  { ja:'sačekaću',   ti:'sačekaćeš',  on:'sačekaće',  mi:'sačekaćemo',  vi:'sačekaćete',  oni:'sačekaće'    },
       }
     },
     {
@@ -3901,7 +3902,7 @@
   //  FLASHCARD STORAGE
   // ═══════════════════════════════════════════════════
   const STORAGE_KEY = 'serbian_cards';
-  const CARDS_VER   = '5';
+  const CARDS_VER   = '8';
 
   const DEFAULT_CARDS = [
     // ── GREETINGS ─────────────────────────────────────────────────────────
@@ -4113,28 +4114,28 @@
     { serbian:'ogledalo',      english:'mirror',                    category:'Home' },
     { serbian:'šporet',        english:'stove / cooker',            category:'Home' },
     // ── VERBS ─────────────────────────────────────────────────────────────
-    { serbian:'biti',          english:'to be',                     category:'Verbs' },
-    { serbian:'imati',         english:'to have',                   category:'Verbs' },
-    { serbian:'ići',           english:'to go',                     category:'Verbs' },
-    { serbian:'doći',          english:'to come',                   category:'Verbs' },
-    { serbian:'videti',        english:'to see',                    category:'Verbs' },
-    { serbian:'jesti',         english:'to eat',                    category:'Verbs' },
-    { serbian:'piti',          english:'to drink',                  category:'Verbs' },
-    { serbian:'govoriti',      english:'to speak / to talk',        category:'Verbs' },
-    { serbian:'razumeti',      english:'to understand',             category:'Verbs' },
-    { serbian:'čuti',          english:'to hear',                   category:'Verbs' },
-    { serbian:'znati',         english:'to know',                   category:'Verbs' },
-    { serbian:'moći',          english:'can / to be able to',       category:'Verbs' },
-    { serbian:'hteti',         english:'to want',                   category:'Verbs' },
-    { serbian:'voleti',        english:'to love / to like',         category:'Verbs' },
-    { serbian:'raditi',        english:'to work / to do',           category:'Verbs' },
-    { serbian:'živeti',        english:'to live',                   category:'Verbs' },
-    { serbian:'čitati',        english:'to read',                   category:'Verbs' },
-    { serbian:'pisati',        english:'to write',                  category:'Verbs' },
-    { serbian:'spavati',       english:'to sleep',                  category:'Verbs' },
-    { serbian:'kupiti',        english:'to buy',                    category:'Verbs' },
-    { serbian:'tražiti',       english:'to look for / to ask for',  category:'Verbs' },
-    { serbian:'dati',          english:'to give',                   category:'Verbs' },
+    { serbian:'biti',          english:'to be',                     category:'Verbs', note:'sam, si, je, smo, ste, su' },
+    { serbian:'imati',         english:'to have',                   category:'Verbs', note:'imam, imaš, ima, imamo, imate, imaju' },
+    { serbian:'ići',           english:'to go',                     category:'Verbs', note:'idem, ideš, ide, idemo, idete, idu' },
+    { serbian:'doći',          english:'to come',                   category:'Verbs', note:'dođem, dođeš, dođe, dođemo, dođete, dođu' },
+    { serbian:'videti',        english:'to see',                    category:'Verbs', note:'vidim, vidiš, vidi, vidimo, vidite, vide' },
+    { serbian:'jesti',         english:'to eat',                    category:'Verbs', note:'jedem, jedeš, jede, jedemo, jedete, jedu' },
+    { serbian:'piti',          english:'to drink',                  category:'Verbs', note:'pijem, piješ, pije, pijemo, pijete, piju' },
+    { serbian:'govoriti',      english:'to speak / to talk',        category:'Verbs', note:'govorim, govoriš, govori, govorimo, govorite, govore' },
+    { serbian:'razumeti',      english:'to understand',             category:'Verbs', note:'razumem, razumeš, razume, razumemo, razumete, razumeju' },
+    { serbian:'čuti',          english:'to hear',                   category:'Verbs', note:'čujem, čuješ, čuje, čujemo, čujete, čuju' },
+    { serbian:'znati',         english:'to know',                   category:'Verbs', note:'znam, znaš, zna, znamo, znate, znaju' },
+    { serbian:'moći',          english:'can / to be able to',       category:'Verbs', note:'mogu, možeš, može, možemo, možete, mogu' },
+    { serbian:'hteti',         english:'to want',                   category:'Verbs', note:'hoću, hoćeš, hoće, hoćemo, hoćete, hoće' },
+    { serbian:'voleti',        english:'to love / to like',         category:'Verbs', note:'volim, voliš, voli, volimo, volite, vole' },
+    { serbian:'raditi',        english:'to work / to do',           category:'Verbs', note:'radim, radiš, radi, radimo, radite, rade' },
+    { serbian:'živeti',        english:'to live',                   category:'Verbs', note:'živim, živiš, živi, živimo, živite, žive' },
+    { serbian:'čitati',        english:'to read',                   category:'Verbs', note:'čitam, čitaš, čita, čitamo, čitate, čitaju' },
+    { serbian:'pisati',        english:'to write',                  category:'Verbs', note:'pišem, pišeš, piše, pišemo, pišete, pišu' },
+    { serbian:'spavati',       english:'to sleep',                  category:'Verbs', note:'spavam, spavaš, spava, spavamo, spavate, spavaju' },
+    { serbian:'kupiti',        english:'to buy',                    category:'Verbs', note:'kupim, kupiš, kupi, kupimo, kupite, kupe' },
+    { serbian:'tražiti',       english:'to look for / to ask for',  category:'Verbs', note:'tražim, tražiš, traži, tražimo, tražite, traže' },
+    { serbian:'dati',          english:'to give',                   category:'Verbs', note:'dam, daš, da, damo, date, daju' },
     // ── ADJECTIVES ────────────────────────────────────────────────────────
     { serbian:'dobar',         english:'good',                      category:'Adjectives' },
     { serbian:'loš',           english:'bad',                       category:'Adjectives' },
@@ -4208,7 +4209,7 @@
     { serbian:'Kada kreće autobus?',         english:'When does the bus leave?',           category:'Phrases' },
     { serbian:'Jedna karta do Beograda.',    english:'One ticket to Belgrade.',            category:'Phrases' },
     { serbian:'Gde mogu da kupim karte?',    english:'Where can I buy tickets?',           category:'Phrases' },
-    { serbian:'Nazovite mi taksi, molim.',   english:'Please call me a taxi.',             category:'Phrases' },
+    { serbian:'Pozovite mi taksi, molim.',   english:'Please call me a taxi.',             category:'Phrases' },
     { serbian:'Imam rezervaciju.',           english:'I have a reservation.',              category:'Phrases' },
     { serbian:'Jedan sto za dvoje.',         english:'A table for two.',                   category:'Phrases' },
     { serbian:'Šta preporučujete?',          english:'What do you recommend?',             category:'Phrases' },
@@ -4221,10 +4222,10 @@
     { serbian:'Veoma je lepo.',              english:'It is very beautiful.',              category:'Phrases' },
     { serbian:'Nema problema.',              english:'No problem.',                        category:'Phrases' },
     { serbian:'Svejedno mi je.',             english:"I don't mind. / All the same.",      category:'Phrases' },
-    { serbian:'Sretan put!',                 english:'Have a good trip!',                  category:'Phrases' },
+    { serbian:'Srećan put!',                 english:'Have a good trip!',                  category:'Phrases' },
     { serbian:'Srećan rođendan!',            english:'Happy birthday!',                    category:'Phrases' },
     { serbian:'Srećna Nova Godina!',         english:'Happy New Year!',                    category:'Phrases' },
-    { serbian:'Čestitamo!',                  english:'Congratulations!',                   category:'Phrases' },
+    { serbian:'Čestitam!',                  english:'Congratulations!',                   category:'Phrases' },
     { serbian:'Sve najbolje!',               english:'All the best!',                      category:'Phrases' },
     { serbian:'Boli me glava.',              english:'I have a headache.',                 category:'Phrases' },
     { serbian:'Nisam dobro.',                english:"I'm not well.",                      category:'Phrases' },
@@ -4243,31 +4244,52 @@
     { serbian:'Drago mi je.',                english:'Nice to meet you.',                  category:'Phrases' },
     { serbian:'Gde se nalazimo?',            english:'Where are we?',                      category:'Phrases' },
     // ── VERBS II ──────────────────────────────────────────────────────────
-    { serbian:'misliti',       english:'to think',                  category:'Verbs II' },
-    { serbian:'čekati',        english:'to wait',                   category:'Verbs II' },
-    { serbian:'pričati',       english:'to talk / to tell',         category:'Verbs II' },
-    { serbian:'slušati',       english:'to listen',                 category:'Verbs II' },
-    { serbian:'gledati',       english:'to watch / to look at',     category:'Verbs II' },
-    { serbian:'sedeti',        english:'to sit',                    category:'Verbs II' },
-    { serbian:'stajati',       english:'to stand',                  category:'Verbs II' },
-    { serbian:'hodati',        english:'to walk',                   category:'Verbs II' },
-    { serbian:'trčati',        english:'to run',                    category:'Verbs II' },
-    { serbian:'plakati',       english:'to cry',                    category:'Verbs II' },
-    { serbian:'smejati se',    english:'to laugh',                  category:'Verbs II' },
-    { serbian:'pevati',        english:'to sing',                   category:'Verbs II' },
-    { serbian:'igrati se',     english:'to play',                   category:'Verbs II' },
-    { serbian:'učiti',         english:'to study / to learn',       category:'Verbs II' },
-    { serbian:'otvoriti',      english:'to open',                   category:'Verbs II' },
-    { serbian:'zatvoriti',     english:'to close',                  category:'Verbs II' },
-    { serbian:'platiti',       english:'to pay',                    category:'Verbs II' },
-    { serbian:'nositi',        english:'to carry / to wear',        category:'Verbs II' },
-    { serbian:'padati',        english:'to fall',                   category:'Verbs II' },
-    { serbian:'brinuti se',    english:'to worry',                  category:'Verbs II' },
-    { serbian:'čuvati',        english:'to take care of / to keep', category:'Verbs II' },
-    { serbian:'sećati se',     english:'to remember',               category:'Verbs II' },
-    { serbian:'zaboraviti',    english:'to forget',                 category:'Verbs II' },
-    { serbian:'objasniti',     english:'to explain',                category:'Verbs II' },
-    { serbian:'pozvati',       english:'to invite / to call',       category:'Verbs II' },
+    { serbian:'misliti',       english:'to think',                  category:'Verbs II', note:'mislim, misliš, misli, mislimo, mislite, misle' },
+    { serbian:'čekati',        english:'to wait',                   category:'Verbs II', note:'čekam, čekaš, čeka, čekamo, čekate, čekaju' },
+    { serbian:'pričati',       english:'to talk / to tell',         category:'Verbs II', note:'pričam, pričaš, priča, pričamo, pričate, pričaju' },
+    { serbian:'slušati',       english:'to listen',                 category:'Verbs II', note:'slušam, slušaš, sluša, slušamo, slušate, slušaju' },
+    { serbian:'gledati',       english:'to watch / to look at',     category:'Verbs II', note:'gledam, gledaš, gleda, gledamo, gledate, gledaju' },
+    { serbian:'sedeti',        english:'to sit',                    category:'Verbs II', note:'sedim, sediš, sedi, sedimo, sedite, sede' },
+    { serbian:'stajati',       english:'to stand',                  category:'Verbs II', note:'stojim, stojiš, stoji, stojimo, stojite, stoje' },
+    { serbian:'hodati',        english:'to walk',                   category:'Verbs II', note:'hodam, hodaš, hoda, hodamo, hodate, hodaju' },
+    { serbian:'trčati',        english:'to run',                    category:'Verbs II', note:'trčim, trčiš, trči, trčimo, trčite, trče' },
+    { serbian:'plakati',       english:'to cry',                    category:'Verbs II', note:'plačem, plačeš, plače, plačemo, plačete, plaču' },
+    { serbian:'smejati se',    english:'to laugh',                  category:'Verbs II', note:'smejem se, smeješ se, smeje se, smejemo se, smejete se, smeju se' },
+    { serbian:'pevati',        english:'to sing',                   category:'Verbs II', note:'pevam, pevaš, peva, pevamo, pevate, pevaju' },
+    { serbian:'igrati se',     english:'to play',                   category:'Verbs II', note:'igram se, igraš se, igra se, igramo se, igrate se, igraju se' },
+    { serbian:'učiti',         english:'to study / to learn',       category:'Verbs II', note:'učim, učiš, uči, učimo, učite, uče' },
+    { serbian:'otvoriti',      english:'to open',                   category:'Verbs II', note:'otvorim, otvoriš, otvori, otvorimo, otvorite, otvore' },
+    { serbian:'zatvoriti',     english:'to close',                  category:'Verbs II', note:'zatvorim, zatvoriš, zatvori, zatvorimo, zatvorite, zatvore' },
+    { serbian:'platiti',       english:'to pay',                    category:'Verbs II', note:'platim, platiš, plati, platimo, platite, plate' },
+    { serbian:'nositi',        english:'to carry / to wear',        category:'Verbs II', note:'nosim, nosiš, nosi, nosimo, nosite, nose' },
+    { serbian:'padati',        english:'to fall',                   category:'Verbs II', note:'padam, padaš, pada, padamo, padate, padaju' },
+    { serbian:'brinuti se',    english:'to worry',                  category:'Verbs II', note:'brinem se, brineš se, brine se, brinemo se, brinete se, brinu se' },
+    { serbian:'čuvati',        english:'to take care of / to keep', category:'Verbs II', note:'čuvam, čuvaš, čuva, čuvamo, čuvate, čuvaju' },
+    { serbian:'sećati se',     english:'to remember',               category:'Verbs II', note:'sećam se, sećaš se, seća se, sećamo se, sećate se, sećaju se' },
+    { serbian:'zaboraviti',    english:'to forget',                 category:'Verbs II', note:'zaboravim, zaboraviš, zaboravi, zaboravimo, zaboravite, zaborave' },
+    { serbian:'objasniti',     english:'to explain',                category:'Verbs II', note:'objasnim, objasniš, objasni, objasnimo, objasnite, objasne' },
+    { serbian:'pozvati',       english:'to invite / to call',       category:'Verbs II', note:'pozovem, pozoveš, pozove, pozovemo, pozovete, pozovu' },
+    // ── VERBS III ─────────────────────────────────────────────────────────
+    { serbian:'trebati',       english:'to need / to be needed',    category:'Verbs III', note:'treba mi, treba ti, treba mu/joj, treba nam, treba vam, treba im' },
+    { serbian:'morati',        english:'to have to / must',         category:'Verbs III', note:'moram, moraš, mora, moramo, morate, moraju' },
+    { serbian:'šetati',        english:'to stroll / take a walk',   category:'Verbs III', note:'šetam, šetaš, šeta, šetamo, šetate, šetaju' },
+    { serbian:'ostati',        english:'to stay / to remain',       category:'Verbs III', note:'ostanem, ostaneš, ostane, ostanemo, ostanete, ostanu' },
+    { serbian:'vraćati se',    english:'to return / to come back',  category:'Verbs III', note:'vraćam se, vraćaš se, vraća se, vraćamo se, vraćate se, vraćaju se' },
+    { serbian:'pitati',        english:'to ask',                    category:'Verbs III', note:'pitam, pitaš, pita, pitamo, pitate, pitaju' },
+    { serbian:'odgovoriti',    english:'to answer / to reply',      category:'Verbs III', note:'odgovorim, odgovoriš, odgovori, odgovorimo, odgovorite, odgovore' },
+    { serbian:'dobiti',        english:'to receive / to get',       category:'Verbs III', note:'dobijem, dobiješ, dobije, dobijemo, dobijete, dobiju' },
+    { serbian:'kuvati',        english:'to cook',                   category:'Verbs III', note:'kuvam, kuvaš, kuva, kuvamo, kuvate, kuvaju' },
+    { serbian:'praviti',       english:'to make / to do',           category:'Verbs III', note:'pravim, praviš, pravi, pravimo, pravite, prave' },
+    { serbian:'upoznati',      english:'to meet / to get to know',  category:'Verbs III', note:'upoznam, upoznaš, upozna, upoznamo, upoznate, upoznaju' },
+    { serbian:'razgovarati',   english:'to converse / to chat',     category:'Verbs III', note:'razgovaram, razgovaraš, razgovara, razgovaramo, razgovarate, razgovaraju' },
+    { serbian:'pokazati',      english:'to show',                   category:'Verbs III', note:'pokažem, pokažeš, pokaže, pokažemo, pokažete, pokažu' },
+    { serbian:'koristiti',     english:'to use',                    category:'Verbs III', note:'koristim, koristiš, koristi, koristimo, koristite, koriste' },
+    { serbian:'početi',        english:'to begin / to start',       category:'Verbs III', note:'počnem, počneš, počne, počnemo, počnete, počnu' },
+    { serbian:'završiti',      english:'to finish / to end',        category:'Verbs III', note:'završim, završiš, završi, završimo, završite, završe' },
+    { serbian:'uzeti',         english:'to take',                   category:'Verbs III', note:'uzmem, uzmeš, uzme, uzmemo, uzmete, uzmu' },
+    { serbian:'doneti',        english:'to bring',                  category:'Verbs III', note:'donesem, doneseš, donese, donesemo, donesete, donesu' },
+    { serbian:'izgubiti',      english:'to lose',                   category:'Verbs III', note:'izgubim, izgubiš, izgubi, izgubimo, izgubite, izgube' },
+    { serbian:'naći',          english:'to find',                   category:'Verbs III', note:'nađem, nađeš, nađe, nađemo, nađete, nađu' },
     // ── TRANSPORTATION ────────────────────────────────────────────────────
     { serbian:'voz',           english:'train',                     category:'Transportation' },
     { serbian:'autobus',       english:'bus',                       category:'Transportation' },
@@ -4843,8 +4865,12 @@
       const existing = raw ? JSON.parse(raw) : [];
       const merged   = [...existing];
       DEFAULT_CARDS.forEach(def => {
-        const exists = existing.some(e => e.serbian === def.serbian && e.category === def.category);
-        if (!exists) merged.push(def);
+        const idx = merged.findIndex(e => e.serbian === def.serbian && e.category === def.category);
+        if (idx === -1) {
+          merged.push(def);
+        } else if (def.note !== undefined) {
+          merged[idx] = { ...merged[idx], note: def.note };
+        }
       });
       saveCards(merged);
       localStorage.setItem(STORAGE_KEY + '_v', CARDS_VER);
@@ -5816,7 +5842,7 @@
     document.getElementById('front-cyrillic').textContent = flipped ? '' : latinToCyrillic(card.serbian);
     document.getElementById('back-cyrillic').textContent  = flipped ? latinToCyrillic(card.serbian) : '';
     document.getElementById('back-category').textContent = card.category || '';
-    const noteEl = document.getElementById('back-note');
+    const noteEl = document.getElementById('front-note');
     if (card.note) { noteEl.textContent = card.note; noteEl.style.display = 'block'; }
     else           { noteEl.textContent = '';         noteEl.style.display = 'none';  }
     document.getElementById('scene').classList.remove('flipped');
