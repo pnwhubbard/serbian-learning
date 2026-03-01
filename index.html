@@ -1010,6 +1010,39 @@
     .cyr-feedback.wrong   { color: #e74c3c; }
 
     .cyr-nav { display: flex; gap: 8px; justify-content: center; }
+
+    /* ── NUMBERS LISTENING ──────────────────────────── */
+    #numbers-view {
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .num-play-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 8px auto;
+      padding: 18px 44px;
+      background: #0f3460;
+      border: 2px solid #2a6aaa;
+      border-radius: 12px;
+      color: #a0c4ff;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      min-width: 200px;
+    }
+    .num-play-btn:hover { background: #1a4a80; border-color: #4a8acc; }
+    .num-play-btn .num-speaker { font-size: 1.6rem; line-height: 1; }
+
+    .num-word-reveal {
+      color: #74b9ff;
+      font-style: italic;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -1025,6 +1058,7 @@
     <button id="nav-drill"      onclick="showView('drill')">Fill-in</button>
     <button id="nav-slagalica"  onclick="showView('slagalica')">Slagalica</button>
     <button id="nav-cyrillic"   onclick="showView('cyrillic')">Cyrillic</button>
+    <button id="nav-numbers"    onclick="showView('numbers')">Numbers</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
@@ -1463,6 +1497,44 @@
     </div>
 
   </div><!-- /cyrillic-view -->
+
+  <!-- ═══════════════ NUMBERS LISTENING VIEW ═══════════════ -->
+  <div id="numbers-view" style="display:none">
+
+    <!-- Range pills -->
+    <div class="cyr-settings">
+      <div class="cyr-settings-group">
+        <span class="cyr-settings-label">Range:</span>
+        <button class="cyr-pill active" id="num-pill-100"     onclick="setNumRange(100)">Up to 100</button>
+        <button class="cyr-pill"        id="num-pill-1000"    onclick="setNumRange(1000)">Up to 1,000</button>
+        <button class="cyr-pill"        id="num-pill-10000"   onclick="setNumRange(10000)">Up to 10,000</button>
+        <button class="cyr-pill"        id="num-pill-1000000" onclick="setNumRange(1000000)">Up to 1,000,000</button>
+      </div>
+    </div>
+
+    <!-- Score row -->
+    <div class="cyr-progress-row">
+      <span></span>
+      <span>Score: <span class="cyr-score" id="num-score-val">0 / 0</span></span>
+    </div>
+
+    <!-- Play button -->
+    <button class="num-play-btn" id="num-play-btn" onclick="speakSerbian(numberToSerbian(numCurrent))">
+      <span class="num-speaker">🔊</span> Play
+    </button>
+
+    <!-- Options grid -->
+    <div class="cyr-options" id="num-options"></div>
+
+    <!-- Feedback -->
+    <div class="cyr-feedback" id="num-feedback"></div>
+
+    <!-- Next button -->
+    <div class="cyr-nav">
+      <button class="btn btn-primary" id="num-next-btn" onclick="numNext()" style="display:none">Next →</button>
+    </div>
+
+  </div><!-- /numbers-view -->
 
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
@@ -5063,6 +5135,13 @@
   let cyrFlashTime = 3;
   let cyrTimerID   = null;
 
+  // Numbers Listening state
+  let numRange    = 100;
+  let numCurrent  = null;
+  let numScore    = { correct: 0, total: 0 };
+  let numAnswered = false;
+  let numScoredQ  = false;
+
   const CTX_PREFIX_MAP = {
     'popiti':'po', 'pojesti':'po', 'pogledati':'po', 'pozvati':'po', 'poslušati':'po',
     'pročitati':'pro', 'prohodati':'pro',
@@ -5587,8 +5666,9 @@
     document.getElementById('aspect-view').style.display     = view === 'aspect'     ? 'flex' : 'none';
     document.getElementById('slagalica-view').style.display  = view === 'slagalica'  ? 'flex' : 'none';
     document.getElementById('cyrillic-view').style.display   = view === 'cyrillic'   ? 'flex' : 'none';
+    document.getElementById('numbers-view').style.display    = view === 'numbers'    ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -5599,6 +5679,7 @@
     if (view === 'aspect')     renderContextView();
     if (view === 'slagalica')  renderSlagView();
     if (view === 'cyrillic')   renderCyrView();
+    if (view === 'numbers')    renderNumView();
     if (view === 'manage')     renderManage();
   }
 
@@ -6163,6 +6244,64 @@
     let result = str;
     for (const [from, to] of pairs) result = result.split(from).join(to);
     return result;
+  }
+
+  // Convert integer 1–999,999 to Serbian words
+  function numberToSerbian(n) {
+    if (!n || n <= 0) return '';
+    const ones = [
+      '', 'jedan', 'dva', 'tri', 'četiri', 'pet', 'šest', 'sedam', 'osam', 'devet',
+      'deset', 'jedanaest', 'dvanaest', 'trinaest', 'četrnaest', 'petnaest',
+      'šesnaest', 'sedamnaest', 'osamnaest', 'devetnaest'
+    ];
+    const tensArr = [
+      '', '', 'dvadeset', 'trideset', 'četrdeset', 'pedeset',
+      'šezdeset', 'sedamdeset', 'osamdeset', 'devedeset'
+    ];
+    const hundredsArr = [
+      '', 'sto', 'dvesta', 'trista', 'četiristo', 'petsto',
+      'šesto', 'sedamsto', 'osamsto', 'devetsto'
+    ];
+
+    function below1000(n) {
+      if (n <= 0) return '';
+      if (n < 20) return ones[n];
+      const h   = Math.floor(n / 100);
+      const rem = n % 100;
+      const parts = [];
+      if (h > 0) parts.push(hundredsArr[h]);
+      if (rem > 0) {
+        if (rem < 20) {
+          parts.push(ones[rem]);
+        } else {
+          const t = tensArr[Math.floor(rem / 10)];
+          const r = rem % 10;
+          parts.push(r > 0 ? t + ' ' + ones[r] : t);
+        }
+      }
+      return parts.join(' ');
+    }
+
+    if (n < 1000) return below1000(n);
+
+    const thousands = Math.floor(n / 1000);
+    const rem       = n % 1000;
+    const lastTwo   = thousands % 100;
+    const lastOne   = thousands % 10;
+
+    let thousandStr;
+    if (thousands === 1) {
+      thousandStr = 'hiljadu';
+    } else if (lastTwo >= 11 && lastTwo <= 19) {
+      thousandStr = below1000(thousands) + ' hiljada';
+    } else if (lastOne >= 2 && lastOne <= 4) {
+      const tStr = thousands === 2 ? 'dve' : below1000(thousands);
+      thousandStr = tStr + ' hiljade';
+    } else {
+      thousandStr = below1000(thousands) + ' hiljada';
+    }
+
+    return rem === 0 ? thousandStr : thousandStr + ' ' + below1000(rem);
   }
 
   function checkGrammar() {
@@ -7067,6 +7206,189 @@
   }
 
   // ═══════════════════════════════════════════════════
+  //  NUMBERS LISTENING
+  // ═══════════════════════════════════════════════════
+
+  function speakSerbian(text) {
+    if (!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u  = new SpeechSynthesisUtterance(text);
+    u.lang   = 'sr-RS';
+    u.rate   = 0.9;
+    // Use a Serbian voice if available
+    const voices = speechSynthesis.getVoices();
+    const srVoice = voices.find(v => v.lang.startsWith('sr'));
+    if (srVoice) u.voice = srVoice;
+    speechSynthesis.speak(u);
+  }
+
+  function setNumRange(r) {
+    numRange = r;
+    [100, 1000, 10000, 1000000].forEach(v => {
+      document.getElementById(`num-pill-${v}`).classList.toggle('active', v === r);
+    });
+    numScore    = { correct: 0, total: 0 };
+    numCurrent  = null;
+    numAnswered = false;
+    numScoredQ  = false;
+    updateNumScore();
+    generateNumQuestion();
+  }
+
+  function renderNumView() {
+    if (!('speechSynthesis' in window)) {
+      const btn = document.getElementById('num-play-btn');
+      if (btn) btn.textContent = 'Audio not supported in this browser';
+    }
+    if (numCurrent === null) generateNumQuestion();
+    else {
+      buildNumOptions(numCurrent);
+      updateNumScore();
+    }
+  }
+
+  function generateNumQuestion() {
+    numCurrent  = Math.ceil(Math.random() * numRange);
+    numAnswered = false;
+    numScoredQ  = false;
+
+    // Reset feedback & next button
+    const fb = document.getElementById('num-feedback');
+    fb.textContent = '';
+    fb.className   = 'cyr-feedback';
+    document.getElementById('num-next-btn').style.display = 'none';
+
+    buildNumOptions(numCurrent);
+    updateNumScore();
+
+    // Auto-speak after a short delay (allows UI to render)
+    setTimeout(() => speakSerbian(numberToSerbian(numCurrent)), 200);
+  }
+
+  function buildNumOptions(correct) {
+    const container = document.getElementById('num-options');
+    container.innerHTML = '';
+
+    const distractors = buildNumDistractors(correct, numRange);
+    const options = [correct, ...distractors];
+
+    // Shuffle
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+
+    options.forEach((val, idx) => {
+      const btn          = document.createElement('button');
+      btn.className      = 'cyr-option';
+      btn.dataset.key    = idx + 1;
+      btn.dataset.numval = val;
+      btn.textContent    = val.toLocaleString();
+      btn.onclick        = () => numAnswer(val);
+      container.appendChild(btn);
+    });
+  }
+
+  function buildNumDistractors(n, maxRange) {
+    const result = new Set();
+
+    // 1. Teen ↔ ten confusion (most pedagogically valuable)
+    if (n >= 11 && n <= 19) {
+      const ten = (n - 10) * 10;          // 17 → 70
+      if (ten >= 1 && ten <= maxRange) result.add(ten);
+    } else if (n >= 10 && n <= 90 && n % 10 === 0) {
+      const teen = n / 10 + 10;           // 70 → 17
+      if (teen >= 11 && teen <= 19) result.add(teen);
+    }
+
+    // 2. Same-component confusion (same hundreds/thousands, different remainder)
+    if (n >= 100 && result.size < 3) {
+      const base = Math.floor(n / 100) * 100;
+      const candidates = [
+        base + Math.min(99, Math.max(1, (n % 100) + 17)),
+        base + Math.max(1,  (n % 100) - 17),
+      ];
+      for (const c of candidates) {
+        if (c >= 1 && c <= maxRange && c !== n && !result.has(c)) {
+          result.add(c);
+          if (result.size >= 3) break;
+        }
+      }
+    }
+
+    // 3. ±15–25% noise filler
+    const spread = Math.max(5, Math.floor(n * 0.22));
+    let attempts = 0;
+    while (result.size < 3 && attempts < 80) {
+      attempts++;
+      const delta = Math.floor(Math.random() * spread * 2 + 1) * (Math.random() < 0.5 ? 1 : -1);
+      const c = n + delta;
+      if (c >= 1 && c <= maxRange && c !== n && !result.has(c)) result.add(c);
+    }
+
+    // 4. Pure random fallback
+    let safety = 0;
+    while (result.size < 3 && safety < 200) {
+      safety++;
+      const r = Math.ceil(Math.random() * maxRange);
+      if (r !== n && !result.has(r)) result.add(r);
+    }
+
+    return [...result].slice(0, 3);
+  }
+
+  function numAnswer(chosen) {
+    if (numAnswered) return;
+    numAnswered = true;
+
+    const correct = numCurrent;
+    const isRight = chosen === correct;
+    const fb      = document.getElementById('num-feedback');
+
+    // Mark buttons
+    document.querySelectorAll('#num-options .cyr-option').forEach(btn => {
+      btn.disabled = true;
+      const val = parseInt(btn.dataset.numval, 10);
+      if (val === correct) {
+        btn.classList.add(isRight ? 'correct' : 'reveal');
+      } else if (val === chosen && !isRight) {
+        btn.classList.add('wrong');
+      }
+    });
+
+    // Score (once per question)
+    if (!numScoredQ) {
+      numScoredQ = true;
+      numScore.total++;
+      if (isRight) numScore.correct++;
+    }
+    updateNumScore();
+
+    // Feedback with Serbian words
+    const srbWord = numberToSerbian(correct);
+    if (isRight) {
+      fb.innerHTML = `✓ Correct! &nbsp;<span class="num-word-reveal">${srbWord}</span>`;
+      fb.className = 'cyr-feedback correct';
+    } else {
+      fb.innerHTML = `✗ The answer was ${correct} &nbsp;<span class="num-word-reveal">${srbWord}</span>`;
+      fb.className = 'cyr-feedback wrong';
+    }
+
+    document.getElementById('num-next-btn').style.display = 'inline-block';
+  }
+
+  function numNext() {
+    numAnswered = false;
+    numScoredQ  = false;
+    generateNumQuestion();
+  }
+
+  function updateNumScore() {
+    document.getElementById('num-score-val').textContent =
+      `${numScore.correct} / ${numScore.total}`;
+  }
+
+  // ═══════════════════════════════════════════════════
   //  MANAGE — shared
   // ═══════════════════════════════════════════════════
   function showManageTab(tab) {
@@ -7371,6 +7693,17 @@
         if (e.key === '2' && optBtns[1]) optBtns[1].click();
         if (e.key === '3' && optBtns[2]) optBtns[2].click();
         if (e.key === '4' && optBtns[3]) optBtns[3].click();
+      }
+    }
+    const numVisible = document.getElementById('numbers-view').style.display !== 'none';
+    if (numVisible) {
+      if ((e.key === 'ArrowRight' || e.key === 'Enter') && numAnswered) numNext();
+      const numOptBtns = document.querySelectorAll('#num-options .cyr-option:not(:disabled)');
+      if (numOptBtns.length > 0) {
+        if (e.key === '1' && numOptBtns[0]) numOptBtns[0].click();
+        if (e.key === '2' && numOptBtns[1]) numOptBtns[1].click();
+        if (e.key === '3' && numOptBtns[2]) numOptBtns[2].click();
+        if (e.key === '4' && numOptBtns[3]) numOptBtns[3].click();
       }
     }
   });
