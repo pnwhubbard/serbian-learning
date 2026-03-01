@@ -1043,6 +1043,24 @@
       font-style: italic;
       font-size: 1rem;
     }
+
+    /* ── MAČE BOOK */
+    #mace-view { flex-direction: column; gap: 12px; padding: 16px; }
+    .mace-tabs { display:flex; gap:8px; flex-wrap:wrap; }
+    .mace-section { display:none; flex-direction:column; gap:12px; }
+    .mace-section.active { display:flex; }
+    .mace-card { background:#1a1a2e; border:1px solid #2a2a4a; border-radius:10px; padding:20px 24px; cursor:pointer; min-height:120px; display:flex; flex-direction:column; gap:10px; }
+    .mace-cyr { font-size:1.25rem; line-height:1.5; color:#e0e0ff; }
+    .mace-lat { font-size:0.95rem; color:#a0b4cc; line-height:1.5; }
+    .mace-en  { font-size:0.9rem; color:#6a8aaa; font-style:italic; line-height:1.5; }
+    .mace-page-label { font-size:0.8rem; color:#556; text-align:right; }
+    .mace-nav-row { display:flex; justify-content:space-between; align-items:center; }
+    .mace-counter { font-size:0.85rem; color:#556; }
+    .mace-blank { display:inline-block; min-width:80px; border-bottom:2px solid #4a8acc; color:transparent; background:#1a2a3a; border-radius:3px; }
+    .mace-missed-btn { background:none; border:1px solid #445; border-radius:6px; padding:4px 10px; color:#779; cursor:pointer; font-size:1rem; }
+    .mace-missed-btn.flagged { color:#f0a020; border-color:#f0a020; }
+    .mace-vocab-note { font-size:0.8rem; color:#556; font-style:normal; }
+    .mace-score { font-size:0.85rem; color:#779; }
   </style>
 </head>
 <body>
@@ -1059,6 +1077,7 @@
     <button id="nav-slagalica"  onclick="showView('slagalica')">Slagalica</button>
     <button id="nav-cyrillic"   onclick="showView('cyrillic')">Cyrillic</button>
     <button id="nav-numbers"    onclick="showView('numbers')">Numbers</button>
+    <button id="nav-mace"       onclick="showView('mace')">Mače</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
@@ -1536,6 +1555,18 @@
 
   </div><!-- /numbers-view -->
 
+  <!-- ═══════════════ MAČE VIEW ═══════════════ -->
+  <div id="mace-view" style="display:none">
+    <div class="mace-tabs">
+      <button class="cyr-pill active" id="mace-tab-reader" onclick="showMaceTab('reader')">📖 Reader</button>
+      <button class="cyr-pill" id="mace-tab-vocab"  onclick="showMaceTab('vocab')">📚 Vocab</button>
+      <button class="cyr-pill" id="mace-tab-cloze"  onclick="showMaceTab('cloze')">✏️ Cloze</button>
+    </div>
+    <div class="mace-section active" id="mace-reader"><!-- rendered by JS --></div>
+    <div class="mace-section"        id="mace-vocab"><!-- rendered by JS --></div>
+    <div class="mace-section"        id="mace-cloze"><!-- rendered by JS --></div>
+  </div><!-- /mace-view -->
+
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
 
@@ -1775,6 +1806,107 @@
     speechSynthesis.addEventListener('voiceschanged', _loadVoices);
     _loadVoices();
   }
+
+  // ═══════════════════════════════════════════════════
+  //  MAČE BOOK DATA
+  // ═══════════════════════════════════════════════════
+  const MACE_SENTENCES = [
+    { page:1,  lat:'Jednog dana, mače se probudilo i pomislilo: „Danas želim da radim nešto vrlo uzbudljivo!"', en:'One day, the kitten woke up and thought: "Today I want to do something very exciting!"', clozeWord:'uzbudljivo' },
+    { page:2,  lat:'Gledalo je svuda po kući, tražeći nešto za čim može da juri.', en:'It looked all around the house, searching for something to chase.', clozeWord:'svuda' },
+    { page:2,  lat:'Mače je baš volelo da juri i lovi različite stvari.', en:'The kitten really loved to chase and catch different things.', clozeWord:'volelo' },
+    { page:3,  lat:'Mače je spazilo veliku crvenu loptu.', en:'The kitten spotted a big red ball.', clozeWord:'crvenu' },
+    { page:3,  lat:'„Juriću to", pomislilo je.', en:'"I will chase that," it thought.', clozeWord:'pomislilo' },
+    { page:3,  lat:'Pretrčalo je preko sobe i ustremilo se na loptu.', en:'It ran across the room and lunged at the ball.', clozeWord:'sobe' },
+    { page:4,  lat:'Ali velika crvena lopta je zapravo bila balon, te je glasno pukla kada ju je mače dotaklo kandžicama.', en:'But the big red ball was actually a balloon, and it popped loudly when the kitten touched it with its claws.', clozeWord:'balon' },
+    { page:5,  lat:'Mače se toliko uplašilo zbog praska da je istrčalo iz kuće u dvorište.', en:'The kitten was so scared by the bang that it ran out of the house into the yard.', clozeWord:'praska' },
+    { page:6,  lat:'Tu je pronašlo perušku koja je lebdela na vetru.', en:'There it found a feather that was floating in the wind.', clozeWord:'lebdela' },
+    { page:6,  lat:'„Dosta mi je bučnih stvari", reče mače jureći za peruškom.', en:'"I\'ve had enough of noisy things," said the kitten, chasing the feather.', clozeWord:'bučnih' },
+    { page:7,  lat:'Mače je skočilo na ogradu pokušavajući da uhvati perušku.', en:'The kitten jumped onto the fence trying to catch the feather.', clozeWord:'ogradu' },
+    { page:8,  lat:'„Av! Av!", zalajao je veliki komšijski pas.', en:'"Woof! Woof!" barked the big neighbor\'s dog.', clozeWord:'zalajao' },
+    { page:9,  lat:'Mačence se mnogo uplašilo.', en:'The little kitten got very scared.', clozeWord:'uplašilo' },
+    { page:9,  lat:'Brzo je pobeglo i popelo se na visoko drvo.', en:'It quickly fled and climbed up a tall tree.', clozeWord:'pobeglo' },
+    { page:10, lat:'Ali mače se popelo suviše visoko i sada nije umelo da siđe.', en:'But the kitten had climbed too high and now didn\'t know how to get down.', clozeWord:'suviše' },
+    { page:10, lat:'„Upomoć, upomoć!", mijaukalo je.', en:'"Help, help!" it meowed.', clozeWord:'mijaukalo' },
+    { page:10, lat:'„Pada mrak i plašim se!"', en:'"It\'s getting dark and I\'m scared!"', clozeWord:'mrak' },
+    { page:11, lat:'Srećom, jedan vatrogasac spazio je mače na drvetu.', en:'Luckily, a firefighter spotted the kitten in the tree.', clozeWord:'vatrogasac' },
+    { page:11, lat:'Brzo se popeo uz merdevine i spasao ga.', en:'He quickly climbed up the ladder and saved it.', clozeWord:'merdevine' },
+    { page:12, lat:'Mače je odlučilo da je dosta uzbuđenja za jedan dan.', en:'The kitten decided that was enough excitement for one day.', clozeWord:'uzbuđenja' },
+    { page:12, lat:'Ušuškalo se u svoju udobnu korpu i ubrzo zaspalo.', en:'It snuggled into its cozy basket and soon fell asleep.', clozeWord:'udobnu' },
+  ];
+
+  const MACE_VOCAB = [
+    { lat:'mače',          en:'kitten',               note:'neuter noun' },
+    { lat:'jednog dana',   en:'one day',               note:'gen. case' },
+    { lat:'probuditi se',  en:'to wake up',            note:'perf.' },
+    { lat:'pomisliti',     en:'to think / have a thought', note:'perf.' },
+    { lat:'danas',         en:'today',                 note:'' },
+    { lat:'vrlo',          en:'very',                  note:'adv.' },
+    { lat:'uzbudljivo',    en:'exciting',              note:'neuter adj.' },
+    { lat:'gledati',       en:'to look',               note:'impf.' },
+    { lat:'svuda',         en:'everywhere',            note:'adv.' },
+    { lat:'kuća',          en:'house',                 note:'f. noun' },
+    { lat:'tražiti',       en:'to search for',         note:'impf.' },
+    { lat:'juriti',        en:'to chase',              note:'impf.' },
+    { lat:'baš',           en:'really / just',         note:'particle' },
+    { lat:'voleti',        en:'to love / like',        note:'impf.' },
+    { lat:'loviti',        en:'to catch / hunt',       note:'impf.' },
+    { lat:'različit',      en:'different / various',   note:'adj.' },
+    { lat:'stvar',         en:'thing',                 note:'f. noun' },
+    { lat:'spaziti',       en:'to spot / notice',      note:'perf.' },
+    { lat:'velik',         en:'big / large',           note:'adj.' },
+    { lat:'crven',         en:'red',                   note:'adj.' },
+    { lat:'lopta',         en:'ball',                  note:'f. noun' },
+    { lat:'pretrčati',     en:'to run across',         note:'perf.' },
+    { lat:'soba',          en:'room',                  note:'f. noun' },
+    { lat:'ustremiti se',  en:'to lunge / dart toward',note:'perf.' },
+    { lat:'zapravo',       en:'actually / in fact',    note:'adv.' },
+    { lat:'balon',         en:'balloon',               note:'m. noun' },
+    { lat:'glasno',        en:'loudly',                note:'adv.' },
+    { lat:'puknuti',       en:'to pop / burst',        note:'perf.' },
+    { lat:'dotaći',        en:'to touch',              note:'perf.' },
+    { lat:'kandže',        en:'claws',                 note:'f. pl.' },
+    { lat:'toliko',        en:'so much / so many',     note:'adv.' },
+    { lat:'uplašiti se',   en:'to get scared',         note:'perf.' },
+    { lat:'zbog',          en:'because of',            note:'prep. + gen.' },
+    { lat:'prasak',        en:'bang / pop (sound)',    note:'m. noun' },
+    { lat:'istrčati',      en:'to run out',            note:'perf.' },
+    { lat:'dvorište',      en:'yard / courtyard',      note:'neuter noun' },
+    { lat:'peruška',       en:'feather',               note:'f. noun' },
+    { lat:'lebdeti',       en:'to float / hover',      note:'impf.' },
+    { lat:'vetar',         en:'wind',                  note:'m. noun' },
+    { lat:'dosta',         en:'enough',                note:'adv.' },
+    { lat:'bučan',         en:'noisy / loud',          note:'adj.' },
+    { lat:'reći',          en:'to say',                note:'perf.' },
+    { lat:'skočiti',       en:'to jump',               note:'perf.' },
+    { lat:'ograda',        en:'fence',                 note:'f. noun' },
+    { lat:'pokušavati',    en:'to try (repeatedly)',   note:'impf.' },
+    { lat:'uhvatiti',      en:'to catch / grab',       note:'perf.' },
+    { lat:'zalajati',      en:'to bark',               note:'perf.' },
+    { lat:'pas',           en:'dog',                   note:'m. noun' },
+    { lat:'komšijski',     en:'neighbor\'s',           note:'adj.' },
+    { lat:'mačence',       en:'little kitten',         note:'diminutive' },
+    { lat:'pobeći',        en:'to flee / run away',    note:'perf.' },
+    { lat:'popeti se',     en:'to climb up',           note:'perf.' },
+    { lat:'drvo',          en:'tree',                  note:'neuter noun' },
+    { lat:'suviše',        en:'too (much) / excessively', note:'adv.' },
+    { lat:'umeti',         en:'to know how to',        note:'impf.' },
+    { lat:'sići',          en:'to go down / descend',  note:'perf.' },
+    { lat:'upomoć',        en:'help! (exclamation)',   note:'' },
+    { lat:'mijaukati',     en:'to meow',               note:'impf.' },
+    { lat:'mrak',          en:'darkness',              note:'m. noun' },
+    { lat:'plašiti se',    en:'to be scared',          note:'impf.' },
+    { lat:'srećom',        en:'luckily / fortunately', note:'adv.' },
+    { lat:'vatrogasac',    en:'firefighter',           note:'m. noun' },
+    { lat:'merdevine',     en:'ladder',                note:'f. pl.' },
+    { lat:'spasiti',       en:'to save / rescue',      note:'perf.' },
+    { lat:'odlučiti',      en:'to decide',             note:'perf.' },
+    { lat:'uzbuđenje',     en:'excitement',            note:'neuter noun' },
+    { lat:'ušuškati se',   en:'to snuggle / nestle',   note:'perf.' },
+    { lat:'udoban',        en:'comfortable / cozy',    note:'adj.' },
+    { lat:'korpa',         en:'basket',                note:'f. noun' },
+    { lat:'ubrzo',         en:'soon / quickly',        note:'adv.' },
+    { lat:'zaspati',       en:'to fall asleep',        note:'perf.' },
+  ];
 
   // ═══════════════════════════════════════════════════
   //  CONSTANTS
@@ -5154,6 +5286,19 @@
   let numAnswered = false;
   let numScoredQ  = false;
 
+  // ── Mače Book state
+  let maceTab           = 'reader';
+  let maceReaderIdx     = 0;
+  let maceVocabIdx      = 0;
+  let maceVocabFlipped  = false;
+  let maceVocabMissed   = new Set();
+  let maceVocabMode     = 'all';       // 'all' | 'missed'
+  let maceVocabDeck     = [];
+  let maceClozeIdx      = 0;
+  let maceClozeScore    = { correct:0, total:0 };
+  let maceClozeAnswered = false;
+  let maceClozeCorrect  = '';
+
   const CTX_PREFIX_MAP = {
     'popiti':'po', 'pojesti':'po', 'pogledati':'po', 'pozvati':'po', 'poslušati':'po',
     'pročitati':'pro', 'prohodati':'pro',
@@ -5679,8 +5824,9 @@
     document.getElementById('slagalica-view').style.display  = view === 'slagalica'  ? 'flex' : 'none';
     document.getElementById('cyrillic-view').style.display   = view === 'cyrillic'   ? 'flex' : 'none';
     document.getElementById('numbers-view').style.display    = view === 'numbers'    ? 'flex' : 'none';
+    document.getElementById('mace-view').style.display       = view === 'mace'       ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -5692,6 +5838,7 @@
     if (view === 'slagalica')  renderSlagView();
     if (view === 'cyrillic')   renderCyrView();
     if (view === 'numbers')    renderNumView();
+    if (view === 'mace')       renderMaceView();
     if (view === 'manage')     renderManage();
   }
 
@@ -7473,6 +7620,201 @@
   }
 
   // ═══════════════════════════════════════════════════
+  //  MAČE BOOK
+  // ═══════════════════════════════════════════════════
+
+  function renderMaceView() {
+    if (maceVocabDeck.length === 0) buildMaceVocabDeck();
+    showMaceTab(maceTab);
+  }
+
+  function showMaceTab(tab) {
+    maceTab = tab;
+    ['reader','vocab','cloze'].forEach(t => {
+      document.getElementById(`mace-${t}`).classList.toggle('active', t === tab);
+      document.getElementById(`mace-tab-${t}`).classList.toggle('active', t === tab);
+    });
+    if (tab === 'reader') renderMaceReader();
+    if (tab === 'vocab')  renderMaceVocab();
+    if (tab === 'cloze')  generateMaceCloze();
+  }
+
+  function renderMaceReader() {
+    const s   = MACE_SENTENCES[maceReaderIdx];
+    const cyr = latinToCyrillic(s.lat);
+    const el  = document.getElementById('mace-reader');
+    el.innerHTML = `
+      <div class="mace-nav-row">
+        <span class="mace-counter">Sentence ${maceReaderIdx + 1} / ${MACE_SENTENCES.length}</span>
+        <span class="mace-page-label">Page ${s.page}</span>
+      </div>
+      <div class="mace-card">
+        <div class="mace-cyr">${cyr}</div>
+        <div class="mace-lat">${s.lat}</div>
+        <div class="mace-en">${s.en}</div>
+      </div>
+      <div class="mace-nav-row">
+        <button class="cyr-pill" onclick="maceReaderGo(-1)" ${maceReaderIdx === 0 ? 'disabled' : ''}>← Prev</button>
+        <button class="cyr-pill" onclick="maceReaderGo(1)" ${maceReaderIdx === MACE_SENTENCES.length - 1 ? 'disabled' : ''}>Next →</button>
+      </div>`;
+  }
+
+  function maceReaderGo(delta) {
+    maceReaderIdx = Math.max(0, Math.min(MACE_SENTENCES.length - 1, maceReaderIdx + delta));
+    renderMaceReader();
+  }
+
+  function buildMaceVocabDeck() {
+    if (maceVocabMode === 'missed') {
+      maceVocabDeck = [...maceVocabMissed];
+      if (maceVocabDeck.length === 0) maceVocabDeck = MACE_VOCAB.map((_, i) => i);
+    } else {
+      maceVocabDeck = MACE_VOCAB.map((_, i) => i);
+    }
+    maceVocabIdx     = 0;
+    maceVocabFlipped = false;
+  }
+
+  function renderMaceVocab() {
+    const el      = document.getElementById('mace-vocab');
+    const realIdx = maceVocabDeck[maceVocabIdx];
+    const card    = MACE_VOCAB[realIdx];
+    const flagged = maceVocabMissed.has(realIdx);
+
+    let cardContent;
+    if (!maceVocabFlipped) {
+      cardContent = `<div class="mace-cyr">${latinToCyrillic(card.lat)}</div>
+                     <div class="mace-lat">${card.lat}</div>
+                     <div class="mace-en" style="color:#445;font-style:normal;">(click to flip)</div>`;
+    } else {
+      cardContent = `<div class="mace-cyr">${card.en}</div>
+                     ${card.note ? `<div class="mace-vocab-note">${card.note}</div>` : ''}`;
+    }
+
+    el.innerHTML = `
+      <div class="mace-nav-row">
+        <span class="mace-counter">Card ${maceVocabIdx + 1} / ${maceVocabDeck.length}</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="cyr-pill ${maceVocabMode === 'all' ? 'active' : ''}" onclick="maceSetVocabMode('all')">All</button>
+          <button class="cyr-pill ${maceVocabMode === 'missed' ? 'active' : ''}" onclick="maceSetVocabMode('missed')">Missed</button>
+          <button class="mace-missed-btn ${flagged ? 'flagged' : ''}" onclick="maceToggleMissed()" title="Flag card">⚑</button>
+        </div>
+      </div>
+      <div class="mace-card" onclick="maceVocabFlip()">${cardContent}</div>
+      <div class="mace-nav-row">
+        <button class="cyr-pill" onclick="maceVocabGo(-1)" ${maceVocabIdx === 0 ? 'disabled' : ''}>← Prev</button>
+        <button class="cyr-pill" onclick="maceVocabGo(1)" ${maceVocabIdx === maceVocabDeck.length - 1 ? 'disabled' : ''}>Next →</button>
+      </div>`;
+  }
+
+  function maceVocabFlip() {
+    maceVocabFlipped = !maceVocabFlipped;
+    renderMaceVocab();
+  }
+
+  function maceVocabGo(delta) {
+    maceVocabIdx     = Math.max(0, Math.min(maceVocabDeck.length - 1, maceVocabIdx + delta));
+    maceVocabFlipped = false;
+    renderMaceVocab();
+  }
+
+  function maceToggleMissed() {
+    const realIdx = maceVocabDeck[maceVocabIdx];
+    if (maceVocabMissed.has(realIdx)) {
+      maceVocabMissed.delete(realIdx);
+    } else {
+      maceVocabMissed.add(realIdx);
+    }
+    renderMaceVocab();
+  }
+
+  function maceSetVocabMode(m) {
+    maceVocabMode = m;
+    buildMaceVocabDeck();
+    renderMaceVocab();
+  }
+
+  function generateMaceCloze() {
+    maceClozeAnswered = false;
+    // Pick a random sentence
+    maceClozeIdx = Math.floor(Math.random() * MACE_SENTENCES.length);
+    const s = MACE_SENTENCES[maceClozeIdx];
+    maceClozeCorrect = s.clozeWord;
+
+    // Build 3 distractors: random vocab words that don't match the correct word
+    // and don't appear verbatim in the sentence
+    const distractors = [];
+    const pool = MACE_VOCAB.filter(v => v.lat !== s.clozeWord && !s.lat.includes(v.lat));
+    const shuffledPool = pool.slice().sort(() => Math.random() - 0.5);
+    for (const v of shuffledPool) {
+      if (distractors.length >= 3) break;
+      distractors.push(v.lat);
+    }
+    // Pad if not enough distractors
+    while (distractors.length < 3) distractors.push('...');
+
+    const options = [s.clozeWord, ...distractors].sort(() => Math.random() - 0.5);
+    renderMaceCloze(s, options);
+  }
+
+  function renderMaceCloze(s, options) {
+    const el = document.getElementById('mace-cloze');
+    // Build display sentence with blank replacing the cloze word
+    const blankLat = s.lat.replace(s.clozeWord, '<span class="mace-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+    const blankCyr = latinToCyrillic(s.lat).replace(
+      latinToCyrillic(s.clozeWord),
+      '<span class="mace-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
+    );
+
+    const optBtns = options.map(w =>
+      `<button class="cyr-option" id="mace-opt-${w}" onclick="maceClozeAnswer('${w.replace(/'/g, "\\'")}')">${w}</button>`
+    ).join('');
+
+    el.innerHTML = `
+      <div class="mace-nav-row">
+        <span class="mace-counter">Sentence ${maceClozeIdx + 1} / ${MACE_SENTENCES.length}</span>
+        <span class="mace-score" id="mace-cloze-score">Score: ${maceClozeScore.correct} / ${maceClozeScore.total}</span>
+      </div>
+      <div class="mace-card">
+        <div class="mace-cyr">${blankCyr}</div>
+        <div class="mace-lat">${blankLat}</div>
+        <div class="mace-en">${s.en}</div>
+      </div>
+      <div class="cyr-options" id="mace-options">${optBtns}</div>
+      <div class="cyr-feedback" id="mace-feedback"></div>
+      <div style="text-align:right;display:none;" id="mace-next-row">
+        <button class="cyr-pill active" onclick="maceClozeNext()">Next →</button>
+      </div>`;
+  }
+
+  function maceClozeAnswer(w) {
+    if (maceClozeAnswered) return;
+    maceClozeAnswered = true;
+    maceClozeScore.total++;
+    const isRight = w === maceClozeCorrect;
+    if (isRight) maceClozeScore.correct++;
+
+    // Disable all buttons and color them
+    document.querySelectorAll('#mace-options .cyr-option').forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === maceClozeCorrect) btn.classList.add('correct');
+      else if (btn.textContent === w && !isRight) btn.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('mace-feedback');
+    fb.textContent = isRight ? '✓ Correct!' : `✗ The answer was: ${maceClozeCorrect}`;
+    fb.style.color = isRight ? '#27ae60' : '#e94560';
+
+    document.getElementById('mace-cloze-score').textContent =
+      `Score: ${maceClozeScore.correct} / ${maceClozeScore.total}`;
+    document.getElementById('mace-next-row').style.display = 'block';
+  }
+
+  function maceClozeNext() {
+    generateMaceCloze();
+  }
+
+  // ═══════════════════════════════════════════════════
   //  MANAGE — shared
   // ═══════════════════════════════════════════════════
   function showManageTab(tab) {
@@ -7788,6 +8130,28 @@
         if (e.key === '2' && numOptBtns[1]) numOptBtns[1].click();
         if (e.key === '3' && numOptBtns[2]) numOptBtns[2].click();
         if (e.key === '4' && numOptBtns[3]) numOptBtns[3].click();
+      }
+    }
+    const maceVisible = document.getElementById('mace-view').style.display !== 'none';
+    if (maceVisible) {
+      if (maceTab === 'reader') {
+        if (e.key === 'ArrowLeft')  maceReaderGo(-1);
+        if (e.key === 'ArrowRight') maceReaderGo(1);
+      }
+      if (maceTab === 'vocab') {
+        if (e.key === 'ArrowLeft')  maceVocabGo(-1);
+        if (e.key === 'ArrowRight') maceVocabGo(1);
+        if (e.key === ' ') { e.preventDefault(); maceVocabFlip(); }
+      }
+      if (maceTab === 'cloze') {
+        if ((e.key === 'ArrowRight' || e.key === 'Enter') && maceClozeAnswered) maceClozeNext();
+        const maceOptBtns = document.querySelectorAll('#mace-options .cyr-option:not(:disabled)');
+        if (maceOptBtns.length > 0) {
+          if (e.key === '1' && maceOptBtns[0]) maceOptBtns[0].click();
+          if (e.key === '2' && maceOptBtns[1]) maceOptBtns[1].click();
+          if (e.key === '3' && maceOptBtns[2]) maceOptBtns[2].click();
+          if (e.key === '4' && maceOptBtns[3]) maceOptBtns[3].click();
+        }
       }
     }
   });
