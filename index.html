@@ -1765,6 +1765,18 @@
 
 <script>
   // ═══════════════════════════════════════════════════
+  //  SPEECH VOICE CACHE
+  //  getVoices() returns [] on first call in Chrome until
+  //  the voiceschanged event fires — cache it properly.
+  // ═══════════════════════════════════════════════════
+  let _ttsVoices = [];
+  if ('speechSynthesis' in window) {
+    const _loadVoices = () => { _ttsVoices = speechSynthesis.getVoices(); };
+    speechSynthesis.addEventListener('voiceschanged', _loadVoices);
+    _loadVoices();
+  }
+
+  // ═══════════════════════════════════════════════════
   //  CONSTANTS
   // ═══════════════════════════════════════════════════
   const PALETTE = [
@@ -7209,16 +7221,54 @@
   //  NUMBERS LISTENING
   // ═══════════════════════════════════════════════════
 
+  // Map Serbian orthography to English phonetic approximations so the
+  // English TTS engine sounds much closer to actual Serbian pronunciation.
+  function serbianToPhonetic(text) {
+    return text
+      // ── Digraphs (must come before single-letter rules) ──────────
+      .replace(/lj/g, 'ly').replace(/LJ/g, 'LY').replace(/Lj/g, 'Ly')
+      .replace(/nj/g, 'ny').replace(/NJ/g, 'NY').replace(/Nj/g, 'Ny')
+      // ── Accented characters ───────────────────────────────────────
+      .replace(/š/g, 'sh').replace(/Š/g, 'Sh')
+      .replace(/č/g, 'ch').replace(/Č/g, 'Ch')
+      .replace(/ć/g, 'ch').replace(/Ć/g, 'Ch')
+      .replace(/ž/g, 'zh').replace(/Ž/g, 'Zh')
+      .replace(/đ/g, 'dj').replace(/Đ/g, 'Dj')
+      // ── Serbian j = English "y" ───────────────────────────────────
+      // Must come after digraph rules so "lj"→"ly" isn't re-processed.
+      .replace(/j/g, 'y').replace(/J/g, 'Y')
+      // ── Number-word phonetics ─────────────────────────────────────
+      // "tri" (3, and tri- prefix in trinaest/trideset/trista):
+      //   English reads "tri" as "TRY"; Serbian is "TREE".
+      .replace(/\btri/gi, 'tree')
+      // "-naest" suffix (all teens): English "naest"≈"nayest"; fix to "nah-est".
+      .replace(/naest/g, 'nah-est')
+      // "-deset" (10 and all tens): clarify the middle syllable.
+      .replace(/deset/g, 'deh-set')
+      // Standalone short words whose vowels English distorts
+      .replace(/\bdva\b/gi, 'dvah')
+      .replace(/\bdve\b/gi, 'dveh');
+  }
+
   function speakSerbian(text) {
     if (!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
-    const u  = new SpeechSynthesisUtterance(text);
-    u.lang   = 'sr-RS';
-    u.rate   = 0.9;
-    // Use a Serbian voice if available
-    const voices = speechSynthesis.getVoices();
-    const srVoice = voices.find(v => v.lang.startsWith('sr'));
-    if (srVoice) u.voice = srVoice;
+
+    // Use cached voices; fall back to live query in case cache is still empty
+    const voices = _ttsVoices.length ? _ttsVoices : speechSynthesis.getVoices();
+
+    // Prefer languages closest to Serbian: sr → hr (Croatian) → bs (Bosnian) → sl (Slovenian)
+    const slavicPrefixes = ['sr', 'hr', 'bs', 'sl'];
+    const slavicVoice = slavicPrefixes.reduce((found, prefix) =>
+      found || voices.find(v => v.lang.toLowerCase().startsWith(prefix)) || null
+    , null);
+
+    const u  = new SpeechSynthesisUtterance(slavicVoice ? text : serbianToPhonetic(text));
+    u.rate   = 0.85;
+    if (slavicVoice) {
+      u.voice = slavicVoice;
+      u.lang  = slavicVoice.lang;
+    }
     speechSynthesis.speak(u);
   }
 
@@ -7292,7 +7342,15 @@
   function buildNumDistractors(n, maxRange) {
     const result = new Set();
 
-    // 1. Teen ↔ ten confusion (most pedagogically valuable)
+    // 1. Guaranteed close neighbor within ±1–10 (always one "trap" option nearby)
+    {
+      const delta = Math.floor(Math.random() * 10) + 1;
+      let close   = n + (Math.random() < 0.5 ? delta : -delta);
+      if (close < 1 || close > maxRange) close = n + (close < 1 ? delta : -delta);
+      if (close >= 1 && close <= maxRange && close !== n) result.add(close);
+    }
+
+    // 2. Teen ↔ ten confusion (most pedagogically valuable)
     if (n >= 11 && n <= 19) {
       const ten = (n - 10) * 10;          // 17 → 70
       if (ten >= 1 && ten <= maxRange) result.add(ten);
@@ -7301,7 +7359,7 @@
       if (teen >= 11 && teen <= 19) result.add(teen);
     }
 
-    // 2. Same-component confusion (same hundreds/thousands, different remainder)
+    // 3. Same-component confusion (same hundreds/thousands, different remainder)
     if (n >= 100 && result.size < 3) {
       const base = Math.floor(n / 100) * 100;
       const candidates = [
@@ -7316,7 +7374,7 @@
       }
     }
 
-    // 3. ±15–25% noise filler
+    // 4. ±15–25% noise filler
     const spread = Math.max(5, Math.floor(n * 0.22));
     let attempts = 0;
     while (result.size < 3 && attempts < 80) {
@@ -7326,7 +7384,7 @@
       if (c >= 1 && c <= maxRange && c !== n && !result.has(c)) result.add(c);
     }
 
-    // 4. Pure random fallback
+    // 5. Pure random fallback
     let safety = 0;
     while (result.size < 3 && safety < 200) {
       safety++;
