@@ -7342,7 +7342,48 @@
   function buildNumDistractors(n, maxRange) {
     const result = new Set();
 
-    // 1. Guaranteed close neighbor within ±1–10 (always one "trap" option nearby)
+    // ── 1. TAIL-SHARING (mandatory for n > 100) ───────────────────────────
+    // For numbers over 100 the learner must identify the *leading* component
+    // (hundreds / thousands / ten-thousands …).  Two distractors share the
+    // exact same ending as the correct answer, differing only in that leading
+    // component.  This means 3 of the 4 options on screen end identically.
+    //
+    //   n = 357  → pool: 157, 257, 457 … 957  (all end in "57")
+    //   n = 1500 → pool: 2500, 3500 … 9500    (all end in "500")
+    //   n = 25000→ pool: 15000, 35000 … 95000 (all end in "5000")
+    if (n > 100) {
+      let base, rangeMin;
+      if      (n <    1000) { base =      100; rangeMin =    100; }
+      else if (n <   10000) { base =     1000; rangeMin =   1000; }
+      else if (n <  100000) { base =    10000; rangeMin =  10000; }
+      else                  { base =   100000; rangeMin = 100000; }
+
+      const mod      = n % base;
+      const rangeMax = base * 10 - 1;           // 999 / 9999 / 99999 / 999999
+      const cap      = Math.min(rangeMax, maxRange);
+      const pool     = [];
+
+      for (let k = 1; k * base + mod <= cap; k++) {
+        const c = k * base + mod;
+        if (c !== n && c >= rangeMin) pool.push(c);
+      }
+      // Shuffle pool so selection is random, not always the lowest values
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      for (const c of pool) {
+        if (!result.has(c)) {
+          result.add(c);
+          if (result.size >= 2) break;
+        }
+      }
+    }
+
+    // ── 2. CLOSE NEIGHBOR (mandatory, ±1–10) ─────────────────────────────
+    // Always one option very near the correct answer.  For n > 100 this
+    // distractor differs in its tail (since base ≥ 100 > 10), so it does NOT
+    // count toward the 3-same-ending constraint — making it the "odd one out".
     {
       const delta = Math.floor(Math.random() * 10) + 1;
       let close   = n + (Math.random() < 0.5 ? delta : -delta);
@@ -7350,31 +7391,16 @@
       if (close >= 1 && close <= maxRange && close !== n) result.add(close);
     }
 
-    // 2. Teen ↔ ten confusion (most pedagogically valuable)
+    // ── 3. TEEN ↔ TEN confusion (only applies for n ≤ 100) ───────────────
     if (n >= 11 && n <= 19) {
-      const ten = (n - 10) * 10;          // 17 → 70
-      if (ten >= 1 && ten <= maxRange) result.add(ten);
+      const ten = (n - 10) * 10;
+      if (ten >= 1 && ten <= maxRange && !result.has(ten)) result.add(ten);
     } else if (n >= 10 && n <= 90 && n % 10 === 0) {
-      const teen = n / 10 + 10;           // 70 → 17
-      if (teen >= 11 && teen <= 19) result.add(teen);
+      const teen = n / 10 + 10;
+      if (teen >= 11 && teen <= 19 && !result.has(teen)) result.add(teen);
     }
 
-    // 3. Same-component confusion (same hundreds/thousands, different remainder)
-    if (n >= 100 && result.size < 3) {
-      const base = Math.floor(n / 100) * 100;
-      const candidates = [
-        base + Math.min(99, Math.max(1, (n % 100) + 17)),
-        base + Math.max(1,  (n % 100) - 17),
-      ];
-      for (const c of candidates) {
-        if (c >= 1 && c <= maxRange && c !== n && !result.has(c)) {
-          result.add(c);
-          if (result.size >= 3) break;
-        }
-      }
-    }
-
-    // 4. ±15–25% noise filler
+    // ── 4. NOISE FILLER ──────────────────────────────────────────────────
     const spread = Math.max(5, Math.floor(n * 0.22));
     let attempts = 0;
     while (result.size < 3 && attempts < 80) {
@@ -7384,7 +7410,7 @@
       if (c >= 1 && c <= maxRange && c !== n && !result.has(c)) result.add(c);
     }
 
-    // 5. Pure random fallback
+    // ── 5. RANDOM FALLBACK ────────────────────────────────────────────────
     let safety = 0;
     while (result.size < 3 && safety < 200) {
       safety++;
