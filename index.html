@@ -4056,11 +4056,12 @@
   //  GROUPS STORAGE
   // ═══════════════════════════════════════════════════
   const GROUPS_KEY  = 'serbian_groups';
-  const GROUPS_VER  = '4';
+  const GROUPS_VER  = '5';
 
   const DEFAULT_GROUPS = [
     'Greetings','Basics','Food & Drink','Places','Numbers','Animals',
     'People','Time','Colors','Body','Home','Verbs','Adjectives','Prepositions',
+    'Transitions','Linkers',
     'Phrases','Verbs II','Verbs III','Transportation','Clothing','Nature & Weather','School & Work',
     'Baby','Not Nice',
     'Unit 1','Unit 2','Unit 3','Unit 4','Unit 5','Unit 6','Unit 7',
@@ -4231,7 +4232,7 @@
   //  FLASHCARD STORAGE
   // ═══════════════════════════════════════════════════
   const STORAGE_KEY = 'serbian_cards';
-  const CARDS_VER   = '10';
+  const CARDS_VER   = '11';
 
   const DEFAULT_CARDS = [
     // ── GREETINGS ─────────────────────────────────────────────────────────
@@ -4518,6 +4519,79 @@
     { serbian:'pri',     english:'at / near / upon',       category:'Prepositions', note:'+ Locative\npri kraju  (near the end)' },
     { serbian:'o',       english:'about / concerning',     category:'Prepositions', note:'+ Locative\npričam o tome  (I talk about that)' },
     { serbian:'ka',      english:'toward (direction)',     category:'Prepositions', note:'+ Dative\nka moru  (toward the sea)' },
+    // ── TRANSITIONS ───────────────────────────────────────────────────────
+    // Coordinators
+    { serbian:'i',              english:'and',                                    category:'Transitions', note:'joins equals: Kupila sam hleb i mleko. (I bought bread and milk.)' },
+    { serbian:'a',              english:'and / but (mild contrast)',              category:'Transitions', note:'On je visok, a ona je niska. (He is tall, but she is short.)' },
+    { serbian:'ali',            english:'but',                                    category:'Transitions', note:'Umoran sam, ali moram da radim. (I am tired, but I must work.)' },
+    { serbian:'nego',           english:'but rather / than',                      category:'Transitions', note:'after negation: Ne čitam, nego spavam. (I\'m not reading, but rather sleeping.)' },
+    { serbian:'ili',            english:'or',                                     category:'Transitions', note:'Kafa ili čaj? (Coffee or tea?)' },
+    { serbian:'niti',           english:'nor',                                    category:'Transitions', note:'pairs with "ni": Ni on ni ona... / Niti jede niti spava. (He neither eats nor sleeps.)' },
+    // Additives
+    { serbian:'takođe',         english:'also / too / as well',                  category:'Transitions', note:'Ja takođe volim muziku. (I also like music.)' },
+    { serbian:'osim toga',      english:'besides / moreover / in addition',       category:'Transitions', note:'Osim toga, bio je i umoran. (Besides, he was also tired.)' },
+    { serbian:'pored toga',     english:'in addition to that / furthermore',      category:'Transitions', note:'Pored toga, govori tri jezika. (In addition, she speaks three languages.)' },
+    { serbian:'štaviše',        english:'furthermore / what\'s more',             category:'Transitions', note:'Štaviše, nikad nije kasnio. (What\'s more, he was never late.)' },
+    { serbian:'uz to',          english:'on top of that / in addition',           category:'Transitions', note:'Uz to, donela je i tortu. (On top of that, she also brought a cake.)' },
+    // Causal
+    { serbian:'jer',            english:'because / for (reason)',                 category:'Transitions', note:'Ne mogu da dođem jer sam bolestan. (I can\'t come because I am sick.)' },
+    { serbian:'zato što',       english:'because (+ clause)',                     category:'Transitions', note:'Kasnim zato što je gužva. (I\'m late because there\'s traffic.)' },
+    { serbian:'pošto',          english:'since / because / after',                category:'Transitions', note:'Pošto je pao sneg, ostali smo kod kuće. (Since snow fell, we stayed home.)' },
+    { serbian:'budući da',      english:'since / given that (formal)',            category:'Transitions', note:'Budući da nema odgovora, zaključujem... (Given that there is no answer, I conclude...)' },
+    // Resultative
+    { serbian:'zato',           english:'therefore / that\'s why',                category:'Transitions', note:'Umoran sam, zato idem spavati. (I\'m tired, that\'s why I\'m going to sleep.)' },
+    { serbian:'dakle',          english:'so / therefore / thus',                  category:'Transitions', note:'Dakle, ti si u pravu. (So, you are right.)' },
+    { serbian:'stoga',          english:'therefore / hence (formal)',             category:'Transitions', note:'Stoga, molimo vas da budete mirni. (Therefore, please be quiet.)' },
+    { serbian:'prema tome',     english:'accordingly / therefore',                category:'Transitions', note:'Prema tome, moramo da reagujemo. (Accordingly, we must react.)' },
+    { serbian:'tako da',        english:'so that / so (result)',                  category:'Transitions', note:'Kiša pada, tako da ne možemo ići. (It\'s raining, so we can\'t go.)' },
+    { serbian:'iz tog razloga', english:'for that reason',                        category:'Transitions', note:'Iz tog razloga sam odbio ponudu. (For that reason I refused the offer.)' },
+    // Concessive / Contrastive
+    { serbian:'međutim',        english:'however / nevertheless',                 category:'Transitions', note:'Planiram da dođem; međutim, ne znam kada. (I plan to come; however, I don\'t know when.)' },
+    { serbian:'ipak',           english:'still / yet / nevertheless',             category:'Transitions', note:'Bio je bolestan, ipak je došao. (He was sick; still, he came.)' },
+    { serbian:'mada',           english:'although / even though',                 category:'Transitions', note:'Mada je kasno, ne mogu da spavam. (Although it\'s late, I can\'t sleep.)' },
+    { serbian:'iako',           english:'although / even though (emphatic)',      category:'Transitions', note:'Iako je hladno, ide napolje. (Even though it\'s cold, she\'s going outside.)' },
+    { serbian:'uprkos tome',    english:'despite that / in spite of that',        category:'Transitions', note:'Uprkos tome, nastavili smo da radimo. (Despite that, we continued working.)' },
+    { serbian:'s jedne strane', english:'on one hand',                            category:'Transitions', note:'S jedne strane, razumem ga. (On one hand, I understand him.)' },
+    { serbian:'s druge strane', english:'on the other hand',                      category:'Transitions', note:'S druge strane, to je skupo. (On the other hand, it is expensive.)' },
+    { serbian:'dok',            english:'while / whereas (contrast)',             category:'Transitions', note:'On voli kafić, dok ona preferira čaj. (He likes coffee, whereas she prefers tea.)' },
+    // Sequential / Temporal
+    { serbian:'najpre',         english:'first / firstly',                        category:'Transitions', note:'Najpre ću završiti posao. (First I will finish work.)' },
+    { serbian:'zatim',          english:'then / next / after that',               category:'Transitions', note:'Zatim idemo na ručak. (Then we go to lunch.)' },
+    { serbian:'potom',          english:'afterwards / then (next step)',          category:'Transitions', note:'Potom je otišla kući. (Afterwards she went home.)' },
+    { serbian:'u međuvremenu',  english:'meanwhile / in the meantime',            category:'Transitions', note:'U međuvremenu, mi smo čekali. (Meanwhile, we were waiting.)' },
+    { serbian:'konačno',        english:'finally / at last',                      category:'Transitions', note:'Konačno smo stigli! (We finally arrived!)' },
+    { serbian:'na kraju',       english:'in the end / at the end / finally',      category:'Transitions', note:'Na kraju, sve je bilo u redu. (In the end, everything was fine.)' },
+    { serbian:'odmah',          english:'immediately / right away',               category:'Transitions', note:'Odmah ću doći. (I\'ll come right away.)' },
+    { serbian:'ubrzo',          english:'soon / shortly after',                   category:'Transitions', note:'Ubrzo je stigla i ona. (She arrived soon after.)' },
+    // Explanatory / Exemplifying
+    { serbian:'na primer',      english:'for example / for instance',             category:'Transitions', note:'Na primer, možeš da kažeš... (For example, you can say...)' },
+    { serbian:'naime',          english:'namely / that is to say',                category:'Transitions', note:'Problem je, naime, u sledećem. (The problem is, namely, the following.)' },
+    { serbian:'zapravo',        english:'actually / in fact',                     category:'Transitions', note:'Zapravo, nisi u pravu. (Actually, you\'re not right.)' },
+    { serbian:'u stvari',       english:'in fact / as a matter of fact',          category:'Transitions', note:'U stvari, nisam siguran. (As a matter of fact, I\'m not sure.)' },
+    { serbian:'to jest',        english:'that is / i.e.',                         category:'Transitions', note:'Dođi rano, to jest, pre osam. (Come early, that is, before eight.)' },
+    { serbian:'kao što',        english:'just as / as (comparison)',              category:'Transitions', note:'Kao što sam rekao, to ne valja. (Just as I said, that\'s no good.)' },
+    { serbian:'inače',          english:'otherwise / by the way / normally',      category:'Transitions', note:'Inače, šta si radio juče? (By the way, what were you doing yesterday?)' },
+    // Conditional
+    { serbian:'ako',            english:'if',                                     category:'Transitions', note:'Ako dođeš, javiću ti. (If you come, I\'ll let you know.)' },
+    { serbian:'ukoliko',        english:'if / in case (formal)',                  category:'Transitions', note:'Ukoliko imate pitanja, javite se. (If you have questions, let us know.)' },
+    { serbian:'pod uslovom da', english:'on condition that / provided that',      category:'Transitions', note:'Dođem, pod uslovom da završim posao. (I\'ll come, provided I finish work.)' },
+    { serbian:'u slučaju da',   english:'in case / should',                       category:'Transitions', note:'U slučaju da kasniš, nazovi me. (In case you\'re late, call me.)' },
+    // ── LINKERS ───────────────────────────────────────────────────────────
+    { serbian:'ako... onda...',          english:'if... then...',                              category:'Linkers', note:'Ako pada kiša, onda ostajemo kod kuće. (If it rains, then we stay home.)' },
+    { serbian:'ili... ili...',           english:'either... or...',                            category:'Linkers', note:'Ili ideš ti, ili idem ja. (Either you go, or I go.)' },
+    { serbian:'ni... ni...',             english:'neither... nor...',                          category:'Linkers', note:'Ni on ni ona nije došao. (Neither he nor she came.)' },
+    { serbian:'i... i...',               english:'both... and...',                             category:'Linkers', note:'I jeo je i pio. (He both ate and drank.)' },
+    { serbian:'ne samo... nego i...',    english:'not only... but also...',                    category:'Linkers', note:'Ne samo da je kasno, nego i hladno. (Not only is it late, but also cold.)' },
+    { serbian:'ne samo... već i...',     english:'not only... but also... (variant)',          category:'Linkers', note:'Ne samo da je pametan, već i vredan. (Not only is he smart, but also hardworking.)' },
+    { serbian:'što... to...',            english:'the more... the more...',                    category:'Linkers', note:'Što više učiš, to više znaš. (The more you study, the more you know.)' },
+    { serbian:'što pre, to bolje',       english:'the sooner the better',                      category:'Linkers', note:'Završi to što pre, to bolje. (Finish it — the sooner the better.)' },
+    { serbian:'bilo... bilo...',         english:'whether... or... / either... or...',         category:'Linkers', note:'Bilo da dođeš, bilo da ne dođeš, javiću ti. (Whether you come or not, I\'ll let you know.)' },
+    { serbian:'kako... tako...',         english:'as... so... / just as... so too...',         category:'Linkers', note:'Kako zaspeš, tako ćeš i ustati. (As you fall asleep, so you will wake.)' },
+    { serbian:'čim... odmah...',         english:'as soon as... right away...',                category:'Linkers', note:'Čim stigneš, odmah me zovi. (As soon as you arrive, call me right away.)' },
+    { serbian:'toliko... koliko...',     english:'as much... as... / as many... as...',        category:'Linkers', note:'Voli te toliko koliko i ja. (He loves you as much as I do.)' },
+    { serbian:'pre... nego...',          english:'rather... than...',                          category:'Linkers', note:'Pre bih ostao kod kuće nego išao na žurku. (I\'d rather stay home than go to a party.)' },
+    { serbian:'s jedne strane... s druge strane...', english:'on one hand... on the other hand...', category:'Linkers', note:'S jedne strane, drag mi je; s druge strane, ne verujem mu. (On one hand I like him; on the other, I don\'t trust him.)' },
+    { serbian:'u onoj meri u kojoj',     english:'to the extent that / insofar as',           category:'Linkers', note:'U onoj meri u kojoj mogu, pomoći ću. (To the extent that I can, I will help.)' },
     // ── PHRASES ───────────────────────────────────────────────────────────
     { serbian:'Kako se zoveš?',              english:"What's your name? (inf.)",          category:'Phrases' },
     { serbian:'Zovem se…',                   english:'My name is…',                        category:'Phrases' },
