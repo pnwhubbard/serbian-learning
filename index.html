@@ -1061,6 +1061,10 @@
     .mace-missed-btn.flagged { color:#f0a020; border-color:#f0a020; }
     .mace-vocab-note { font-size:0.8rem; color:#556; font-style:normal; }
     .mace-score { font-size:0.85rem; color:#779; }
+    .mace-card-poetry { min-height:160px; }
+    .mace-card-poetry .mace-cyr { font-size:1.1rem; line-height:1.9; }
+    .mace-card-poetry .mace-lat { line-height:1.8; }
+    .mace-card-poetry .mace-en  { line-height:1.7; }
     .mace-page-img { width:100%; max-height:380px; object-fit:contain; border-radius:10px; background:#111; }
   </style>
 </head>
@@ -8159,9 +8163,17 @@
   // ═══════════════════════════════════════════════════
 
   const BOOK_CONFIGS = {
-    mace:    { sentences: MACE_SENTENCES,    vocab: MACE_VOCAB,    sentenceLabel: 'Sentence', pageLabel: 'Page' },
-    jezurka: { sentences: JEZURKA_SENTENCES, vocab: JEZURKA_VOCAB, sentenceLabel: 'Stanza',   pageLabel: 'Page' },
+    mace:    { sentences: MACE_SENTENCES,    vocab: MACE_VOCAB,    sentenceLabel: 'Sentence', pageLabel: 'Page', poetry: false },
+    jezurka: { sentences: JEZURKA_SENTENCES, vocab: JEZURKA_VOCAB, sentenceLabel: 'Stanza',   pageLabel: 'Page', poetry: true  },
   };
+
+  // For poetry books, break the continuous stanza text into readable lines.
+  // Splits at period/exclamation/question mark followed by a space + uppercase letter
+  // (safe heuristic: avoids splitting mid-abbreviation).
+  function fmtPoetry(text) {
+    return text.replace(/([.!?])\s+(?=[A-ZŠĐČĆŽА-ЯЉЊЏа-яљњџ„"«»])/g, '$1<br>');
+  }
+  function fmtText(text, poetry) { return poetry ? fmtPoetry(text) : text; }
 
   // Legacy wrappers so the static HTML onclick="" attributes keep working
   function renderMaceView()    { renderBookView('mace');    }
@@ -8192,15 +8204,18 @@
     const cfg = BOOK_CONFIGS[id];
     const s   = cfg.sentences[st.readerIdx];
     const el  = document.getElementById(`${id}-reader`);
+    const cyrText = fmtText(latinToCyrillic(s.lat), cfg.poetry);
+    const latText = fmtText(s.lat, cfg.poetry);
+    const enText  = fmtText(s.en,  cfg.poetry);
     el.innerHTML = `
       <div class="mace-nav-row">
         <span class="mace-counter">${cfg.sentenceLabel} ${st.readerIdx + 1} / ${cfg.sentences.length}</span>
         <span class="mace-page-label">${cfg.pageLabel} ${s.page}</span>
       </div>
-      <div class="mace-card">
-        <div class="mace-cyr">${latinToCyrillic(s.lat)}</div>
-        <div class="mace-lat">${s.lat}</div>
-        <div class="mace-en">${s.en}</div>
+      <div class="mace-card${cfg.poetry ? ' mace-card-poetry' : ''}">
+        <div class="mace-cyr">${cyrText}</div>
+        <div class="mace-lat">${latText}</div>
+        <div class="mace-en">${enText}</div>
       </div>
       <div class="mace-nav-row">
         <button class="cyr-pill" onclick="bookReaderGo('${id}',-1)" ${st.readerIdx === 0 ? 'disabled' : ''}>← Prev</button>
@@ -8332,10 +8347,16 @@
     const cfg = BOOK_CONFIGS[id];
     const el  = document.getElementById(`${id}-cloze`);
 
-    const blankLat = s.lat.replace(s.clozeWord, '<span class="mace-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
-    const blankCyr = latinToCyrillic(s.lat).replace(
-      latinToCyrillic(s.clozeWord),
-      '<span class="mace-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
+    const blankLat = fmtText(
+      s.lat.replace(s.clozeWord, '<span class="mace-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'),
+      cfg.poetry
+    );
+    const blankCyr = fmtText(
+      latinToCyrillic(s.lat).replace(
+        latinToCyrillic(s.clozeWord),
+        '<span class="mace-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
+      ),
+      cfg.poetry
     );
 
     const optBtns = options.map(w =>
@@ -8356,11 +8377,11 @@
           <button class="cyr-pill" onclick="resetBookClozeScore('${id}')" title="Reset score">↺</button>
         </div>
       </div>
-      <div class="mace-card">
+      <div class="mace-card${cfg.poetry ? ' mace-card-poetry' : ''}">
         <div class="mace-page-label">${cfg.pageLabel} ${s.page}</div>
         <div class="mace-cyr">${blankCyr}</div>
         <div class="mace-lat">${blankLat}</div>
-        <div class="mace-en">${s.en}</div>
+        <div class="mace-en">${fmtText(s.en, cfg.poetry)}</div>
       </div>
       <div class="cyr-options" id="${id}-options">${optBtns}</div>
       <div class="cyr-feedback" id="${id}-feedback"></div>
