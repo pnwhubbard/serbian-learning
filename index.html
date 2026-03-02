@@ -1061,6 +1061,7 @@
     .mace-missed-btn.flagged { color:#f0a020; border-color:#f0a020; }
     .mace-vocab-note { font-size:0.8rem; color:#556; font-style:normal; }
     .mace-score { font-size:0.85rem; color:#779; }
+    .mace-page-img { width:100%; max-height:380px; object-fit:contain; border-radius:10px; background:#111; }
   </style>
 </head>
 <body>
@@ -1078,6 +1079,7 @@
     <button id="nav-cyrillic"   onclick="showView('cyrillic')">Cyrillic</button>
     <button id="nav-numbers"    onclick="showView('numbers')">Numbers</button>
     <button id="nav-mace"       onclick="showView('mace')">Mače</button>
+    <button id="nav-jezurka"    onclick="showView('jezurka')">Ježurka</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
@@ -1567,6 +1569,18 @@
     <div class="mace-section"        id="mace-cloze"><!-- rendered by JS --></div>
   </div><!-- /mace-view -->
 
+  <!-- ═══════════════ JEŽURKA VIEW ═══════════════ -->
+  <div id="jezurka-view" style="display:none">
+    <div class="mace-tabs">
+      <button class="cyr-pill active" id="jezurka-tab-reader" onclick="showJezurkaTab('reader')">📖 Reader</button>
+      <button class="cyr-pill" id="jezurka-tab-vocab"  onclick="showJezurkaTab('vocab')">📚 Vocab</button>
+      <button class="cyr-pill" id="jezurka-tab-cloze"  onclick="showJezurkaTab('cloze')">✏️ Cloze</button>
+    </div>
+    <div class="mace-section active" id="jezurka-reader"><!-- rendered by JS --></div>
+    <div class="mace-section"        id="jezurka-vocab"><!-- rendered by JS --></div>
+    <div class="mace-section"        id="jezurka-cloze"><!-- rendered by JS --></div>
+  </div><!-- /jezurka-view -->
+
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
 
@@ -1906,6 +1920,104 @@
     { lat:'korpa',         en:'basket',                note:'f. noun' },
     { lat:'ubrzo',         en:'soon / quickly',        note:'adv.' },
     { lat:'zaspati',       en:'to fall asleep',        note:'perf.' },
+  ];
+
+  // ═══════════════════════════════════════════════════
+  //  JEŽURKA BOOK DATA
+  // ═══════════════════════════════════════════════════
+  const JEZURKA_SENTENCES = [
+    { page:1,  lat:'Po šumi, širom, bez staze, puta, Ježurka Ježić povazdan luta. Lovom se bavi, često ga vide, s trista kopalja na juriš ide.', en:'Through the forest, far and wide, without path or trail, Ježurka Ježić wanders all day long. He occupies himself with hunting, often seen, he charges with three hundred spears.', clozeWord:'luta' },
+    { page:1,  lat:'I vuk, i medo, pa čak i ovca, poznaju ježa, slavnog lovca. Jastreb ga štuje, vuk mu se sklanja, zmija ga šarka po svu noć sanja.', en:'The wolf, the bear, and even the sheep know the hedgehog, the famous hunter. The hawk respects him, the wolf gives way, the spotted snake dreams of him all night.', clozeWord:'lovca' },
+    { page:1,  lat:'Pred njim, dan hoda, širi se strava, njegovim tragom putuje slava.', en:'Before him, day walks ahead, fear spreads; glory travels in his wake.', clozeWord:'slava' },
+    { page:2,  lat:'Jednoga dana, vidjeli nismo, Ježić je, kažu, dobio pismo. Medeno pismo, pričao meca, stiglo u torbi poštara zeca.', en:'One day, out of the blue, Ježić, they say, received a letter. A honey-sweet letter, the bear was telling, arrived in the bag of the rabbit postman.', clozeWord:'pismo' },
+    { page:2,  lat:'Dođi na ručak u moju logu, požuri samo, ne žali nogu. Sa punim loncem i masnim brkom čekat ću na te, požuri trkom.', en:'"Come to lunch at my den, just hurry, don\'t spare your feet. With a full pot and greasy whiskers I\'ll wait for you, hurry along!"', clozeWord:'ručak' },
+    { page:2,  lat:'Nježno te grli medena lica i pozdrav šalje lisica, Mica.', en:'"With warm embrace, your sweet-faced friend, the fox, Mica, sends greetings."', clozeWord:'lisica' },
+    { page:3,  lat:'Jež se veseli: Na gozbu, veli, tu šale nema, hajd\' da se sprema. Ježurka Ježić lukavo škilji, pregleda bodlje i svaku šilji.', en:'The hedgehog is delighted: "Off to the feast," he says, "this is no joke, let\'s get ready." Ježurka Ježić squints cunningly, inspects his spines and sharpens each one.', clozeWord:'bodlje' },
+    { page:3,  lat:'Sunčani krug se u zenit dig\'o kad je Ježurka do lije stig\'o. Pred kućom-logom, kamenog zida, Ježurka Ježić svoj šešir skida.', en:'The sun had risen to its zenith when Ježurka arrived at the fox\'s place. Before the stone-walled log-house, Ježurka Ježić takes off his hat.', clozeWord:'šešir' },
+    { page:4,  lat:'Klanjam se tebi, sa bodlja trista. Nek perje pijetla krasi tvoj dom, kokoš nek sjedi u loncu tvom!', en:'"I bow to you with three hundred spines. May the rooster\'s feathers adorn your home, may a hen sit in your pot!"', clozeWord:'pijetla' },
+    { page:4,  lat:'Otpoče ručak čaroban, bajni. I jež i lija od masti sjajni. Jelo za jelom samo se niže, Ježurka često zdravicu diže.', en:'The magical, wondrous lunch began. Both the hedgehog and the fox shining with grease. Dish after dish kept coming; Ježurka often raised a toast.', clozeWord:'masti' },
+    { page:5,  lat:'Niže se ručak četverosatni, zategnu trbuh k\'o bubanj ratni.', en:'The four-hour lunch rolled on; his belly became as taut as a war drum.', clozeWord:'trbuh' },
+    { page:5,  lat:'Evo i noći, nad šumom cijelom nadvi se suton sa modrim velom. Promakne samo leptirić koji i vjetar noćnik listove broji.', en:'Night came too; over the entire forest dusk descended with a blue veil. Only the occasional butterfly passed and the night wind counted the leaves.', clozeWord:'suton' },
+    { page:5,  lat:'Utihnu šuma, nestade graje, mačaka divljih oči se sjaje. Skitnica svitac svjetiljku pali, čarobnim sjajem putanju zali.', en:'The forest fell silent, the noise was gone, the wild cats\' eyes gleamed. The wandering firefly lit its lamp, pouring its magical glow on the path.', clozeWord:'svitac' },
+    { page:6,  lat:'Ježić se diže, njuškicu briše: Ja moram kući, dosta je više. Dobro je bilo, na stranu šala, lisice draga, e, baš ti hvala.', en:'Ježić got up and wiped his little snout: "I must go home, that\'s enough now. It was good, joking aside, dear fox, thank you very much."', clozeWord:'hvala' },
+    { page:6,  lat:'Zahvaljujem se pozivu tvom, al\' mi je draži moj skromni dom!', en:'"I thank you for your invitation, but my humble home is dearer to me!"', clozeWord:'skromni' },
+    { page:7,  lat:'Al\' jež, tvrdoglav, osta pri svom: Draži je meni moj skromni dom! Šušteći šumom jež mjeri put, kroz granje mjesec svijetli mu put.', en:'But the hedgehog, stubborn, stood his ground: "My humble home is dearer to me!" Rustling through the forest the hedgehog makes his way; through the branches the moon lights his path.', clozeWord:'tvrdoglav' },
+    { page:7,  lat:'Ide jež, gunda, dok zvijezde sjaju: Kućico moja, najljepši raju!', en:'The hedgehog walks, grumbling, while the stars shine: "My dear little home, the most beautiful paradise!"', clozeWord:'zvijezde' },
+    { page:7,  lat:'Ostade lija, misli se: Vraga, što mu je kuća toliko draga? Kad Ježić tako žudi za njom, bit\' će to, bogme, bogati dom.', en:'The fox stayed behind, thinking: "Darn it, why is his house so dear to him? If Ježić yearns for it so much, it must be, by golly, a wealthy home."', clozeWord:'draga' },
+    { page:8,  lat:'Požuri lija, nečujna sjena, paperje meko noga je njena. Dok juri tako uz grobni muk, pred njom, na stazi, stvori se vuk.', en:'The fox hurried, a soundless shadow, her footstep soft as down. As she rushed in deathly silence, before her on the path a wolf appeared.', clozeWord:'sjena' },
+    { page:8,  lat:'Idem da doznam — lija sve duva — zašto jež kuću toliko čuva.', en:'"I\'m going to find out," the fox huffed, "why the hedgehog guards his house so much."', clozeWord:'čuva' },
+    { page:9,  lat:'Poći ću s tobom, jer volim šalu, hoću da vidim ježa — budalu! Dok jure dalje brzo k\'o strijela, srete ih medo, prijatelj pčela.', en:'"I\'ll come with you, because I love a joke; I want to see the hedgehog — the fool!" As they rushed on fast as an arrow, they met the bear, friend of the bees.', clozeWord:'budalu' },
+    { page:9,  lat:'Svoju bih dao za gnjile kruške. Za satić meda dat\' ću je svakom! Poći ću s vama, jer volim šalu, hoću da vidim ježa — budalu!', en:'"I\'d give mine for rotten pears. I\'d give it to anyone for a drop of honey! I\'ll come with you, because I love a joke; I want to see the hedgehog — the fool!"', clozeWord:'meda' },
+    { page:10, lat:'Sve troje jure k\'o divlja rijeka, odjednom — evo — kaljuga neka. Divlja se svinja u njojzi banja, pospano škilji i jelo sanja.', en:'All three rush like a wild river, when suddenly — look — a mud puddle! The wild boar was wallowing in it, squinting drowsily and dreaming of food.', clozeWord:'kaljuga' },
+    { page:10, lat:'Tražimo razlog, blatnjava zvijezdo, zašto jež voli rođeno gnijezdo! Poći ću s vama, jer volim šalu, hoću da vidim ježa — budalu!', en:'"We\'re looking for the reason, muddy star, why the hedgehog loves his native nest! I\'ll come with you, because I love a joke; I want to see the hedgehog — the fool!"', clozeWord:'gnijezdo' },
+    { page:11, lat:'Svi jure složno ka cilju svom, kuda god prođu — prasak i lom! Pristigli ježa, glede: on stade kraj neke stare bukove klade.', en:'They all rush together toward their goal; wherever they pass — crash and bang! They arrived where the hedgehog was, look: he stopped by an old beech log.', clozeWord:'prasak' },
+    { page:11, lat:'Pod kladom rupa, tamna i gluha, prostirka u njoj od lišća suha. Tu Ježić ude, pliva u sreći, šušti i pipa gdje li će leći.', en:'Under the log a hole, dark and quiet, its bedding of dry leaves. There Ježić entered, swimming in happiness, rustling and feeling where he would sleep.', clozeWord:'lišća' },
+    { page:12, lat:'Kućico draga, slobodo moja! Palačo divna, drvenog svoda, kolijevko meka, lisnatog poda, uvijek ću vjeran ostati tebi, nizašto ja te mijenjao ne bi\'!', en:'"Dear little home, my freedom! Wonderful palace of wooden roof, soft cradle of leafy floor — I will always remain faithful to you, I would never exchange you for anything!"', clozeWord:'slobodo' },
+    { page:12, lat:'Budalo ježu, bodljivi soju, zar tako cijeniš straćaru svoju?! Koliba tvoja prava je baba, krov ti je truo, prostirka slaba.', en:'"You fool of a hedgehog, you prickly wretch, do you really treasure your shack so much?! Your hut is a proper mess, your roof is rotten, your bedding is weak."', clozeWord:'straćaru' },
+    { page:13, lat:'Ma kakav bio moj rodni prag, on mi je ipak mio i drag. Prost je i skroman, ali je moj, tu sam slobodan i gazda svoj.', en:'"No matter what my native threshold may be, it is still dear and beloved to me. It is plain and modest, but it is mine — here I am free and my own master."', clozeWord:'prag' },
+    { page:14, lat:'To samo hulje, nosi ih vrag, za ručak daju svoj rodni prag! Zbog toga samo, lude vas troje, čestite kuće nemate svoje.', en:'"Only scoundrels, curse them, give up their native threshold for a meal! That is why, you three fools, you don\'t have decent homes of your own."', clozeWord:'hulje' },
+    { page:14, lat:'Sad vidim i ja, jež ima pravo! To reče, klisnu jednom čiviku, a ono troje, digoše viku: Jež nema pravo, nastranu šala, a i ti, lijo, baš si — budala!', en:'"Now I see it too — the hedgehog is right!" With that she darted off, and those three raised a cry: "The hedgehog is not right, joking aside, and you, fox — you\'re a fool!"', clozeWord:'pravo' },
+    { page:15, lat:'Krvnika vuka, jadna mu majka, umlati brzo seljačka hajka. Trapavog medu, oh, kuku, lele, do same smrti, izbole pčele.', en:'The murderous wolf, poor his mother, was quickly beaten by the village mob. The clumsy bear, oh dear, was stung nearly to death by the bees.', clozeWord:'hajka' },
+    { page:15, lat:'Po šumi, danas, bez staze, puta, Ježurka Ježić lovi i luta. Vještak i majstor u poslu svom, radi i čuva, rođeni dom.', en:'Through the forest today, without path or trail, Ježurka Ježić hunts and wanders. An expert and master at his craft, he works and guards his native home.', clozeWord:'majstor' },
+  ];
+
+  const JEZURKA_VOCAB = [
+    { lat:'jež',           en:'hedgehog',                    note:'m. noun' },
+    { lat:'ježurka',       en:'hedgehog (affectionate)',     note:'diminutive' },
+    { lat:'šuma',          en:'forest',                      note:'f. noun' },
+    { lat:'lovac',         en:'hunter',                      note:'m. noun' },
+    { lat:'lutati',        en:'to wander',                   note:'impf.' },
+    { lat:'bodlja',        en:'spine / quill',               note:'f. noun' },
+    { lat:'šiljiti',       en:'to sharpen',                  note:'impf.' },
+    { lat:'jastreb',       en:'hawk',                        note:'m. noun' },
+    { lat:'vuk',           en:'wolf',                        note:'m. noun' },
+    { lat:'medo',          en:'bear (familiar)',             note:'m. noun' },
+    { lat:'lisica',        en:'fox',                         note:'f. noun' },
+    { lat:'divlja svinja', en:'wild boar',                   note:'f. noun' },
+    { lat:'zmija',         en:'snake',                       note:'f. noun' },
+    { lat:'slava',         en:'glory / fame',                note:'f. noun' },
+    { lat:'strava',        en:'horror / dread',              note:'f. noun' },
+    { lat:'pismo',         en:'letter',                      note:'neuter noun' },
+    { lat:'poštara',       en:'postman',                     note:'m. noun' },
+    { lat:'zec',           en:'rabbit / hare',               note:'m. noun' },
+    { lat:'ručak',         en:'lunch',                       note:'m. noun' },
+    { lat:'loga',          en:'den / lair',                  note:'f. noun' },
+    { lat:'gozba',         en:'feast / banquet',             note:'f. noun' },
+    { lat:'mast',          en:'grease / lard',               note:'f. noun' },
+    { lat:'lonac',         en:'pot',                         note:'m. noun' },
+    { lat:'pijetao',       en:'rooster',                     note:'m. noun' },
+    { lat:'trbuh',         en:'belly / stomach',             note:'m. noun' },
+    { lat:'bubanj',        en:'drum',                        note:'m. noun' },
+    { lat:'suton',         en:'dusk / twilight',             note:'m. noun' },
+    { lat:'sova',          en:'owl',                         note:'f. noun' },
+    { lat:'svitac',        en:'firefly',                     note:'m. noun' },
+    { lat:'leptir',        en:'butterfly',                   note:'m. noun' },
+    { lat:'njuška',        en:'snout / muzzle',              note:'f. noun' },
+    { lat:'kuća',          en:'house / home',                note:'f. noun' },
+    { lat:'dom',           en:'home',                        note:'m. noun' },
+    { lat:'klada',         en:'log / trunk',                 note:'f. noun' },
+    { lat:'rupa',          en:'hole',                        note:'f. noun' },
+    { lat:'lišće',         en:'leaves',                      note:'neuter noun' },
+    { lat:'prostirka',     en:'bedding / mat',               note:'f. noun' },
+    { lat:'sreća',         en:'happiness / luck',            note:'f. noun' },
+    { lat:'sloboda',       en:'freedom',                     note:'f. noun' },
+    { lat:'prag',          en:'threshold / doorstep',        note:'m. noun' },
+    { lat:'straćara',      en:'shack / hovel',               note:'f. noun' },
+    { lat:'gazda',         en:'owner / master',              note:'m. noun' },
+    { lat:'krov',          en:'roof',                        note:'m. noun' },
+    { lat:'hulja',         en:'scoundrel / villain',         note:'m. noun' },
+    { lat:'hajka',         en:'mob / hunt / chase',          note:'f. noun' },
+    { lat:'pčela',         en:'bee',                         note:'f. noun' },
+    { lat:'gnijezdo',      en:'nest',                        note:'neuter noun' },
+    { lat:'kaljuga',       en:'mud puddle',                  note:'f. noun' },
+    { lat:'skroman',       en:'humble / modest',             note:'adj.' },
+    { lat:'tvrdoglav',     en:'stubborn',                    note:'adj.' },
+    { lat:'čaroban',       en:'magical / enchanting',        note:'adj.' },
+    { lat:'lukavo',        en:'cunningly / slyly',           note:'adv.' },
+    { lat:'šuštati',       en:'to rustle',                   note:'impf.' },
+    { lat:'juriti',        en:'to chase / rush',             note:'impf.' },
+    { lat:'braniti',       en:'to defend / guard',           note:'impf.' },
+    { lat:'prasak',        en:'bang / crash',                note:'m. noun' },
   ];
 
   // ═══════════════════════════════════════════════════
@@ -5299,6 +5411,19 @@
   let maceClozeAnswered = false;
   let maceClozeCorrect  = '';
 
+  // ── Ježurka Book state
+  let jezurkaTab           = 'reader';
+  let jezurkaReaderIdx     = 0;
+  let jezurkaVocabIdx      = 0;
+  let jezurkaVocabFlipped  = false;
+  let jezurkaVocabMissed   = new Set();
+  let jezurkaVocabMode     = 'all';
+  let jezurkaVocabDeck     = [];
+  let jezurkaClozeIdx      = 0;
+  let jezurkaClozeScore    = { correct:0, total:0 };
+  let jezurkaClozeAnswered = false;
+  let jezurkaClozeCorrect  = '';
+
   const CTX_PREFIX_MAP = {
     'popiti':'po', 'pojesti':'po', 'pogledati':'po', 'pozvati':'po', 'poslušati':'po',
     'pročitati':'pro', 'prohodati':'pro',
@@ -5825,8 +5950,9 @@
     document.getElementById('cyrillic-view').style.display   = view === 'cyrillic'   ? 'flex' : 'none';
     document.getElementById('numbers-view').style.display    = view === 'numbers'    ? 'flex' : 'none';
     document.getElementById('mace-view').style.display       = view === 'mace'       ? 'flex' : 'none';
+    document.getElementById('jezurka-view').style.display    = view === 'jezurka'    ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','jezurka','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -5839,6 +5965,7 @@
     if (view === 'cyrillic')   renderCyrView();
     if (view === 'numbers')    renderNumView();
     if (view === 'mace')       renderMaceView();
+    if (view === 'jezurka')    renderJezurkaView();
     if (view === 'manage')     renderManage();
   }
 
@@ -7648,6 +7775,7 @@
         <span class="mace-counter">Sentence ${maceReaderIdx + 1} / ${MACE_SENTENCES.length}</span>
         <span class="mace-page-label">Page ${s.page}</span>
       </div>
+      <img src="Mace_book/page${s.page}.jpg" alt="Page ${s.page}" class="mace-page-img">
       <div class="mace-card">
         <div class="mace-cyr">${cyr}</div>
         <div class="mace-lat">${s.lat}</div>
@@ -7812,6 +7940,196 @@
 
   function maceClozeNext() {
     generateMaceCloze();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  JEŽURKA BOOK
+  // ═══════════════════════════════════════════════════
+
+  function renderJezurkaView() {
+    if (jezurkaVocabDeck.length === 0) buildJezurkaVocabDeck();
+    showJezurkaTab(jezurkaTab);
+  }
+
+  function showJezurkaTab(tab) {
+    jezurkaTab = tab;
+    ['reader','vocab','cloze'].forEach(t => {
+      document.getElementById(`jezurka-${t}`).classList.toggle('active', t === tab);
+      document.getElementById(`jezurka-tab-${t}`).classList.toggle('active', t === tab);
+    });
+    if (tab === 'reader') renderJezurkaReader();
+    if (tab === 'vocab')  renderJezurkaVocab();
+    if (tab === 'cloze')  generateJezurkaCloze();
+  }
+
+  function renderJezurkaReader() {
+    const s   = JEZURKA_SENTENCES[jezurkaReaderIdx];
+    const cyr = latinToCyrillic(s.lat);
+    const el  = document.getElementById('jezurka-reader');
+    el.innerHTML = `
+      <div class="mace-nav-row">
+        <span class="mace-counter">Stanza ${jezurkaReaderIdx + 1} / ${JEZURKA_SENTENCES.length}</span>
+        <span class="mace-page-label">Page ${s.page}</span>
+      </div>
+      <img src="Jezurka/page${s.page}.jpg" alt="Page ${s.page}" class="mace-page-img">
+      <div class="mace-card">
+        <div class="mace-cyr">${cyr}</div>
+        <div class="mace-lat">${s.lat}</div>
+        <div class="mace-en">${s.en}</div>
+      </div>
+      <div class="mace-nav-row">
+        <button class="cyr-pill" onclick="jezurkaReaderGo(-1)" ${jezurkaReaderIdx === 0 ? 'disabled' : ''}>← Prev</button>
+        <button class="cyr-pill" onclick="jezurkaReaderGo(1)" ${jezurkaReaderIdx === JEZURKA_SENTENCES.length - 1 ? 'disabled' : ''}>Next →</button>
+      </div>`;
+  }
+
+  function jezurkaReaderGo(delta) {
+    jezurkaReaderIdx = Math.max(0, Math.min(JEZURKA_SENTENCES.length - 1, jezurkaReaderIdx + delta));
+    renderJezurkaReader();
+  }
+
+  function buildJezurkaVocabDeck() {
+    if (jezurkaVocabMode === 'missed') {
+      jezurkaVocabDeck = [...jezurkaVocabMissed];
+      if (jezurkaVocabDeck.length === 0) jezurkaVocabDeck = JEZURKA_VOCAB.map((_, i) => i);
+    } else {
+      jezurkaVocabDeck = JEZURKA_VOCAB.map((_, i) => i);
+    }
+    jezurkaVocabIdx     = 0;
+    jezurkaVocabFlipped = false;
+  }
+
+  function renderJezurkaVocab() {
+    const el      = document.getElementById('jezurka-vocab');
+    const realIdx = jezurkaVocabDeck[jezurkaVocabIdx];
+    const card    = JEZURKA_VOCAB[realIdx];
+    const flagged = jezurkaVocabMissed.has(realIdx);
+
+    let cardContent;
+    if (!jezurkaVocabFlipped) {
+      cardContent = `<div class="mace-cyr">${latinToCyrillic(card.lat)}</div>
+                     <div class="mace-lat">${card.lat}</div>
+                     <div class="mace-en" style="color:#445;font-style:normal;">(click to flip)</div>`;
+    } else {
+      cardContent = `<div class="mace-cyr">${card.en}</div>
+                     ${card.note ? `<div class="mace-vocab-note">${card.note}</div>` : ''}`;
+    }
+
+    el.innerHTML = `
+      <div class="mace-nav-row">
+        <span class="mace-counter">Card ${jezurkaVocabIdx + 1} / ${jezurkaVocabDeck.length}</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="cyr-pill ${jezurkaVocabMode === 'all' ? 'active' : ''}" onclick="jezurkaSetVocabMode('all')">All</button>
+          <button class="cyr-pill ${jezurkaVocabMode === 'missed' ? 'active' : ''}" onclick="jezurkaSetVocabMode('missed')">Missed</button>
+          <button class="mace-missed-btn ${flagged ? 'flagged' : ''}" onclick="jezurkaToggleMissed()" title="Flag card">⚑</button>
+        </div>
+      </div>
+      <div class="mace-card" onclick="jezurkaVocabFlip()">${cardContent}</div>
+      <div class="mace-nav-row">
+        <button class="cyr-pill" onclick="jezurkaVocabGo(-1)" ${jezurkaVocabIdx === 0 ? 'disabled' : ''}>← Prev</button>
+        <button class="cyr-pill" onclick="jezurkaVocabGo(1)" ${jezurkaVocabIdx === jezurkaVocabDeck.length - 1 ? 'disabled' : ''}>Next →</button>
+      </div>`;
+  }
+
+  function jezurkaVocabFlip() {
+    jezurkaVocabFlipped = !jezurkaVocabFlipped;
+    renderJezurkaVocab();
+  }
+
+  function jezurkaVocabGo(delta) {
+    jezurkaVocabIdx     = Math.max(0, Math.min(jezurkaVocabDeck.length - 1, jezurkaVocabIdx + delta));
+    jezurkaVocabFlipped = false;
+    renderJezurkaVocab();
+  }
+
+  function jezurkaToggleMissed() {
+    const realIdx = jezurkaVocabDeck[jezurkaVocabIdx];
+    if (jezurkaVocabMissed.has(realIdx)) {
+      jezurkaVocabMissed.delete(realIdx);
+    } else {
+      jezurkaVocabMissed.add(realIdx);
+    }
+    renderJezurkaVocab();
+  }
+
+  function jezurkaSetVocabMode(m) {
+    jezurkaVocabMode = m;
+    buildJezurkaVocabDeck();
+    renderJezurkaVocab();
+  }
+
+  function generateJezurkaCloze() {
+    jezurkaClozeAnswered = false;
+    jezurkaClozeIdx = Math.floor(Math.random() * JEZURKA_SENTENCES.length);
+    const s = JEZURKA_SENTENCES[jezurkaClozeIdx];
+    jezurkaClozeCorrect = s.clozeWord;
+
+    const pool = JEZURKA_VOCAB.filter(v => v.lat !== s.clozeWord && !s.lat.includes(v.lat));
+    const shuffledPool = pool.slice().sort(() => Math.random() - 0.5);
+    const distractors = [];
+    for (const v of shuffledPool) {
+      if (distractors.length >= 3) break;
+      distractors.push(v.lat);
+    }
+    while (distractors.length < 3) distractors.push('...');
+
+    const options = [s.clozeWord, ...distractors].sort(() => Math.random() - 0.5);
+    renderJezurkaCloze(s, options);
+  }
+
+  function renderJezurkaCloze(s, options) {
+    const el = document.getElementById('jezurka-cloze');
+    const blankLat = s.lat.replace(s.clozeWord, '<span class="mace-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+    const blankCyr = latinToCyrillic(s.lat).replace(
+      latinToCyrillic(s.clozeWord),
+      '<span class="mace-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
+    );
+
+    const optBtns = options.map(w =>
+      `<button class="cyr-option" id="jezurka-opt-${w}" onclick="jezurkaClozeAnswer('${w.replace(/'/g, "\\'")}')">${w}</button>`
+    ).join('');
+
+    el.innerHTML = `
+      <div class="mace-nav-row">
+        <span class="mace-counter">Stanza ${jezurkaClozeIdx + 1} / ${JEZURKA_SENTENCES.length}</span>
+        <span class="mace-score" id="jezurka-cloze-score">Score: ${jezurkaClozeScore.correct} / ${jezurkaClozeScore.total}</span>
+      </div>
+      <div class="mace-card">
+        <div class="mace-cyr">${blankCyr}</div>
+        <div class="mace-lat">${blankLat}</div>
+        <div class="mace-en">${s.en}</div>
+      </div>
+      <div class="cyr-options" id="jezurka-options">${optBtns}</div>
+      <div class="cyr-feedback" id="jezurka-feedback"></div>
+      <div style="text-align:right;display:none;" id="jezurka-next-row">
+        <button class="cyr-pill active" onclick="jezurkaClozeNext()">Next →</button>
+      </div>`;
+  }
+
+  function jezurkaClozeAnswer(w) {
+    if (jezurkaClozeAnswered) return;
+    jezurkaClozeAnswered = true;
+    jezurkaClozeScore.total++;
+    const isRight = w === jezurkaClozeCorrect;
+    if (isRight) jezurkaClozeScore.correct++;
+
+    document.querySelectorAll('#jezurka-options .cyr-option').forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === jezurkaClozeCorrect) btn.classList.add('correct');
+      else if (btn.textContent === w && !isRight) btn.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('jezurka-feedback');
+    fb.textContent = isRight ? '✓ Correct!' : `✗ The answer was: ${jezurkaClozeCorrect}`;
+    fb.style.color = isRight ? '#27ae60' : '#e94560';
+
+    document.getElementById('jezurka-cloze-score').textContent =
+      `Score: ${jezurkaClozeScore.correct} / ${jezurkaClozeScore.total}`;
+    document.getElementById('jezurka-next-row').style.display = 'block';
+  }
+
+  function jezurkaClozeNext() {
+    generateJezurkaCloze();
   }
 
   // ═══════════════════════════════════════════════════
@@ -8151,6 +8469,28 @@
           if (e.key === '2' && maceOptBtns[1]) maceOptBtns[1].click();
           if (e.key === '3' && maceOptBtns[2]) maceOptBtns[2].click();
           if (e.key === '4' && maceOptBtns[3]) maceOptBtns[3].click();
+        }
+      }
+    }
+    const jezurkaVisible = document.getElementById('jezurka-view').style.display !== 'none';
+    if (jezurkaVisible) {
+      if (jezurkaTab === 'reader') {
+        if (e.key === 'ArrowLeft')  jezurkaReaderGo(-1);
+        if (e.key === 'ArrowRight') jezurkaReaderGo(1);
+      }
+      if (jezurkaTab === 'vocab') {
+        if (e.key === 'ArrowLeft')  jezurkaVocabGo(-1);
+        if (e.key === 'ArrowRight') jezurkaVocabGo(1);
+        if (e.key === ' ') { e.preventDefault(); jezurkaVocabFlip(); }
+      }
+      if (jezurkaTab === 'cloze') {
+        if ((e.key === 'ArrowRight' || e.key === 'Enter') && jezurkaClozeAnswered) jezurkaClozeNext();
+        const jezurkaOptBtns = document.querySelectorAll('#jezurka-options .cyr-option:not(:disabled)');
+        if (jezurkaOptBtns.length > 0) {
+          if (e.key === '1' && jezurkaOptBtns[0]) jezurkaOptBtns[0].click();
+          if (e.key === '2' && jezurkaOptBtns[1]) jezurkaOptBtns[1].click();
+          if (e.key === '3' && jezurkaOptBtns[2]) jezurkaOptBtns[2].click();
+          if (e.key === '4' && jezurkaOptBtns[3]) jezurkaOptBtns[3].click();
         }
       }
     }
