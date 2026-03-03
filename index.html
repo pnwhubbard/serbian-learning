@@ -1088,6 +1088,28 @@
     .cases-rule { margin-top:10px; padding-top:8px; border-top:1px solid #2a3a4a; font-size:0.85rem; color:#7a9aaa; }
     .cases-rule strong { color:#9abaca; }
     .cases-next-row { display:flex; justify-content:flex-end; }
+
+    /* ── ANTONYMS VIEW */
+    #antonyms-view { flex-direction:column; gap:14px; padding:16px; }
+    .antn-header   { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    .antn-score    { font-size:0.85rem; color:#779; }
+    .antn-counter  { font-size:0.85rem; color:#556; }
+    .antn-prompt   { background:#16213e; border:1px solid #2a2a4a; border-radius:10px; padding:22px 24px; text-align:center; }
+    .antn-word     { font-size:1.6rem; color:#e0e0ff; font-weight:600; letter-spacing:0.02em; }
+    .antn-word-en  { font-size:0.9rem; color:#6a8aaa; margin-top:6px; font-style:italic; }
+    .antn-options  { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .antn-option   { padding:13px 16px; border:2px solid #3a3a5a; background:none; color:#cce; border-radius:10px; cursor:pointer; font-size:1rem; transition:background 0.15s,border-color 0.15s; text-align:center; }
+    .antn-option:hover:not(:disabled) { border-color:#7070cc; background:#2a2a4a; }
+    .antn-option.correct { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .antn-option.wrong   { border-color:#e94560; background:#3a1a2a; color:#ff8080; }
+    .antn-option.reveal  { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .antn-option:disabled{ cursor:default; opacity:0.7; }
+    .antn-option-en{ font-size:0.75rem; color:#889; display:none; margin-top:3px; }
+    .antn-option-en.revealed { display:block; }
+    .antn-feedback { background:#16213e; border-left:3px solid #4a8acc; border-radius:0 8px 8px 0; padding:12px 16px; font-size:0.9rem; color:#aac; display:none; }
+    .antn-feedback.show { display:block; }
+    .antn-pair     { font-size:1rem; color:#c8d8e8; }
+    .antn-next-row { display:flex; justify-content:flex-end; }
   </style>
 </head>
 <body>
@@ -1107,6 +1129,7 @@
     <button id="nav-mace"       onclick="showView('mace')">Mače</button>
     <button id="nav-jezurka"    onclick="showView('jezurka')">Ježurka</button>
     <button id="nav-cases"      onclick="showView('cases')">Cases</button>
+    <button id="nav-antonyms"   onclick="showView('antonyms')">Antonyms</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
@@ -1610,6 +1633,9 @@
 
   <!-- ═══════════════ CASES VIEW ═══════════════ -->
   <div id="cases-view" style="display:none"><!-- rendered by JS --></div><!-- /cases-view -->
+
+  <!-- ═══════════════ ANTONYMS VIEW ═══════════════ -->
+  <div id="antonyms-view" style="display:none"><!-- rendered by JS --></div><!-- /antonyms-view -->
 
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
@@ -6390,8 +6416,9 @@
     document.getElementById('mace-view').style.display       = view === 'mace'       ? 'flex' : 'none';
     document.getElementById('jezurka-view').style.display    = view === 'jezurka'    ? 'flex' : 'none';
     document.getElementById('cases-view').style.display      = view === 'cases'      ? 'flex' : 'none';
+    document.getElementById('antonyms-view').style.display   = view === 'antonyms'   ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','jezurka','cases','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','jezurka','cases','antonyms','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -6406,6 +6433,7 @@
     if (view === 'mace')       renderMaceView();
     if (view === 'jezurka')    renderJezurkaView();
     if (view === 'cases')      renderCasesView();
+    if (view === 'antonyms')   renderAntonymsView();
     if (view === 'manage')     renderManage();
   }
 
@@ -8992,6 +9020,230 @@
       casesQIdx  = 0;
     }
     renderCasesItem();
+  }
+
+
+  // ═══════════════════════════════════════════════════
+  //  ANTONYMS
+  // ═══════════════════════════════════════════════════
+
+  const ANTONYM_PAIRS = [
+    // ── ADJECTIVES ──────────────────────────────────
+    { a:'velik',      aEn:'big',            b:'mali',        bEn:'small' },
+    { a:'star',       aEn:'old (of things)',b:'nov',         bEn:'new' },
+    { a:'mlad',       aEn:'young',          b:'star',        bEn:'old' },
+    { a:'dobar',      aEn:'good',           b:'loš',         bEn:'bad' },
+    { a:'lep',        aEn:'beautiful',      b:'ružan',       bEn:'ugly' },
+    { a:'brz',        aEn:'fast',           b:'spor',        bEn:'slow' },
+    { a:'jak',        aEn:'strong',         b:'slab',        bEn:'weak' },
+    { a:'topao',      aEn:'warm',           b:'hladan',      bEn:'cold' },
+    { a:'bogat',      aEn:'rich',           b:'siromašan',   bEn:'poor' },
+    { a:'čist',       aEn:'clean',          b:'prljav',      bEn:'dirty' },
+    { a:'pun',        aEn:'full',           b:'prazan',      bEn:'empty' },
+    { a:'tvrd',       aEn:'hard',           b:'mek',         bEn:'soft' },
+    { a:'tih',        aEn:'quiet',          b:'bučan',       bEn:'noisy' },
+    { a:'slobodan',   aEn:'free',           b:'zauzet',      bEn:'busy' },
+    { a:'srećan',     aEn:'happy',          b:'tužan',       bEn:'sad' },
+    { a:'pametan',    aEn:'smart',          b:'glup',        bEn:'stupid' },
+    { a:'zdrav',      aEn:'healthy',        b:'bolestan',    bEn:'sick' },
+    { a:'visok',      aEn:'tall',           b:'nizak',       bEn:'short' },
+    { a:'debeo',      aEn:'fat',            b:'mršav',       bEn:'thin' },
+    { a:'težak',      aEn:'difficult',      b:'lak',         bEn:'easy' },
+    { a:'skup',       aEn:'expensive',      b:'jeftin',      bEn:'cheap' },
+    { a:'svetao',     aEn:'bright',         b:'taman',       bEn:'dark' },
+    { a:'otvoren',    aEn:'open',           b:'zatvoren',    bEn:'closed' },
+    { a:'dugačak',    aEn:'long',           b:'kratak',      bEn:'short' },
+    { a:'širok',      aEn:'wide',           b:'uzak',        bEn:'narrow' },
+    { a:'gladan',     aEn:'hungry',         b:'sit',         bEn:'full / satiated' },
+    { a:'hrabar',     aEn:'brave',          b:'plašljiv',    bEn:'fearful' },
+    { a:'dalek',      aEn:'far',            b:'blizak',      bEn:'near / close' },
+    { a:'levi',       aEn:'left',           b:'desni',       bEn:'right' },
+    { a:'mokar',      aEn:'wet',            b:'suv',         bEn:'dry' },
+    { a:'oštar',      aEn:'sharp',          b:'tup',         bEn:'dull' },
+    { a:'siguran',    aEn:'safe',           b:'opasan',      bEn:'dangerous' },
+    { a:'veseo',      aEn:'cheerful',       b:'ozbiljan',    bEn:'serious' },
+    { a:'zanimljiv',  aEn:'interesting',    b:'dosadan',     bEn:'boring' },
+    { a:'gladak',     aEn:'smooth',         b:'hrapav',      bEn:'rough' },
+
+    // ── ADVERBS ─────────────────────────────────────
+    { a:'brzo',       aEn:'quickly',        b:'polako',      bEn:'slowly' },
+    { a:'mnogo',      aEn:'a lot',          b:'malo',        bEn:'a little' },
+    { a:'uvek',       aEn:'always',         b:'nikad',       bEn:'never' },
+    { a:'gore',       aEn:'up / upstairs',  b:'dole',        bEn:'down / downstairs' },
+    { a:'ovde',       aEn:'here',           b:'tamo',        bEn:'there' },
+    { a:'unutra',     aEn:'inside',         b:'napolje',     bEn:'outside' },
+    { a:'rano',       aEn:'early',          b:'kasno',       bEn:'late' },
+    { a:'pre',        aEn:'before',         b:'posle',       bEn:'after' },
+    { a:'zajedno',    aEn:'together',       b:'odvojeno',    bEn:'separately' },
+    { a:'više',       aEn:'more',           b:'manje',       bEn:'less' },
+    { a:'davno',      aEn:'long ago',       b:'nedavno',     bEn:'recently' },
+    { a:'odmah',      aEn:'immediately',    b:'kasnije',     bEn:'later' },
+    { a:'ispred',     aEn:'in front',       b:'iza',         bEn:'behind' },
+    { a:'glasno',     aEn:'loudly',         b:'tiho',        bEn:'quietly' },
+    { a:'ujutru',     aEn:'in the morning', b:'uveče',       bEn:'in the evening' },
+
+    // ── VERBS ───────────────────────────────────────
+    { a:'dolaziti',   aEn:'to come',        b:'odlaziti',    bEn:'to leave' },
+    { a:'kupovati',   aEn:'to buy',         b:'prodavati',   bEn:'to sell' },
+    { a:'uzimati',    aEn:'to take',        b:'davati',      bEn:'to give' },
+    { a:'govoriti',   aEn:'to speak',       b:'slušati',     bEn:'to listen' },
+    { a:'smejati se', aEn:'to laugh',       b:'plakati',     bEn:'to cry' },
+    { a:'otvarati',   aEn:'to open',        b:'zatvarati',   bEn:'to close' },
+    { a:'voleti',     aEn:'to love',        b:'mrzeti',      bEn:'to hate' },
+    { a:'pamtiti',    aEn:'to remember',    b:'zaboraviti',  bEn:'to forget' },
+    { a:'naći',       aEn:'to find',        b:'izgubiti',    bEn:'to lose' },
+    { a:'pitati',     aEn:'to ask',         b:'odgovarati',  bEn:'to answer' },
+    { a:'ulaziti',    aEn:'to enter',       b:'izlaziti',    bEn:'to exit' },
+    { a:'ustati',     aEn:'to get up',      b:'sesti',       bEn:'to sit down' },
+    { a:'počinjati',  aEn:'to begin',       b:'završavati',  bEn:'to finish' },
+    { a:'živeti',     aEn:'to live',        b:'umirati',     bEn:'to die' },
+    { a:'graditi',    aEn:'to build',       b:'rušiti',      bEn:'to demolish' },
+    { a:'paliti',     aEn:'to turn on',     b:'gasiti',      bEn:'to turn off' },
+    { a:'dozvoliti',  aEn:'to allow',       b:'zabraniti',   bEn:'to forbid' },
+    { a:'spavati',    aEn:'to sleep',       b:'buditi se',   bEn:'to wake up' },
+    { a:'napadati',   aEn:'to attack',      b:'braniti',     bEn:'to defend' },
+    { a:'štedeti',    aEn:'to save',        b:'trošiti',     bEn:'to spend' },
+    { a:'puniti',     aEn:'to fill',        b:'prazniti',    bEn:'to empty' },
+    { a:'povećavati', aEn:'to increase',    b:'smanjivati',  bEn:'to decrease' },
+    { a:'verovati',   aEn:'to believe',     b:'sumnjati',    bEn:'to doubt' },
+    { a:'slaviti',    aEn:'to celebrate',   b:'žalovati',    bEn:'to mourn' },
+    { a:'pričati',    aEn:'to talk',        b:'ćutati',      bEn:'to be silent' },
+
+    // ── NOUNS ───────────────────────────────────────
+    { a:'dan',        aEn:'day',            b:'noć',         bEn:'night' },
+    { a:'leto',       aEn:'summer',         b:'zima',        bEn:'winter' },
+    { a:'jutro',      aEn:'morning',        b:'veče',        bEn:'evening' },
+    { a:'početak',    aEn:'beginning',      b:'kraj',        bEn:'end' },
+    { a:'prijatelj',  aEn:'friend',         b:'neprijatelj', bEn:'enemy' },
+    { a:'mir',        aEn:'peace',          b:'rat',         bEn:'war' },
+    { a:'istina',     aEn:'truth',          b:'laž',         bEn:'lie' },
+    { a:'ljubav',     aEn:'love',           b:'mržnja',      bEn:'hate' },
+    { a:'pitanje',    aEn:'question',       b:'odgovor',     bEn:'answer' },
+    { a:'ulaz',       aEn:'entrance',       b:'izlaz',       bEn:'exit' },
+    { a:'selo',       aEn:'village',        b:'grad',        bEn:'city' },
+    { a:'nebo',       aEn:'sky',            b:'zemlja',      bEn:'earth / ground' },
+    { a:'muškarac',   aEn:'man',            b:'žena',        bEn:'woman' },
+    { a:'otac',       aEn:'father',         b:'majka',       bEn:'mother' },
+    { a:'sin',        aEn:'son',            b:'kćerka',      bEn:'daughter' },
+    { a:'brat',       aEn:'brother',        b:'sestra',      bEn:'sister' },
+    { a:'dečak',      aEn:'boy',            b:'devojčica',   bEn:'girl' },
+    { a:'svetlost',   aEn:'light',          b:'tama',        bEn:'darkness' },
+    { a:'pobeda',     aEn:'victory',        b:'poraz',       bEn:'defeat' },
+    { a:'rad',        aEn:'work',           b:'odmor',       bEn:'rest' },
+    { a:'život',      aEn:'life',           b:'smrt',        bEn:'death' },
+    { a:'uspeh',      aEn:'success',        b:'neuspeh',     bEn:'failure' },
+    { a:'zdravlje',   aEn:'health',         b:'bolest',      bEn:'illness' },
+    { a:'prošlost',   aEn:'past',           b:'budućnost',   bEn:'future' },
+    { a:'bogatstvo',  aEn:'wealth',         b:'siromaštvo',  bEn:'poverty' },
+  ];
+
+  // Antonyms state
+  let antonymsQueue      = [];
+  let antonymsQIdx       = 0;
+  let antonymsAnswered   = false;
+  let antonymsScore      = { correct: 0, total: 0 };
+  let antonymsMissed     = new Set();
+  let antonymsMissedMode = 'all';
+
+  function buildAntonymsQueue() {
+    const pool = antonymsMissedMode === 'missed'
+      ? [...antonymsMissed]
+      : ANTONYM_PAIRS.map((_, i) => i);
+    const items = pool.map(idx => ({ idx, showA: Math.random() < 0.5 }));
+    antonymsQueue = shuffleArr(items);
+    antonymsQIdx  = 0;
+  }
+
+  function setAntonymsMode(mode) {
+    if (mode === 'missed' && antonymsMissed.size === 0) return;
+    antonymsMissedMode = mode;
+    buildAntonymsQueue();
+    renderAntonymsItem();
+  }
+
+  function renderAntonymsView() {
+    if (antonymsQueue.length === 0) buildAntonymsQueue();
+    renderAntonymsItem();
+  }
+
+  function renderAntonymsItem() {
+    antonymsAnswered = false;
+    const { idx, showA } = antonymsQueue[antonymsQIdx];
+    const pair = ANTONYM_PAIRS[idx];
+
+    const displayWord = showA ? pair.a   : pair.b;
+    const displayEn   = showA ? pair.aEn : pair.bEn;
+    const correctWord = showA ? pair.b   : pair.a;
+    const correctEn   = showA ? pair.bEn : pair.aEn;
+
+    // Distractors: other pairs' answer-side words
+    const pool = shuffleArr(
+      ANTONYM_PAIRS
+        .map((p, i) => i === idx ? null : { w: showA ? p.b : p.a, en: showA ? p.bEn : p.aEn })
+        .filter(x => x && x.w !== correctWord)
+    ).slice(0, 3);
+
+    const options = shuffleArr([
+      { w: correctWord, en: correctEn, correct: true },
+      ...pool.map(x => ({ w: x.w, en: x.en, correct: false })),
+    ]);
+
+    const el = document.getElementById('antonyms-view');
+    el.innerHTML = `
+      <div class="antn-header">
+        <div style="display:flex;gap:6px;">
+          <button class="cyr-pill${antonymsMissedMode==='all'?' active':''}" onclick="setAntonymsMode('all')">All</button>
+          <button class="cyr-pill${antonymsMissedMode==='missed'?' active':''}" onclick="setAntonymsMode('missed')" ${antonymsMissed.size===0?'disabled':''}>Missed (${antonymsMissed.size})</button>
+        </div>
+        <span class="antn-score" id="antn-score">Score: ${antonymsScore.correct} / ${antonymsScore.total}</span>
+        <span class="antn-counter">${antonymsQIdx + 1} / ${antonymsQueue.length}</span>
+      </div>
+      <div class="antn-prompt">
+        <div class="antn-word">${displayWord}</div>
+        <div class="antn-word-en">${displayEn}</div>
+      </div>
+      <div class="antn-options">
+        ${options.map(o => `
+          <button class="antn-option" data-word="${o.w.replace(/'/g,"&apos;")}" onclick="antonymsAnswer(this,'${o.w.replace(/'/g,"\\'")}','${correctWord.replace(/'/g,"\\'")}')">
+            ${o.w}<span class="antn-option-en">${o.en}</span>
+          </button>`).join('')}
+      </div>
+      <div class="antn-feedback" id="antn-feedback"></div>
+      <div class="antn-next-row">
+        <button class="btn btn-primary" id="antn-next" style="display:none" onclick="antonymsNext()">Next →</button>
+      </div>`;
+  }
+
+  function antonymsAnswer(btn, chosen, correct) {
+    if (antonymsAnswered) return;
+    antonymsAnswered = true;
+    const isCorrect = chosen === correct;
+    antonymsScore.total++;
+    if (isCorrect) antonymsScore.correct++;
+    if (!isCorrect) antonymsMissed.add(antonymsQueue[antonymsQIdx].idx);
+    document.getElementById('antn-score').textContent = `Score: ${antonymsScore.correct} / ${antonymsScore.total}`;
+
+    document.querySelectorAll('.antn-option').forEach(b => {
+      b.disabled = true;
+      const w = b.dataset.word;
+      if (w === correct) b.classList.add(isCorrect ? 'correct' : 'reveal');
+      if (w === chosen && !isCorrect) b.classList.add('wrong');
+    });
+    document.querySelectorAll('.antn-option-en').forEach(el => el.classList.add('revealed'));
+
+    const { idx, showA } = antonymsQueue[antonymsQIdx];
+    const pair = ANTONYM_PAIRS[idx];
+    const wordA = pair.a, enA = pair.aEn, wordB = pair.b, enB = pair.bEn;
+    const fb = document.getElementById('antn-feedback');
+    fb.innerHTML = `<span class="antn-pair">${wordA} <em>(${enA})</em> &nbsp;↔&nbsp; ${wordB} <em>(${enB})</em></span>`;
+    fb.classList.add('show');
+    document.getElementById('antn-next').style.display = 'inline-block';
+  }
+
+  function antonymsNext() {
+    antonymsQIdx++;
+    if (antonymsQIdx >= antonymsQueue.length) buildAntonymsQueue();
+    renderAntonymsItem();
   }
 
   // ═══════════════════════════════════════════════════
