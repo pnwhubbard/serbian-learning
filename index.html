@@ -1089,6 +1089,50 @@
     .cases-rule strong { color:#9abaca; }
     .cases-next-row { display:flex; justify-content:flex-end; }
 
+    /* ── CASE RULES VIEW */
+    #caserules-view { flex-direction:column; gap:14px; padding:16px; }
+    .caserules-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    .caserules-score  { font-size:0.85rem; color:#779; }
+    .caserules-counter{ font-size:0.85rem; color:#556; }
+    .caserules-sentence { font-size:1.15rem; line-height:1.7; color:#e0e0ff; background:#16213e; border:1px solid #2a2a4a; border-radius:10px; padding:20px 24px; }
+    .caserules-blank { background:#2a1a3a; padding:4px 12px; border-radius:6px; color:#f0b8c0; font-weight:600; }
+    .caserules-word-given { font-size:0.9rem; color:#aac; text-align:center; margin:8px 0; font-style:italic; }
+    .caserules-options { display:flex; gap:8px; flex-wrap:wrap; }
+    .caserules-option { padding:9px 16px; border:2px solid #3a3a5a; background:none; color:#cce; border-radius:8px; cursor:pointer; font-size:0.9rem; transition:background 0.15s,border-color 0.15s; }
+    .caserules-option:hover:not(:disabled) { border-color:#7070cc; background:#2a2a4a; }
+    .caserules-option.correct { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .caserules-option.wrong   { border-color:#e94560; background:#3a1a2a; color:#ff8080; }
+    .caserules-option.reveal  { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .caserules-option:disabled{ cursor:default; opacity:0.7; }
+    .caserules-explanation { background:#16213e; border-left:3px solid #4a8acc; border-radius:0 8px 8px 0; padding:12px 16px; font-size:0.9rem; color:#aac; line-height:1.6; display:none; }
+    .caserules-explanation.show { display:block; }
+    .caserules-translation { font-style:italic; color:#8aaccc; margin-bottom:8px; font-size:0.88rem; }
+    .caserules-rule { margin-top:10px; padding-top:8px; border-top:1px solid #2a3a4a; font-size:0.85rem; color:#7a9aaa; }
+    .caserules-rule strong { color:#9abaca; }
+    .caserules-next-row { display:flex; justify-content:flex-end; }
+
+    /* ── POSSESSIVES VIEW */
+    #possessives-view { flex-direction:column; gap:14px; padding:16px; }
+    .possessives-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    .possessives-score  { font-size:0.85rem; color:#779; }
+    .possessives-counter{ font-size:0.85rem; color:#556; }
+    .possessives-sentence { font-size:1.15rem; line-height:1.7; color:#e0e0ff; background:#16213e; border:1px solid #2a2a4a; border-radius:10px; padding:20px 24px; }
+    .possessives-blank { background:#2a1a3a; padding:4px 12px; border-radius:6px; color:#f0b8c0; font-weight:600; }
+    .possessives-possessor { font-size:0.9rem; color:#aac; text-align:center; margin:8px 0; font-style:italic; }
+    .possessives-options { display:flex; gap:8px; flex-wrap:wrap; }
+    .possessives-option { padding:9px 16px; border:2px solid #3a3a5a; background:none; color:#cce; border-radius:8px; cursor:pointer; font-size:0.9rem; transition:background 0.15s,border-color 0.15s; }
+    .possessives-option:hover:not(:disabled) { border-color:#7070cc; background:#2a2a4a; }
+    .possessives-option.correct { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .possessives-option.wrong   { border-color:#e94560; background:#3a1a2a; color:#ff8080; }
+    .possessives-option.reveal  { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .possessives-option:disabled{ cursor:default; opacity:0.7; }
+    .possessives-explanation { background:#16213e; border-left:3px solid #4a8acc; border-radius:0 8px 8px 0; padding:12px 16px; font-size:0.9rem; color:#aac; line-height:1.6; display:none; }
+    .possessives-explanation.show { display:block; }
+    .possessives-translation { font-style:italic; color:#8aaccc; margin-bottom:8px; font-size:0.88rem; }
+    .possessives-rule { margin-top:10px; padding-top:8px; border-top:1px solid #2a3a4a; font-size:0.85rem; color:#7a9aaa; }
+    .possessives-rule strong { color:#9abaca; }
+    .possessives-next-row { display:flex; justify-content:flex-end; }
+
     /* ── ANTONYMS VIEW */
     #antonyms-view { flex-direction:column; gap:14px; padding:16px; }
     .antn-header   { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
@@ -1129,6 +1173,8 @@
     <button id="nav-mace"       onclick="showView('mace')">Mače</button>
     <button id="nav-jezurka"    onclick="showView('jezurka')">Ježurka</button>
     <button id="nav-cases"      onclick="showView('cases')">Cases</button>
+    <button id="nav-caserules"  onclick="showView('caserules')">Case Rules</button>
+    <button id="nav-possessives" onclick="showView('possessives')">Possessives</button>
     <button id="nav-antonyms"   onclick="showView('antonyms')">Antonyms</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
@@ -1633,6 +1679,12 @@
 
   <!-- ═══════════════ CASES VIEW ═══════════════ -->
   <div id="cases-view" style="display:none"><!-- rendered by JS --></div><!-- /cases-view -->
+
+  <!-- ═══════════════ CASE RULES VIEW ═══════════════ -->
+  <div id="caserules-view" style="display:none"><!-- rendered by JS --></div><!-- /caserules-view -->
+
+  <!-- ═══════════════ POSSESSIVES VIEW ═══════════════ -->
+  <div id="possessives-view" style="display:none"><!-- rendered by JS --></div><!-- /possessives-view -->
 
   <!-- ═══════════════ ANTONYMS VIEW ═══════════════ -->
   <div id="antonyms-view" style="display:none"><!-- rendered by JS --></div><!-- /antonyms-view -->
@@ -6228,26 +6280,116 @@
   const GRAMMAR_KEY = 'serbian_grammar_nouns';
 
   const DEFAULT_GRAMMAR_NOUNS = [
-    { english:'brother', gender:'masculine', forms:{ nominativ:'brat',   genitiv:'brata',   dativ:'bratu',   akuzativ:'brata',   vokativ:'brate',   instrumental:'bratom',   lokativ:'bratu'   }},
-    { english:'city',    gender:'masculine', forms:{ nominativ:'grad',   genitiv:'grada',   dativ:'gradu',   akuzativ:'grad',    vokativ:'grade',   instrumental:'gradom',   lokativ:'gradu'   }},
-    { english:'man',     gender:'masculine', forms:{ nominativ:'čovek',  genitiv:'čoveka',  dativ:'čoveku',  akuzativ:'čoveka',  vokativ:'čoveče',  instrumental:'čovekom',  lokativ:'čoveku'  }},
-    { english:'dog',     gender:'masculine', forms:{ nominativ:'pas',    genitiv:'psa',     dativ:'psu',     akuzativ:'psa',     vokativ:'pse',     instrumental:'psom',     lokativ:'psu'     }},
-    { english:'son',     gender:'masculine', forms:{ nominativ:'sin',    genitiv:'sina',    dativ:'sinu',    akuzativ:'sina',    vokativ:'sine',    instrumental:'sinom',    lokativ:'sinu'    }},
-    { english:'friend',  gender:'masculine', forms:{ nominativ:'drug',   genitiv:'druga',   dativ:'drugu',   akuzativ:'druga',   vokativ:'druže',   instrumental:'drugom',   lokativ:'drugu'   }},
-    { english:'window',  gender:'masculine', forms:{ nominativ:'prozor', genitiv:'prozora', dativ:'prozoru', akuzativ:'prozor',  vokativ:'prozore', instrumental:'prozorom', lokativ:'prozoru' }},
-    { english:'woman',   gender:'feminine',  forms:{ nominativ:'žena',   genitiv:'žene',    dativ:'ženi',    akuzativ:'ženu',    vokativ:'ženo',    instrumental:'ženom',    lokativ:'ženi'    }},
-    { english:'sister',  gender:'feminine',  forms:{ nominativ:'sestra', genitiv:'sestre',  dativ:'sestri',  akuzativ:'sestru',  vokativ:'sestro',  instrumental:'sestrom',  lokativ:'sestri'  }},
-    { english:'mother',  gender:'feminine',  forms:{ nominativ:'majka',  genitiv:'majke',   dativ:'majci',   akuzativ:'majku',   vokativ:'majko',   instrumental:'majkom',   lokativ:'majci'   }},
-    { english:'book',    gender:'feminine',  forms:{ nominativ:'knjiga', genitiv:'knjige',  dativ:'knjizi',  akuzativ:'knjigu',  vokativ:'knjigo',  instrumental:'knjigom',  lokativ:'knjizi'  }},
-    { english:'house',   gender:'feminine',  forms:{ nominativ:'kuća',   genitiv:'kuće',    dativ:'kući',    akuzativ:'kuću',    vokativ:'kućo',    instrumental:'kućom',    lokativ:'kući'    }},
-    { english:'water',   gender:'feminine',  forms:{ nominativ:'voda',   genitiv:'vode',    dativ:'vodi',    akuzativ:'vodu',    vokativ:'vodo',    instrumental:'vodom',    lokativ:'vodi'    }},
-    { english:'river',   gender:'feminine',  forms:{ nominativ:'reka',   genitiv:'reke',    dativ:'reci',    akuzativ:'reku',    vokativ:'reko',    instrumental:'rekom',    lokativ:'reci'    }},
-    { english:'school',  gender:'feminine',  forms:{ nominativ:'škola',  genitiv:'škole',   dativ:'školi',   akuzativ:'školu',   vokativ:'školo',   instrumental:'školom',   lokativ:'školi'   }},
-    { english:'village', gender:'neuter',    forms:{ nominativ:'selo',   genitiv:'sela',    dativ:'selu',    akuzativ:'selo',    vokativ:'selo',    instrumental:'selom',    lokativ:'selu'    }},
-    { english:'sea',     gender:'neuter',    forms:{ nominativ:'more',   genitiv:'mora',    dativ:'moru',    akuzativ:'more',    vokativ:'more',    instrumental:'morem',    lokativ:'moru'    }},
-    { english:'child',   gender:'neuter',    forms:{ nominativ:'dete',   genitiv:'deteta',  dativ:'detetu',  akuzativ:'dete',    vokativ:'dete',    instrumental:'detetom',  lokativ:'detetu'  }},
-    { english:'name',    gender:'neuter',    forms:{ nominativ:'ime',    genitiv:'imena',   dativ:'imenu',   akuzativ:'ime',     vokativ:'ime',     instrumental:'imenom',   lokativ:'imenu'   }},
-    { english:'sun',     gender:'neuter',    forms:{ nominativ:'sunce',  genitiv:'sunca',   dativ:'suncu',   akuzativ:'sunce',   vokativ:'sunce',   instrumental:'suncem',   lokativ:'suncu'   }},
+    // ── MASCULINE NOUNS ────────────────────────────────────
+    // Family & People
+    { english:'brother', gender:'masculine', forms:{ nominativ:'brat',     genitiv:'brata',     dativ:'bratu',     akuzativ:'brata',     vokativ:'brate',     instrumental:'bratom',     lokativ:'bratu'     }},
+    { english:'father',  gender:'masculine', forms:{ nominativ:'otac',     genitiv:'oca',       dativ:'ocu',       akuzativ:'oca',       vokativ:'oče',       instrumental:'ocem',       lokativ:'ocu'       }},
+    { english:'son',     gender:'masculine', forms:{ nominativ:'sin',      genitiv:'sina',      dativ:'sinu',      akuzativ:'sina',      vokativ:'sine',      instrumental:'sinom',      lokativ:'sinu'      }},
+    { english:'man',     gender:'masculine', forms:{ nominativ:'čovek',    genitiv:'čoveka',    dativ:'čoveku',    akuzativ:'čoveka',    vokativ:'čoveče',    instrumental:'čovekom',    lokativ:'čoveku'    }},
+    { english:'friend',  gender:'masculine', forms:{ nominativ:'drug',     genitiv:'druga',     dativ:'drugu',     akuzativ:'druga',     vokativ:'druže',     instrumental:'drugom',     lokativ:'drugu'     }},
+    { english:'boy',     gender:'masculine', forms:{ nominativ:'dečak',    genitiv:'dečaka',    dativ:'dečaku',    akuzativ:'dečaka',    vokativ:'dečače',    instrumental:'dečakom',    lokativ:'dečaku'    }},
+    { english:'teacher', gender:'masculine', forms:{ nominativ:'učitelj',  genitiv:'učitelja',  dativ:'učitelju',  akuzativ:'učitelja',  vokativ:'učitelju',  instrumental:'učiteljem',  lokativ:'učitelju'  }},
+    { english:'student', gender:'masculine', forms:{ nominativ:'student',  genitiv:'studenta',  dativ:'studentu',  akuzativ:'studenta',  vokativ:'studente',  instrumental:'studentom',  lokativ:'studentu'  }},
+    { english:'doctor',  gender:'masculine', forms:{ nominativ:'doktor',   genitiv:'doktora',   dativ:'doktoru',   akuzativ:'doktora',   vokativ:'doktore',   instrumental:'doktorom',   lokativ:'doktoru'   }},
+    { english:'worker',  gender:'masculine', forms:{ nominativ:'radnik',   genitiv:'radnika',   dativ:'radniku',   akuzativ:'radnika',   vokativ:'radniče',   instrumental:'radnikom',   lokativ:'radniku'   }},
+
+    // Animals
+    { english:'dog',     gender:'masculine', forms:{ nominativ:'pas',      genitiv:'psa',       dativ:'psu',       akuzativ:'psa',       vokativ:'pse',       instrumental:'psom',       lokativ:'psu'       }},
+    { english:'cat',     gender:'masculine', forms:{ nominativ:'mačak',    genitiv:'mačka',     dativ:'mačku',     akuzativ:'mačka',     vokativ:'mačku',     instrumental:'mačkom',     lokativ:'mačku'     }},
+    { english:'horse',   gender:'masculine', forms:{ nominativ:'konj',     genitiv:'konja',     dativ:'konju',     akuzativ:'konja',     vokativ:'konju',     instrumental:'konjem',     lokativ:'konju'     }},
+    { english:'wolf',    gender:'masculine', forms:{ nominativ:'vuk',      genitiv:'vuka',      dativ:'vuku',      akuzativ:'vuka',      vokativ:'vuče',      instrumental:'vukom',      lokativ:'vuku'      }},
+    { english:'bear',    gender:'masculine', forms:{ nominativ:'medved',   genitiv:'medveda',   dativ:'medvedu',   akuzativ:'medveda',   vokativ:'medvede',   instrumental:'medvedom',   lokativ:'medvedu'   }},
+    { english:'bird',    gender:'feminine',  forms:{ nominativ:'ptica',    genitiv:'ptice',     dativ:'ptici',     akuzativ:'pticu',     vokativ:'ptico',     instrumental:'pticom',     lokativ:'ptici'     }},
+
+    // Objects & Places
+    { english:'city',    gender:'masculine', forms:{ nominativ:'grad',     genitiv:'grada',     dativ:'gradu',     akuzativ:'grad',      vokativ:'grade',     instrumental:'gradom',     lokativ:'gradu'     }},
+    { english:'window',  gender:'masculine', forms:{ nominativ:'prozor',   genitiv:'prozora',   dativ:'prozoru',   akuzativ:'prozor',    vokativ:'prozore',   instrumental:'prozorom',   lokativ:'prozoru'   }},
+    { english:'table',   gender:'masculine', forms:{ nominativ:'sto',      genitiv:'stola',     dativ:'stolu',     akuzativ:'sto',       vokativ:'stole',     instrumental:'stolom',     lokativ:'stolu'     }},
+    { english:'chair',   gender:'masculine', forms:{ nominativ:'stolac',   genitiv:'stolca',    dativ:'stolcu',    akuzativ:'stolac',    vokativ:'stolče',    instrumental:'stolcem',    lokativ:'stolcu'    }},
+    { english:'car',     gender:'masculine', forms:{ nominativ:'auto',     genitiv:'auta',      dativ:'autu',      akuzativ:'auto',      vokativ:'auto',      instrumental:'autom',      lokativ:'autu'      }},
+    { english:'train',   gender:'masculine', forms:{ nominativ:'voz',      genitiv:'voza',      dativ:'vozu',      akuzativ:'voz',       vokativ:'voze',      instrumental:'vozom',      lokativ:'vozu'      }},
+    { english:'park',    gender:'masculine', forms:{ nominativ:'park',     genitiv:'parka',     dativ:'parku',     akuzativ:'park',      vokativ:'parku',     instrumental:'parkom',     lokativ:'parku'     }},
+    { english:'bridge',  gender:'masculine', forms:{ nominativ:'most',     genitiv:'mosta',     dativ:'mostu',     akuzativ:'most',      vokativ:'moste',     instrumental:'mostom',     lokativ:'mostu'     }},
+    { english:'forest',  gender:'feminine',  forms:{ nominativ:'šuma',     genitiv:'šume',      dativ:'šumi',      akuzativ:'šumu',      vokativ:'šumo',      instrumental:'šumom',      lokativ:'šumi'      }},
+
+    // Time & Abstract
+    { english:'day',     gender:'masculine', forms:{ nominativ:'dan',      genitiv:'dana',      dativ:'danu',      akuzativ:'dan',       vokativ:'dane',      instrumental:'danom',      lokativ:'danu'      }},
+    { english:'month',   gender:'masculine', forms:{ nominativ:'mesec',    genitiv:'meseca',    dativ:'mesecu',    akuzativ:'mesec',     vokativ:'meseče',    instrumental:'mesecom',    lokativ:'mesecu'    }},
+    { english:'year',    gender:'masculine', forms:{ nominativ:'godina',   genitiv:'godine',    dativ:'godini',    akuzativ:'godinu',    vokativ:'godino',    instrumental:'godinom',    lokativ:'godini'    }},
+    { english:'work',    gender:'masculine', forms:{ nominativ:'posao',    genitiv:'posla',     dativ:'poslu',     akuzativ:'posao',     vokativ:'poslu',     instrumental:'poslom',     lokativ:'poslu'     }},
+
+    // ── FEMININE NOUNS ─────────────────────────────────────
+    // Family & People
+    { english:'woman',     gender:'feminine',  forms:{ nominativ:'žena',     genitiv:'žene',      dativ:'ženi',      akuzativ:'ženu',      vokativ:'ženo',      instrumental:'ženom',      lokativ:'ženi'      }},
+    { english:'mother',    gender:'feminine',  forms:{ nominativ:'majka',    genitiv:'majke',     dativ:'majci',     akuzativ:'majku',     vokativ:'majko',     instrumental:'majkom',     lokativ:'majci'     }},
+    { english:'sister',    gender:'feminine',  forms:{ nominativ:'sestra',   genitiv:'sestre',    dativ:'sestri',    akuzativ:'sestru',    vokativ:'sestro',    instrumental:'sestrom',    lokativ:'sestri'    }},
+    { english:'daughter', gender:'feminine',  forms:{ nominativ:'ćerka',    genitiv:'ćerke',     dativ:'ćerki',     akuzativ:'ćerku',     vokativ:'ćerko',     instrumental:'ćerkom',     lokativ:'ćerki'     }},
+    { english:'girl',      gender:'feminine',  forms:{ nominativ:'devojka',  genitiv:'devojke',   dativ:'devojci',   akuzativ:'devojku',   vokativ:'devojko',   instrumental:'devojkom',   lokativ:'devojci'   }},
+    { english:'grandmother', gender:'feminine', forms:{ nominativ:'baka',    genitiv:'bake',      dativ:'baki',      akuzativ:'baku',      vokativ:'bako',      instrumental:'bakom',      lokativ:'baki'      }},
+    { english:'aunt',      gender:'feminine',  forms:{ nominativ:'tetka',    genitiv:'tetke',     dativ:'tetki',     akuzativ:'tetku',     vokativ:'tetko',     instrumental:'tetkom',     lokativ:'tetki'     }},
+    { english:'nurse',     gender:'feminine',  forms:{ nominativ:'sestra',   genitiv:'sestre',    dativ:'sestri',    akuzativ:'sestru',    vokativ:'sestro',    instrumental:'sestrom',    lokativ:'sestri'    }},
+
+    // Objects & Places
+    { english:'house',     gender:'feminine',  forms:{ nominativ:'kuća',     genitiv:'kuće',      dativ:'kući',      akuzativ:'kuću',      vokativ:'kućo',      instrumental:'kućom',      lokativ:'kući'      }},
+    { english:'book',      gender:'feminine',  forms:{ nominativ:'knjiga',   genitiv:'knjige',    dativ:'knjizi',    akuzativ:'knjigu',    vokativ:'knjigo',    instrumental:'knjigom',    lokativ:'knjizi'    }},
+    { english:'school',    gender:'feminine',  forms:{ nominativ:'škola',    genitiv:'škole',     dativ:'školi',     akuzativ:'školu',     vokativ:'školo',     instrumental:'školom',     lokativ:'školi'     }},
+    { english:'church',    gender:'feminine',  forms:{ nominativ:'crkva',    genitiv:'crkve',     dativ:'crkvi',     akuzativ:'crkvu',     vokativ:'crkvo',     instrumental:'crkvom',     lokativ:'crkvi'     }},
+    { english:'street',    gender:'feminine',  forms:{ nominativ:'ulica',    genitiv:'ulice',     dativ:'ulici',     akuzativ:'ulicu',     vokativ:'ulico',     instrumental:'ulicom',     lokativ:'ulici'     }},
+    { english:'door',      gender:'feminine',  forms:{ nominativ:'vrata',    genitiv:'vrata',     dativ:'vratima',   akuzativ:'vrata',     vokativ:'vrata',     instrumental:'vratima',    lokativ:'vratima'   }},
+    { english:'room',      gender:'feminine',  forms:{ nominativ:'soba',     genitiv:'sobe',      dativ:'sobi',      akuzativ:'sobu',      vokativ:'sobo',      instrumental:'sobom',      lokativ:'sobi'      }},
+    { english:'kitchen',   gender:'feminine',  forms:{ nominativ:'kuhinja',  genitiv:'kuhinje',   dativ:'kuhinji',   akuzativ:'kuhinju',   vokativ:'kuhinjo',   instrumental:'kuhinjom',   lokativ:'kuhinji'   }},
+    { english:'bed',       gender:'feminine',  forms:{ nominativ:'postelja', genitiv:'postelje',  dativ:'postelji',  akuzativ:'postelju',  vokativ:'posteljo',  instrumental:'posteljom',  lokativ:'postelji'  }},
+
+    // Nature & Food
+    { english:'water',     gender:'feminine',  forms:{ nominativ:'voda',     genitiv:'vode',      dativ:'vodi',      akuzativ:'vodu',      vokativ:'vodo',      instrumental:'vodom',      lokativ:'vodi'      }},
+    { english:'river',     gender:'feminine',  forms:{ nominativ:'reka',     genitiv:'reke',      dativ:'reci',      akuzativ:'reku',      vokativ:'reko',      instrumental:'rekom',      lokativ:'reci'      }},
+    { english:'mountain',  gender:'feminine',  forms:{ nominativ:'planina',  genitiv:'planine',   dativ:'planini',   akuzativ:'planinu',   vokativ:'planino',   instrumental:'planinom',   lokativ:'planini'   }},
+    { english:'tree',      gender:'neuter',    forms:{ nominativ:'drvo',     genitiv:'drveta',    dativ:'drvetu',    akuzativ:'drvo',      vokativ:'drvo',      instrumental:'drvetom',    lokativ:'drvetu'    }},
+    { english:'apple',     gender:'feminine',  forms:{ nominativ:'jabuka',   genitiv:'jabuke',    dativ:'jabuci',    akuzativ:'jabuku',    vokativ:'jabuko',    instrumental:'jabukom',    lokativ:'jabuci'    }},
+    { english:'bread',     gender:'masculine', forms:{ nominativ:'hleb',     genitiv:'hleba',     dativ:'hlebu',     akuzativ:'hleb',      vokativ:'hlebe',     instrumental:'hlebom',     lokativ:'hlebu'     }},
+    { english:'coffee',    gender:'feminine',  forms:{ nominativ:'kafa',     genitiv:'kafe',      dativ:'kafi',      akuzativ:'kafu',      vokativ:'kafo',      instrumental:'kafom',      lokativ:'kafi'      }},
+    { english:'fish',      gender:'feminine',  forms:{ nominativ:'riba',     genitiv:'ribe',      dativ:'ribi',      akuzativ:'ribu',      vokativ:'ribo',      instrumental:'ribom',      lokativ:'ribi'      }},
+    { english:'flower',    gender:'feminine',  forms:{ nominativ:'ruža',     genitiv:'ruže',      dativ:'ruži',      akuzativ:'ružu',      vokativ:'ružo',      instrumental:'ružom',      lokativ:'ruži'      }},
+    { english:'music',     gender:'feminine',  forms:{ nominativ:'muzika',   genitiv:'muzike',    dativ:'muzici',    akuzativ:'muziku',    vokativ:'muziko',    instrumental:'muzikom',    lokativ:'muzici'    }},
+
+    // Animals
+    { english:'cat',       gender:'feminine',  forms:{ nominativ:'mačka',    genitiv:'mačke',     dativ:'mački',     akuzativ:'mačku',     vokativ:'mačko',     instrumental:'mačkom',     lokativ:'mački'     }},
+    { english:'cow',       gender:'feminine',  forms:{ nominativ:'krava',    genitiv:'krave',     dativ:'kravi',     akuzativ:'kravu',     vokativ:'kravo',     instrumental:'kravom',     lokativ:'kravi'     }},
+    { english:'bird',      gender:'feminine',  forms:{ nominativ:'ptica',    genitiv:'ptice',     dativ:'ptici',     akuzativ:'pticu',     vokativ:'ptico',     instrumental:'pticom',     lokativ:'ptici'     }},
+
+    // ── NEUTER NOUNS ──────────────────────────────────────
+    // Family & People
+    { english:'child',   gender:'neuter',    forms:{ nominativ:'dete',     genitiv:'deteta',    dativ:'detetu',    akuzativ:'dete',      vokativ:'dete',      instrumental:'detetom',    lokativ:'detetu'    }},
+
+    // Objects & Places
+    { english:'village',   gender:'neuter',    forms:{ nominativ:'selo',     genitiv:'sela',      dativ:'selu',      akuzativ:'selo',      vokativ:'selo',      instrumental:'selom',      lokativ:'selu'      }},
+    { english:'sea',       gender:'neuter',    forms:{ nominativ:'more',     genitiv:'mora',      dativ:'moru',      akuzativ:'more',      vokativ:'more',      instrumental:'morem',      lokativ:'moru'      }},
+    { english:'lake',      gender:'neuter',    forms:{ nominativ:'jezero',   genitiv:'jezera',    dativ:'jezeru',    akuzativ:'jezero',    vokativ:'jezero',    instrumental:'jezerom',    lokativ:'jezeru'    }},
+    { english:'window',    gender:'neuter',    forms:{ nominativ:'okno',     genitiv:'okna',      dativ:'oknu',      akuzativ:'okno',      vokativ:'okno',      instrumental:'oknom',      lokativ:'oknu'      }},
+    { english:'field',     gender:'neuter',    forms:{ nominativ:'polje',    genitiv:'polja',     dativ:'polju',     akuzativ:'polje',     vokativ:'polje',     instrumental:'poljem',     lokativ:'polju'     }},
+    { english:'mirror',    gender:'neuter',    forms:{ nominativ:'ogledalo', genitiv:'ogledala',  dativ:'ogledalu',  akuzativ:'ogledalo',  vokativ:'ogledalo',  instrumental:'ogledalom',  lokativ:'ogledalu'  }},
+    { english:'place',     gender:'neuter',    forms:{ nominativ:'mesto',    genitiv:'mesta',     dativ:'mestu',     akuzativ:'mesto',     vokativ:'mesto',     instrumental:'mestom',     lokativ:'mestu'     }},
+    { english:'building', gender:'neuter',    forms:{ nominativ:'zdanje',   genitiv:'zdanja',    dativ:'zdanju',    akuzativ:'zdanje',    vokativ:'zdanje',    instrumental:'zdanjem',    lokativ:'zdanju'    }},
+
+    // Nature & Abstract
+    { english:'sun',       gender:'neuter',    forms:{ nominativ:'sunce',    genitiv:'sunca',     dativ:'suncu',     akuzativ:'sunce',     vokativ:'sunce',     instrumental:'suncem',     lokativ:'suncu'     }},
+    { english:'moon',      gender:'neuter',    forms:{ nominativ:'mesec',    genitiv:'meseca',    dativ:'mesecu',    akuzativ:'mesec',     vokativ:'meseče',    instrumental:'mesecom',    lokativ:'mesecu'    }},
+    { english:'sky',       gender:'neuter',    forms:{ nominativ:'nebo',     genitiv:'neba',      dativ:'nebu',      akuzativ:'nebo',      vokativ:'nebo',      instrumental:'nebom',      lokativ:'nebu'      }},
+    { english:'heart',     gender:'neuter',    forms:{ nominativ:'srce',     genitiv:'srca',      dativ:'srcu',      akuzativ:'srce',      vokativ:'srce',      instrumental:'srcem',      lokativ:'srcu'      }},
+    { english:'eye',       gender:'neuter',    forms:{ nominativ:'oko',      genitiv:'oka',       dativ:'oku',       akuzativ:'oko',       vokativ:'oko',       instrumental:'okom',       lokativ:'oku'       }},
+    { english:'word',      gender:'neuter',    forms:{ nominativ:'reč',      genitiv:'reči',      dativ:'reči',      akuzativ:'reč',       vokativ:'reči',      instrumental:'rečju',      lokativ:'reči'      }},
+    { english:'name',      gender:'neuter',    forms:{ nominativ:'ime',      genitiv:'imena',     dativ:'imenu',     akuzativ:'ime',       vokativ:'ime',       instrumental:'imenom',     lokativ:'imenu'     }},
+    { english:'time',      gender:'neuter',    forms:{ nominativ:'vreme',    genitiv:'vremena',   dativ:'vremenu',   akuzativ:'vreme',     vokativ:'vreme',     instrumental:'vremenom',   lokativ:'vremenu'   }},
+
+    // Food & Drink
+    { english:'milk',      gender:'neuter',    forms:{ nominativ:'mleko',    genitiv:'mleka',     dativ:'mleku',     akuzativ:'mleko',     vokativ:'mleko',     instrumental:'mlekom',     lokativ:'mleku'     }},
+    { english:'wine',      gender:'neuter',    forms:{ nominativ:'vino',     genitiv:'vina',      dativ:'vinu',      akuzativ:'vino',      vokativ:'vino',      instrumental:'vinom',      lokativ:'vinu'      }},
+    { english:'meat',      gender:'neuter',    forms:{ nominativ:'meso',     genitiv:'mesa',      dativ:'mesu',      akuzativ:'meso',      vokativ:'meso',      instrumental:'mesom',      lokativ:'mesu'      }},
+    { english:'egg',       gender:'neuter',    forms:{ nominativ:'jaje',     genitiv:'jajeta',    dativ:'jajetu',    akuzativ:'jaje',      vokativ:'jaje',      instrumental:'jajetom',    lokativ:'jajetu'    }},
+
+    // Animals
+    { english:'animal',    gender:'neuter',    forms:{ nominativ:'životinja',genitiv:'životinje', dativ:'životinji', akuzativ:'životinja', vokativ:'životinjo', instrumental:'životinjom', lokativ:'životinji' }},
+    { english:'deer',      gender:'neuter',    forms:{ nominativ:'jelen',    genitiv:'jelena',    dativ:'jelenu',    akuzativ:'jelena',    vokativ:'jelene',    instrumental:'jelenom',    lokativ:'jelenu'    }},
   ];
 
   function loadGrammarNouns() {
@@ -6956,9 +7098,11 @@
     document.getElementById('mace-view').style.display       = view === 'mace'       ? 'flex' : 'none';
     document.getElementById('jezurka-view').style.display    = view === 'jezurka'    ? 'flex' : 'none';
     document.getElementById('cases-view').style.display      = view === 'cases'      ? 'flex' : 'none';
+    document.getElementById('caserules-view').style.display  = view === 'caserules'  ? 'flex' : 'none';
+    document.getElementById('possessives-view').style.display = view === 'possessives' ? 'flex' : 'none';
     document.getElementById('antonyms-view').style.display   = view === 'antonyms'   ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','jezurka','cases','antonyms','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','jezurka','cases','caserules','possessives','antonyms','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -6973,6 +7117,8 @@
     if (view === 'mace')       renderMaceView();
     if (view === 'jezurka')    renderJezurkaView();
     if (view === 'cases')      renderCasesView();
+    if (view === 'caserules')  renderCaseRulesView();
+    if (view === 'possessives') renderPossessivesView();
     if (view === 'antonyms')   renderAntonymsView();
     if (view === 'manage')     renderManage();
   }
@@ -9366,6 +9512,44 @@
         }
       }
     });
+    const casesVisible = document.getElementById('cases-view').style.display !== 'none';
+    if (casesVisible) {
+      if ((e.key === 'ArrowRight' || e.key === 'Enter') && casesAnswered) casesNext();
+      const caseOptBtns = document.querySelectorAll('.cases-option:not(:disabled)');
+      if (caseOptBtns.length > 0) {
+        const keyMap = {'1':0,'2':1,'3':2,'4':3,'5':4,'6':5,'7':6};
+        if (e.key in keyMap && caseOptBtns[keyMap[e.key]]) caseOptBtns[keyMap[e.key]].click();
+      }
+    }
+    const caseRulesVisible = document.getElementById('caserules-view').style.display !== 'none';
+    if (caseRulesVisible) {
+      if ((e.key === 'ArrowRight' || e.key === 'Enter') && caseRulesAnswered) caseRulesNext();
+      const caseRuleOptBtns = document.querySelectorAll('.caserules-option:not(:disabled)');
+      if (caseRuleOptBtns.length > 0) {
+        const keyMap = {'1':0,'2':1,'3':2,'4':3,'5':4,'6':5,'7':6};
+        if (e.key in keyMap && caseRuleOptBtns[keyMap[e.key]]) caseRuleOptBtns[keyMap[e.key]].click();
+      }
+    }
+    const possessivesVisible = document.getElementById('possessives-view').style.display !== 'none';
+    if (possessivesVisible) {
+      if ((e.key === 'ArrowRight' || e.key === 'Enter') && possessivesAnswered) possessivesNext();
+      const possessiveOptBtns = document.querySelectorAll('.possessives-option:not(:disabled)');
+      if (possessiveOptBtns.length > 0) {
+        const keyMap = {'1':0,'2':1,'3':2,'4':3,'5':4,'6':5,'7':6};
+        if (e.key in keyMap && possessiveOptBtns[keyMap[e.key]]) possessiveOptBtns[keyMap[e.key]].click();
+      }
+    }
+    const antonymsVisible = document.getElementById('antonyms-view').style.display !== 'none';
+    if (antonymsVisible) {
+      if ((e.key === 'ArrowRight' || e.key === 'Enter') && antonymsAnswered) antonymsNext();
+      const antnOptBtns = document.querySelectorAll('.antn-option:not(:disabled)');
+      if (antnOptBtns.length > 0) {
+        if (e.key === '1' && antnOptBtns[0]) antnOptBtns[0].click();
+        if (e.key === '2' && antnOptBtns[1]) antnOptBtns[1].click();
+        if (e.key === '3' && antnOptBtns[2]) antnOptBtns[2].click();
+        if (e.key === '4' && antnOptBtns[3]) antnOptBtns[3].click();
+      }
+    }
   });
 
   // ═══════════════════════════════════════════════════
@@ -9390,6 +9574,89 @@
     { lat:'Sestra spava u maloj sobi.',      word:'Sestra',     en:'My sister is sleeping in the small room.',         answer:'Nominative',   explanation:'"Sestra" (sister) is the subject of "spava" (sleeps). Feminine -a nouns look the same in nominative and accusative singular — here it\'s nominative because it\'s the subject.', rule:'The nominative marks the subject. \'Sestra\' is who sleeps — it performs the action, so nominative. Note: feminine -a nouns look the same in nominative and accusative; being the subject identifies this as nominative.' },
     { lat:'Stari auto stoji ispred kuće.',   word:'auto',       en:'The old car is parked in front of the house.',     answer:'Nominative',   explanation:'"Auto" (car) is the subject of "stoji" (stands/is parked). Masculine inanimate nouns are nominative when acting as the subject.', rule:'The nominative marks the subject. \'Auto\' is what stands parked — it performs the action, so nominative. Inanimate masculine nouns look the same in nominative and accusative; the subject role marks this as nominative.' },
     { lat:'Sunce sija ceo dan.',             word:'Sunce',      en:'The sun shines all day.',                          answer:'Nominative',   explanation:'"Sunce" (sun) is the subject of "sija" (shines). Neuter nouns as subjects are in the nominative case.', rule:'The nominative marks the subject — what performs the action. \'Sunce\' is what shines, so it takes nominative.' },
+    { lat:'Mačka spava na stolici.',         word:'Mačka',      en:'The cat is sleeping on the chair.',                answer:'Nominative',   explanation:'"Mačka" (cat) is the subject performing the action "spava" (sleeps). All subjects are in the nominative case.', rule:'The nominative marks the subject — who or what does the action. \'Mačka\' is the one sleeping, so nominative.' },
+    { lat:'Voda teče niz brdo.',             word:'Voda',       en:'Water flows down the hill.',                       answer:'Nominative',   explanation:'"Voda" (water) is the subject of "teče" (flows). Even with abstract actions, the subject takes nominative.', rule:'The nominative marks the subject regardless of whether it\'s animate. \'Voda\' is what flows, so nominative.' },
+    { lat:'Deca se igraju u parku.',         word:'Deca',       en:'Children are playing in the park.',                answer:'Nominative',   explanation:'"Deca" (children) is the subject of the reflexive verb "igraju se" (play). Irregular plurals as subjects take nominative.', rule:'The nominative marks the subject. \'Deca\' is an irregular plural meaning children — they are the ones playing, so nominative.' },
+    { lat:'Voz stiže na vreme.',             word:'Voz',        en:'The train arrives on time.',                       answer:'Nominative',   explanation:'"Voz" (train) is the subject of "stiže" (arrives). Masculine nouns as subjects are nominative.', rule:'The nominative marks the subject — what performs the action. \'Voz\' is what arrives, so nominative.' },
+    { lat:'Mama kuva ručak.',                word:'Mama',       en:'Mom is cooking lunch.',                            answer:'Nominative',   explanation:'"Mama" (mom) is the subject of "kuva" (cooks). Family terms as subjects take nominative.', rule:'The nominative marks the subject. \'Mama\' is who cooks — she performs the action, so nominative.' },
+    { lat:'Kiša pada već dva sata.',         word:'Kiša',       en:'Rain has been falling for two hours.',             answer:'Nominative',   explanation:'"Kiša" (rain) is the subject of "pada" (falls). Weather phenomena as subjects are nominative.', rule:'The nominative marks the subject. \'Kiša\' is what falls — it performs the action, so nominative.' },
+    { lat:'Telefon zvoni glasno.',           word:'Telefon',    en:'The telephone is ringing loudly.',                 answer:'Nominative',   explanation:'"Telefon" (telephone) is the subject of "zvoni" (rings). Objects that perform actions are nominative subjects.', rule:'The nominative marks the subject. \'Telefon\' is what rings — even inanimate objects take nominative when they\'re the subject.' },
+    { lat:'Baka priča lepe priče.',          word:'Baka',       en:'Grandma tells beautiful stories.',                 answer:'Nominative',   explanation:'"Baka" (grandma) is the subject of "priča" (tells). Family terms as subjects are in nominative.', rule:'The nominative marks the subject. \'Baka\' is who tells stories — she performs the action, so nominative.' },
+    { lat:'Vetar duva snažno.',              word:'Vetar',      en:'The wind is blowing strongly.',                    answer:'Nominative',   explanation:'"Vetar" (wind) is the subject of "duva" (blows). Natural forces as subjects take nominative.', rule:'The nominative marks the subject. \'Vetar\' is what blows — it performs the action, so nominative.' },
+    { lat:'Cveće miriše divno.',             word:'Cveće',      en:'The flowers smell wonderful.',                     answer:'Nominative',   explanation:'"Cveće" (flowers) is the subject of "miriše" (smells). Collective neuter nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Cveće\' is a collective noun meaning flowers — they are what smells wonderful, so nominative.' },
+    { lat:'Student čita knjige.',            word:'Student',    en:'The student is reading books.',                    answer:'Nominative',   explanation:'"Student" (student) is the subject of "čita" (reads). Masculine animate nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Student\' is who reads — he performs the action, so nominative.' },
+    { lat:'Biblioteka se zatvrila rano.',    word:'Biblioteka', en:'The library closed early.',                        answer:'Nominative',   explanation:'"Biblioteka" (library) is the subject of the reflexive "zatvarala se" (closed). Institutions as subjects take nominative.', rule:'The nominative marks the subject. \'Biblioteka\' is what closed — even with reflexive verbs, the subject is nominative.' },
+    { lat:'Novine leže na stolu.',           word:'Novine',     en:'The newspaper lies on the table.',                 answer:'Nominative',   explanation:'"Novine" (newspaper) is the subject of "leže" (lie). Plural-only nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Novine\' is a plural-only noun meaning newspaper — it\'s what lies there, so nominative.' },
+    { lat:'Mesec sija na nebu.',             word:'Mesec',      en:'The moon shines in the sky.',                      answer:'Nominative',   explanation:'"Mesec" (moon) is the subject of "sija" (shines). Celestial bodies as subjects are nominative.', rule:'The nominative marks the subject. \'Mesec\' is what shines — it performs the action, so nominative.' },
+    { lat:'Glumica glumi u pozorištu.',      word:'Glumica',    en:'The actress acts in the theater.',                 answer:'Nominative',   explanation:'"Glumica" (actress) is the subject of "glumi" (acts). Profession terms as subjects are nominative.', rule:'The nominative marks the subject. \'Glumica\' is who acts — she performs the action, so nominative.' },
+    { lat:'Muzika svira u restoranu.',       word:'Muzika',     en:'Music is playing in the restaurant.',              answer:'Nominative',   explanation:'"Muzika" (music) is the subject of "svira" (plays). Abstract nouns as subjects take nominative.', rule:'The nominative marks the subject. \'Muzika\' is what plays — even abstract concepts take nominative when they\'re the subject.' },
+    { lat:'Hleb se pravi u pekari.',         word:'Hleb',       en:'Bread is made at the bakery.',                     answer:'Nominative',   explanation:'"Hleb" (bread) is the subject of the passive "pravi se" (is made). Even in passive constructions, the grammatical subject is nominative.', rule:'The nominative marks the grammatical subject even in passive voice. \'Hleb\' is what gets made — it\'s the subject, so nominative.' },
+    { lat:'Pesma se često pevala.',          word:'Pesma',      en:'The song was often sung.',                         answer:'Nominative',   explanation:'"Pesma" (song) is the subject of the passive "pevala se" (was sung). Passive subjects are still nominative.', rule:'The nominative marks the subject in passive constructions. \'Pesma\' is what gets sung — it\'s the grammatical subject, so nominative.' },
+    { lat:'Restoran je otvoren ceo dan.',    word:'Restoran',   en:'The restaurant is open all day.',                  answer:'Nominative',   explanation:'"Restoran" (restaurant) is the subject of the linking verb "je" (is). The subject of "to be" is always nominative.', rule:'The nominative marks the subject with linking verbs. \'Restoran\' is what is open — it\'s being described, so nominative.' },
+    { lat:'Autobus kasni zbog gužve.',       word:'Autobus',    en:'The bus is late because of traffic.',              answer:'Nominative',   explanation:'"Autobus" (bus) is the subject of "kasni" (is late). Vehicles as subjects take nominative.', rule:'The nominative marks the subject. \'Autobus\' is what is late — it\'s the subject performing the state, so nominative.' },
+    { lat:'Doktor radi u bolnici.',          word:'Doktor',     en:'The doctor works at the hospital.',                answer:'Nominative',   explanation:'"Doktor" (doctor) is the subject of "radi" (works). Professional titles as subjects are nominative.', rule:'The nominative marks the subject. \'Doktor\' is who works — he performs the action, so nominative.' },
+    { lat:'Soba je svetla i prostorna.',     word:'Soba',       en:'The room is bright and spacious.',                 answer:'Nominative',   explanation:'"Soba" (room) is the subject of "je" (is). With adjective predicates, the subject is nominative.', rule:'The nominative marks the subject with predicate adjectives. \'Soba\' is what is bright — it\'s being described, so nominative.' },
+    { lat:'Film počinje u osam sati.',       word:'Film',       en:'The movie starts at eight o\'clock.',              answer:'Nominative',   explanation:'"Film" (movie) is the subject of "počinje" (starts). Entertainment as subjects take nominative.', rule:'The nominative marks the subject. \'Film\' is what starts — it performs the action, so nominative.' },
+    { lat:'Dečko igra fudbal.',              word:'Dečko',      en:'The boy plays soccer.',                            answer:'Nominative',   explanation:'"Dečko" (boy) is the subject of "igra" (plays). Age/relationship terms as subjects are nominative.', rule:'The nominative marks the subject. \'Dečko\' is who plays — he performs the action, so nominative.' },
+    { lat:'Crtež visi na zidu.',             word:'Crtež',      en:'The drawing hangs on the wall.',                   answer:'Nominative',   explanation:'"Crtež" (drawing) is the subject of "visi" (hangs). Artwork as subjects take nominative.', rule:'The nominative marks the subject. \'Crtež\' is what hangs — it performs the state of hanging, so nominative.' },
+    { lat:'Putnik čeka voz.',                word:'Putnik',     en:'The passenger is waiting for the train.',          answer:'Nominative',   explanation:'"Putnik" (passenger) is the subject of "čeka" (waits). Travel-related nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Putnik\' is who waits — he performs the action, so nominative.' },
+    { lat:'Medicinska sestra pomaže pacijentima.', word:'sestra', en:'The nurse helps patients.',                        answer:'Nominative',   explanation:'"Sestra" (nurse) is the subject of "pomaže" (helps). The head noun of a compound subject phrase takes nominative.', rule:'The nominative marks the subject. In \'medicinska sestra\' (nurse), the head noun \'sestra\' is nominative because it\'s the subject who helps.' },
+    { lat:'Prodavac prodaje voće na pijaci.', word:'Prodavac',   en:'The vendor sells fruit at the market.',            answer:'Nominative',   explanation:'"Prodavac" (vendor) is the subject of "prodaje" (sells). Occupation nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Prodavac\' is who sells — he performs the action, so nominative.' },
+    { lat:'Računar ne radi kako treba.',     word:'Računar',    en:'The computer isn\'t working properly.',            answer:'Nominative',   explanation:'"Računar" (computer) is the subject of "radi" (works). Technology terms as subjects are nominative.', rule:'The nominative marks the subject. \'Računar\' is what doesn\'t work — it\'s the subject, so nominative.' },
+    { lat:'Zgrada je visoka i moderna.',     word:'Zgrada',     en:'The building is tall and modern.',                 answer:'Nominative',   explanation:'"Zgrada" (building) is the subject of "je" (is). Architecture terms as subjects are nominative.', rule:'The nominative marks the subject. \'Zgrada\' is what is tall — it\'s being described, so nominative.' },
+    { lat:'Ptica peva na drvetu.',           word:'Ptica',      en:'The bird is singing in the tree.',                 answer:'Nominative',   explanation:'"Ptica" (bird) is the subject of "peva" (sings). Animal nouns as subjects take nominative.', rule:'The nominative marks the subject. \'Ptica\' is what sings — it performs the action, so nominative.' },
+    { lat:'Konj trči po polju.',             word:'Konj',       en:'The horse runs across the field.',                 answer:'Nominative',   explanation:'"Konj" (horse) is the subject of "trči" (runs). Large animals as subjects are nominative.', rule:'The nominative marks the subject. \'Konj\' is what runs — it performs the action, so nominative.' },
+    { lat:'Reka protjee kroz grad.',         word:'Reka',       en:'The river flows through the city.',                answer:'Nominative',   explanation:'"Reka" (river) is the subject of "protiče" (flows). Geographic features as subjects are nominative.', rule:'The nominative marks the subject. \'Reka\' is what flows — it performs the action, so nominative.' },
+    { lat:'Učenik uči matematiku.',          word:'Učenik',     en:'The student is learning mathematics.',             answer:'Nominative',   explanation:'"Učenik" (student) is the subject of "uči" (learns). School-related nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Učenik\' is who learns — he performs the action, so nominative.' },
+    { lat:'Papir je beo i čist.',            word:'Papir',      en:'The paper is white and clean.',                    answer:'Nominative',   explanation:'"Papir" (paper) is the subject of "je" (is). Materials as subjects take nominative.', rule:'The nominative marks the subject. \'Papir\' is what is white — it\'s being described, so nominative.' },
+    { lat:'Topola raste u dvorištu.',        word:'Topola',     en:'The poplar grows in the yard.',                    answer:'Nominative',   explanation:'"Topola" (poplar) is the subject of "raste" (grows). Tree names as subjects are nominative.', rule:'The nominative marks the subject. \'Topola\' is what grows — it performs the action, so nominative.' },
+    { lat:'Kamera snima sve vreme.',         word:'Kamera',     en:'The camera records all the time.',                 answer:'Nominative',   explanation:'"Kamera" (camera) is the subject of "snima" (records). Electronic devices as subjects are nominative.', rule:'The nominative marks the subject. \'Kamera\' is what records — it performs the action, so nominative.' },
+    { lat:'Lekarkinja pregleda pacijente.',  word:'Lekarkinja', en:'The female doctor examines patients.',             answer:'Nominative',   explanation:'"Lekarkinja" (female doctor) is the subject of "pregleda" (examines). Professional titles with gender suffixes as subjects are nominative.', rule:'The nominative marks the subject. \'Lekarkinja\' is who examines — she performs the action, so nominative.' },
+    { lat:'Most spaja dva dela grada.',      word:'Most',       en:'The bridge connects two parts of the city.',       answer:'Nominative',   explanation:'"Most" (bridge) is the subject of "spaja" (connects). Infrastructure as subjects take nominative.', rule:'The nominative marks the subject. \'Most\' is what connects — it performs the function, so nominative.' },
+    { lat:'Torta je ukusna i slatka.',       word:'Torta',      en:'The cake is delicious and sweet.',                 answer:'Nominative',   explanation:'"Torta" (cake) is the subject of "je" (is). Food items as subjects are nominative.', rule:'The nominative marks the subject. \'Torta\' is what is delicious — it\'s being described, so nominative.' },
+    { lat:'Vozač vozi pažljivo.',            word:'Vozač',      en:'The driver drives carefully.',                     answer:'Nominative',   explanation:'"Vozač" (driver) is the subject of "vozi" (drives). Transportation professionals as subjects are nominative.', rule:'The nominative marks the subject. \'Vozač\' is who drives — he performs the action, so nominative.' },
+    { lat:'Staklo je providno.',             word:'Staklo',     en:'The glass is transparent.',                        answer:'Nominative',   explanation:'"Staklo" (glass) is the subject of "je" (is). Material nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Staklo\' is what is transparent — it\'s being described, so nominative.' },
+    { lat:'Čovek čita novine svako jutro.',   word:'Čovek',      en:'The man reads the newspaper every morning.',       answer:'Nominative',   explanation:'"Čovek" (man) is the subject of "čita" (reads). General person nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Čovek\' is who reads — he performs the action, so nominative.' },
+    { lat:'Žena kupuje voće na pijaci.',     word:'Žena',       en:'The woman buys fruit at the market.',              answer:'Nominative',   explanation:'"Žena" (woman) is the subject of "kupuje" (buys). Gender-specific person nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Žena\' is who buys — she performs the action, so nominative.' },
+    { lat:'Sat kuca na zidu.',               word:'Sat',        en:'The clock ticks on the wall.',                     answer:'Nominative',   explanation:'"Sat" (clock) is the subject of "kuca" (ticks). Timepieces as subjects are nominative.', rule:'The nominative marks the subject. \'Sat\' is what ticks — it performs the action, so nominative.' },
+    { lat:'Miš se krije u rupi.',            word:'Miš',        en:'The mouse hides in the hole.',                     answer:'Nominative',   explanation:'"Miš" (mouse) is the subject of the reflexive "krije se" (hides). Small animals as subjects are nominative.', rule:'The nominative marks the subject. \'Miš\' is what hides — it performs the action, so nominative.' },
+    { lat:'Staza vodi kroz šumu.',           word:'Staza',      en:'The path leads through the forest.',               answer:'Nominative',   explanation:'"Staza" (path) is the subject of "vodi" (leads). Pathways as subjects are nominative.', rule:'The nominative marks the subject. \'Staza\' is what leads — it performs the function, so nominative.' },
+    { lat:'Krava daje mleko.',               word:'Krava',      en:'The cow gives milk.',                              answer:'Nominative',   explanation:'"Krava" (cow) is the subject of "daje" (gives). Farm animals as subjects are nominative.', rule:'The nominative marks the subject. \'Krava\' is what gives milk — it performs the action, so nominative.' },
+    { lat:'Pevačica peva na pozornici.',     word:'Pevačica',   en:'The singer sings on the stage.',                   answer:'Nominative',   explanation:'"Pevačica" (female singer) is the subject of "peva" (sings). Performer titles as subjects are nominative.', rule:'The nominative marks the subject. \'Pevačica\' is who sings — she performs the action, so nominative.' },
+    { lat:'Lampa osvetljava prostoriju.',    word:'Lampa',      en:'The lamp illuminates the room.',                   answer:'Nominative',   explanation:'"Lampa" (lamp) is the subject of "osvetljava" (illuminates). Lighting fixtures as subjects are nominative.', rule:'The nominative marks the subject. \'Lampa\' is what illuminates — it performs the function, so nominative.' },
+    { lat:'Poštar donosi poštu.',            word:'Poštar',     en:'The mailman delivers mail.',                       answer:'Nominative',   explanation:'"Poštar" (mailman) is the subject of "donosi" (brings/delivers). Service professionals as subjects are nominative.', rule:'The nominative marks the subject. \'Poštar\' is who delivers — he performs the action, so nominative.' },
+    { lat:'Brod plovi po moru.',             word:'Brod',       en:'The ship sails on the sea.',                       answer:'Nominative',   explanation:'"Brod" (ship) is the subject of "plovi" (sails). Maritime vessels as subjects are nominative.', rule:'The nominative marks the subject. \'Brod\' is what sails — it performs the action, so nominative.' },
+    { lat:'Avion leti visoko.',              word:'Avion',      en:'The airplane flies high.',                         answer:'Nominative',   explanation:'"Avion" (airplane) is the subject of "leti" (flies). Aircraft as subjects are nominative.', rule:'The nominative marks the subject. \'Avion\' is what flies — it performs the action, so nominative.' },
+    { lat:'Kuvarkinja priprema obrok.',      word:'Kuvarkinja', en:'The cook prepares the meal.',                      answer:'Nominative',   explanation:'"Kuvarkinja" (female cook) is the subject of "priprema" (prepares). Food service professionals as subjects are nominative.', rule:'The nominative marks the subject. \'Kuvarkinja\' is who prepares — she performs the action, so nominative.' },
+    { lat:'Prozor gleda na dvorište.',       word:'Prozor',     en:'The window looks onto the yard.',                  answer:'Nominative',   explanation:'"Prozor" (window) is the subject of "gleda" (looks). Building elements as subjects are nominative.', rule:'The nominative marks the subject. \'Prozor\' is what looks — even when used figuratively, the subject is nominative.' },
+    { lat:'Pekar vadi hleb iz pećnice.',     word:'Pekar',      en:'The baker takes bread out of the oven.',           answer:'Nominative',   explanation:'"Pekar" (baker) is the subject of "vadi" (takes out). Craftspeople as subjects are nominative.', rule:'The nominative marks the subject. \'Pekar\' is who takes out — he performs the action, so nominative.' },
+    { lat:'Radnik radi na gradilištu.',      word:'Radnik',     en:'The worker works at the construction site.',       answer:'Nominative',   explanation:'"Radnik" (worker) is the subject of "radi" (works). Labor-related nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Radnik\' is who works — he performs the action, so nominative.' },
+    { lat:'Kamera snima film.',              word:'Kamera',     en:'The camera records a movie.',                      answer:'Nominative',   explanation:'"Kamera" (camera) is the subject of "snima" (records). Recording equipment as subjects are nominative.', rule:'The nominative marks the subject. \'Kamera\' is what records — it performs the function, so nominative.' },
+    { lat:'Uče nik piše zadatak.',           word:'Učenik',     en:'The pupil writes the assignment.',                 answer:'Nominative',   explanation:'"Učenik" (pupil) is the subject of "piše" (writes). Education-related nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Učenik\' is who writes — he performs the action, so nominative.' },
+    { lat:'Voda ključa na šporetu.',         word:'Voda',       en:'Water is boiling on the stove.',                   answer:'Nominative',   explanation:'"Voda" (water) is the subject of "ključa" (boils). Substances as subjects are nominative.', rule:'The nominative marks the subject. \'Voda\' is what boils — it performs the action, so nominative.' },
+    { lat:'Igračka leži na podu.',           word:'Igračka',    en:'The toy lies on the floor.',                       answer:'Nominative',   explanation:'"Igračka" (toy) is the subject of "leži" (lies). Children\'s items as subjects are nominative.', rule:'The nominative marks the subject. \'Igračka\' is what lies — it performs the state of lying, so nominative.' },
+    { lat:'Radnica radi u fabrici.',         word:'Radnica',    en:'The female worker works in the factory.',          answer:'Nominative',   explanation:'"Radnica" (female worker) is the subject of "radi" (works). Gendered profession terms as subjects are nominative.', rule:'The nominative marks the subject. \'Radnica\' is who works — she performs the action, so nominative.' },
+    { lat:'Slika visi na zidu.',             word:'Slika',      en:'The picture hangs on the wall.',                   answer:'Nominative',   explanation:'"Slika" (picture) is the subject of "visi" (hangs). Artwork as subjects take nominative.', rule:'The nominative marks the subject. \'Slika\' is what hangs — it performs the state of hanging, so nominative.' },
+    { lat:'Čaša stoji na stolu.',            word:'Čaša',       en:'The glass stands on the table.',                   answer:'Nominative',   explanation:'"Čaša" (glass) is the subject of "stoji" (stands). Containers as subjects are nominative.', rule:'The nominative marks the subject. \'Čaša\' is what stands — it performs the state of standing, so nominative.' },
+    { lat:'Planina je visoka.',              word:'Planina',    en:'The mountain is tall.',                            answer:'Nominative',   explanation:'"Planina" (mountain) is the subject of "je" (is). Geographic features as subjects are nominative.', rule:'The nominative marks the subject. \'Planina\' is what is tall — it\'s being described, so nominative.' },
+    { lat:'Kuća ima tri sprata.',            word:'Kuća',       en:'The house has three floors.',                      answer:'Nominative',   explanation:'"Kuća" (house) is the subject of "ima" (has). Buildings as subjects are nominative.', rule:'The nominative marks the subject. \'Kuća\' is what has floors — it performs the state of having, so nominative.' },
+    { lat:'Ključ otključava vrata.',         word:'Ključ',      en:'The key unlocks the door.',                        answer:'Nominative',   explanation:'"Ključ" (key) is the subject of "otključava" (unlocks). Tools as subjects are nominative.', rule:'The nominative marks the subject. \'Ključ\' is what unlocks — it performs the function, so nominative.' },
+    { lat:'Pesnik piše poeziju.',            word:'Pesnik',     en:'The poet writes poetry.',                          answer:'Nominative',   explanation:'"Pesnik" (poet) is the subject of "piše" (writes). Artists as subjects are nominative.', rule:'The nominative marks the subject. \'Pesnik\' is who writes — he performs the action, so nominative.' },
+    { lat:'Novinar čita vest.',              word:'Novinar',    en:'The journalist reads the news.',                   answer:'Nominative',   explanation:'"Novinar" (journalist) is the subject of "čita" (reads). Media professionals as subjects are nominative.', rule:'The nominative marks the subject. \'Novinar\' is who reads — he performs the action, so nominative.' },
+    { lat:'Pozorište prikazuje predstavu.',  word:'Pozorište',  en:'The theater shows a play.',                        answer:'Nominative',   explanation:'"Pozorište" (theater) is the subject of "prikazuje" (shows). Entertainment venues as subjects are nominative.', rule:'The nominative marks the subject. \'Pozorište\' is what shows — it performs the function, so nominative.' },
+    { lat:'Dete se smeje.',                  word:'Dete',       en:'The child is laughing.',                           answer:'Nominative',   explanation:'"Dete" (child) is the subject of the reflexive "smeje se" (laughs). Age-specific nouns as subjects are nominative.', rule:'The nominative marks the subject. \'Dete\' is who laughs — it performs the action, so nominative.' },
+    { lat:'Bašta cveta u proleće.',          word:'Bašta',      en:'The garden blooms in spring.',                     answer:'Nominative',   explanation:'"Bašta" (garden) is the subject of "cveta" (blooms). Landscaping as subjects take nominative.', rule:'The nominative marks the subject. \'Bašta\' is what blooms — it performs the action, so nominative.' },
+    { lat:'Učiteljka objašnjava lekciju.',   word:'Učiteljka',  en:'The female teacher explains the lesson.',          answer:'Nominative',   explanation:'"Učiteljka" (female teacher) is the subject of "objašnjava" (explains). Feminine education professionals as subjects are nominative.', rule:'The nominative marks the subject. \'Učiteljka\' is who explains — she performs the action, so nominative.' },
+    { lat:'Stolica je udobna.',              word:'Stolica',    en:'The chair is comfortable.',                        answer:'Nominative',   explanation:'"Stolica" (chair) is the subject of "je" (is). Furniture as subjects take nominative.', rule:'The nominative marks the subject. \'Stolica\' is what is comfortable — it\'s being described, so nominative.' },
+    { lat:'Krov štiti kuću od kiše.',        word:'Krov',       en:'The roof protects the house from rain.',           answer:'Nominative',   explanation:'"Krov" (roof) is the subject of "štiti" (protects). Building parts as subjects are nominative.', rule:'The nominative marks the subject. \'Krov\' is what protects — it performs the function, so nominative.' },
+    { lat:'Telefon zvoni već pola sata.',    word:'Telefon',    en:'The phone has been ringing for half an hour.',     answer:'Nominative',   explanation:'"Telefon" (phone) is the subject of "zvoni" (rings). Communication devices as subjects are nominative.', rule:'The nominative marks the subject. \'Telefon\' is what rings — it performs the action, so nominative.' },
+    { lat:'Cvet miriše predivno.',           word:'Cvet',       en:'The flower smells wonderful.',                     answer:'Nominative',   explanation:'"Cvet" (flower) is the subject of "miriše" (smells). Plant parts as subjects are nominative.', rule:'The nominative marks the subject. \'Cvet\' is what smells wonderful — it performs the quality, so nominative.' },
+    { lat:'Čeličar radi u fabrici.',         word:'Čeličar',    en:'The steelworker works in the factory.',            answer:'Nominative',   explanation:'"Čeličar" (steelworker) is the subject of "radi" (works). Industry-specific professionals as subjects are nominative.', rule:'The nominative marks the subject. \'Čeličar\' is who works — he performs the action, so nominative.' },
+    { lat:'Savetnik daje savete.',           word:'Savetnik',   en:'The advisor gives advice.',                        answer:'Nominative',   explanation:'"Savetnik" (advisor) is the subject of "daje" (gives). Consultant roles as subjects are nominative.', rule:'The nominative marks the subject. \'Savetnik\' is who gives advice — he performs the action, so nominative.' },
+    { lat:'Sveska leži na stolu.',           word:'Sveska',     en:'The notebook lies on the table.',                  answer:'Nominative',   explanation:'"Sveska" (notebook) is the subject of "leži" (lies). School supplies as subjects are nominative.', rule:'The nominative marks the subject. \'Sveska\' is what lies — it performs the state of lying, so nominative.' },
+    { lat:'Gospodin ide u kancelariju.',     word:'Gospodin',   en:'The gentleman goes to the office.',                answer:'Nominative',   explanation:'"Gospodin" (gentleman) is the subject of "ide" (goes). Formal address terms as subjects are nominative.', rule:'The nominative marks the subject. \'Gospodin\' is who goes — he performs the action, so nominative.' },
+    { lat:'Gospofa dolazi sutra.',           word:'Gospođa',    en:'The lady comes tomorrow.',                         answer:'Nominative',   explanation:'"Gospođa" (lady) is the subject of "dolazi" (comes). Formal female address terms as subjects are nominative.', rule:'The nominative marks the subject. \'Gospođa\' is who comes — she performs the action, so nominative.' },
+    { lat:'Riba pliva u reci.',              word:'Riba',       en:'The fish swims in the river.',                     answer:'Nominative',   explanation:'"Riba" (fish) is the subject of "pliva" (swims). Aquatic animals as subjects are nominative.', rule:'The nominative marks the subject. \'Riba\' is what swims — it performs the action, so nominative.' },
 
     // ── GENITIVE ────────────────────────────────────
     { lat:'Čaša vode stoji na stolu.',           word:'vode',       en:'A glass of water is on the table.',                answer:'Genitive', explanation:'"Vode" (water) is a partitive genitive — "a glass of water." A quantity noun followed by the substance it contains uses the genitive.', rule:'The genitive marks a part-of or contents-of relationship, known as the partitive genitive. \'Čaša vode\' literally means \'a glass of water\' — the contents (vode) are genitive because they fill or belong to the container noun.' },
@@ -9410,6 +9677,85 @@
     { lat:'Majka se vratila od doktora.',        word:'doktora',    en:'My mother came back from the doctor.',             answer:'Genitive', explanation:'"Doktora" (doctor) follows "od" (from), a preposition that governs the genitive, used here to express coming from a person.', rule:'The preposition \'od\' (from / away from) requires the genitive when expressing origin or departure from a person or place. It marks the starting point of movement or separation.' },
     { lat:'Iz šume se čuju čudni zvuci.',        word:'šume',       en:'Strange sounds can be heard from the forest.',     answer:'Genitive', explanation:'"Šume" (forest) follows "iz" (from/out of), which always requires the genitive case.', rule:'The preposition \'iz\' (from / out of) always requires the genitive. It marks the source or place of origin — here, the forest the sounds are coming out of.' },
     { lat:'Nema struje u celom kvartu.',         word:'struje',     en:'There is no electricity in the whole neighborhood.', answer:'Genitive', explanation:'"Struje" (electricity) is genitive after "nema" (there is no). Negated existence always takes the genitive.', rule:'\'Nema\' (there is no) always requires the genitive. The genitive marks absence — the thing that does not exist takes genitive, whether countable or uncountable.' },
+    { lat:'Kilo mesa košta mnogo.',              word:'mesa',       en:'A kilo of meat costs a lot.',                      answer:'Genitive', explanation:'"Mesa" (meat) is the partitive genitive after "kilo" (kilogram). Quantity words require the genitive.', rule:'Quantity + substance structures use the genitive. \'Kilo mesa\' = a kilogram of meat — the substance being measured takes genitive.' },
+    { lat:'Vratio se sa posla.',                 word:'posla',      en:'He returned from work.',                           answer:'Genitive', explanation:'"Posla" (work) follows "sa" (from/with), which governs the genitive when meaning "from a place."', rule:'The preposition \'sa\' (from / off of / with) requires the genitive when expressing departure or movement away from a location.' },
+    { lat:'Čaša vina stoji na stolu.',           word:'vina',       en:'A glass of wine stands on the table.',             answer:'Genitive', explanation:'"Vina" (wine) is the partitive genitive — "a glass of wine." The contents of a container take the genitive.', rule:'The genitive marks contents or material. \'Čaša vina\' = a glass of wine — the liquid being contained takes genitive.' },
+    { lat:'Kupio je litar mleka.',               word:'mleka',      en:'He bought a liter of milk.',                       answer:'Genitive', explanation:'"Mleka" (milk) is the partitive genitive after "litar" (liter). Measurement words require the genitive.', rule:'Measurements use the genitive for the substance measured. \'Litar mleka\' = a liter of milk — the measured liquid takes genitive.' },
+    { lat:'Dolazim od brata.',                   word:'brata',      en:'I\'m coming from my brother\'s place.',            answer:'Genitive', explanation:'"Brata" (brother) follows "od" (from), which always requires the genitive for the point of departure.', rule:'The preposition \'od\' (from / away from) always requires the genitive. It marks the starting point of movement or the source of departure.' },
+    { lat:'Crno bez šećera, molim.',             word:'šećera',     en:'Black without sugar, please.',                     answer:'Genitive', explanation:'"Šećera" (sugar) follows "bez" (without), which always governs the genitive case.', rule:'The preposition \'bez\' (without) always requires the genitive. It marks what is absent or excluded from something.' },
+    { lat:'Unutar kuće je toplo.',               word:'kuće',       en:'Inside the house it\'s warm.',                     answer:'Genitive', explanation:'"Kuće" (house) follows "unutar" (inside/within), which always takes the genitive case.', rule:'The preposition \'unutar\' (inside / within) always requires the genitive. It marks the outer boundary or container of a space.' },
+    { lat:'Oko jezera raste drveće.',            word:'jezera',     en:'Trees grow around the lake.',                      answer:'Genitive', explanation:'"Jezera" (lake) follows "oko" (around), which governs the genitive case.', rule:'The preposition \'oko\' (around) always requires the genitive. It marks the central point around which something is positioned.' },
+    { lat:'Ispod stola leži mačka.',             word:'stola',      en:'A cat lies under the table.',                      answer:'Genitive', explanation:'"Stola" (table) follows "ispod" (under/below), which always takes the genitive case.', rule:'The preposition \'ispod\' (under / below) always requires the genitive. It marks the upper reference point beneath which something is located.' },
+    { lat:'Iznad oblaka leti avion.',            word:'oblaka',     en:'An airplane flies above the clouds.',              answer:'Genitive', explanation:'"Oblaka" (clouds) follows "iznad" (above/over), which always governs the genitive.', rule:'The preposition \'iznad\' (above / over) always requires the genitive. It marks the lower reference point above which something is positioned.' },
+    { lat:'Tokom sedmice radim.',                word:'sedmice',    en:'During the week I work.',                          answer:'Genitive', explanation:'"Sedmice" (week) follows "tokom" (during), a temporal preposition that takes the genitive.', rule:'The preposition \'tokom\' (during / in the course of) always requires the genitive. It marks the time period within which something occurs.' },
+    { lat:'Umesto hleba kupi pecivo.',           word:'hleba',      en:'Instead of bread, buy pastry.',                    answer:'Genitive', explanation:'"Hleba" (bread) follows "umesto" (instead of), which always requires the genitive case.', rule:'The preposition \'umesto\' (instead of) always requires the genitive. It marks what is being replaced or substituted.' },
+    { lat:'Usred noći čuo sam buku.',            word:'noći',       en:'In the middle of the night I heard noise.',        answer:'Genitive', explanation:'"Noći" (night) follows "usred" (in the middle of), which governs the genitive case.', rule:'The preposition \'usred\' (in the middle of / amid) always requires the genitive. It marks the time or space within which something happens.' },
+    { lat:'Blizu prodavnice ima kafić.',         word:'prodavnice', en:'Near the store there\'s a café.',                  answer:'Genitive', explanation:'"Prodavnice" (store) follows "blizu" (near/close to), which always takes the genitive.', rule:'The preposition \'blizu\' (near / close to) always requires the genitive. It marks the reference point for proximity.' },
+    { lat:'Daleko od grada živi farmer.',        word:'grada',      en:'Far from the city lives a farmer.',                answer:'Genitive', explanation:'"Grada" (city) follows "daleko od" (far from), where "od" requires the genitive.', rule:'The preposition \'od\' (from / away from) always requires the genitive. In \'daleko od\' (far from), it marks the distant reference point.' },
+    { lat:'Preko puta postoji park.',            word:'puta',       en:'Across the road there\'s a park.',                 answer:'Genitive', explanation:'"Puta" (road) follows "preko" (across/over), which governs the genitive case.', rule:'The preposition \'preko\' (across / over) requires the genitive when expressing movement or position relative to a barrier or reference point.' },
+    { lat:'Naspram škole je muzej.',             word:'škole',      en:'Opposite the school is a museum.',                 answer:'Genitive', explanation:'"Škole" (school) follows "naspram" (opposite), which always takes the genitive case.', rule:'The preposition \'naspram\' (opposite / across from) always requires the genitive. It marks the reference point for opposition or facing.' },
+    { lat:'Duž reke vodi staza.',                word:'reke',       en:'A path runs along the river.',                     answer:'Genitive', explanation:'"Reke" (river) follows "duž" (along), which always governs the genitive case.', rule:'The preposition \'duž\' (along / alongside) always requires the genitive. It marks the linear reference feature that something follows.' },
+    { lat:'Putem grada vozio se autobus.',       word:'grada',      en:'A bus was driving through the city.',              answer:'Genitive', explanation:'"Grada" (city) follows "putem" (by way of/through), which requires the genitive.', rule:'The preposition \'putem\' (by way of / via / through) requires the genitive. It marks the route or means of passage.' },
+    { lat:'Radi od jutra do mraka.',             word:'jutra',      en:'He works from morning until dark.',                answer:'Genitive', explanation:'"Jutra" (morning) follows "od" (from), which always requires the genitive for the starting point.', rule:'The preposition \'od\' (from) always requires the genitive. It marks the temporal starting point in time expressions.' },
+    { lat:'Ništa od toga neću.',                word:'toga',       en:'I don\'t want any of that.',                       answer:'Genitive', explanation:'"Toga" (that) follows "od" in the partitive expression "ništa od" (nothing of/none of), requiring genitive.', rule:'Partitive expressions like \'ništa od\' (nothing of) require the genitive. The genitive marks the whole from which nothing is taken.' },
+    { lat:'Mnogo studenata uči srpski.',         word:'studenata',  en:'Many students learn Serbian.',                     answer:'Genitive', explanation:'"Studenata" (students) is the genitive plural after "mnogo" (many). Quantity words require genitive.', rule:'Quantity words like \'mnogo\' (many) always require the genitive plural. The counted noun takes genitive to show it\'s being quantified.' },
+    { lat:'Nekoliko prijatelja dolazi.',         word:'prijatelja', en:'Several friends are coming.',                      answer:'Genitive', explanation:'"Prijatelja" (friends) is genitive after "nekoliko" (several). Numbers and quantity words require genitive.', rule:'Quantity words like \'nekoliko\' (several) require the genitive. The counted noun takes genitive to mark the partial quantity.' },
+    { lat:'Pet knjiga leži na stolu.',           word:'knjiga',     en:'Five books lie on the table.',                     answer:'Genitive', explanation:'"Knjiga" (books) is genitive plural after "pet" (five). Numbers 5 and above require genitive.', rule:'Numbers five and above require the genitive plural. This shows that the items are being counted as a quantity rather than individual subjects.' },
+    { lat:'Sedmog aprila je moj rođendan.',      word:'aprila',     en:'April seventh is my birthday.',                    answer:'Genitive', explanation:'"Aprila" (April) is genitive in date expressions. Both the ordinal and month take genitive in Serbian dates.', rule:'In dates, the month always takes the genitive case. Serbian date structure is \'of the seventh of April\' — both ordinal and month are genitive.' },
+    { lat:'Sina mog najbolžeg prijatelja.',     word:'sina',       en:'My best friend\'s son.',                           answer:'Genitive', explanation:'"Sina" (son) is genitive showing possession — whose son. Serbian expresses possession with genitive rather than possessive suffixes.', rule:'The genitive marks possession. \'Sin prijatelja\' = friend\'s son — the possessor (friend) takes genitive, and what\'s possessed (son) also takes genitive here in this phrase structure.' },
+    { lat:'Kuća novih komšija je lepa.',        word:'komšija',    en:'The new neighbors\' house is nice.',               answer:'Genitive', explanation:'"Komšija" (neighbors) is genitive plural showing possession — whose house. Genitive expresses ownership.', rule:'The genitive marks possession. \'Kuća komšija\' = neighbors\' house — the possessor takes genitive to show the belonging relationship.' },
+    { lat:'Do kraja godine ostalo je malo.',     word:'godine',     en:'Little time remains until the end of the year.',   answer:'Genitive', explanation:'"Godine" (year) follows "kraja" (end), and "kraja" follows "do" (until). "Do kraja godine" = until the end of the year.', rule:'The preposition \'do\' (until / up to) requires the genitive. \'Do kraja godine\' — both \'kraja\' and \'godine\' are genitive in this nested structure.' },
+    { lat:'Širom sveta putuje mnogo ljudi.',     word:'sveta',      en:'Many people travel around the world.',             answer:'Genitive', explanation:'"Sveta" (world) follows "širom" (throughout/all over), which governs the genitive case.', rule:'The preposition \'širom\' (throughout / all over) requires the genitive. It marks the area or extent being covered.' },
+    { lat:'Nasuprot moje kuće je park.',         word:'kuće',       en:'Opposite my house is a park.',                     answer:'Genitive', explanation:'"Kuće" (house) follows "nasuprot" (opposite/facing), which always takes the genitive.', rule:'The preposition \'nasuprot\' (opposite / facing) always requires the genitive. It marks what is being faced or opposed.' },
+    { lat:'Usled loših vremenskih uslova.',      word:'uslova',     en:'Due to poor weather conditions.',                  answer:'Genitive', explanation:'"Uslova" (conditions) follows "usled" (due to/because of), which always requires genitive.', rule:'The preposition \'usled\' (due to / as a result of) always requires the genitive. It marks the cause or reason for something.' },
+    { lat:'Navrh brda stoji crkva.',             word:'brda',       en:'On top of the hill stands a church.',              answer:'Genitive', explanation:'"Brda" (hill) follows "navrh" (on top of), which governs the genitive case.', rule:'The preposition \'navrh\' (on top of / atop) requires the genitive. It marks the lower reference point that something sits on top of.' },
+    { lat:'Pomoću kalkulatora rešavam zadatke.', word:'kalkulatora', en:'I solve problems with the help of a calculator.',   answer:'Genitive', explanation:'"Kalkulatora" (calculator) follows "pomoću" (with the help of), which requires genitive.', rule:'The preposition \'pomoću\' (with the help of / by means of) always requires the genitive. It marks the tool or means used.' },
+    { lat:'Uprkos kiši izašli smo.',             word:'kiši',       en:'Despite the rain we went out.',                    answer:'Genitive', explanation:'"Kiši" (rain) follows "uprkos" (despite/in spite of), which always takes the genitive.', rule:'The preposition \'uprkos\' (despite / in spite of) always requires the genitive. It marks what is being opposed or overcome.' },
+    { lat:'Osim vas, niko nije došao.',          word:'vas',        en:'Except for you, nobody came.',                     answer:'Genitive', explanation:'"Vas" (you) follows "osim" (except for/besides), which always governs the genitive case.', rule:'The preposition \'osim\' (except for / besides) always requires the genitive. It marks what is excluded from a statement.' },
+    { lat:'Krajem meseca počinje škola.',        word:'meseca',     en:'At the end of the month school begins.',           answer:'Genitive', explanation:'"Meseca" (month) follows "krajem" (at the end of), which requires the genitive case.', rule:'The preposition \'krajem\' (at the end of) requires the genitive. It marks the time period that is ending.' },
+    { lat:'Početkom godine bio je sneg.',        word:'godine',     en:'At the beginning of the year there was snow.',     answer:'Genitive', explanation:'"Godine" (year) follows "početkom" (at the beginning of), which requires genitive.', rule:'The preposition \'početkom\' (at the beginning of) requires the genitive. It marks the time period that is starting.' },
+    { lat:'Toku razgovora shvatio sam.',         word:'razgovora',  en:'During the conversation I realized.',               answer:'Genitive', explanation:'"Razgovora" (conversation) follows "tokom" (during), which always takes the genitive.', rule:'The preposition \'tokom\' (during / in the course of) always requires the genitive. It marks the ongoing activity or time period.' },
+    { lat:'Duž obale reke raste vrba.',          word:'reke',       en:'Willows grow along the riverbank.',                answer:'Genitive', explanation:'"Reke" (river) is part of "obale reke" (riverbank), where both nouns are in genitive — "obala reke" = bank of the river.', rule:'In compound phrases like \'obala reke\' (riverbank), the second noun takes genitive to show the relationship. \'Obala reke\' = bank of the river.' },
+    { lat:'Vrh planine je pokriven snegom.',     word:'planine',    en:'The mountaintop is covered with snow.',            answer:'Genitive', explanation:'"Planine" (mountain) follows "vrh" (top/peak) in the possessive genitive. "Vrh planine" = top of the mountain.', rule:'The genitive marks possession or belonging. \'Vrh planine\' = mountain\'s peak — the mountain \'possesses\' or \'has\' the peak, so it takes genitive.' },
+    { lat:'Dno jezera je duboko.',               word:'jezera',     en:'The bottom of the lake is deep.',                  answer:'Genitive', explanation:'"Jezera" (lake) follows "dno" (bottom) in the possessive genitive. "Dno jezera" = bottom of the lake.', rule:'The genitive marks possession or parts of a whole. \'Dno jezera\' = lake\'s bottom — the bottom belongs to or is part of the lake, so genitive.' },
+    { lat:'Centar grada je uvek živ.',           word:'grada',      en:'The city center is always lively.',                answer:'Genitive', explanation:'"Grada" (city) follows "centar" (center) in the possessive genitive. "Centar grada" = center of the city.', rule:'The genitive marks belonging or parts. \'Centar grada\' = city\'s center — the center is part of or belongs to the city, so genitive.' },
+    { lat:'Zvuk muzike čuje se svuda.',          word:'muzike',     en:'The sound of music can be heard everywhere.',      answer:'Genitive', explanation:'"Muzike" (music) follows "zvuk" (sound) in the possessive genitive. "Zvuk muzike" = sound of music.', rule:'The genitive marks the source or origin. \'Zvuk muzike\' = music\'s sound — the sound originates from or belongs to the music, so genitive.' },
+    { lat:'Miris hleba dopire iz pekare.',       word:'hleba',      en:'The smell of bread comes from the bakery.',        answer:'Genitive', explanation:'"Hleba" (bread) follows "miris" (smell) in the possessive genitive. "Miris hleba" = smell of bread.', rule:'The genitive marks the source or origin. \'Miris hleba\' = bread\'s smell — the smell comes from or is characteristic of the bread, so genitive.' },
+    { lat:'Boja neba je plave.',                 word:'neba',       en:'The color of the sky is blue.',                    answer:'Genitive', explanation:'"Neba" (sky) follows "boja" (color) in the possessive genitive. "Boja neba" = color of the sky.', rule:'The genitive marks belonging or characteristics. \'Boja neba\' = sky\'s color — the color belongs to or characterizes the sky, so genitive.' },
+    { lat:'Ukus vina je odličan.',               word:'vina',       en:'The taste of the wine is excellent.',              answer:'Genitive', explanation:'"Vina" (wine) follows "ukus" (taste) in the possessive genitive. "Ukus vina" = taste of wine.', rule:'The genitive marks characteristics or qualities. \'Ukus vina\' = wine\'s taste — the taste is a quality of the wine, so genitive.' },
+    { lat:'Težina slona je ogromna.',            word:'slona',      en:'The weight of the elephant is enormous.',          answer:'Genitive', explanation:'"Slona" (elephant) follows "težina" (weight) in the possessive genitive. "Težina slona" = weight of the elephant.', rule:'The genitive marks possession of characteristics. \'Težina slona\' = elephant\'s weight — the weight belongs to the elephant, so genitive.' },
+    { lat:'Širina reke ovde je deset metara.',   word:'reke',       en:'The width of the river here is ten meters.',       answer:'Genitive', explanation:'"Reke" (river) follows "širina" (width) in the possessive genitive. "Širina reke" = width of the river.', rule:'The genitive marks possession of measurements. \'Širina reke\' = river\'s width — the width is a dimension of the river, so genitive.' },
+    { lat:'Kapija dvorišta je otvorena.',        word:'dvorišta',   en:'The gate of the courtyard is open.',               answer:'Genitive', explanation:'"Dvorišta" (courtyard) follows "kapija" (gate) in the possessive genitive. "Kapija dvorišta" = gate of the courtyard.', rule:'The genitive marks belonging or parts. \'Kapija dvorišta\' = courtyard\'s gate — the gate belongs to or is part of the courtyard, so genitive.' },
+    { lat:'Glas direktora se čuje jasno.',       word:'direktora',  en:'The principal\'s voice can be heard clearly.',     answer:'Genitive', explanation:'"Direktora" (principal) follows "glas" (voice) in the possessive genitive. "Glas direktora" = principal\'s voice.', rule:'The genitive marks possession. \'Glas direktora\' = principal\'s voice — the voice belongs to the principal, so genitive.' },
+    { lat:'Kišobran moje sestre je crven.',      word:'sestre',     en:'My sister\'s umbrella is red.',                    answer:'Genitive', explanation:'"Sestre" (sister) is genitive showing possession — whose umbrella. Serbian uses genitive for ownership rather than possessive adjectives.', rule:'The genitive marks possession. \'Kišobran sestre\' = sister\'s umbrella — the umbrella belongs to the sister, so she takes genitive.' },
+    { lat:'Automobil novog komšije je plav.',    word:'komšije',    en:'The new neighbor\'s car is blue.',                 answer:'Genitive', explanation:'"Komšije" (neighbor) is genitive showing possession — whose car. The owner/possessor takes genitive in Serbian.', rule:'The genitive marks possession. \'Automobil komšije\' = neighbor\'s car — the car belongs to the neighbor, so he takes genitive.' },
+    { lat:'Sastanak počinje nakon ručka.',      word:'ručka',      en:'The meeting begins after lunch.',                  answer:'Genitive', explanation:'"Ručka" (lunch) follows "nakon" (after), which always requires the genitive case.', rule:'The preposition \'nakon\' (after) always requires the genitive. It marks the temporal reference point that comes before.' },
+    { lat:'Spram ove situacije nemam izbora.',   word:'situacije',  en:'Given this situation, I have no choice.',          answer:'Genitive', explanation:'"Situacije" (situation) follows "spram" (given/regarding), which governs the genitive case.', rule:'The preposition \'spram\' (regarding / given / in relation to) requires the genitive. It marks the reference point for evaluation.' },
+    { lat:'Nadomak planine vidim selo.',         word:'planine',    en:'Near the mountain I see a village.',               answer:'Genitive', explanation:'"Planine" (mountain) follows "nadomak" (near/within reach of), which requires genitive.', rule:'The preposition \'nadomak\' (near / within reach of) requires the genitive. It marks the reference point for proximity.' },
+    { lat:'Inače ovog vremena nema turista.',    word:'vremena',    en:'Usually at this time there are no tourists.',      answer:'Genitive', explanation:'"Vremena" (time) follows "ovog" (this) in a temporal genitive phrase. "Ovog vremena" = at this time.', rule:'Temporal genitives express \'at this time\' or \'during this period.\' \'Ovog vremena\' is a fixed expression meaning \'at this time\' — genitive marks the time reference.' },
+    { lat:'Radi cele nedelje bez pauze.',        word:'nedelje',    en:'He works all week without a break.',               answer:'Genitive', explanation:'"Nedelje" (week) follows "cele" (whole/entire) in a duration genitive. Time periods take genitive for duration.', rule:'Duration expressions use the genitive. \'Cele nedelje\' = all week — the genitive marks the time period being spent or consumed.' },
+    { lat:'Čitam deo filma.',                    word:'filma',      en:'I\'m reading part of the movie (script).',         answer:'Genitive', explanation:'"Filma" (movie) follows "deo" (part) in the partitive genitive. "Deo filma" = part of the movie.', rule:'The genitive marks a part-whole relationship. \'Deo filma\' = part of the movie — the genitive shows what the part comes from.' },
+    { lat:'Polovina grada je bez struje.',       word:'grada',      en:'Half of the city is without electricity.',         answer:'Genitive', explanation:'"Grada" (city) follows "polovina" (half) in the partitive genitive. "Polovina grada" = half of the city.', rule:'Fractions use the genitive for the divided whole. \'Polovina grada\' = half of the city — the genitive marks what is being divided.' },
+    { lat:'Trećina učenika nije došla.',         word:'učenika',    en:'A third of the students didn\'t come.',            answer:'Genitive', explanation:'"Učenika" (students) follows "trećina" (third) in the partitive genitive. Fractions require genitive.', rule:'Fractions require the genitive. \'Trećina učenika\' = a third of the students — the genitive marks the group being divided into portions.' },
+    { lat:'Većina ljudi voli muziku.',           word:'ljudi',      en:'Most people love music.',                          answer:'Genitive', explanation:'"Ljudi" (people) follows "većina" (majority/most) in the partitive genitive. Proportions require genitive.', rule:'Proportional words like \'većina\' (majority) require the genitive. The genitive marks the group from which the portion is taken.' },
+    { lat:'Manjina stanoviika je protiv.',       word:'stanovnika', en:'A minority of residents are against it.',           answer:'Genitive', explanation:'"Stanovnika" (residents) follows "manjina" (minority) in the partitive genitive. Proportion words require genitive.', rule:'Proportional words like \'manjina\' (minority) require the genitive. The genitive marks the group from which the portion is taken.' },
+    { lat:'Ostatak dana provest ću kod kuće.',   word:'dana',       en:'I\'ll spend the rest of the day at home.',         answer:'Genitive', explanation:'"Dana" (day) follows "ostatak" (rest/remainder) in the partitive genitive. "Ostatak dana" = rest of the day.', rule:'Words indicating remainder or leftover portions use the genitive. \'Ostatak dana\' = rest of the day — the genitive marks what remains.' },
+    { lat:'Početak predstave je u osam.',        word:'predstave',  en:'The beginning of the show is at eight.',           answer:'Genitive', explanation:'"Predstave" (show) follows "početak" (beginning) in the possessive genitive. "Početak predstave" = beginning of the show.', rule:'The genitive marks possession or belonging. \'Početak predstave\' = show\'s beginning — the beginning belongs to the show, so genitive.' },
+    { lat:'Kraj priče je tužan.',                word:'priče',      en:'The end of the story is sad.',                     answer:'Genitive', explanation:'"Priče" (story) follows "kraj" (end) in the possessive genitive. "Kraj priče" = end of the story.', rule:'The genitive marks parts or sections. \'Kraj priče\' = story\'s end — the ending is part of the story, so genitive.' },
+    { lat:'Sredina filma je najuzbudljivija.',   word:'filma',      en:'The middle of the movie is most exciting.',        answer:'Genitive', explanation:'"Filma" (movie) follows "sredina" (middle) in the possessive genitive. "Sredina filma" = middle of the movie.', rule:'The genitive marks parts or sections. \'Sredina filma\' = movie\'s middle — the middle is part of the movie, so genitive.' },
+    { lat:'Vrh torte je ukrašen.',               word:'torte',      en:'The top of the cake is decorated.',                answer:'Genitive', explanation:'"Torte" (cake) follows "vrh" (top) in the possessive genitive. "Vrh torte" = top of the cake.', rule:'The genitive marks parts. \'Vrh torte\' = cake\'s top — the top is part of the cake, so genitive.' },
+    { lat:'Osnova jezika je gramatika.',         word:'jezika',     en:'The foundation of language is grammar.',           answer:'Genitive', explanation:'"Jezika" (language) follows "osnova" (foundation/base) in the possessive genitive. "Osnova jezika" = foundation of language.', rule:'The genitive marks belonging or characteristics. \'Osnova jezika\' = language\'s foundation — the foundation belongs to or characterizes language, so genitive.' },
+    { lat:'Tema razgovora bila je politika.',    word:'razgovora',  en:'The topic of the conversation was politics.',      answer:'Genitive', explanation:'"Razgovora" (conversation) follows "tema" (topic/theme) in the possessive genitive. "Tema razgovora" = conversation\'s topic.', rule:'The genitive marks content or characteristics. \'Tema razgovora\' = conversation\'s topic — the topic belongs to or characterizes the conversation, so genitive.' },
+    { lat:'Cilj putovanja je odmor.',            word:'putovanja',  en:'The goal of the trip is rest.',                    answer:'Genitive', explanation:'"Putovanja" (trip) follows "cilj" (goal/purpose) in the possessive genitive. "Cilj putovanja" = trip\'s goal.', rule:'The genitive marks purpose or characteristics. \'Cilj putovanja\' = trip\'s goal — the goal belongs to or defines the trip, so genitive.' },
+    { lat:'Razlog odlaska nije jasan.',          word:'odlaska',    en:'The reason for leaving isn\'t clear.',             answer:'Genitive', explanation:'"Odlaska" (leaving) follows "razlog" (reason) in the possessive genitive. "Razlog odlaska" = reason for leaving.', rule:'The genitive marks the object or focus of explanation. \'Razlog odlaska\' = reason for leaving — the leaving is what the reason explains, so genitive.' },
+    { lat:'Način rada je vrlo efikasan.',        word:'rada',       en:'The method of work is very efficient.',            answer:'Genitive', explanation:'"Rada" (work) follows "način" (method/way) in the possessive genitive. "Način rada" = method of work.', rule:'The genitive marks the object or focus of a method. \'Način rada\' = work method — the work is what the method applies to, so genitive.' },
+    { lat:'Svrha ovog eksperimenta je...',       word:'eksperimenta', en:'The purpose of this experiment is...',           answer:'Genitive', explanation:'"Eksperimenta" (experiment) follows "svrha" (purpose) in the possessive genitive. "Svrha eksperimenta" = experiment\'s purpose.', rule:'The genitive marks belonging or intention. \'Svrha eksperimenta\' = experiment\'s purpose — the purpose belongs to the experiment, so genitive.' },
+    { lat:'Ishod utakmice je neizvestan.',       word:'utakmice',   en:'The outcome of the match is uncertain.',           answer:'Genitive', explanation:'"Utakmice" (match) follows "ishod" (outcome/result) in the possessive genitive. "Ishod utakmice" = match\'s outcome.', rule:'The genitive marks what produces or generates something. \'Ishod utakmice\' = match\'s outcome — the outcome comes from the match, so genitive.' },
+    { lat:'Rezultat ispita je odličan.',         word:'ispita',     en:'The exam result is excellent.',                    answer:'Genitive', explanation:'"Ispita" (exam) follows "rezultat" (result) in the possessive genitive. "Rezultat ispita" = exam\'s result.', rule:'The genitive marks what produces something. \'Rezultat ispita\' = exam\'s result — the result comes from the exam, so genitive.' },
+    { lat:'Posledica nesreće je bila strašna.',  word:'nesreće',    en:'The consequence of the accident was terrible.',     answer:'Genitive', explanation:'"Nesreće" (accident) follows "posledica" (consequence) in the possessive genitive. "Posledica nesreće" = accident\'s consequence.', rule:'The genitive marks the cause or source. \'Posledica nesreće\' = accident\'s consequence — the consequence results from the accident, so genitive.' },
+    { lat:'Uticaj muzike na ljude je velik.',    word:'muzike',     en:'The influence of music on people is great.',       answer:'Genitive', explanation:'"Muzike" (music) follows "uticaj" (influence) in the possessive genitive. "Uticaj muzike" = music\'s influence.', rule:'The genitive marks the agent or source of influence. \'Uticaj muzike\' = music\'s influence — the influence comes from music, so genitive.' },
+    { lat:'Značaj obrazovanja raste.',           word:'obrazovanja', en:'The importance of education is growing.',          answer:'Genitive', explanation:'"Obrazovanja" (education) follows "značaj" (importance/significance) in the possessive genitive. "Značaj obrazovanja" = education\'s importance.', rule:'The genitive marks what has importance. \'Značaj obrazovanja\' = education\'s importance — the importance belongs to education, so genitive.' },
+    { lat:'Kvalitet proizvoda je dobar.',        word:'proizvoda',  en:'The quality of the product is good.',              answer:'Genitive', explanation:'"Proizvoda" (product) follows "kvalitet" (quality) in the possessive genitive. "Kvalitet proizvoda" = product\'s quality.', rule:'The genitive marks what possesses a quality. \'Kvalitet proizvoda\' = product\'s quality — the quality belongs to the product, so genitive.' },
 
     // ── DATIVE ──────────────────────────────────────
     { lat:'Dajem poklon majci za rođendan.',          word:'majci',     en:'I\'m giving my mother a birthday gift.',           answer:'Dative', explanation:'"Majci" (mother) is the indirect object — the person to whom the gift is given. Indirect objects take the dative case.', rule:'The dative marks the recipient — the person TO whom something is given, shown, or transferred. \'Majci\' is who receives the gift, so it takes dative.' },
@@ -9426,6 +9772,73 @@
     { lat:'Vraća novac prijatelju.',                  word:'prijatelju',en:'He\'s returning money to his friend.',             answer:'Dative', explanation:'"Prijatelju" (friend) is the dative indirect object — the person the money is returned to.', rule:'The dative marks the recipient of any transfer — TO whom something is returned, given, or directed. \'Prijatelju\' is who gets the money back.' },
     { lat:'Veruje svom instinktu.',                   word:'instinktu', en:'She trusts her instinct.',                          answer:'Dative', explanation:'"Instinktu" (instinct) is dative because "verovati" (to trust/believe) always takes the dative for the thing trusted.', rule:'\'Verovati\' (to trust / believe in) takes the dative, which marks the experiencer or recipient. The meaning is giving belief TO something — the trusted thing is the dative recipient of that trust.' },
     { lat:'On se sviđa svima u razredu.',             word:'svima',     en:'He is liked by everyone in the class.',            answer:'Dative', explanation:'"Svima" (everyone) is dative because "sviđati se" (to be pleasing to) governs the dative — the people who are pleased.', rule:'\'Sviđati se\' (to please / be liked by) takes the dative, which marks the experiencer — the person TO whom something is pleasing. In Serbian the logic is inverted from English: \'he is pleasing TO everyone\' rather than \'everyone likes him.\'' },
+    { lat:'Objašnjavam matematiku učenicima.',        word:'učenicima', en:'I\'m explaining mathematics to the students.',     answer:'Dative', explanation:'"Učenicima" (students) is the dative indirect object — the audience for the explanation. Teaching verbs take a dative audience.', rule:'The dative marks the recipient of communication or teaching. \'Učenicima\' is who receives the explanation — the audience, so dative.' },
+    { lat:'Dodaje so jelu.',                          word:'jelu',      en:'He adds salt to the food.',                        answer:'Dative', explanation:'"Jelu" (food) is dative because "dodavati" (to add) takes a dative for the thing being added to.', rule:'\'Dodavati\' (to add) takes the dative for the recipient — the thing TO which something is added. The food receives the salt, so dative.' },
+    { lat:'Oprostiću mu grešku.',                     word:'mu',        en:'I will forgive him the mistake.',                  answer:'Dative', explanation:'"Mu" (him) is the dative pronoun — the person being forgiven. Verbs of forgiveness take a dative person.', rule:'\'Oprostiti\' (to forgive) takes the dative for the person forgiven — TO whom forgiveness is given. The person receiving mercy takes dative.' },
+    { lat:'Dati ću joj poklon sutra.',                word:'joj',       en:'I will give her a gift tomorrow.',                 answer:'Dative', explanation:'"Joj" (her) is the dative pronoun — the recipient of the gift. Gift-giving verbs take a dative recipient.', rule:'\'Dati\' (to give) takes the dative for the recipient — the person TO whom something is given. She receives the gift, so dative.' },
+    { lat:'Smešim se detetu u parku.',                word:'detetu',    en:'I\'m smiling at the child in the park.',           answer:'Dative', explanation:'"Detetu" (child) is dative because smiling is directed AT someone. The target of the smile takes dative.', rule:'Verbs of communication or expression like \'smešiti se\' (to smile) can take dative for the target — the person TO whom the action is directed.' },
+    { lat:'Pozivam te na kafe.',                      word:'te',        en:'I\'m inviting you for coffee.',                    answer:'Dative', explanation:'"Te" (you) is the dative pronoun — the person being invited. Social invitation verbs take a dative person.', rule:'Invitation verbs take the dative for the person invited — TO whom the invitation is extended. You are the recipient, so dative.' },
+    { lat:'Predajem ključeve stanodavcu.',            word:'stanodavcu',en:'I\'m handing over the keys to the landlord.',      answer:'Dative', explanation:'"Stanodavcu" (landlord) is the dative recipient — the person receiving the keys. Transfer verbs take dative recipients.', rule:'The dative marks the recipient of transfers — TO whom something is handed over. The landlord receives the keys, so dative.' },
+    { lat:'Pokazujem fotografije prijateljima.',      word:'prijateljima', en:'I\'m showing photographs to my friends.',        answer:'Dative', explanation:'"Prijateljima" (friends) is the dative audience — the people being shown something. Demonstration verbs take dative audiences.', rule:'\'Pokazivati\' (to show) takes the dative for the audience — the people TO whom something is displayed. The friends are the viewers, so dative.' },
+    { lat:'Čitam bajke deci pre spavanja.',           word:'deci',      en:'I read fairy tales to children before bedtime.',   answer:'Dative', explanation:'"Deci" (children) is the dative audience — the people for whom the story is read. Reading aloud takes a dative audience.', rule:'Reading TO someone takes the dative for the audience — the people who listen and benefit from the reading. Children are the listeners, so dative.' },
+    { lat:'Govori istinu svim prijateljima.',         word:'prijateljima', en:'He tells the truth to all his friends.',        answer:'Dative', explanation:'"Prijateljima" (friends) is the dative audience — the people being told something. Communication verbs take dative recipients.', rule:'\'Govoriti\' (to tell) takes the dative for the audience — the people TO whom something is communicated. The friends hear the truth, so dative.' },
+    { lat:'Nudim vodu umornom psu.',                  word:'psu',       en:'I offer water to the tired dog.',                  answer:'Dative', explanation:'"Psu" (dog) is the dative recipient — the animal being offered something. Offering verbs take dative recipients.', rule:'\'Nuditi\' (to offer) takes the dative for the recipient — TO whom something is offered. The dog is offered water, so dative.' },
+    { lat:'Služim kafu gostima.',                     word:'gostima',   en:'I serve coffee to the guests.',                    answer:'Dative', explanation:'"Gostima" (guests) is the dative recipients — the people being served. Service verbs take dative beneficiaries.', rule:'\'Služiti\' (to serve) takes the dative for those being served — the people FOR whom a service is performed. The guests benefit, so dative.' },
+    { lat:'Darujem cveće majci za praznik.',          word:'majci',     en:'I\'m giving flowers to my mother for the holiday.', answer:'Dative', explanation:'"Majci" (mother) is the dative recipient — the person receiving the gift. Gift verbs take dative recipients.', rule:'\'Darivati\' (to give as a gift) takes the dative for the recipient — TO whom the gift is given. The mother receives flowers, so dative.' },
+    { lat:'Preparušavam se rođenoj sestri.',          word:'sestri',    en:'I confide in my own sister.',                      answer:'Dative', explanation:'"Sestri" (sister) is dative because "poveravati se" (to confide) takes a dative for the person confided in.', rule:'\'Poveravati se\' (to confide) takes the dative for the confidant — the person TO whom secrets are entrusted. The sister receives trust, so dative.' },
+    { lat:'Odgovarajm učitelju na pitanje.',          word:'učitelju',  en:'I\'m answering the teacher\'s question.',          answer:'Dative', explanation:'"Učitelju" (teacher) is dative because "odgovarati" (to answer) takes dative for the person being answered.', rule:'\'Odgovarati\' (to answer) takes the dative for the questioner — the person TO whom an answer is given. The teacher receives the response, so dative.' },
+    { lat:'Dozivoljavam detetu da izađe.',            word:'detetu',    en:'I\'m allowing the child to go out.',               answer:'Dative', explanation:'"Detetu" (child) is dative because "dozvoljavati" (to allow) takes dative for the person receiving permission.', rule:'\'Dozvoljavati\' (to allow) takes the dative for the person granted permission — TO whom permission is given. The child receives permission, so dative.' },
+    { lat:'Savetu je učiniti drugačije.',             word:'vam',       en:'I advise you to do it differently.',               answer:'Dative', explanation:'"Vam" (you) is the dative recipient — the person receiving advice. Advisory verbs take dative recipients.', rule:'\'Savetovati\' (to advise) takes the dative for the person receiving advice — TO whom counsel is given. You receive the advice, so dative.' },
+    { lat:'Naredila je deci da idu spavati.',         word:'deci',      en:'She ordered the children to go to sleep.',         answer:'Dative', explanation:'"Deci" (children) is dative because "narediti" (to order) takes dative for the people receiving commands.', rule:'\'Narediti\' (to order) takes the dative for those receiving commands — the people TO whom orders are given. The children receive orders, so dative.' },
+    { lat:'Preporučuje nam dobru knjiku.',            word:'nam',       en:'He recommends a good book to us.',                 answer:'Dative', explanation:'"Nam" (us) is the dative recipients — the people receiving the recommendation. Recommendation verbs take dative recipients.', rule:'\'Preporučivati\' (to recommend) takes the dative for those receiving recommendations — the people TO whom suggestions are made. We receive the suggestion, so dative.' },
+    { lat:'Omogućava studentima da uče.',             word:'studentima', en:'It enables students to learn.',                    answer:'Dative', explanation:'"Studentima" (students) is dative because "omogućavati" (to enable) takes dative for the beneficiaries.', rule:'\'Omogućavati\' (to enable) takes the dative for the beneficiaries — the people FOR whom something is made possible. The students benefit, so dative.' },
+    { lat:'Poklanja poklone deci za Novu godinu.',    word:'deci',      en:'She gives presents to children for New Year.',     answer:'Dative', explanation:'"Deci" (children) is the dative recipients — the people receiving presents. Gift-giving verbs take dative recipients.', rule:'\'Poklanjati\' (to give as a gift) takes the dative for recipients — the people TO whom gifts are given. The children receive presents, so dative.' },
+    { lat:'Odgovara na pisma čitaocima.',             word:'čitaocima', en:'He replies to letters from readers.',              answer:'Dative', explanation:'"Čitaocima" (readers) is dative because "odgovarati" (to reply) takes dative for the people being replied to.', rule:'\'Odgovarati\' (to reply) takes the dative for the people receiving replies — TO whom responses are sent. The readers get responses, so dative.' },
+    { lat:'Ustupa mesto staroj dami u autobusu.',     word:'dami',      en:'He gives up his seat to an old lady on the bus.',  answer:'Dative', explanation:'"Dami" (lady) is the dative recipient — the person receiving the seat. Transfer verbs take dative recipients.', rule:'\'Ustupati\' (to give up / yield) takes the dative for the recipient — the person TO whom something is yielded. The lady receives the seat, so dative.' },
+    { lat:'Dovikuje psu da dođe ovde.',               word:'psu',       en:'He calls to the dog to come here.',                answer:'Dative', explanation:'"Psu" (dog) is dative because "dovikivati" (to call to) involves directed communication. The target of calling takes dative.', rule:'\'Dovikivati\' (to call to) takes the dative for the target — the being TO whom the call is directed. The dog is called to, so dative.' },
+    { lat:'Prilazim učitelju posle časa.',            word:'učitelju',  en:'I approach the teacher after class.',              answer:'Dative', explanation:'"Učitelju" (teacher) is dative because "prilaziti" (to approach) takes dative for the destination of movement.', rule:'\'Prilaziti\' (to approach) takes the dative for the goal — the person or thing TO which you move closer. The teacher is the destination, so dative.' },
+    { lat:'Dodaje šećer kafi.',                       word:'kafi',      en:'He adds sugar to the coffee.',                     answer:'Dative', explanation:'"Kafi" (coffee) is dative because "dodavati" (to add) takes dative for the thing being added to.', rule:'\'Dodavati\' (to add) takes the dative for what receives the addition — the thing TO which something is added. Coffee receives sugar, so dative.' },
+    { lat:'Dostavljam poštu komšijama.',              word:'komšijama', en:'I deliver mail to the neighbors.',                 answer:'Dative', explanation:'"Komšijama" (neighbors) is the dative recipients — the people receiving the delivery. Delivery verbs take dative recipients.', rule:'\'Dostavljati\' (to deliver) takes the dative for recipients — the people TO whom things are delivered. The neighbors receive mail, so dative.' },
+    { lat:'Izlazim u susret gostima.',                word:'gostima',   en:'I go out to meet the guests.',                     answer:'Dative', explanation:'"Gostima" (guests) follows "u susret" (to meet), which requires the dative case.', rule:'The expression \'u susret\' (to meet / toward) takes the dative. It marks the people you are going to meet or toward whom you move.' },
+    { lat:'Približavam se kući polako.',               word:'kući',      en:'I approach the house slowly.',                     answer:'Dative', explanation:'"Kući" (house) is dative because "približavati se" (to approach) takes dative for the destination.', rule:'\'Približavati se\' (to approach) takes the dative for the goal — the thing TO which you move closer. The house is the destination, so dative.' },
+    { lat:'Opiremo se problemima svaki dan.',         word:'problemima',en:'We resist problems every day.',                    answer:'Dative', explanation:'"Problemima" (problems) is dative because "opirati se" (to resist) takes dative for what is opposed.', rule:'\'Opirati se\' (to resist) takes the dative for what is being opposed — the thing TO which resistance is offered. Problems are resisted, so dative.' },
+    { lat:'Pridružujem se novim kolegama.',           word:'kolegama',  en:'I join the new colleagues.',                       answer:'Dative', explanation:'"Kolegama" (colleagues) is dative because "pridruživati se" (to join) takes dative for the group being joined.', rule:'\'Pridruživati se\' (to join) takes the dative for the group joined — the people TO whom you attach yourself. Colleagues are joined, so dative.' },
+    { lat:'Udubljujem se u izučavanje srpskog.',      word:'izučavanju',en:'I immerse myself in studying Serbian.',            answer:'Dative', explanation:'"Izučavanju" (studying) is dative because "udubljivati se" (to immerse oneself) takes dative for the activity.', rule:'\'Udubljivati se\' (to immerse / delve into) takes the dative for the activity — what you immerse yourself IN. The studying receives focus, so dative.' },
+    { lat:'Pokušavam da se približim istini.',         word:'istini',    en:'I try to get closer to the truth.',                answer:'Dative', explanation:'"Istini" (truth) is dative because "približiti se" (to get close to) takes dative for the goal.', rule:'\'Približiti se\' (to approach / get close to) takes the dative for the goal — what you move toward. The truth is the goal, so dative.' },
+    { lat:'Uslužujem gostima u restoranu.',           word:'gostima',   en:'I serve guests in the restaurant.',                answer:'Dative', explanation:'"Gostima" (guests) is dative because "usluživati" (to serve) takes dative for those being served.', rule:'\'Usluživati\' (to serve / wait on) takes the dative for the customers — the people FOR whom service is provided. Guests receive service, so dative.' },
+    { lat:'Zavidim prijatelju na uspehu.',            word:'prijatelju',en:'I envy my friend his success.',                    answer:'Dative', explanation:'"Prijatelju" (friend) is dative because "zavideti" (to envy) takes dative for the person envied.', rule:'\'Zavideti\' (to envy) takes the dative for the person envied — the one TO whom envy is directed. The friend is envied, so dative.' },
+    { lat:'Čestitam roditeljima na ćerkinom uspehu.', word:'roditeljima',en:'I congratulate the parents on their daughter\'s success.', answer:'Dative', explanation:'"Roditeljima" (parents) is dative because "čestitati" (to congratulate) takes dative for the people congratulated.', rule:'\'Čestitati\' (to congratulate) takes the dative for those congratulated — the people TO whom congratulations are offered. Parents receive congratulations, so dative.' },
+    { lat:'Klanjam se pred spomenikom.',              word:'spomeniku', en:'I bow before the monument.',                       answer:'Dative', explanation:'"Spomeniku" (monument) is dative because "klanjati se" (to bow) can take dative for what is bowed to.', rule:'\'Klanjati se\' (to bow) can take the dative for the object of reverence — what you bow TO. The monument receives the bow, so dative.' },
+    { lat:'Protivim se novom zakonu.',                word:'zakonu',    en:'I oppose the new law.',                            answer:'Dative', explanation:'"Zakonu" (law) is dative because "protiviti se" (to oppose) takes dative for what is opposed.', rule:'\'Protiviti se\' (to oppose) takes the dative for what is being opposed — the thing TO which opposition is directed. The law is opposed, so dative.' },
+    { lat:'Obraćam se direktoru sa zahtevom.',        word:'direktoru', en:'I address the director with a request.',           answer:'Dative', explanation:'"Direktoru" (director) is dative because "obraćati se" (to address) takes dative for the person addressed.', rule:'\'Obraćati se\' (to address / turn to) takes the dative for the person addressed — TO whom you direct speech. The director is addressed, so dative.' },
+    { lat:'Smeta mi buka iz ulice.',                  word:'mi',        en:'The noise from the street bothers me.',            answer:'Dative', explanation:'"Mi" (me) is dative because "smetati" (to bother) takes dative for the person bothered.', rule:'\'Smetati\' (to bother) takes the dative for the person affected — TO whom something is bothersome. I am bothered, so dative.' },
+    { lat:'Teško pada rastanak prijateljima.',        word:'prijateljima',en:'The farewell is hard for the friends.',          answer:'Dative', explanation:'"Prijateljima" (friends) is dative because "padati teško" (to be hard) takes dative for the person affected.', rule:'The expression \'teško padati\' (to be difficult for) takes the dative for the person affected — TO whom something is difficult. Friends are affected, so dative.' },
+    { lat:'Ide na ruku studentima.',                  word:'studentima',en:'It works in favor of the students.',             answer:'Dative', explanation:'"Studentima" (students) is dative because "ići na ruku" (to benefit) takes dative for the beneficiaries.', rule:'The expression \'ići na ruku\' (to work in favor of) takes the dative for the beneficiaries — the people FOR whom something is advantageous. Students benefit, so dative.' },
+    { lat:'Stoji na raspolaganju turistima.',         word:'turistima', en:'It is available to tourists.',                     answer:'Dative', explanation:'"Turistima" (tourists) is dative because "stojati na raspolaganju" (to be available to) takes dative for users.', rule:'The expression \'stojati na raspolaganju\' (to be available to) takes the dative for those who can use something — TO whom it is available. Tourists have access, so dative.' },
+    { lat:'Izjednačava se po važnosti drugim gradovima.', word:'gradovima', en:'It equals other cities in importance.',           answer:'Dative', explanation:'"Gradovima" (cities) follows "po važnosti" expressing comparison. When comparing "po X", the standard of comparison takes dative.', rule:'In comparisons using \'po\' (by / in terms of), the standard of comparison takes the dative. The cities are what this one is compared TO, so dative.' },
+    { lat:'Spada po ranglu vodećim univerzitetima.',   word:'univerzitetima',en:'It ranks among the leading universities.',     answer:'Dative', explanation:'"Univerzitetima" (universities) follows "po rangu" (by rank) in a ranking comparison. Ranking standards take dative.', rule:'In ranking expressions with \'po\' (by / according to), the group being compared to takes the dative. The universities are the ranking group, so dative.' },
+    { lat:'Čini po prirodi skromnim ljudima.',         word:'ljudima',   en:'By nature, it belongs to modest people.',          answer:'Dative', explanation:'"Ljudima" (people) follows "po prirodi" (by nature) expressing natural belonging. Attribution uses dative.', rule:'In expressions of natural belonging or attribution using \'po\' (by nature), the group that naturally possesses something takes the dative.' },
+    { lat:'Odgovara po ukusu svim generacijama.',     word:'generacijama',en:'It suits the taste of all generations.',        answer:'Dative', explanation:'"Generacijama" (generations) follows "po ukusu" (by taste) expressing suitability. Suitability expressions use dative.', rule:'In suitability expressions with \'po\' (according to), those who find something suitable take the dative. The generations find it suitable, so dative.' },
+    { lat:'Prema mojim roditeljima je uvek ljubazan.', word:'roditeljima',en:'He is always kind toward my parents.',           answer:'Dative', explanation:'"Roditeljima" (parents) follows "prema" (toward/to), which always takes the dative case.', rule:'The preposition \'prema\' (toward / to / regarding) always requires the dative. It marks the target of attitudes, behavior, or direction.' },
+    { lat:'Nasuprot očekivanjima, uspeo je.',         word:'očekivanjima',en:'Contrary to expectations, he succeeded.',        answer:'Dative', explanation:'"Očekivanjima" (expectations) follows "nasuprot" (contrary to), which requires the dative case.', rule:'The preposition \'nasuprot\' (contrary to / against) requires the dative. It marks what is being opposed or contradicted.' },
+    { lat:'Uprkos kišo, izašli smo u šetnju.',        word:'kiši',      en:'Despite the rain, we went for a walk.',            answer:'Dative', explanation:'"Kiši" (rain) follows "uprkos" (despite), which always takes the dative case.', rule:'The preposition \'uprkos\' (despite / in spite of) always requires the dative. It marks what is being overcome or ignored.' },
+    { lat:'Zahvaljujući profesoru, razumem gradivo.',  word:'profesoru', en:'Thanks to the professor, I understand the material.', answer:'Dative', explanation:'"Profesoru" (professor) follows "zahvaljujući" (thanks to), which requires the dative case.', rule:'The preposition \'zahvaljujući\' (thanks to / owing to) requires the dative. It marks the person or thing that enables something good.' },
+    { lat:'Susuprot većini, on misli drugačije.',     word:'većini',    en:'Unlike the majority, he thinks differently.',       answer:'Dative', explanation:'"Većini" (majority) follows "nasuprot" (unlike/contrary to), which takes the dative case.', rule:'The preposition \'nasuprot\' (contrary to / unlike) requires the dative. It marks the standard being contrasted or opposed.' },
+    { lat:'Idemo prema centru grada.',                word:'centru',    en:'We\'re heading toward the city center.',           answer:'Dative', explanation:'"Centru" (center) follows "prema" (toward), which always requires the dative case.', rule:'The preposition \'prema\' (toward / in the direction of) always requires the dative. It marks the goal or destination of movement.' },
+    { lat:'Klonimo se problemima koliko možemo.',     word:'problemima',en:'We avoid problems as much as we can.',             answer:'Dative', explanation:'"Problemima" (problems) is dative because "kloniti se" (to avoid) takes dative for what is avoided.', rule:'\'Kloniti se\' (to avoid / stay away from) takes the dative for what is avoided — the things FROM which you stay away. Problems are avoided, so dative.' },
+    { lat:'Divim se vašoj uprornosti.',               word:'uprornosti',en:'I admire your persistence.',                      answer:'Dative', explanation:'"Uprornosti" (persistence) is dative because "diviti se" (to admire) takes dative for what is admired.', rule:'\'Diviti se\' (to admire) takes the dative for what is admired — the quality or thing TO which admiration is directed. Persistence is admired, so dative.' },
+    { lat:'Raduje se susretu sa starim prijateljima.', word:'susretu',   en:'He looks forward to meeting old friends.',         answer:'Dative', explanation:'"Susretu" (meeting) is dative because "radovati se" (to look forward to) takes dative for the anticipated event.', rule:'\'Radovati se\' (to look forward to / rejoice) takes the dative for what brings joy — the thing TO which happiness is directed. The meeting brings joy, so dative.' },
+    { lat:'Čudi se brzini kojom učim.',                word:'brzini',    en:'He is amazed by the speed at which I learn.',      answer:'Dative', explanation:'"Brzini" (speed) is dative because "čuditi se" (to be amazed) takes dative for what amazes.', rule:'\'Čuditi se\' (to be amazed / surprised by) takes the dative for what causes amazement — the thing TO which surprise is directed. The speed is surprising, so dative.' },
+    { lat:'Nadeč se boljem ishodu.',                  word:'ishodu',    en:'I hope for a better outcome.',                     answer:'Dative', explanation:'"Ishodu" (outcome) is dative because "nadati se" (to hope) takes dative for what is hoped for.', rule:'\'Nadati se\' (to hope for) takes the dative for what is hoped for — the thing TO which hope is directed. The outcome is hoped for, so dative.' },
+    { lat:'Treba pored aje lepotn.',                  word:'lepoti',    en:'One should strive for beauty.',                    answer:'Dative', explanation:'"Lepoti" (beauty) is dative because "težiti" (to strive) takes dative for the goal.', rule:'\'Težiti\' (to strive / aspire to) takes the dative for the goal — what you strive TOWARD. Beauty is the goal, so dative.' },
+    { lat:'Prističe u pomoć prijtelju.',               word:'prijatelju',en:'He rushes to help his friend.',                    answer:'Dative', explanation:'"Prijatelju" (friend) follows "u pomoć" (to help), which requires dative for the beneficiary.', rule:'The expression \'u pomoć\' (to help / to the aid of) requires the dative for the person helped — TO whom help is given. The friend receives help, so dative.' },
+    { lat:'Ide na runu drugtom kandidatu.',           word:'kandidatu', en:'He helps the other candidate.',                     answer:'Dative', explanation:'"Kandidatu" (candidate) follows "na ruku" (to help), which requires dative for the beneficiary.', rule:'The expression \'na ruku\' (to help / in favor of) requires the dative for the person helped — FOR whom something is advantageous. The candidate benefits, so dative.' },
+    { lat:'Pristupam rešavanju svakog problema.',     word:'rešavanju', en:'I approach solving every problem.',                answer:'Dative', explanation:'"Rešavanju" (solving) is dative because "pristupati" (to approach) takes dative for the approached activity.', rule:'\'Pristupati\' (to approach) takes the dative for what is approached — the activity or task TO which you turn your attention. Solving is approached, so dative.' },
+    { lat:'Posvećuuje se čitanju svako veče.',        word:'čitanju',   en:'She dedicates herself to reading every evening.',  answer:'Dative', explanation:'"Čitanju" (reading) is dative because "posvećivati se" (to dedicate oneself) takes dative for the activity.', rule:'\'Posvećivati se\' (to dedicate / devote oneself) takes the dative for the activity — what you dedicate yourself TO. Reading receives dedication, so dative.' },
+    { lat:'Ostaje veran svojim prinipima.',           word:'principima',en:'He remains faithful to his principles.',          answer:'Dative', explanation:'"Principima" (principles) is dative because "ostajati veran" (to remain faithful) takes dative for what faithfulness is directed to.', rule:'\'Ostajati veran\' (to remain faithful to) takes the dative for what receives loyalty — the things TO which faithfulness is directed. Principles receive loyalty, so dative.' },
+    { lat:'Sklanja se danger opnosti.',               word:'opasnosti', en:'He avoids danger.',                               answer:'Dative', explanation:'"Opasnosti" (danger) is dative because "sklanjati se" (to avoid) takes dative for what is avoided.', rule:'\'Sklanjati se\' (to avoid / take shelter from) takes the dative for what is avoided — the thing FROM which you protect yourself. Danger is avoided, so dative.' },
+    { lat:'Povira Тако uvvjem svem.',                 word:'prijatelju',en:'He trusts his friend completely.',                 answer:'Dative', explanation:'"Prijatelju" (friend) is dative because "poveravati" (to trust) takes dative for the person trusted.', rule:'\'Poveravati\' (to trust / confide in) takes the dative for the person trusted — TO whom trust is given. The friend receives trust, so dative.' },
+    { lat:'Sprečava se belopnju svadom.',              word:'svađi',     en:'He prevents himself from arguing.',                answer:'Dative', explanation:'"Svađi" (arguing) is dative because "sprečavati se" (to prevent oneself) takes dative for the avoided action.', rule:'\'Sprečavati se\' (to prevent oneself from) takes the dative for the action being prevented — what you prevent yourself FROM doing. Arguing is prevented, so dative.' },
 
     // ── ACCUSATIVE ──────────────────────────────────
     { lat:'Čitam zanimljivu knjigu.',                   word:'knjigu',       en:'I\'m reading an interesting book.',                answer:'Accusative', explanation:'"Knjigu" (book) is the direct object of "čitam" (I read). Direct objects of transitive verbs take the accusative case.', rule:'The accusative marks the direct object — the thing directly and completely affected by the action of a transitive verb. \'Knjigu\' is what is being read, so it takes accusative.' },
@@ -9446,6 +9859,30 @@
     { lat:'Čeka autobus na stanici.',                   word:'autobus',      en:'She\'s waiting for the bus at the stop.',          answer:'Accusative', explanation:'"Autobus" (bus) is the direct object of "čeka" (waits for). Inanimate masculine, accusative = nominative.', rule:'The accusative marks the direct object of \'čekati\' (to wait for) — the thing or person being awaited. Inanimate masculine nouns look the same in nominative and accusative; the direct object role marks this as accusative.' },
     { lat:'Preuzimam odgovornost za grešku.',           word:'odgovornost',  en:'I\'m taking responsibility for the mistake.',      answer:'Accusative', explanation:'"Odgovornost" (responsibility) is the direct object of "preuzimam" (I take on). Feminine consonant-stem nouns have no ending change in accusative.', rule:'The accusative marks the direct object — the thing being taken on. Feminine consonant-stem nouns like \'odgovornost\' look the same in nominative and accusative; the direct object role identifies this as accusative.' },
     { lat:'Slušam radio dok kuvam.',                    word:'radio',        en:'I listen to the radio while I cook.',               answer:'Accusative', explanation:'"Radio" is the direct object of "slušam" (I listen to). Indeclinable loanwords like "radio" look the same in all cases.', rule:'The accusative marks the direct object — the thing being listened to. Indeclinable loanwords like \'radio\' look the same in all cases; only the direct object role reveals that this is accusative.' },
+    { lat:'Kažam vam istinu o situaciji.',              word:'istinu',       en:'I tell you the truth about the situation.',        answer:'Accusative', explanation:'"Istinu" (truth) is the direct object of "kažem" (I tell). Feminine -a nouns take -u in accusative singular.', rule:'The accusative marks the direct object — the thing being told or communicated. \'Istinu\' is what is told, so accusative.' },
+    { lat:'Vozim bicikl kroz park.',                    word:'bicikl',       en:'I ride a bicycle through the park.',               answer:'Accusative', explanation:'"Bicikl" (bicycle) is the direct object of "vozim" (I drive/ride). Inanimate masculine, accusative = nominative.', rule:'The accusative marks the direct object — the thing being operated or controlled. \'Bicikl\' is what is ridden, so accusative.' },
+    { lat:'Spremam ručak za porodicu.',                 word:'ručak',        en:'I prepare lunch for the family.',                  answer:'Accusative', explanation:'"Ručak" (lunch) is the direct object of "spremam" (I prepare). Masculine inanimate accusative = nominative.', rule:'The accusative marks the direct object — the thing being prepared or made. \'Ručak\' is what is prepared, so accusative.' },
+    { lat:'Učim srpski jezik već godinu dana.',         word:'jezik',        en:'I\'ve been learning Serbian for a year.',          answer:'Accusative', explanation:'"Jezik" (language) is the direct object of "učim" (I learn). Learning subjects take accusative as direct objects.', rule:'The accusative marks the direct object — the subject being learned. \'Jezik\' is what is learned, so accusative.' },
+    { lat:'Pevam pesmu o ljubavi.',                     word:'pesmu',        en:'I sing a song about love.',                        answer:'Accusative', explanation:'"Pesmu" (song) is the direct object of "pevam" (I sing). Feminine -a nouns take -u in accusative.', rule:'The accusative marks the direct object — the thing being sung or performed. \'Pesmu\' is what is sung, so accusative.' },
+    { lat:'Nosim tešku torbu svaki dan.',               word:'torbu',        en:'I carry a heavy bag every day.',                   answer:'Accusative', explanation:'"Torbu" (bag) is the direct object of "nosim" (I carry). Feminine -a nouns take -u in accusative.', rule:'The accusative marks the direct object — the thing being carried or transported. \'Torbu\' is what is carried, so accusative.' },
+    { lat:'Pijem kafu svako jutro.',                    word:'kafu',         en:'I drink coffee every morning.',                    answer:'Accusative', explanation:'"Kafu" (coffee) is the direct object of "pijem" (I drink). Beverages as direct objects take accusative.', rule:'The accusative marks the direct object — the thing being consumed. \'Kafu\' is what is drunk, so accusative.' },
+    { lat:'Gledam televiziju posle posla.',            word:'televiziju',   en:'I watch television after work.',                   answer:'Accusative', explanation:'"Televiziju" (television) is the direct object of "gledam" (I watch). Entertainment as direct object takes accusative.', rule:'The accusative marks the direct object — the thing being watched or observed. \'Televiziju\' is what is watched, so accusative.' },
+    { lat:'Čitam dobre knjige preko leta.',             word:'knjige',       en:'I read good books over the summer.',               answer:'Accusative', explanation:'"Knjige" (books) is the accusative plural direct object of "čitam" (I read). Reading materials take accusative as direct objects.', rule:'The accusative marks the direct object — the things being read. \'Knjige\' is what is read, so accusative.' },
+    { lat:'Kupujem hranu u supermarketu.',              word:'hranu',        en:'I buy food at the supermarket.',                   answer:'Accusative', explanation:'"Hranu" (food) is the direct object of "kupujem" (I buy). Things purchased take accusative as direct objects.', rule:'The accusative marks the direct object — the thing being purchased. \'Hranu\' is what is bought, so accusative.' },
+    { lat:'Poznajem tog čoveka odavno.',                word:'čoveka',       en:'I\'ve known that man for a long time.',            answer:'Accusative', explanation:'"Čoveka" (man) is the direct object of "poznajem" (I know). Animate masculine accusative = genitive form.', rule:'The accusative marks the direct object — the person being known. Animate masculine nouns use genitive form for accusative.' },
+    { lat:'Volim svoju decu više od života.',           word:'decu',         en:'I love my children more than life.',               answer:'Accusative', explanation:'"Decu" (children) is the direct object of "volim" (I love). People loved take accusative as direct objects.', rule:'The accusative marks the direct object — the people being loved. \'Decu\' is who is loved, so accusative.' },
+    { lat:'Slušamo muziku u kolima.',                   word:'muziku',       en:'We listen to music in the car.',                   answer:'Accusative', explanation:'"Muziku" (music) is the direct object of "slušamo" (we listen to). Audio being listened to takes accusative.', rule:'The accusative marks the direct object — the thing being listened to. \'Muziku\' is what is heard, so accusative.' },
+    { lat:'Uzimam ključeve sa stola.',                  word:'ključeve',     en:'I take the keys from the table.',                  answer:'Accusative', explanation:'"Ključeve" (keys) is the accusative plural direct object of "uzimam" (I take). Things taken are direct objects.', rule:'The accusative marks the direct object — the things being taken or picked up. \'Ključeve\' is what is taken, so accusative.' },
+    { lat:'Pratim vesti na televiziji.',               word:'vesti',        en:'I follow the news on television.',                 answer:'Accusative', explanation:'"Vesti" (news) is the direct object of "pratim" (I follow). Information being followed takes accusative.', rule:'The accusative marks the direct object — the thing being followed or tracked. \'Vesti\' is what is followed, so accusative.' },
+    { lat:'Tražim posao u gradu.',                      word:'posao',        en:'I\'m looking for work in the city.',               answer:'Accusative', explanation:'"Posao" (job) is the direct object of "tražim" (I seek). Things sought take accusative as direct objects.', rule:'The accusative marks the direct object — the thing being sought or searched for. \'Posao\' is what is sought, so accusative.' },
+    { lat:'Popravljam staru kuću celo leto.',           word:'kuću',         en:'I\'m fixing the old house all summer.',            answer:'Accusative', explanation:'"Kuću" (house) is the direct object of "popravljam" (I fix). Things being repaired take accusative.', rule:'The accusative marks the direct object — the thing being fixed or repaired. \'Kuću\' is what is repaired, so accusative.' },
+    { lat:'Izbegavam gužve u gradu.',                   word:'gužve',        en:'I avoid crowds in the city.',                      answer:'Accusative', explanation:'"Gužve" (crowds) is the accusative plural direct object of "izbegavam" (I avoid). Things avoided are direct objects.', rule:'The accusative marks the direct object — the things being avoided. \'Gužve\' is what is avoided, so accusative.' },
+    { lat:'Predajem dokumenta na šalteru.',            word:'dokumenta',    en:'I submit documents at the counter.',               answer:'Accusative', explanation:'"Dokumenta" (documents) is the accusative plural direct object of "predajem" (I submit). Things submitted are direct objects.', rule:'The accusative marks the direct object — the things being submitted or handed in. \'Dokumenta\' is what is submitted, so accusative.' },
+    { lat:'Organizujem žurku za prijatelje.',          word:'žurku',        en:'I\'m organizing a party for friends.',            answer:'Accusative', explanation:'"Žurku" (party) is the direct object of "organizujem" (I organize). Events organized take accusative as direct objects.', rule:'The accusative marks the direct object — the thing being organized or planned. \'Žurku\' is what is organized, so accusative.' },
+    { lat:'Prekidam vezu sa starym dečkom.',           word:'vezu',         en:'I\'m ending the relationship with my old boyfriend.', answer:'Accusative', explanation:'"Vezu" (relationship) is the direct object of "prekidam" (I end). Relationships ended take accusative as direct objects.', rule:'The accusative marks the direct object — the thing being ended or terminated. \'Vezu\' is what is ended, so accusative.' },
+    { lat:'Otvaram prozor da uđe vazduh.',              word:'prozor',       en:'I open the window to let air in.',                 answer:'Accusative', explanation:'"Prozor" (window) is the direct object of "otvaram" (I open). Things opened take accusative as direct objects.', rule:'The accusative marks the direct object — the thing being opened. \'Prozor\' is what is opened, so accusative.' },
+    { lat:'Zatvaralo vrata pred spavanje.',            word:'vrata',        en:'I close the door before sleeping.',                answer:'Accusative', explanation:'"Vrata" (door) is the direct object of "zatvarąm" (I close). Things closed take accusative as direct objects.', rule:'The accusative marks the direct object — the thing being closed. \'Vrata\' is what is closed, so accusative.' },
+    { lat:'Palim svetlo u sobi.',                       word:'svetlo',       en:'I turn on the light in the room.',                 answer:'Accusative', explanation:'"Svetlo" (light) is the direct object of "palim" (I turn on). Things activated take accusative as direct objects.', rule:'The accusative marks the direct object — the thing being turned on or activated. \'Svetlo\' is what is turned on, so accusative.' },
 
     // ── INSTRUMENTAL ────────────────────────────────
     { lat:'Pišem olovkom u svesci.',              word:'olovkom',    en:'I\'m writing with a pencil in my notebook.',        answer:'Instrumental', explanation:'"Olovkom" (pencil) is the instrumental of means — writing WITH a pencil. The instrument used to perform an action takes the instrumental.', rule:'The instrumental marks the means or instrument — HOW an action is performed. Writing WITH a pencil uses the instrumental because the pencil is the enabling tool. No preposition is needed; the case alone expresses \'by means of.\'' },
@@ -9462,6 +9899,25 @@
     { lat:'Govori srpskim jezikom sa svima.',     word:'jezikom',    en:'She speaks Serbian with everyone.',                 answer:'Instrumental', explanation:'"Jezikom" (language) is the instrumental of means of communication — speaking IN/WITH a language takes the instrumental.', rule:'The instrumental marks the means of communication — the language is the instrument used to speak. Just as you write WITH a pen (instrumental), you speak WITH or IN a language (also instrumental).' },
     { lat:'Pod mostom mirno teče reka.',          word:'mostom',     en:'The river flows calmly under the bridge.',          answer:'Instrumental', explanation:'"Mostom" (bridge) follows "pod" (under) expressing a static location below something. Static "pod" takes the instrumental.', rule:'The preposition \'pod\' (under) takes the instrumental for static position. The instrumental marks a fixed spatial relationship — the reference point you are positioned beneath.' },
     { lat:'Seče hleb nožem.',                    word:'nožem',      en:'She\'s cutting bread with a knife.',                answer:'Instrumental', explanation:'"Nožem" (knife) is the instrumental of instrument — cutting WITH a knife. The tool used for an action takes the instrumental.', rule:'The instrumental marks the instrument or tool — HOW something is done. The knife is the means by which cutting is performed. No preposition is needed; the instrumental case alone expresses \'by means of this tool.\'' },
+    { lat:'Krije se iza velikog stabla.',            word:'stablom',    en:'He hides behind a big tree.',                      answer:'Instrumental', explanation:'"Stablom" (tree) follows "iza" (behind), which takes the instrumental for static position behind something.', rule:'The preposition \'iza\' (behind) takes the instrumental for static position. The instrumental marks a fixed spatial relationship — the reference point you are hidden behind.' },
+    { lat:'Između naših kuća je mali put.',          word:'kućama',     en:'Between our houses is a small path.',              answer:'Instrumental', explanation:'"Kućama" (houses) follows "između" (between), which takes the instrumental for static position between things.', rule:'The preposition \'između\' (between) takes the instrumental for static position. The instrumental marks the reference points on either side of a space.' },
+    { lat:'Mleko se meša kašikom.',                  word:'kašikom',    en:'Milk is stirred with a spoon.',                    answer:'Instrumental', explanation:'"Kašikom" (spoon) is the instrumental of instrument — stirring WITH a spoon. Kitchen tools take instrumental.', rule:'The instrumental marks the tool or instrument used for an action. \'Kašikom\' is how stirring is done — the spoon is the means.' },
+    { lat:'Vozi kolima na posao.',                   word:'kolima',     en:'He drives to work by car.',                        answer:'Instrumental', explanation:'"Kolima" (car) is the instrumental of transport — traveling BY car. Transportation means take instrumental.', rule:'The instrumental marks the means of transport. \'Kolima\' means by car — the car is the means by which the journey happens.' },
+    { lat:'Pije kafu sa mnom svako jutro.',          word:'mnom',       en:'She drinks coffee with me every morning.',         answer:'Instrumental', explanation:'"Mnom" (me) follows "sa" (with), which requires the instrumental for accompaniment.', rule:'The preposition \'sa\' (with) always takes the instrumental. The instrumental marks companionship — who you do something with.' },
+    { lat:'Pokriva se debelim pokrivačem.',          word:'pokrivačem', en:'She covers herself with a thick blanket.',         answer:'Instrumental', explanation:'"Pokrivačem" (blanket) is the instrumental of means — covering WITH a blanket. Materials used for covering take instrumental.', rule:'The instrumental marks the material or means used for covering. The blanket is how covering is achieved.' },
+    { lat:'Brise suze maramicom.',                   word:'maramicom',  en:'She wipes tears with a tissue.',                   answer:'Instrumental', explanation:'"Maramicom" (tissue) is the instrumental of instrument — wiping WITH a tissue. Cleaning materials take instrumental.', rule:'The instrumental marks the tool used for cleaning or wiping. The tissue is the means by which wiping is done.' },
+    { lat:'Crta sliku četkicom.',                    word:'četkicom',   en:'She paints a picture with a brush.',               answer:'Instrumental', explanation:'"Četkicom" (brush) is the instrumental of instrument — painting WITH a brush. Art tools take instrumental.', rule:'The instrumental marks the artistic tool or instrument. The brush is the means by which painting is performed.' },
+    { lat:'Svira klavirom veoma lepo.',              word:'klavirom',   en:'He plays piano very beautifully.',                 answer:'Instrumental', explanation:'"Klavirom" (piano) is the instrumental of instrument — playing WITH/ON a piano. Musical instruments take instrumental.', rule:'The instrumental marks the musical instrument. \'Klavirom\' means playing by means of the piano — the piano is the instrument of music-making.' },
+    { lat:'Udara loptu glavom.',                     word:'glavom',     en:'He hits the ball with his head.',                  answer:'Instrumental', explanation:'"Glavom" (head) is the instrumental of body part — hitting WITH the head. Body parts as tools take instrumental.', rule:'The instrumental marks body parts used as tools or means. The head is the means by which the ball is hit.' },
+    { lat:'Osveđava prostor lepim lampama.',         word:'lampama',    en:'She illuminates the space with beautiful lamps.',  answer:'Instrumental', explanation:'"Lampama" (lamps) is the instrumental of means — illuminating WITH lamps. Lighting sources take instrumental.', rule:'The instrumental marks the means of illumination. The lamps are how the space gets lit — they are the instruments of lighting.' },
+    { lat:'Pokida papir rukama.',                    word:'rukama',     en:'He tears paper with his hands.',                   answer:'Instrumental', explanation:'"Rukama" (hands) is the instrumental of body part — tearing WITH hands. Body parts as tools take instrumental.', rule:'The instrumental marks body parts used as tools. The hands are the means by which tearing is accomplished.' },
+    { lat:'Kopa zemlju lopatom.',                    word:'lopatom',    en:'He digs earth with a shovel.',                     answer:'Instrumental', explanation:'"Lopatom" (shovel) is the instrumental of tool — digging WITH a shovel. Digging tools take instrumental.', rule:'The instrumental marks the digging tool. The shovel is the means by which digging is performed.' },
+    { lat:'Gleda kroz prozor binoklom.',             word:'binoklom',   en:'He looks through the window with binoculars.',     answer:'Instrumental', explanation:'"Binoklom" (binoculars) is the instrumental of optical instrument — looking WITH binoculars. Viewing aids take instrumental.', rule:'The instrumental marks optical instruments or viewing aids. Binoculars are the means by which enhanced viewing is achieved.' },
+    { lat:'Čisti cipele četkom.',                    word:'četkom',     en:'He cleans shoes with a brush.',                    answer:'Instrumental', explanation:'"Četkom" (brush) is the instrumental of cleaning tool — cleaning WITH a brush. Cleaning implements take instrumental.', rule:'The instrumental marks cleaning tools. The brush is the means by which cleaning is performed.' },
+    { lat:'Pašče testo valjkom.',                    word:'valjkom',    en:'She rolls out dough with a rolling pin.',          answer:'Instrumental', explanation:'"Valjkom" (rolling pin) is the instrumental of kitchen tool — rolling WITH a rolling pin. Kitchen implements take instrumental.', rule:'The instrumental marks kitchen tools. The rolling pin is the means by which the dough is flattened.' },
+    { lat:'Greje se varom kod vatre.',               word:'vatrom',     en:'He warms himself by the fire.',                    answer:'Instrumental', explanation:'"Vatrom" (fire) follows "kod" (by/near), but here it\'s better analyzed as instrumental of means — warming BY MEANS OF fire.', rule:'The instrumental marks the source or means of warming. Fire is what provides the heat — it\'s the means of warming.' },
+    { lat:'Šija haljinu iglom i koncem.',            word:'iglom',      en:'She sews a dress with needle and thread.',         answer:'Instrumental', explanation:'"Iglom" (needle) is the instrumental of sewing tool — sewing WITH a needle. Sewing implements take instrumental.', rule:'The instrumental marks sewing tools. The needle (and thread) are the means by which sewing is accomplished.' },
+    { lat:'Čisti pod štemom i vodom.',               word:'štemom',     en:'She cleans the floor with soap and water.',        answer:'Instrumental', explanation:'"Štemom" (soap) is the instrumental of cleaning agent — cleaning WITH soap. Cleaning substances take instrumental.', rule:'The instrumental marks cleaning materials or substances. Soap is one of the means by which cleaning is performed.' },
 
     // ── LOCATIVE ────────────────────────────────────
     { lat:'Živim u Beogradu već pet godina.',   word:'Beogradu',  en:'I\'ve been living in Belgrade for five years.',      answer:'Locative', explanation:'"Beogradu" is the locative of "Beograd." The preposition "u" expressing static location (living IN a city) always takes the locative.', rule:'The preposition \'u\' takes the locative for static location — WHERE something is, with no movement. The locative answers \'where?\' Compare: \'u Beograd\' (accusative) = to Belgrade (motion); \'u Beogradu\' (locative) = in Belgrade (position).' },
@@ -9489,6 +9945,152 @@
     { lat:'Majko, zašto si tužna?',                    word:'Majko',     en:'Mother, why are you sad?',                           answer:'Vocative', explanation:'The child is speaking directly to their mother — "Majko" appears at the start to signal who is being addressed before the question is asked. Serbian has a dedicated vocative case for this: whenever you speak TO someone rather than ABOUT them, the noun takes a special address form. "Majko" is the vocative of "majka" (mother); the final -a becomes -o.', rule:'The vocative marks direct address — it is the case used whenever you speak TO someone rather than about them. Family terms take a special vocative form: \'majko\' signals that you are speaking to your mother, not referring to her.' },
     { lat:'Sine, dođi da večeramo!',                   word:'Sine',      en:'Son, come and let\'s have dinner!',                  answer:'Vocative', explanation:'A parent is calling out to their son — speaking directly to him to invite him to dinner. The vocative is the Serbian case for direct address: any time a noun is used to speak to a person instead of about them, it takes the vocative form. "Sine" is the vocative of "sin" (son), formed by adding -e.', rule:'The vocative marks direct address — it is the case used whenever you speak TO someone rather than about them. Any noun used to call out to or address a person — rather than describe them — takes the vocative form.' },
   ];
+
+  // ═══════════════════════════════════════════════════
+  //  CASE RULES — practice when to use which case
+  // ═══════════════════════════════════════════════════
+
+  const CASE_RULES_ITEMS = [
+    // ── NOMINATIVE RULES ───────────────────────────────
+    { sentence:'_____ čita knjigu.', word:'student', en:'The student reads a book.', answer:'Student', case:'Nominative', explanation:'The subject of the sentence — who performs the action — is always nominative.', rule:'Nominative marks the subject of the sentence.' },
+    { sentence:'_____ je na stolu.', word:'knjiga', en:'The book is on the table.', answer:'Knjiga', case:'Nominative', explanation:'With linking verbs like "je" (is), the subject is nominative.', rule:'Nominative marks the subject with linking verbs.' },
+    { sentence:'_____ peva pesmu.', word:'devojka', en:'The girl sings a song.', answer:'Devojka', case:'Nominative', explanation:'The person performing the action "peva" (sings) is the subject in nominative.', rule:'Nominative marks who or what does the action.' },
+
+    // ── GENITIVE RULES ─────────────────────────────────
+    { sentence:'Dolazim iz _____.', word:'škola', en:'I\'m coming from school.', answer:'škole', case:'Genitive', explanation:'The preposition "iz" (from/out of) always requires genitive case.', rule:'Preposition "iz" always takes genitive.' },
+    { sentence:'Nema _____ u frižideru.', word:'mleko', en:'There\'s no milk in the fridge.', answer:'mleka', case:'Genitive', explanation:'"Nema" (there is no) always requires genitive case.', rule:'"Nema" always takes genitive.' },
+    { sentence:'Kuća moje _____.', word:'majka', en:'My mother\'s house.', answer:'majke', case:'Genitive', explanation:'Possessive relationships use genitive case.', rule:'Genitive shows possession.' },
+    { sentence:'Pije kafu bez _____.', word:'šećer', en:'He drinks coffee without sugar.', answer:'šećera', case:'Genitive', explanation:'The preposition "bez" (without) always requires genitive.', rule:'Preposition "bez" always takes genitive.' },
+    { sentence:'Kod _____ je večera.', word:'prijatelj', en:'Dinner is at my friend\'s place.', answer:'prijatelja', case:'Genitive', explanation:'The preposition "kod" (at someone\'s place) always requires genitive.', rule:'Preposition "kod" always takes genitive.' },
+    { sentence:'Zbog _____ kasnim.', word:'saobraćaj', en:'I\'m late because of traffic.', answer:'saobraćaja', case:'Genitive', explanation:'The preposition "zbog" (because of) always requires genitive.', rule:'Preposition "zbog" always takes genitive.' },
+    { sentence:'Ima mnogo _____.', word:'knjiga', en:'There are many books.', answer:'knjiga', case:'Genitive', explanation:'Quantity words like "mnogo" (many) require genitive.', rule:'Quantity words take genitive.' },
+    { sentence:'Pre _____ idem kući.', word:'ručak', en:'Before lunch I go home.', answer:'ručka', case:'Genitive', explanation:'The preposition "pre" (before) always requires genitive.', rule:'Preposition "pre" always takes genitive.' },
+    { sentence:'Posle _____ radim.', word:'škola', en:'After school I work.', answer:'škole', case:'Genitive', explanation:'The preposition "posle" (after) always requires genitive.', rule:'Preposition "posle" always takes genitive.' },
+    { sentence:'Od _____ do kuće.', word:'park', en:'From the park to home.', answer:'parka', case:'Genitive', explanation:'The preposition "od" (from) always requires genitive.', rule:'Preposition "od" always takes genitive.' },
+
+    // ── DATIVE RULES ───────────────────────────────────
+    { sentence:'Dajem poklon _____.', word:'sestra', en:'I\'m giving a gift to my sister.', answer:'sestri', case:'Dative', explanation:'The recipient of giving — indirect object — takes dative case.', rule:'Dative marks the recipient (to whom).' },
+    { sentence:'Pišem pismo _____.', word:'drug', en:'I\'m writing a letter to my friend.', answer:'drugu', case:'Dative', explanation:'The person to whom you write takes dative case.', rule:'Dative marks recipient of communication.' },
+    { sentence:'Idemo ka _____.', word:'centar', en:'We\'re going toward the center.', answer:'centru', case:'Dative', explanation:'The preposition "ka" (toward) always requires dative.', rule:'Preposition "ka" always takes dative.' },
+    { sentence:'Prilazim _____.', word:'učitelj', en:'I\'m approaching the teacher.', answer:'učitelju', case:'Dative', explanation:'Verbs of approaching take dative case.', rule:'Verbs of approaching take dative.' },
+    { sentence:'Pomaže _____.', word:'majka', en:'He helps mother.', answer:'majci', case:'Dative', explanation:'The verb "pomagati" (to help) takes dative case.', rule:'Verb "pomagati" takes dative.' },
+    { sentence:'Hvala _____.', word:'doktor', en:'Thanks to the doctor.', answer:'doktoru', case:'Dative', explanation:'"Hvala" (thanks) always takes dative case.', rule:'"Hvala" always takes dative.' },
+    { sentence:'Treba mi _____.', word:'pomoć', en:'I need help.', answer:'pomoć', case:'Nominative', explanation:'With "treba" construction, the thing needed stays nominative.', rule:'With "treba", needed thing is nominative.' },
+
+    // ── ACCUSATIVE RULES ───────────────────────────────
+    { sentence:'Čitam _____.', word:'knjiga', en:'I\'m reading a book.', answer:'knjigu', case:'Accusative', explanation:'Direct object of transitive verbs takes accusative case.', rule:'Accusative marks the direct object.' },
+    { sentence:'Idem u _____.', word:'škola', en:'I\'m going to school.', answer:'školu', case:'Accusative', explanation:'The preposition "u" with motion toward requires accusative.', rule:'Preposition "u" + motion = accusative.' },
+    { sentence:'Volim svoju _____.', word:'sestra', en:'I love my sister.', answer:'sestru', case:'Accusative', explanation:'The verb "voleti" (to love) takes accusative case.', rule:'Verb "voleti" takes accusative.' },
+    { sentence:'Kupujem _____.', word:'auto', en:'I\'m buying a car.', answer:'auto', case:'Accusative', explanation:'The thing being bought is the direct object in accusative.', rule:'Objects of buying/selling are accusative.' },
+    { sentence:'Gledam _____.', word:'film', en:'I\'m watching a movie.', answer:'film', case:'Accusative', explanation:'The verb "gledati" (to watch) takes accusative case.', rule:'Verb "gledati" takes accusative.' },
+    { sentence:'Slušam _____.', word:'muzika', en:'I\'m listening to music.', answer:'muziku', case:'Accusative', explanation:'The verb "slušati" (to listen to) takes accusative case.', rule:'Verb "slušati" takes accusative.' },
+    { sentence:'Kroz _____ prolazim.', word:'park', en:'I\'m passing through the park.', answer:'park', case:'Accusative', explanation:'The preposition "kroz" (through) always requires accusative.', rule:'Preposition "kroz" always takes accusative.' },
+    { sentence:'Za _____ se zanimam.', word:'sport', en:'I\'m interested in sports.', answer:'sport', case:'Accusative', explanation:'The preposition "za" (for) usually requires accusative.', rule:'Preposition "za" usually takes accusative.' },
+
+    // ── INSTRUMENTAL RULES ─────────────────────────────
+    { sentence:'Pišem _____.', word:'olovka', en:'I\'m writing with a pencil.', answer:'olovkom', case:'Instrumental', explanation:'The tool or means used takes instrumental case.', rule:'Instrumental marks the tool/means.' },
+    { sentence:'Idem _____.', word:'autobus', en:'I\'m going by bus.', answer:'autobusom', case:'Instrumental', explanation:'The means of transportation takes instrumental case.', rule:'Instrumental marks means of transport.' },
+    { sentence:'Razgovaram s _____.', word:'prijatelj', en:'I\'m talking with a friend.', answer:'prijateljem', case:'Instrumental', explanation:'The preposition "s/sa" (with) requires instrumental case.', rule:'Preposition "s/sa" takes instrumental.' },
+    { sentence:'On je _____.', word:'učitelj', en:'He is a teacher.', answer:'učitelj', case:'Nominative', explanation:'Predicate nominatives agree with the subject in nominative.', rule:'Predicate nominatives are nominative.' },
+    { sentence:'Između _____ i kuće.', word:'škola', en:'Between school and home.', answer:'škole', case:'Genitive', explanation:'The preposition "između" (between) requires genitive case.', rule:'Preposition "između" takes genitive.' },
+    { sentence:'Nad _____ leti ptica.', word:'drvo', en:'A bird flies over the tree.', answer:'drvetom', case:'Instrumental', explanation:'The preposition "nad" (over/above) with motion requires instrumental.', rule:'Preposition "nad" with motion takes instrumental.' },
+    { sentence:'Pred _____ čekam.', word:'škola', en:'I\'m waiting in front of school.', answer:'školom', case:'Instrumental', explanation:'The preposition "pred" (in front of) requires instrumental.', rule:'Preposition "pred" takes instrumental.' },
+
+    // ── LOCATIVE RULES ─────────────────────────────────
+    { sentence:'Razgovaramo o _____.', word:'film', en:'We\'re talking about the movie.', answer:'filmu', case:'Locative', explanation:'The preposition "o" (about) always requires locative case.', rule:'Preposition "o" always takes locative.' },
+    { sentence:'Mislim o _____.', word:'prijatelj', en:'I\'m thinking about my friend.', answer:'prijatelju', case:'Locative', explanation:'The preposition "o" (about) in thoughts requires locative.', rule:'Preposition "o" with thinking takes locative.' },
+    { sentence:'U _____ se uči.', word:'škola', en:'One studies at school.', answer:'školi', case:'Locative', explanation:'The preposition "u" with static location requires locative.', rule:'Preposition "u" + location = locative.' },
+    { sentence:'Na _____ leži knjiga.', word:'sto', en:'A book lies on the table.', answer:'stolu', case:'Locative', explanation:'The preposition "na" with static location requires locative.', rule:'Preposition "na" + location = locative.' },
+    { sentence:'Pri _____ sedim.', word:'prozor', en:'I sit by the window.', answer:'prozoru', case:'Locative', explanation:'The preposition "pri" (by/near) requires locative case.', rule:'Preposition "pri" takes locative.' },
+    { sentence:'Po _____ hodamo.', word:'park', en:'We walk through the park.', answer:'parku', case:'Locative', explanation:'The preposition "po" (through/around) requires locative case.', rule:'Preposition "po" takes locative.' },
+
+    // ── VOCATIVE RULES ─────────────────────────────────
+    { sentence:'Zdravo, _____!', word:'Ana', en:'Hello, Ana!', answer:'Ana', case:'Vocative', explanation:'When directly addressing someone, use vocative case.', rule:'Vocative is used for direct address.' },
+    { sentence:'Dobro jutro, _____!', word:'učitelj', en:'Good morning, teacher!', answer:'učitelju', case:'Vocative', explanation:'When greeting someone directly, use vocative case.', rule:'Vocative is used when calling/greeting someone.' },
+    { sentence:'Hvala ti, _____!', word:'mama', en:'Thank you, mom!', answer:'mamo', case:'Vocative', explanation:'When thanking someone directly, use vocative case.', rule:'Vocative is used in direct address/thanks.' },
+
+    // ── MIXED PRACTICE ─────────────────────────────────
+    { sentence:'Student čita _____.', word:'lekcija', en:'The student reads the lesson.', answer:'lekciju', case:'Accusative', explanation:'The lesson is what is being read — direct object in accusative.', rule:'Direct objects take accusative.' },
+    { sentence:'_____ čita lekciju.', word:'student', en:'The student reads the lesson.', answer:'Student', case:'Nominative', explanation:'The student is who performs the reading — subject in nominative.', rule:'Subjects take nominative.' },
+    { sentence:'Lekciju čita _____.', word:'student', en:'The lesson is read by the student.', answer:'student', case:'Nominative', explanation:'Even with different word order, the subject is still nominative.', rule:'Subjects are nominative regardless of word order.' },
+    { sentence:'Iz _____ dolazi voda.', word:'bunар', en:'Water comes from the well.', answer:'bunara', case:'Genitive', explanation:'The source/origin is expressed with "iz" + genitive.', rule:'"Iz" marks source/origin with genitive.' },
+    { sentence:'Preko _____ prelazim.', word:'most', en:'I cross over the bridge.', answer:'mosta', case:'Genitive', explanation:'The preposition "preko" (over/across) requires genitive.', rule:'Preposition "preko" takes genitive.' },
+  ];
+
+  // Case Rules state
+  let caseRulesQueue    = [];
+  let caseRulesQIdx     = 0;
+  let caseRulesAnswered = false;
+  let caseRulesScore    = { correct: 0, total: 0 };
+
+  // ═══════════════════════════════════════════════════
+  //  POSSESSIVES — practice possessive pronouns
+  // ═══════════════════════════════════════════════════
+
+  const POSSESSIVES_ITEMS = [
+    // ── MOJ/MOJA/MOJE (MY) ─────────────────────────────
+    { sentence:'_____ kuća je velika.', possessor:'ja', noun:'kuća', gender:'feminine', case:'Nominative', en:'My house is big.', answer:'Moja', explanation:'The possessed noun "kuća" (house) is feminine nominative, so the possessive agrees: moja.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ brat radi u gradu.', possessor:'ja', noun:'brat', gender:'masculine', case:'Nominative', en:'My brother works in the city.', answer:'Moj', explanation:'The possessed noun "brat" (brother) is masculine nominative, so the possessive agrees: moj.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ dete spava.', possessor:'ja', noun:'dete', gender:'neuter', case:'Nominative', en:'My child is sleeping.', answer:'Moje', explanation:'The possessed noun "dete" (child) is neuter nominative, so the possessive agrees: moje.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Vidim _____ prijatelja.', possessor:'ja', noun:'prijatelj', gender:'masculine', case:'Accusative', en:'I see my friend.', answer:'mog', explanation:'The possessed noun "prijatelja" is masculine accusative animate, so the possessive agrees: mog.', rule:'Masculine animate nouns in accusative take genitive form, possessive follows: mog.' },
+    { sentence:'Idem u _____ školu.', possessor:'ja', noun:'škola', gender:'feminine', case:'Accusative', en:'I go to my school.', answer:'moju', explanation:'The possessed noun "školu" is feminine accusative, so the possessive agrees: moju.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Razgovaram s _____ majkom.', possessor:'ja', noun:'majka', gender:'feminine', case:'Instrumental', en:'I\'m talking with my mother.', answer:'mojom', explanation:'The possessed noun "majkom" is feminine instrumental, so the possessive agrees: mojom.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Pišem _____ sestri.', possessor:'ja', noun:'sestra', gender:'feminine', case:'Dative', en:'I\'m writing to my sister.', answer:'mojoj', explanation:'The possessed noun "sestri" is feminine dative, so the possessive agrees: mojoj.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Mislim o _____ buduconosti.', possessor:'ja', noun:'budućnost', gender:'feminine', case:'Locative', en:'I think about my future.', answer:'mojoj', explanation:'The possessed noun "budućnosti" is feminine locative, so the possessive agrees: mojoj.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+
+    // ── TVOJ/TVOJA/TVOJE (YOUR SINGULAR) ──────────────
+    { sentence:'_____ auto je crven.', possessor:'ti', noun:'auto', gender:'masculine', case:'Nominative', en:'Your car is red.', answer:'Tvoj', explanation:'The possessed noun "auto" is masculine nominative, so the possessive agrees: tvoj.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ sestra je lepa.', possessor:'ti', noun:'sestra', gender:'feminine', case:'Nominative', en:'Your sister is beautiful.', answer:'Tvoja', explanation:'The possessed noun "sestra" is feminine nominative, so the possessive agrees: tvoja.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ ime je lepo.', possessor:'ti', noun:'ime', gender:'neuter', case:'Nominative', en:'Your name is beautiful.', answer:'Tvoje', explanation:'The possessed noun "ime" is neuter nominative, so the possessive agrees: tvoje.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Čitam _____ pismo.', possessor:'ti', noun:'pismo', gender:'neuter', case:'Accusative', en:'I\'m reading your letter.', answer:'tvoje', explanation:'The possessed noun "pismo" is neuter accusative (same as nominative), so: tvoje.', rule:'Neuter accusative is the same as nominative for possessives.' },
+    { sentence:'Dolazim od _____ druga.', possessor:'ti', noun:'drug', gender:'masculine', case:'Genitive', en:'I\'m coming from your friend.', answer:'tvog', explanation:'The possessed noun "druga" is masculine genitive, so the possessive agrees: tvog.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+
+    // ── NJEGOV/NJEGOVA/NJEGOVO (HIS) ───────────────────
+    { sentence:'_____ otac je doktor.', possessor:'on', noun:'otac', gender:'masculine', case:'Nominative', en:'His father is a doctor.', answer:'Njegov', explanation:'The possessed noun "otac" is masculine nominative, so the possessive agrees: njegov.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ mama kuva ručak.', possessor:'on', noun:'mama', gender:'feminine', case:'Nominative', en:'His mom cooks lunch.', answer:'Njegova', explanation:'The possessed noun "mama" is feminine nominative, so the possessive agrees: njegova.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ dete igra napolju.', possessor:'on', noun:'dete', gender:'neuter', case:'Nominative', en:'His child plays outside.', answer:'Njegovo', explanation:'The possessed noun "dete" is neuter nominative, so the possessive agrees: njegovo.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Slušam _____ savete.', possessor:'on', noun:'savet', gender:'masculine', case:'Accusative', en:'I listen to his advice.', answer:'njegove', explanation:'The possessed noun "savete" is masculine plural accusative, so: njegove.', rule:'Possessives agree in number too — plural possessed objects take plural possessive forms.' },
+    { sentence:'Radim s _____ sestrom.', possessor:'on', noun:'sestra', gender:'feminine', case:'Instrumental', en:'I work with his sister.', answer:'njegovom', explanation:'The possessed noun "sestrom" is feminine instrumental, so the possessive agrees: njegovom.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+
+    // ── NJEN/NJENA/NJENO (HER) ────────────────────────
+    { sentence:'_____ muž je inženjer.', possessor:'ona', noun:'muž', gender:'masculine', case:'Nominative', en:'Her husband is an engineer.', answer:'Njen', explanation:'The possessed noun "muž" is masculine nominative, so the possessive agrees: njen.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ prijateljica dolazi.', possessor:'ona', noun:'prijateljica', gender:'feminine', case:'Nominative', en:'Her friend is coming.', answer:'Njena', explanation:'The possessed noun "prijateljica" is feminine nominative, so the possessive agrees: njena.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ dete je pameto.', possessor:'ona', noun:'dete', gender:'neuter', case:'Nominative', en:'Her child is smart.', answer:'Njeno', explanation:'The possessed noun "dete" is neuter nominative, so the possessive agrees: njeno.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Poznajem _____ oca.', possessor:'ona', noun:'otac', gender:'masculine', case:'Accusative', en:'I know her father.', answer:'njenog', explanation:'The possessed noun "oca" is masculine accusative (animate = genitive), so: njenog.', rule:'Masculine animate accusative uses genitive forms for both noun and possessive.' },
+    { sentence:'Govorim _____ majci.', possessor:'ona', noun:'majka', gender:'feminine', case:'Dative', en:'I speak to her mother.', answer:'njenoj', explanation:'The possessed noun "majci" is feminine dative, so the possessive agrees: njenoj.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+
+    // ── NAŠ/NAŠA/NAŠE (OUR) ────────────────────────────
+    { sentence:'_____ pas je veliki.', possessor:'mi', noun:'pas', gender:'masculine', case:'Nominative', en:'Our dog is big.', answer:'Naš', explanation:'The possessed noun "pas" is masculine nominative, so the possessive agrees: naš.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ škola je nova.', possessor:'mi', noun:'škola', gender:'feminine', case:'Nominative', en:'Our school is new.', answer:'Naša', explanation:'The possessed noun "škola" is feminine nominative, so the possessive agrees: naša.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ vreme je isteklo.', possessor:'mi', noun:'vreme', gender:'neuter', case:'Nominative', en:'Our time has run out.', answer:'Naše', explanation:'The possessed noun "vreme" is neuter nominative, so the possessive agrees: naše.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Čekamo _____ goste.', possessor:'mi', noun:'gost', gender:'masculine', case:'Accusative', en:'We\'re waiting for our guests.', answer:'naše', explanation:'The possessed noun "goste" is masculine plural accusative, so: naše.', rule:'Possessives agree in number too — plural possessed objects take plural possessive forms.' },
+    { sentence:'Ponosni smo na _____ decu.', possessor:'mi', noun:'deca', gender:'plural', case:'Accusative', en:'We\'re proud of our children.', answer:'našu', explanation:'The possessed noun "decu" is plural accusative, so the possessive agrees: našu.', rule:'Deca (children) is a special plural noun that takes feminine singular agreement.' },
+
+    // ── VAŠ/VAŠA/VAŠE (YOUR PLURAL) ───────────────────
+    { sentence:'_____ profesor je strpljiv.', possessor:'vi', noun:'profesor', gender:'masculine', case:'Nominative', en:'Your professor is patient.', answer:'Vaš', explanation:'The possessed noun "profesor" is masculine nominative, so the possessive agrees: vaš.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ biblioteka je zatvorena.', possessor:'vi', noun:'biblioteka', gender:'feminine', case:'Nominative', en:'Your library is closed.', answer:'Vaša', explanation:'The possessed noun "biblioteka" is feminine nominative, so the possessive agrees: vaša.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ pitanje je zanimljivo.', possessor:'vi', noun:'pitanje', gender:'neuter', case:'Nominative', en:'Your question is interesting.', answer:'Vaše', explanation:'The possessed noun "pitanje" is neuter nominative, so the possessive agrees: vaše.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Bez _____ pomoći ne mogu.', possessor:'vi', noun:'pomoć', gender:'feminine', case:'Genitive', en:'I can\'t do it without your help.', answer:'vaše', explanation:'The possessed noun "pomoći" is feminine genitive, so the possessive agrees: vaše.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+
+    // ── NJIHOV/NJIHOVA/NJIHOVO (THEIR) ────────────────
+    { sentence:'_____ sin studira pravo.', possessor:'oni', noun:'sin', gender:'masculine', case:'Nominative', en:'Their son studies law.', answer:'Njihov', explanation:'The possessed noun "sin" is masculine nominative, so the possessive agrees: njihov.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ kući treba popravka.', possessor:'oni', noun:'kuća', gender:'feminine', case:'Dative', en:'Their house needs repair.', answer:'Njihovoj', explanation:'The possessed noun "kući" is feminine dative, so the possessive agrees: njihovoj.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'_____ mišljenje je važno.', possessor:'oni', noun:'mišljenje', gender:'neuter', case:'Nominative', en:'Their opinion is important.', answer:'Njihovo', explanation:'The possessed noun "mišljenje" is neuter nominative, so the possessive agrees: njihovo.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+    { sentence:'Slažem se s _____ odlukom.', possessor:'oni', noun:'odluka', gender:'feminine', case:'Instrumental', en:'I agree with their decision.', answer:'njihovom', explanation:'The possessed noun "odlukom" is feminine instrumental, so the possessive agrees: njihovom.', rule:'Possessives agree with the possessed object in gender, number, and case.' },
+
+    // ── MIXED CHALLENGING EXAMPLES ────────────────────
+    { sentence:'Idem kod _____ bake.', possessor:'ja', noun:'baka', gender:'feminine', case:'Genitive', en:'I\'m going to my grandmother\'s.', answer:'moje', explanation:'The possessed noun "bake" is feminine genitive (kod + genitive), so: moje.', rule:'The preposition "kod" requires genitive, possessive agrees with the genitive form.' },
+    { sentence:'Razgovaram o _____ planovima.', possessor:'ti', noun:'plan', gender:'masculine', case:'Locative', en:'I\'m talking about your plans.', answer:'tvojim', explanation:'The possessed noun "planovima" is masculine plural locative, so: tvojim.', rule:'Plural possessives: masculine/neuter plural locative uses -im ending.' },
+    { sentence:'Dolazim iz _____ sela.', possessor:'on', noun:'selo', gender:'neuter', case:'Genitive', en:'I\'m coming from his village.', answer:'njegovog', explanation:'The possessed noun "sela" is neuter genitive (iz + genitive), so: njegovog.', rule:'The preposition "iz" requires genitive, possessive agrees with the genitive form.' },
+    { sentence:'Pričam s _____ prijateljima.', possessor:'ona', noun:'prijatelj', gender:'masculine', case:'Instrumental', en:'I\'m talking with her friends.', answer:'njenim', explanation:'The possessed noun "prijateljima" is masculine plural instrumental, so: njenim.', rule:'Plural possessives: masculine/neuter plural instrumental uses -im ending.' },
+    { sentence:'Idemo u _____ kuće.', possessor:'oni', noun:'kuća', gender:'feminine', case:'Accusative', en:'We\'re going to their houses.', answer:'njihove', explanation:'The possessed noun "kuće" is feminine plural accusative, so: njihove.', rule:'Plural possessives: feminine plural accusative uses -e ending.' },
+  ];
+
+  // Possessives state
+  let possessivesQueue    = [];
+  let possessivesQIdx     = 0;
+  let possessivesAnswered = false;
+  let possessivesScore    = { correct: 0, total: 0 };
 
   // Cases state
   let casesQueue    = [];
@@ -9523,7 +10125,7 @@
       </div>
       <div class="cases-sentence">${sentenceHtml}</div>
       <div class="cases-options">
-        ${CASES_LABELS.map(c => `<button class="cases-option" onclick="casesAnswer('${c}')">${c}</button>`).join('')}
+        ${shuffleArr(CASES_LABELS).map(c => `<button class="cases-option" onclick="casesAnswer('${c}')">${c}</button>`).join('')}
       </div>
       <div class="cases-explanation" id="cases-explanation"></div>
       <div class="cases-next-row">
@@ -9560,6 +10162,216 @@
       casesQIdx  = 0;
     }
     renderCasesItem();
+  }
+
+
+  // ═══════════════════════════════════════════════════
+  //  CASE RULES — practice when to use which case
+  // ═══════════════════════════════════════════════════
+
+  function renderCaseRulesView() {
+    if (caseRulesQueue.length === 0) {
+      caseRulesQueue = shuffleArr([...Array(CASE_RULES_ITEMS.length).keys()]);
+      caseRulesQIdx  = 0;
+    }
+    renderCaseRulesItem();
+  }
+
+  function renderCaseRulesItem() {
+    caseRulesAnswered = false;
+    const item = CASE_RULES_ITEMS[caseRulesQueue[caseRulesQIdx]];
+    const el   = document.getElementById('caserules-view');
+
+    // Get all possible case forms for this word
+    const baseWord = item.word;
+    const correctAnswer = item.answer;
+
+    // Generate options by finding a noun from DEFAULT_GRAMMAR_NOUNS that matches
+    const matchingNoun = DEFAULT_GRAMMAR_NOUNS.find(n =>
+      n.forms.nominativ === baseWord ||
+      Object.values(n.forms).includes(baseWord) ||
+      n.english === baseWord
+    );
+
+    let options = [];
+    if (matchingNoun) {
+      // Use all case forms of the matched noun
+      options = Object.values(matchingNoun.forms).filter(form => form && form.trim());
+      // Make sure correct answer is included
+      if (!options.includes(correctAnswer)) {
+        options.push(correctAnswer);
+      }
+    } else {
+      // Fallback: create some basic options based on the word
+      const base = baseWord.endsWith('a') ? baseWord.slice(0, -1) : baseWord;
+      options = [
+        baseWord,                    // nominative
+        base + 'e',                  // genitive/dative fem
+        base + 'a',                  // genitive masc
+        base + 'u',                  // accusative fem / dative/loc masc
+        base + 'om',                 // instrumental
+        base + 'i',                  // locative fem
+        correctAnswer                // ensure correct is included
+      ].filter((v, i, arr) => arr.indexOf(v) === i); // remove duplicates
+    }
+
+    // Shuffle options and ensure we have the correct answer
+    const shuffledOptions = shuffleArr(options).slice(0, 6);
+    if (!shuffledOptions.includes(correctAnswer)) {
+      shuffledOptions[Math.floor(Math.random() * shuffledOptions.length)] = correctAnswer;
+    }
+
+    el.innerHTML = `
+      <div class="caserules-header">
+        <span class="caserules-score" id="caserules-score">Score: ${caseRulesScore.correct} / ${caseRulesScore.total}</span>
+        <span class="caserules-counter">${caseRulesQIdx + 1} / ${caseRulesQueue.length}</span>
+      </div>
+      <div class="caserules-sentence">${item.sentence.replace('_____', '<span class="caserules-blank">_____</span>')}</div>
+      <div class="caserules-word-given">Given word: <strong>${baseWord}</strong></div>
+      <div class="caserules-options">
+        ${shuffledOptions.map(option => `<button class="caserules-option" onclick="caseRulesAnswer('${option}')">${option}</button>`).join('')}
+      </div>
+      <div class="caserules-explanation" id="caserules-explanation"></div>
+      <div class="caserules-next-row">
+        <button class="btn btn-primary" id="caserules-next" style="display:none" onclick="caseRulesNext()">Next →</button>
+      </div>`;
+  }
+
+  function caseRulesAnswer(choice) {
+    if (caseRulesAnswered) return;
+    caseRulesAnswered = true;
+    const item    = CASE_RULES_ITEMS[caseRulesQueue[caseRulesQIdx]];
+    const correct = choice === item.answer;
+    caseRulesScore.total++;
+    if (correct) caseRulesScore.correct++;
+
+    document.getElementById('caserules-score').textContent = `Score: ${caseRulesScore.correct} / ${caseRulesScore.total}`;
+
+    document.querySelectorAll('.caserules-option').forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === item.answer) btn.classList.add(correct ? 'correct' : 'reveal');
+      if (btn.textContent === choice && !correct) btn.classList.add('wrong');
+    });
+
+    const expEl = document.getElementById('caserules-explanation');
+    expEl.innerHTML = `<div class="caserules-translation">"${item.en}"</div>${item.explanation}<div class="caserules-rule"><strong>Rule:</strong> ${item.rule} <strong>Case:</strong> ${item.case}</div>`;
+    expEl.classList.add('show');
+    document.getElementById('caserules-next').style.display = 'inline-block';
+  }
+
+  function caseRulesNext() {
+    caseRulesQIdx++;
+    if (caseRulesQIdx >= caseRulesQueue.length) {
+      caseRulesQueue = shuffleArr([...Array(CASE_RULES_ITEMS.length).keys()]);
+      caseRulesQIdx  = 0;
+    }
+    renderCaseRulesItem();
+  }
+
+
+  // ═══════════════════════════════════════════════════
+  //  POSSESSIVES — practice possessive pronouns
+  // ═══════════════════════════════════════════════════
+
+  function renderPossessivesView() {
+    if (possessivesQueue.length === 0) {
+      possessivesQueue = shuffleArr([...Array(POSSESSIVES_ITEMS.length).keys()]);
+      possessivesQIdx  = 0;
+    }
+    renderPossessivesItem();
+  }
+
+  function renderPossessivesItem() {
+    possessivesAnswered = false;
+    const item = POSSESSIVES_ITEMS[possessivesQueue[possessivesQIdx]];
+    const el   = document.getElementById('possessives-view');
+
+    // Generate possessive options based on the possessor
+    const correctAnswer = item.answer;
+    let options = [];
+
+    // Create comprehensive option set based on possessor type
+    if (item.possessor === 'ja') {
+      options = ['moj', 'moja', 'moje', 'mog', 'mojeg', 'mojoj', 'moju', 'mojom', 'mojem', 'moji', 'mojih', 'mojim', 'moje'];
+    } else if (item.possessor === 'ti') {
+      options = ['tvoj', 'tvoja', 'tvoje', 'tvog', 'tvojeg', 'tvojoj', 'tvoju', 'tvojom', 'tvojem', 'tvoji', 'tvojih', 'tvojim', 'tvoje'];
+    } else if (item.possessor === 'on') {
+      options = ['njegov', 'njegova', 'njegovo', 'njegovog', 'njegovoj', 'njegovu', 'njegovom', 'njegovi', 'njegovih', 'njegovim', 'njegove'];
+    } else if (item.possessor === 'ona') {
+      options = ['njen', 'njena', 'njeno', 'njenog', 'njenoj', 'njenu', 'njenom', 'njeni', 'njenih', 'njenim', 'njene'];
+    } else if (item.possessor === 'mi') {
+      options = ['naš', 'naša', 'naše', 'našeg', 'našoj', 'našu', 'našom', 'našem', 'naši', 'naših', 'našim', 'naše'];
+    } else if (item.possessor === 'vi') {
+      options = ['vaš', 'vaša', 'vaše', 'vašeg', 'vašoj', 'vašu', 'vašom', 'vašem', 'vaši', 'vaših', 'vašim', 'vaše'];
+    } else if (item.possessor === 'oni') {
+      options = ['njihov', 'njihova', 'njihovo', 'njihovog', 'njihovoj', 'njihovu', 'njihovom', 'njihovi', 'njihovih', 'njihovim', 'njihove'];
+    }
+
+    // Remove duplicates and shuffle, ensuring correct answer is included
+    options = [...new Set(options)];
+    if (!options.includes(correctAnswer.toLowerCase())) {
+      options.push(correctAnswer.toLowerCase());
+    }
+
+    // Shuffle and take 6 options
+    const shuffledOptions = shuffleArr(options).slice(0, 6);
+    if (!shuffledOptions.includes(correctAnswer.toLowerCase())) {
+      shuffledOptions[Math.floor(Math.random() * shuffledOptions.length)] = correctAnswer.toLowerCase();
+    }
+
+    // Capitalize first letter for display
+    const displayOptions = shuffledOptions.map(opt => opt.charAt(0).toUpperCase() + opt.slice(1));
+
+    const possessorNames = {
+      'ja': 'I/my', 'ti': 'you/your (sg)', 'on': 'he/his', 'ona': 'she/her',
+      'mi': 'we/our', 'vi': 'you/your (pl)', 'oni': 'they/their'
+    };
+
+    el.innerHTML = `
+      <div class="possessives-header">
+        <span class="possessives-score" id="possessives-score">Score: ${possessivesScore.correct} / ${possessivesScore.total}</span>
+        <span class="possessives-counter">${possessivesQIdx + 1} / ${possessivesQueue.length}</span>
+      </div>
+      <div class="possessives-sentence">${item.sentence.replace('_____', '<span class="possessives-blank">_____</span>')}</div>
+      <div class="possessives-possessor">Possessor: <strong>${possessorNames[item.possessor]}</strong> | Object: <strong>${item.noun}</strong> (${item.gender} ${item.case.toLowerCase()})</div>
+      <div class="possessives-options">
+        ${displayOptions.map(option => `<button class="possessives-option" onclick="possessivesAnswer('${option}')">${option}</button>`).join('')}
+      </div>
+      <div class="possessives-explanation" id="possessives-explanation"></div>
+      <div class="possessives-next-row">
+        <button class="btn btn-primary" id="possessives-next" style="display:none" onclick="possessivesNext()">Next →</button>
+      </div>`;
+  }
+
+  function possessivesAnswer(choice) {
+    if (possessivesAnswered) return;
+    possessivesAnswered = true;
+    const item    = POSSESSIVES_ITEMS[possessivesQueue[possessivesQIdx]];
+    const correct = choice.toLowerCase() === item.answer.toLowerCase();
+    possessivesScore.total++;
+    if (correct) possessivesScore.correct++;
+
+    document.getElementById('possessives-score').textContent = `Score: ${possessivesScore.correct} / ${possessivesScore.total}`;
+
+    document.querySelectorAll('.possessives-option').forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent.toLowerCase() === item.answer.toLowerCase()) btn.classList.add(correct ? 'correct' : 'reveal');
+      if (btn.textContent === choice && !correct) btn.classList.add('wrong');
+    });
+
+    const expEl = document.getElementById('possessives-explanation');
+    expEl.innerHTML = `<div class="possessives-translation">"${item.en}"</div>${item.explanation}<div class="possessives-rule"><strong>Rule:</strong> ${item.rule}</div>`;
+    expEl.classList.add('show');
+    document.getElementById('possessives-next').style.display = 'inline-block';
+  }
+
+  function possessivesNext() {
+    possessivesQIdx++;
+    if (possessivesQIdx >= possessivesQueue.length) {
+      possessivesQueue = shuffleArr([...Array(POSSESSIVES_ITEMS.length).keys()]);
+      possessivesQIdx  = 0;
+    }
+    renderPossessivesItem();
   }
 
 
