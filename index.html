@@ -1133,6 +1133,39 @@
     .possessives-rule strong { color:#9abaca; }
     .possessives-next-row { display:flex; justify-content:flex-end; }
 
+    /* ── SONGS VIEW */
+    #songs-view { flex-direction:column; gap:20px; padding:16px; }
+    .songs-selector { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+    .song-tab { padding:10px 16px; border:2px solid #3a3a5a; background:#1a1a2a; color:#cce; border-radius:8px; cursor:pointer; transition:all 0.2s; }
+    .song-tab:hover { border-color:#7070cc; background:#2a2a4a; }
+    .song-tab.active { border-color:#4a8acc; background:#16213e; color:#e0e0ff; }
+
+    .song-content { background:#16213e; border:1px solid #2a2a4a; border-radius:12px; padding:20px; }
+    .song-title { font-size:1.4rem; color:#e0e0ff; margin-bottom:15px; text-align:center; }
+    .song-subtitle { font-size:0.9rem; color:#aac; text-align:center; margin-bottom:20px; font-style:italic; }
+
+    .song-lyrics { background:#0f1419; border:1px solid #2a3a4a; border-radius:8px; padding:16px; margin:15px 0; }
+    .song-line { margin:8px 0; line-height:1.6; }
+    .song-line-sr { color:#e0e0ff; font-size:1.1rem; }
+    .song-line-en { color:#aac; font-size:0.9rem; font-style:italic; margin-left:20px; }
+
+    .vocab-section { margin-top:25px; }
+    .vocab-header { font-size:1.1rem; color:#e0e0ff; margin-bottom:15px; border-bottom:1px solid #2a3a4a; padding-bottom:8px; }
+    .vocab-quiz { background:#0f1419; border:1px solid #2a3a4a; border-radius:8px; padding:16px; }
+    .vocab-question { font-size:1rem; color:#e0e0ff; margin-bottom:12px; }
+    .vocab-options { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:15px; }
+    .vocab-option { padding:8px 14px; border:2px solid #3a3a5a; background:none; color:#cce; border-radius:6px; cursor:pointer; font-size:0.85rem; transition:all 0.15s; }
+    .vocab-option:hover:not(:disabled) { border-color:#7070cc; background:#2a2a4a; }
+    .vocab-option.correct { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .vocab-option.wrong   { border-color:#e94560; background:#3a1a2a; color:#ff8080; }
+    .vocab-option:disabled{ cursor:default; opacity:0.7; }
+    .vocab-feedback { font-size:0.9rem; color:#aac; margin-top:10px; display:none; }
+    .vocab-feedback.show { display:block; }
+    .vocab-score { font-size:0.85rem; color:#779; text-align:center; margin-bottom:15px; }
+    .vocab-controls { text-align:center; margin-top:15px; }
+    .vocab-next-btn { background:#4a8acc; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:0.9rem; }
+    .vocab-next-btn:hover { background:#5a9acc; }
+
     /* ── ANTONYMS VIEW */
     #antonyms-view { flex-direction:column; gap:14px; padding:16px; }
     .antn-header   { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
@@ -1175,6 +1208,7 @@
     <button id="nav-cases"      onclick="showView('cases')">Cases</button>
     <button id="nav-caserules"  onclick="showView('caserules')">Case Rules</button>
     <button id="nav-possessives" onclick="showView('possessives')">Possessives</button>
+    <button id="nav-songs"      onclick="showView('songs')">Songs</button>
     <button id="nav-antonyms"   onclick="showView('antonyms')">Antonyms</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
@@ -1685,6 +1719,9 @@
 
   <!-- ═══════════════ POSSESSIVES VIEW ═══════════════ -->
   <div id="possessives-view" style="display:none"><!-- rendered by JS --></div><!-- /possessives-view -->
+
+  <!-- ═══════════════ SONGS VIEW ═══════════════ -->
+  <div id="songs-view" style="display:none"><!-- rendered by JS --></div><!-- /songs-view -->
 
   <!-- ═══════════════ ANTONYMS VIEW ═══════════════ -->
   <div id="antonyms-view" style="display:none"><!-- rendered by JS --></div><!-- /antonyms-view -->
@@ -4356,12 +4393,12 @@
   //  GROUPS STORAGE
   // ═══════════════════════════════════════════════════
   const GROUPS_KEY  = 'serbian_groups';
-  const GROUPS_VER  = '7';
+  const GROUPS_VER  = '8';
 
   const DEFAULT_GROUPS = [
     'Greetings','Basics','Food & Drink','Places','Numbers','Animals',
     'People','Time','Colors','Body','Home','Verbs','Adjectives','Prepositions',
-    'Transitions','Linkers',
+    'Transitions','Linkers','Sports',
     'Phrases','Verbs II','Verbs III','Transportation','Clothing','Nature & Weather','School & Work',
     'Baby','Not Nice','Kitchen & Dining',
     'Unit 1','Unit 2','Unit 3','Unit 4','Unit 5','Unit 6','Unit 7',
@@ -4711,6 +4748,128 @@
     { serbian:'siva',          english:'gray',                      category:'Colors' },
     { serbian:'smeđa',         english:'brown',                     category:'Colors' },
     { serbian:'roze',          english:'pink',                      category:'Colors' },
+    // ── TECHNOLOGY & MODERN LIFE ─────────────────────────────────────────
+    { serbian:'računar',       english:'computer',                  category:'Basics' },
+    { serbian:'telefon',       english:'phone / telephone',        category:'Basics' },
+    { serbian:'mobilni',       english:'mobile phone / cell phone', category:'Basics' },
+    { serbian:'internet',      english:'internet',                  category:'Basics' },
+    { serbian:'veb-sajt',      english:'website',                   category:'Basics' },
+    { serbian:'aplikacija',    english:'app / application',        category:'Basics' },
+    { serbian:'mejl',          english:'email',                     category:'Basics' },
+    { serbian:'poruka',        english:'message / text',            category:'Basics' },
+    { serbian:'lozinka',       english:'password',                  category:'Basics' },
+    { serbian:'korisničko ime', english:'username',                 category:'Basics' },
+    { serbian:'WiFi',          english:'WiFi',                      category:'Basics' },
+    { serbian:'Bluetooth',     english:'Bluetooth',                 category:'Basics' },
+    { serbian:'društvene mreže', english:'social media',           category:'Basics' },
+    { serbian:'Facebook',      english:'Facebook',                  category:'Basics' },
+    { serbian:'Instagram',     english:'Instagram',                 category:'Basics' },
+    { serbian:'YouTube',       english:'YouTube',                   category:'Basics' },
+    { serbian:'Google',        english:'Google',                    category:'Basics' },
+    { serbian:'pretraživanje', english:'search / searching',       category:'Basics' },
+    { serbian:'preuzimanje',   english:'download',                  category:'Basics' },
+    { serbian:'kačenje',       english:'upload',                    category:'Basics' },
+    { serbian:'fajl',          english:'file',                      category:'Basics' },
+    { serbian:'folder',        english:'folder',                    category:'Basics' },
+    { serbian:'fotografija',   english:'photo / picture',          category:'Basics' },
+    { serbian:'video',         english:'video',                     category:'Basics' },
+    { serbian:'musik',         english:'music (digital)',          category:'Basics' },
+    { serbian:'igrica',        english:'video game',                category:'Basics' },
+    { serbian:'baterija',      english:'battery',                   category:'Basics' },
+    { serbian:'punjač',        english:'charger',                   category:'Basics' },
+    { serbian:'ekran',         english:'screen',                    category:'Basics' },
+    { serbian:'miš',           english:'mouse (computer)',          category:'Basics' },
+    { serbian:'tastatura',     english:'keyboard',                  category:'Basics' },
+    { serbian:'zvučnik',       english:'speaker',                   category:'Basics' },
+    { serbian:'slušalice',     english:'headphones / earphones',   category:'Basics' },
+    { serbian:'kamera',        english:'camera',                    category:'Basics' },
+    { serbian:'printer',       english:'printer',                   category:'Basics' },
+    { serbian:'skener',        english:'scanner',                   category:'Basics' },
+    // ── EMOTIONS & FEELINGS (ADJECTIVES) ─────────────────────────────────
+    { serbian:'srećan',        english:'happy',                     category:'Adjectives' },
+    { serbian:'tužan',         english:'sad',                       category:'Adjectives' },
+    { serbian:'ljut',          english:'angry / mad',               category:'Adjectives' },
+    { serbian:'uzbuđen',       english:'excited',                   category:'Adjectives' },
+    { serbian:'nervozan',      english:'nervous',                   category:'Adjectives' },
+    { serbian:'zabrinut',      english:'worried / concerned',       category:'Adjectives' },
+    { serbian:'opušten',       english:'relaxed',                   category:'Adjectives' },
+    { serbian:'umoran',        english:'tired',                     category:'Adjectives' },
+    { serbian:'energičan',     english:'energetic',                 category:'Adjectives' },
+    { serbian:'stresan',       english:'stressed',                  category:'Adjectives' },
+    { serbian:'frustriran',    english:'frustrated',                category:'Adjectives' },
+    { serbian:'iznenađen',     english:'surprised',                 category:'Adjectives' },
+    { serbian:'šokiran',       english:'shocked',                   category:'Adjectives' },
+    { serbian:'zbunjen',       english:'confused',                  category:'Adjectives' },
+    { serbian:'samopouzdan',   english:'confident',                 category:'Adjectives' },
+    { serbian:'nesiguran',     english:'insecure / uncertain',     category:'Adjectives' },
+    { serbian:'ponosan',       english:'proud',                     category:'Adjectives' },
+    { serbian:'zahvalan',      english:'grateful / thankful',       category:'Adjectives' },
+    { serbian:'ljubomoran',    english:'jealous',                   category:'Adjectives' },
+    { serbian:'stidljiv',      english:'shy / embarrassed',         category:'Adjectives' },
+    { serbian:'hrabar',        english:'brave / courageous',        category:'Adjectives' },
+    { serbian:'plašljiv',      english:'scared / afraid',           category:'Adjectives' },
+    { serbian:'optimistifičan', english:'optimistic',               category:'Adjectives' },
+    { serbian:'pesimistifičan', english:'pessimistic',              category:'Adjectives' },
+    { serbian:'motivisan',     english:'motivated',                 category:'Adjectives' },
+    { serbian:'demotivisan',   english:'unmotivated',               category:'Adjectives' },
+    { serbian:'zadovoljan',    english:'satisfied / content',       category:'Adjectives' },
+    { serbian:'nezadovoljan',  english:'dissatisfied / unhappy',   category:'Adjectives' },
+    { serbian:'mirno',         english:'calm / peaceful',           category:'Adjectives' },
+    { serbian:'anksiozno',     english:'anxious',                   category:'Adjectives' },
+    { serbian:'depresivno',    english:'depressed',                 category:'Adjectives' },
+    { serbian:'usamljen',      english:'lonely',                    category:'Adjectives' },
+    { serbian:'srećno',        english:'cheerful / joyful',         category:'Adjectives' },
+    { serbian:'razočaran',     english:'disappointed',              category:'Adjectives' },
+    { serbian:'nadahnut',      english:'inspired',                  category:'Adjectives' },
+    // ── HEALTH & MEDICAL (BODY RELATED) ──────────────────────────────────
+    { serbian:'zdravlje',      english:'health',                    category:'Body' },
+    { serbian:'bolest',        english:'illness / disease',        category:'Body' },
+    { serbian:'doktor',        english:'doctor',                    category:'Body' },
+    { serbian:'lekar',         english:'doctor / physician',       category:'Body' },
+    { serbian:'medicinska sestra', english:'nurse',                category:'Body' },
+    { serbian:'bolnica',       english:'hospital',                  category:'Body' },
+    { serbian:'klinika',       english:'clinic',                    category:'Body' },
+    { serbian:'apoteka',       english:'pharmacy',                  category:'Body' },
+    { serbian:'lek',           english:'medicine / medication',    category:'Body' },
+    { serbian:'recept',        english:'prescription',              category:'Body' },
+    { serbian:'pregled',       english:'medical examination',      category:'Body' },
+    { serbian:'operacija',     english:'surgery / operation',      category:'Body' },
+    { serbian:'temperatura',  english:'fever / temperature',      category:'Body' },
+    { serbian:'bol',           english:'pain',                      category:'Body' },
+    { serbian:'glavobolja',    english:'headache',                  category:'Body' },
+    { serbian:'zubobolja',     english:'toothache',                 category:'Body' },
+    { serbian:'stomakobobolja', english:'stomach ache',            category:'Body' },
+    { serbian:'kašalj',        english:'cough',                     category:'Body' },
+    { serbian:'kijanje',       english:'sneezing',                  category:'Body' },
+    { serbian:'prehlada',      english:'cold (illness)',           category:'Body' },
+    { serbian:'grip',          english:'flu',                       category:'Body' },
+    { serbian:'virus',         english:'virus',                     category:'Body' },
+    { serbian:'infekcija',     english:'infection',                 category:'Body' },
+    { serbian:'alergija',      english:'allergy',                   category:'Body' },
+    { serbian:'astma',         english:'asthma',                    category:'Body' },
+    { serbian:'dijabetes',     english:'diabetes',                  category:'Body' },
+    { serbian:'pritisak',      english:'blood pressure',           category:'Body' },
+    { serbian:'puls',          english:'pulse',                     category:'Body' },
+    { serbian:'krv',           english:'blood',                     category:'Body' },
+    { serbian:'povreda',       english:'injury',                    category:'Body' },
+    { serbian:'rana',          english:'wound',                     category:'Body' },
+    { serbian:'modrica',       english:'bruise',                    category:'Body' },
+    { serbian:'opekotina',     english:'burn',                      category:'Body' },
+    { serbian:'prelom',        english:'fracture / broken bone',   category:'Body' },
+    { serbian:'gips',          english:'cast (medical)',           category:'Body' },
+    { serbian:'zavoj',         english:'bandage',                   category:'Body' },
+    { serbian:'flaster',       english:'band-aid',                  category:'Body' },
+    { serbian:'injekcija',     english:'injection / shot',         category:'Body' },
+    { serbian:'vakcinacija',   english:'vaccination',               category:'Body' },
+    { serbian:'dijagnoza',     english:'diagnosis',                 category:'Body' },
+    { serbian:'terapija',      english:'therapy / treatment',      category:'Body' },
+    { serbian:'rehabilitacija', english:'rehabilitation',          category:'Body' },
+    { serbian:'hitna pomoć',   english:'emergency / first aid',    category:'Body' },
+    { serbian:'ambulanta',     english:'ambulance',                 category:'Body' },
+    { serbian:'rendgen',       english:'X-ray',                     category:'Body' },
+    { serbian:'ultrazvuk',     english:'ultrasound',                category:'Body' },
+    { serbian:'analiza krvi',  english:'blood test',                category:'Body' },
+    { serbian:'osiguranje',    english:'insurance',                 category:'Body' },
     // ── BODY ──────────────────────────────────────────────────────────────
     { serbian:'glava',         english:'head',                      category:'Body' },
     { serbian:'lice',          english:'face',                      category:'Body' },
@@ -5188,6 +5347,61 @@
     { serbian:'torbica',       english:'bag / handbag',             category:'Clothing' },
     { serbian:'pojas',         english:'belt',                      category:'Clothing' },
     { serbian:'naočare',       english:'glasses',                   category:'Clothing' },
+    // ── SPORTS & RECREATION ───────────────────────────────────────────────
+    { serbian:'sport',         english:'sport',                     category:'Sports' },
+    { serbian:'fudbal',        english:'football / soccer',        category:'Sports' },
+    { serbian:'košarka',       english:'basketball',                category:'Sports' },
+    { serbian:'odbojka',       english:'volleyball',                category:'Sports' },
+    { serbian:'rukomet',       english:'handball',                  category:'Sports' },
+    { serbian:'tenis',         english:'tennis',                    category:'Sports' },
+    { serbian:'stoni tenis',   english:'ping pong / table tennis', category:'Sports' },
+    { serbian:'badminton',     english:'badminton',                 category:'Sports' },
+    { serbian:'golf',          english:'golf',                      category:'Sports' },
+    { serbian:'hokej',         english:'hockey',                    category:'Sports' },
+    { serbian:'ragbi',         english:'rugby',                     category:'Sports' },
+    { serbian:'plivanje',      english:'swimming',                  category:'Sports' },
+    { serbian:'trčanje',       english:'running',                   category:'Sports' },
+    { serbian:'biciklizam',    english:'cycling / biking',         category:'Sports' },
+    { serbian:'planinarenje',  english:'hiking / mountain climbing', category:'Sports' },
+    { serbian:'skijanje',      english:'skiing',                    category:'Sports' },
+    { serbian:'snoubording',   english:'snowboarding',              category:'Sports' },
+    { serbian:'klizanje',      english:'skating',                   category:'Sports' },
+    { serbian:'boks',          english:'boxing',                    category:'Sports' },
+    { serbian:'karate',        english:'karate',                    category:'Sports' },
+    { serbian:'judo',          english:'judo',                      category:'Sports' },
+    { serbian:'gimnastika',    english:'gymnastics',                category:'Sports' },
+    { serbian:'atletika',      english:'athletics / track and field', category:'Sports' },
+    { serbian:'vežbanje',      english:'exercise / workout',        category:'Sports' },
+    { serbian:'fitness',       english:'fitness',                   category:'Sports' },
+    { serbian:'teretana',      english:'gym',                       category:'Sports' },
+    { serbian:'trener',        english:'coach / trainer',           category:'Sports' },
+    { serbian:'igrač',         english:'player',                    category:'Sports' },
+    { serbian:'tim',           english:'team',                      category:'Sports' },
+    { serbian:'utakmica',      english:'match / game',              category:'Sports' },
+    { serbian:'turnir',        english:'tournament',                category:'Sports' },
+    { serbian:'šampionat',     english:'championship',              category:'Sports' },
+    { serbian:'medalja',       english:'medal',                     category:'Sports' },
+    { serbian:'trofej',        english:'trophy',                    category:'Sports' },
+    { serbian:'pobeda',        english:'victory / win',             category:'Sports' },
+    { serbian:'poraz',         english:'defeat / loss',             category:'Sports' },
+    { serbian:'nerešeno',      english:'draw / tie',                category:'Sports' },
+    { serbian:'rezultat',      english:'score / result',            category:'Sports' },
+    { serbian:'gol',           english:'goal',                      category:'Sports' },
+    { serbian:'poen',          english:'point',                     category:'Sports' },
+    { serbian:'loptu',         english:'ball',                      category:'Sports' },
+    { serbian:'reket',         english:'racket',                    category:'Sports' },
+    { serbian:'stadion',       english:'stadium',                   category:'Sports' },
+    { serbian:'teren',         english:'field / court',             category:'Sports' },
+    { serbian:'bazen',         english:'pool / swimming pool',      category:'Sports' },
+    { serbian:'staza',         english:'track',                     category:'Sports' },
+    { serbian:'bicikl',        english:'bicycle / bike',            category:'Sports' },
+    { serbian:'kaciga',        english:'helmet',                    category:'Sports' },
+    { serbian:'sportska obuća', english:'athletic shoes',           category:'Sports' },
+    { serbian:'dres',          english:'uniform / jersey',          category:'Sports' },
+    { serbian:'šorts',         english:'shorts',                    category:'Sports' },
+    { serbian:'grudnjak za sport', english:'sports bra',            category:'Sports' },
+    { serbian:'navijač',       english:'fan / supporter',           category:'Sports' },
+    { serbian:'sudija',        english:'referee / judge',           category:'Sports' },
     // ── NATURE & WEATHER ──────────────────────────────────────────────────
     { serbian:'sunce',         english:'sun',                       category:'Nature & Weather' },
     { serbian:'zvezda',        english:'star',                      category:'Nature & Weather' },
@@ -7100,9 +7314,10 @@
     document.getElementById('cases-view').style.display      = view === 'cases'      ? 'flex' : 'none';
     document.getElementById('caserules-view').style.display  = view === 'caserules'  ? 'flex' : 'none';
     document.getElementById('possessives-view').style.display = view === 'possessives' ? 'flex' : 'none';
+    document.getElementById('songs-view').style.display      = view === 'songs'      ? 'flex' : 'none';
     document.getElementById('antonyms-view').style.display   = view === 'antonyms'   ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','jezurka','cases','caserules','possessives','antonyms','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','jezurka','cases','caserules','possessives','songs','antonyms','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -7119,6 +7334,7 @@
     if (view === 'cases')      renderCasesView();
     if (view === 'caserules')  renderCaseRulesView();
     if (view === 'possessives') renderPossessivesView();
+    if (view === 'songs')      renderSongsView();
     if (view === 'antonyms')   renderAntonymsView();
     if (view === 'manage')     renderManage();
   }
@@ -10092,6 +10308,172 @@
   let possessivesAnswered = false;
   let possessivesScore    = { correct: 0, total: 0 };
 
+  // ═══════════════════════════════════════════════════
+  //  SONGS — learn Serbian through songs with vocabulary quizzes
+  // ═══════════════════════════════════════════════════
+
+  const SONGS_DATA = [
+    {
+      id: 'leptiric',
+      title: 'Leptiriću šareniću',
+      subtitle: 'Traditional Serbian children\'s song by Jovan Jovanović Zmaj - dialogue between child and butterfly',
+      lyrics: [
+        { sr: 'Leptiriću, šareniću, dodji k\' meni amo', en: 'Little colorful butterfly, come here to me' },
+        { sr: 'Evo imam lepu ružu, pomiriši samo', en: 'Here I have a beautiful rose, just smell it' },
+        { sr: 'Evo imam lepu ružu, pomiriši samo', en: 'Here I have a beautiful rose, just smell it' },
+        { sr: '', en: '' },
+        { sr: 'Ja bih doš\'o, al\' se bojim kakve igle klete', en: 'I would come, but I\'m afraid of wicked thorns' },
+        { sr: 'Stisnućeš me, probošćeš me, onda zbogom svete', en: 'You\'ll squeeze me, pierce me, then goodbye world' },
+        { sr: 'Stisnućeš me, probošćeš me, onda zbogom svete', en: 'You\'ll squeeze me, pierce me, then goodbye world' },
+        { sr: '', en: '' },
+        { sr: 'Neću lepko, neću lepko, života mi moga', en: 'I won\'t sweetly, I won\'t sweetly, of my life' },
+        { sr: 'Samo hoću da izbrojim kol\'ko imaš noga', en: 'I just want to count how many legs you have' },
+        { sr: 'Samo hoću da izbrojim kol\'ko imaš noga', en: 'I just want to count how many legs you have' },
+        { sr: '', en: '' },
+        { sr: 'E pa to ti mogu reći i izdalje malko', en: 'Well, I can tell you that from a little distance' },
+        { sr: 'Leptir ima šest nožica, a sad zbogom brajko', en: 'A butterfly has six little legs, now goodbye little brother' },
+        { sr: 'Leptir ima šest nožica, a sad zbogom brajko', en: 'A butterfly has six little legs, now goodbye little brother' }
+      ],
+      vocab: [
+        // Multiple choice with mixed distractors
+        { type: 'meaning', question: 'What does "leptiric" mean?', answer: 'butterfly (small/cute)', options: ['butterfly (small/cute)', 'little bird', 'small flower', 'colorful insect'], explanation: 'Diminutive form showing endearment - "leptir" + "-ic" suffix for small/cute things.' },
+        { type: 'meaning', question: 'What does "šaren" mean?', answer: 'colorful', options: ['colorful', 'beautiful', 'small', 'happy'], explanation: 'Describes something with many colors or patterns - the butterfly is "šaren" because it has colorful wings.' },
+        { type: 'meaning', question: 'What does "ruža" mean?', answer: 'rose', options: ['rose', 'garden', 'smell', 'flower'], explanation: 'A specific flower - the child offers the butterfly a "lepu ružu" (beautiful rose) to smell.' },
+        { type: 'meaning', question: 'What does "igle" mean in this context?', answer: 'thorns/needles', options: ['thorns/needles', 'bees', 'sharp things', 'dangerous animals'], explanation: 'Rose thorns - the butterfly fears "kakve igle klete" (wicked thorns) that might hurt it.' },
+
+        // Fill-in-the-blank from song
+        { type: 'fill', question: 'Complete the lyric: "Leptiriću, šareniću, dodji k\' meni ____"', answer: 'amo', options: ['amo', 'tamo', 'ovde', 'gore'], explanation: '"Amo" means "here/this way" - the child is calling the butterfly to come closer.' },
+        { type: 'fill', question: 'Complete: "Evo imam lepu ružu, _______ samo"', answer: 'pomiriši', options: ['pomiriši', 'pogledaj', 'dotakni', 'uzmi'], explanation: '"Pomiriši" (smell it) - imperative form inviting the butterfly to smell the rose.' },
+        { type: 'fill', question: 'Complete: "Stisnućeš me, probošćeš me, onda ______ svete"', answer: 'zbogom', options: ['zbogom', 'zdravo', 'doviđenja', 'cao'], explanation: '"Zbogom svete" (goodbye world) - dramatic way the butterfly says it would die if squeezed.' },
+
+        // Translation challenges
+        { type: 'translate', question: 'Translate to English: "Ja bih došo, al\' se bojim"', answer: 'I would come, but I\'m afraid', options: ['I would come, but I\'m afraid', 'I want to come and play', 'I came here yesterday', 'I\'m coming right now'], explanation: 'The butterfly explains why it hesitates - conditional "bih" + fear "bojim se".' },
+        { type: 'translate', question: 'Translate to Serbian: "I just want to count"', answer: 'Samo hoću da izbrojim', options: ['Samo hoću da izbrojim', 'Samo mogu da brojim', 'Samo volim da računam', 'Samo treba da izmerim'], explanation: 'Child\'s reassurance that they only want to count the butterfly\'s legs, nothing harmful.' },
+
+        // Contextual usage
+        { type: 'context', question: 'Why does the butterfly say "zbogom svete"?', answer: 'It thinks it will die if touched', options: ['It thinks it will die if touched', 'It\'s saying goodbye politely', 'It\'s going to sleep', 'It\'s late in the evening'], explanation: 'Dramatic expression - the butterfly fears being squeezed/pierced would kill it, so "goodbye world".' },
+        { type: 'context', question: 'What does "šest nožica" tell us about butterflies?', answer: 'Butterflies have six legs', options: ['Butterflies have six legs', 'This butterfly is special', 'The child counted wrong', 'It\'s just a rhyme'], explanation: 'Factual information - all insects including butterflies have six legs, "nožica" is diminutive of "noga".' },
+
+        // Grammar/cultural context
+        { type: 'grammar', question: 'Why "leptiric" instead of "leptir"?', answer: 'Diminutive shows affection', options: ['Diminutive shows affection', 'It means the butterfly is small', 'It\'s more formal', 'It rhymes better'], explanation: 'Serbian uses diminutives (-ic, -ić) to show affection, especially in children\'s songs - makes it cuter and friendlier.' },
+        { type: 'grammar', question: 'What does "k\' meni" mean?', answer: 'to me (shortened form)', options: ['to me (shortened form)', 'with me', 'from me', 'about me'], explanation: 'Colloquial contraction of "ka meni" (toward me) - common in songs and speech to fit rhythm.' },
+        { type: 'cultural', question: 'This song teaches children about:', answer: 'Respecting nature/creatures', options: ['Respecting nature/creatures', 'Flower gardening', 'Counting numbers', 'Color recognition'], explanation: 'The dialogue shows empathy - child reassures the frightened butterfly, teaching gentle interaction with nature.' },
+
+        // Additional vocabulary and concepts
+        { type: 'meaning', question: 'What does "samo" mean in "pomiriši samo"?', answer: 'just/only', options: ['just/only', 'please', 'carefully', 'again'], explanation: '"Samo" emphasizes that the child only wants the butterfly to smell, nothing more - reassuring the worried butterfly.' },
+        { type: 'meaning', question: 'What are "klete igle"?', answer: 'wicked/cursed thorns', options: ['wicked/cursed thorns', 'sharp needles', 'dangerous bees', 'thorny plants'], explanation: '"Klete" (wicked/cursed) makes the thorns sound scary from butterfly\'s perspective - dramatic child-like fear.' },
+        { type: 'fill', question: 'Complete: "Al\' se ______ kakve igle klete"', answer: 'bojim', options: ['bojim', 'plašim', 'brinem', 'strah'], explanation: '"Bojim se" (I\'m afraid) - reflexive verb, butterfly expresses its fear of getting hurt.' },
+        { type: 'translate', question: 'Translate: "probošćeš me"', answer: 'you will pierce me', options: ['you will pierce me', 'you will hurt me', 'you will catch me', 'you will scare me'], explanation: '"Probosti" (to pierce) - butterfly fears being poked by thorns, very specific and dramatic fear.' },
+        { type: 'context', question: 'Why does the child say "života mi moga"?', answer: 'Swearing on their life (emphasis)', options: ['Swearing on their life (emphasis)', 'Talking about death', 'Being very formal', 'Making a religious vow'], explanation: 'Expression meaning "I swear on my life" - child emphasizes they absolutely won\'t hurt the butterfly.' },
+        { type: 'grammar', question: 'Why "izdalje malko" and not "izdaleka malo"?', answer: 'Colloquial/song form', options: ['Colloquial/song form', 'It\'s wrong grammar', 'Regional dialect', 'Poetic license'], explanation: 'Songs often use colloquial forms - "malko" instead of "malo", "izdalje" flows better rhythmically.' },
+        { type: 'cultural', question: 'Who was Jovan Jovanović Zmaj?', answer: 'Famous Serbian poet for children', options: ['Famous Serbian poet for children', 'Traditional folk singer', 'Children\'s book illustrator', 'Music composer'], explanation: 'Zmaj (1833-1904) is Serbia\'s most beloved children\'s poet - wrote many songs still sung today.' },
+        { type: 'meaning', question: 'What does "brajko" mean?', answer: 'little brother (affectionate)', options: ['little brother (affectionate)', 'little friend', 'little one', 'little creature'], explanation: 'Diminutive of "brat" (brother) - butterfly calls child "little brother" showing friendship after conversation.' }
+      ]
+    },
+    {
+      id: 'birthday',
+      title: 'Rođendanska',
+      subtitle: 'Traditional Serbian birthday song',
+      lyrics: [
+        { sr: 'Danas nam je divan dan, divan dan, divan dan.', en: 'Today is a beautiful day, beautiful day, beautiful day.' },
+        { sr: 'Našem ________ rođendan, rođendan, rođendan.', en: 'It\'s our ________\'s birthday, birthday, birthday.' },
+        { sr: 'Živeo, živeo, i srećan nam bio!', en: 'Live long, live long, and be happy for us!' },
+        { sr: 'Živeo, živeo, i srećan nam bio!', en: 'Live long, live long, and be happy for us!' }
+      ],
+      vocab: [
+        // Multiple choice with mixed distractors
+        { type: 'meaning', question: 'What does "divan" mean?', answer: 'wonderful/beautiful', options: ['wonderful/beautiful', 'special', 'important', 'favorite'], explanation: '"Divan dan" - a wonderful day, emphasizing how special birthdays are.' },
+        { type: 'meaning', question: 'What does "rođendan" literally mean?', answer: 'birth day', options: ['birth day', 'special day', 'party day', 'cake day'], explanation: 'Compound word: "rođen" (born) + "dan" (day) = the day someone was born.' },
+        { type: 'meaning', question: 'What is "živeo" in English?', answer: 'live long! / hooray!', options: ['live long! / hooray!', 'be happy!', 'grow up!', 'stay healthy!'], explanation: 'Traditional Serbian exclamation like "cheers!" - wishing someone a long, good life.' },
+
+        // Fill-in-the-blank from song
+        { type: 'fill', question: 'Complete: "Danas nam je ______ dan"', answer: 'divan', options: ['divan', 'lep', 'dobar', 'novi'], explanation: '"Divan dan" (wonderful day) - the song emphasizes how special and beautiful the birthday is.' },
+        { type: 'fill', question: 'Complete: "Našem _______ rođendan"', answer: '[ime]', options: ['[ime]', 'dragi', 'mili', 'voljeni'], explanation: 'You insert the birthday person\'s name here - "Našem Marku rođendan" (It\'s our Marko\'s birthday).' },
+        { type: 'fill', question: 'Complete: "Živeo, živeo, i _______ nam bio!"', answer: 'srećan', options: ['srećan', 'zdrav', 'vesel', 'dobar'], explanation: '"Srećan nam bio" - may you be happy for us - traditional birthday wish.' },
+
+        // Translation challenges
+        { type: 'translate', question: 'Translate: "Danas nam je divan dan"', answer: 'Today is a wonderful day for us', options: ['Today is a wonderful day for us', 'Today we have a great time', 'This day is very important', 'We are having a beautiful day'], explanation: '"Nam" shows this is wonderful "for us" - the birthday affects the whole family/group.' },
+        { type: 'translate', question: 'How do you say "birthday" in Serbian?', answer: 'rođendan', options: ['rođendan', 'praznik', 'slava', 'godišnjica'], explanation: '"Rođendan" (birth-day) vs "slava" (family saint day) vs "godišnjica" (anniversary) - different celebrations.' },
+
+        // Cultural context
+        { type: 'cultural', question: 'What makes this different from English "Happy Birthday"?', answer: 'Different melody and cultural meaning', options: ['Different melody and cultural meaning', 'It\'s sung in a different key', 'It\'s longer than the English version', 'It\'s only for children'], explanation: 'Not just translated - completely different song with Serbian cultural elements like "živeo!"' },
+        { type: 'cultural', question: 'When Serbians say "živeo", they mean:', answer: 'May you live long and prosper', options: ['May you live long and prosper', 'Have a great party today', 'Enjoy your birthday cake', 'See you next year'], explanation: 'Traditional blessing - not just "happy birthday" but wishing a full, long, good life.' },
+        { type: 'cultural', question: 'Why does the song say "nam" (for us)?', answer: 'Birthdays are family/community celebrations', options: ['Birthdays are family/community celebrations', 'It sounds better in the song', 'It\'s a grammar requirement', 'Everyone gets presents'], explanation: 'Serbian culture emphasizes collective joy - your birthday makes the whole family/group happy.' },
+
+        // Grammar insights
+        { type: 'grammar', question: 'What case is "našem" in "Našem Marku rođendan"?', answer: 'Dative (to whom it belongs)', options: ['Dative (to whom it belongs)', 'Nominative (subject)', 'Accusative (direct object)', 'Genitive (possession)'], explanation: 'Dative case showing "to our Marko" - the birthday belongs to/is for him.' },
+        { type: 'grammar', question: 'Why "srećan" and not "srećno"?', answer: 'Agrees with masculine person', options: ['Agrees with masculine person', 'It sounds better', 'It\'s the standard form', 'It rhymes with the song'], explanation: 'Adjective agreement - "srećan" for masculine, "srećna" for feminine, "srećno" for neuter.' },
+
+        // Additional birthday vocabulary and concepts
+        { type: 'meaning', question: 'What does "nam" mean in "danas nam je"?', answer: 'for us/to us', options: ['for us/to us', 'with us', 'about us', 'by us'], explanation: 'Dative pronoun - the day is wonderful "for us", showing shared joy in the celebration.' },
+        { type: 'fill', question: 'How would you sing this for Ana? "Našoj ______ rođendan"', answer: 'Ani', options: ['Ani', 'Ana', 'Anne', 'Ane'], explanation: 'Dative case for feminine name - "Našoj Ani" (to our Ana), feminine dative ending.' },
+        { type: 'translate', question: 'How do you say "Happy Birthday Ana!" in Serbian?', answer: 'Srećan rođendan Ana!', options: ['Srećan rođendan Ana!', 'Danas je Anin dan!', 'Živela Ana!', 'Rođendan srećan Ana!'], explanation: 'Direct birthday greeting - "Srećan rođendan" + name, same structure as English but different cultural meaning.' },
+        { type: 'cultural', question: 'How do Serbian families typically celebrate birthdays?', answer: 'Family gatherings with traditional foods', options: ['Family gatherings with traditional foods', 'Same as American style', 'Only children get parties', 'No special traditions'], explanation: 'Serbian birthdays often include extended family, traditional foods, and the "živeo" toast.' },
+        { type: 'context', question: 'What\'s the feeling of "i srećan nam bio"?', answer: 'Blessing/wish for happiness', options: ['Blessing/wish for happiness', 'Statement of fact', 'Command to be happy', 'Question about happiness'], explanation: 'It\'s a traditional blessing - "may you be happy for us" - wishing the person happiness that affects the whole family.' },
+        { type: 'grammar', question: 'What would you say for twins Marko and Ana?', answer: 'Našem Marku i našoj Ani', options: ['Našem Marku i našoj Ani', 'Našima Marku i Ani', 'Naše Marko i Ana', 'Našem Marko i Ana'], explanation: 'Each name gets proper dative - "našem" (masculine) Marku, "našoj" (feminine) Ani.' },
+        { type: 'cultural', question: 'When do Serbians say "Živeo!"?', answer: 'Toasts, celebrations, good wishes', options: ['Toasts, celebrations, good wishes', 'Only on birthdays', 'When meeting someone', 'Before eating meals'], explanation: '"Živeo!" (live long!) used in toasts, celebrations, expressing joy - like "cheers!" but wishing long life.' },
+        { type: 'meaning', question: 'What\'s the literal meaning of "rođendan"?', answer: 'birth-day', options: ['birth-day', 'happy-day', 'special-day', 'celebration-day'], explanation: 'Compound: "rođen" (born) + "dan" (day) = the day you were born, same concept as English "birthday".' }
+      ]
+    },
+    {
+      id: 'ringe',
+      title: 'Ringe Ringe Raja',
+      subtitle: 'Traditional Serbian circle game song for children',
+      lyrics: [
+        { sr: 'Ringe, ringe raja,', en: 'Ring, ring, paradise/joy,' },
+        { sr: 'puna korpa jaja.', en: 'a basket full of eggs.' },
+        { sr: 'Doš\'o čika Paja,', en: 'Uncle Paja came,' },
+        { sr: 'pa pojeo jaja.', en: 'and ate the eggs.' },
+        { sr: 'Jedno jaje muc,', en: 'One egg crack/gone,' },
+        { sr: 'A mi deca čuč!', en: 'And we children squat!' }
+      ],
+      vocab: [
+        // Multiple choice with mixed distractors
+        { type: 'meaning', question: 'What does "raja" mean in this song?', answer: 'paradise/joy/fun', options: ['paradise/joy/fun', 'kingdom', 'family', 'circle'], explanation: 'Creates a joyful, playful mood - "ringe ringe raja" sets up the fun circle game atmosphere.' },
+        { type: 'meaning', question: 'What does "čika" mean?', answer: 'uncle (informal)', options: ['uncle (informal)', 'old man', 'neighbor', 'friend'], explanation: 'Informal/affectionate term for uncle - "čika Paja" is Uncle Paja, friendly character in children\'s stories.' },
+        { type: 'meaning', question: 'What does "čuč" mean?', answer: 'squat down!', options: ['squat down!', 'sit down!', 'jump up!', 'run away!'], explanation: 'Game instruction - when kids hear "čuč!" they all squat down together, ending the circle game.' },
+        { type: 'meaning', question: 'What is "muc"?', answer: 'sound of cracking/breaking', options: ['sound of cracking/breaking', 'sound of eating', 'sound of jumping', 'sound of falling'], explanation: 'Onomatopoeia - "jedno jaje muc" suggests the last egg cracking or disappearing.' },
+
+        // Fill-in-the-blank from song
+        { type: 'fill', question: 'Complete: "Ringe, ringe raja, ______ korpa jaja"', answer: 'puna', options: ['puna', 'velika', 'mala', 'lepa'], explanation: '"Puna korpa" (full basket) - feminine adjective agreeing with feminine "korpa".' },
+        { type: 'fill', question: 'Complete: "Doš\'o čika Paja, pa ______ jaja"', answer: 'pojeo', options: ['pojeo', 'uzeo', 'bacio', 'našao'], explanation: '"Pojeo jaja" (ate the eggs) - past tense masculine, Uncle Paja ate them up!' },
+        { type: 'fill', question: 'Complete: "A mi deca ______!"', answer: 'čuč', options: ['čuč', 'hop', 'skačemo', 'padamo'], explanation: '"A mi deca čuč!" - signal for all the children playing to squat down together.' },
+
+        // Game/cultural context
+        { type: 'cultural', question: 'How do children play this game?', answer: 'Hold hands in circle, squat on "čuč"', options: ['Hold hands in circle, squat on "čuč"', 'Sit in a circle and clap', 'Run around and tag each other', 'Jump rope while singing'], explanation: 'Traditional circle game - kids hold hands, walk/skip in circle while singing, squat together on final "čuč!"' },
+        { type: 'cultural', question: 'What happens to the eggs in the story?', answer: 'Uncle Paja eats them all', options: ['Uncle Paja eats them all', 'The children collect them', 'They fall and break', 'Birds fly away with them'], explanation: 'Simple story - full basket of eggs, Uncle Paja comes and eats them, only one left goes "muc".' },
+        { type: 'cultural', question: 'Why is this song good for children?', answer: 'Teaches rhythm, cooperation, listening', options: ['Teaches rhythm, cooperation, listening', 'Teaches about cooking eggs', 'Teaches counting numbers', 'Teaches about farm animals'], explanation: 'Circle games develop social skills, rhythm, listening for cues, and group coordination.' },
+
+        // Translation challenges
+        { type: 'translate', question: 'Translate: "puna korpa jaja"', answer: 'a basket full of eggs', options: ['a basket full of eggs', 'a big basket with eggs', 'eggs inside a basket', 'many eggs and baskets'], explanation: 'Word order: "puna" (full) + "korpa" (basket) + "jaja" (eggs) = full basket of eggs.' },
+        { type: 'translate', question: 'What does "doš\'o" mean?', answer: 'he came (colloquial)', options: ['he came (colloquial)', 'he wanted', 'he took', 'he saw'], explanation: 'Shortened form of "došao" (came) - common in songs and casual speech for rhythm/meter.' },
+
+        // Grammar insights
+        { type: 'grammar', question: 'Why "puna korpa" and not "pun korpa"?', answer: 'Adjective agrees with feminine noun', options: ['Adjective agrees with feminine noun', 'It sounds better in the song', 'It\'s a set expression', 'It describes the eggs, not basket'], explanation: 'Gender agreement - "korpa" is feminine, so adjective "puna" (not "pun") agrees with it.' },
+        { type: 'grammar', question: 'What\'s the difference between "pojeo" and "pojela"?', answer: 'Masculine vs feminine past tense', options: ['Masculine vs feminine past tense', 'Formal vs informal speech', 'Past vs present tense', 'Singular vs plural'], explanation: '"Pojeo" = masculine subject ate, "pojela" = feminine subject ate - Serbian verbs show gender of who did the action.' },
+        { type: 'grammar', question: 'What does "pa" add to "pa pojeo jaja"?', answer: 'Sequence/consequence connector', options: ['Sequence/consequence connector', 'Emphasis on the eating', 'Rhyming with the song', 'Nothing, just filler'], explanation: '"Pa" shows sequence - he came AND THEN (consequently) ate the eggs, showing cause and effect.' },
+
+        // Additional vocabulary and contextual understanding
+        { type: 'meaning', question: 'What does "jaje" mean?', answer: 'egg', options: ['egg', 'ball', 'apple', 'toy'], explanation: 'Basic vocabulary - "jaje" (singular), "jaja" (plural). The basket is full of eggs.' },
+        { type: 'meaning', question: 'What does "korpa" mean?', answer: 'basket', options: ['basket', 'bowl', 'box', 'bag'], explanation: 'Container for carrying things - "korpa" is specifically a woven basket.' },
+        { type: 'meaning', question: 'What does "deca" mean?', answer: 'children', options: ['children', 'people', 'friends', 'players'], explanation: '"Deca" (plural of "dete") - all the children playing the game together.' },
+        { type: 'fill', question: 'Complete: "Jedno ______ muc"', answer: 'jaje', options: ['jaje', 'jelo', 'dete', 'mesto'], explanation: '"Jedno jaje muc" - one egg goes crack/disappears, marking the end of Uncle Paja\'s feast.' },
+        { type: 'translate', question: 'What does "jedno jaje muc" suggest?', answer: 'The last egg cracks/disappears', options: ['The last egg cracks/disappears', 'One egg falls down', 'A single egg breaks', 'The egg makes noise'], explanation: '"Muc" sound suggests the final egg cracking or being eaten - end of the eggs.' },
+        { type: 'context', question: 'What role does Uncle Paja play in the story?', answer: 'The egg-eater who empties the basket', options: ['The egg-eater who empties the basket', 'The basket owner', 'A child in the game', 'The game leader'], explanation: 'Uncle Paja is the character who comes and eats all the eggs, creating the story conflict/resolution.' },
+        { type: 'cultural', question: 'What does "čika" tell us about Serbian family terms?', answer: 'Informal, affectionate title for uncle', options: ['Informal, affectionate title for uncle', 'Formal way to address elders', 'Title only for grandfathers', 'Generic term for all men'], explanation: '"Čika" is warmer than formal "ujak/stric" - shows the affectionate, familiar relationship with Uncle Paja.' },
+        { type: 'grammar', question: 'What case is "jaja" in "pojeo jaja"?', answer: 'Accusative (direct object)', options: ['Accusative (direct object)', 'Nominative (subject)', 'Genitive (possession)', 'Dative (indirect object)'], explanation: 'Direct object - Uncle Paja ate WHAT? The eggs. "Jaja" receives the action of eating.' },
+        { type: 'cultural', question: 'Why do circle games like this exist in Serbian culture?', answer: 'Build community and teach social skills', options: ['Build community and teach social skills', 'Just for entertainment', 'To teach counting', 'Religious purposes'], explanation: 'Traditional games foster group cooperation, rhythm, listening skills, and cultural continuity across generations.' }
+      ]
+    }
+  ];
+
+  // Songs state
+  let currentSongId = 'leptiric';
+  let currentSongVocabIdx = 0;
+  let songVocabAnswered = false;
+  let songVocabScore = { correct: 0, total: 0 };
+  let songVocabQueue = []; // Randomized question order
+
   // Cases state
   let casesQueue    = [];
   let casesQIdx     = 0;
@@ -10372,6 +10754,234 @@
       possessivesQIdx  = 0;
     }
     renderPossessivesItem();
+  }
+
+
+  // ═══════════════════════════════════════════════════
+  //  SONGS — learn vocabulary through Serbian songs
+  // ═══════════════════════════════════════════════════
+
+  function renderSongsView() {
+    const el = document.getElementById('songs-view');
+
+    el.innerHTML = `
+      <div class="songs-selector">
+        ${SONGS_DATA.map(song => `
+          <div class="song-tab ${song.id === currentSongId ? 'active' : ''}" onclick="selectSong('${song.id}')">
+            ${song.title}
+          </div>
+        `).join('')}
+      </div>
+      <div id="song-content"></div>
+    `;
+
+    renderCurrentSong();
+  }
+
+  function selectSong(songId) {
+    currentSongId = songId;
+    songVocabAnswered = false;
+    songVocabScore = { correct: 0, total: 0 };
+
+    // Initialize randomized question queue
+    const song = SONGS_DATA.find(s => s.id === songId);
+    if (song) {
+      songVocabQueue = shuffleArr([...Array(song.vocab.length).keys()]);
+      currentSongVocabIdx = 0; // Now represents index in shuffled queue
+    }
+
+    // Update tab states
+    document.querySelectorAll('.song-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    document.querySelector(`[onclick="selectSong('${songId}')"]`).classList.add('active');
+
+    renderCurrentSong();
+  }
+
+  function renderCurrentSong() {
+    const song = SONGS_DATA.find(s => s.id === currentSongId);
+    const contentEl = document.getElementById('song-content');
+
+    if (!song) return;
+
+    contentEl.innerHTML = `
+      <div class="song-content">
+        <div class="song-title">${song.title}</div>
+        <div class="song-subtitle">${song.subtitle}</div>
+
+        <div class="song-lyrics">
+          ${song.lyrics.map(line =>
+            line.sr ? `
+              <div class="song-line">
+                <div class="song-line-sr">${line.sr}</div>
+                <div class="song-line-en">${line.en}</div>
+              </div>
+            ` : '<div style="height:10px;"></div>'
+          ).join('')}
+        </div>
+
+        <div class="vocab-section">
+          <div class="vocab-header">🎵 Vocabulary Quiz</div>
+          <div class="vocab-quiz">
+            <div class="vocab-score">Score: ${songVocabScore.correct} / ${songVocabScore.total}</div>
+            <div id="vocab-question-area"></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    renderVocabQuestion();
+  }
+
+  function renderVocabQuestion() {
+    const song = SONGS_DATA.find(s => s.id === currentSongId);
+    if (!song || currentSongVocabIdx >= songVocabQueue.length) {
+      // End of vocab - show completion
+      const percentage = songVocabScore.total > 0 ? Math.round((songVocabScore.correct / songVocabScore.total) * 100) : 0;
+      const performance = percentage >= 80 ? '🎉 Excellent!' : percentage >= 60 ? '👍 Good job!' : '📚 Keep practicing!';
+
+      document.getElementById('vocab-question-area').innerHTML = `
+        <div style="text-align:center; color:#4caf50; font-size:1.1rem; padding:20px;">
+          ${performance}<br>
+          Final Score: ${songVocabScore.correct} / ${songVocabScore.total} (${percentage}%)
+          <div style="margin-top:15px;">
+            <button class="vocab-next-btn" onclick="resetSongQuiz()">Start Over</button>
+            <button class="vocab-next-btn" onclick="selectRandomSong()" style="margin-left:10px;">Try Another Song</button>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const actualQuestionIdx = songVocabQueue[currentSongVocabIdx];
+    const vocabItem = song.vocab[actualQuestionIdx];
+    const options = shuffleArr([...vocabItem.options]);
+    songVocabAnswered = false;
+
+    // Type-specific question rendering
+    let questionHtml = '';
+    let typeIcon = '';
+
+    switch(vocabItem.type) {
+      case 'meaning':
+        typeIcon = '📝';
+        questionHtml = `<div class="vocab-question">${typeIcon} ${vocabItem.question}</div>`;
+        break;
+      case 'fill':
+        typeIcon = '✏️';
+        questionHtml = `<div class="vocab-question">${typeIcon} ${vocabItem.question}</div>`;
+        break;
+      case 'translate':
+        typeIcon = '🌍';
+        questionHtml = `<div class="vocab-question">${typeIcon} ${vocabItem.question}</div>`;
+        break;
+      case 'context':
+        typeIcon = '🎭';
+        questionHtml = `<div class="vocab-question">${typeIcon} ${vocabItem.question}</div>`;
+        break;
+      case 'grammar':
+        typeIcon = '📖';
+        questionHtml = `<div class="vocab-question">${typeIcon} ${vocabItem.question}</div>`;
+        break;
+      case 'cultural':
+        typeIcon = '🏛️';
+        questionHtml = `<div class="vocab-question">${typeIcon} ${vocabItem.question}</div>`;
+        break;
+      default:
+        typeIcon = '❓';
+        questionHtml = `<div class="vocab-question">${typeIcon} ${vocabItem.question}</div>`;
+    }
+
+    document.getElementById('vocab-question-area').innerHTML = `
+      <div class="vocab-type-indicator" style="font-size:0.8rem; color:#779; margin-bottom:8px;">
+        Question ${currentSongVocabIdx + 1} of ${songVocabQueue.length} • ${vocabItem.type.charAt(0).toUpperCase() + vocabItem.type.slice(1)}
+      </div>
+      ${questionHtml}
+      <div class="vocab-options">
+        ${options.map(option =>
+          `<button class="vocab-option" onclick="answerVocab('${option.replace(/'/g, '\\\'')}')">${option}</button>`
+        ).join('')}
+      </div>
+      <div class="vocab-feedback" id="vocab-feedback"></div>
+      <div class="vocab-controls">
+        <button class="vocab-next-btn" id="vocab-next" style="display:none;" onclick="nextVocabQuestion()">
+          Next Question →
+        </button>
+      </div>
+    `;
+  }
+
+  function answerVocab(answer) {
+    if (songVocabAnswered) return;
+
+    const song = SONGS_DATA.find(s => s.id === currentSongId);
+    const actualQuestionIdx = songVocabQueue[currentSongVocabIdx];
+    const vocabItem = song.vocab[actualQuestionIdx];
+    const correct = answer === vocabItem.answer;
+
+    songVocabAnswered = true;
+    songVocabScore.total++;
+    if (correct) songVocabScore.correct++;
+
+    // Update score display
+    document.querySelector('.vocab-score').textContent = `Score: ${songVocabScore.correct} / ${songVocabScore.total}`;
+
+    // Update button states
+    document.querySelectorAll('.vocab-option').forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === vocabItem.answer) btn.classList.add('correct');
+      if (btn.textContent === answer && !correct) btn.classList.add('wrong');
+    });
+
+    // Show detailed feedback with explanation
+    const feedbackEl = document.getElementById('vocab-feedback');
+    const resultEmoji = correct ? '✅' : '❌';
+    const resultText = correct ? 'Correct!' : 'Incorrect.';
+
+    feedbackEl.innerHTML = `
+      <div style="margin-bottom:8px;">
+        <strong>${resultEmoji} ${resultText}</strong>
+      </div>
+      <div style="background:#0a0f14; padding:12px; border-radius:6px; border-left:3px solid ${correct ? '#4caf50' : '#e94560'};">
+        <div style="color:#e0e0ff; margin-bottom:6px;"><strong>Answer:</strong> ${vocabItem.answer}</div>
+        <div style="color:#aac; font-size:0.9rem; line-height:1.4;">
+          ${vocabItem.explanation}
+        </div>
+      </div>
+    `;
+    feedbackEl.classList.add('show');
+
+    // Show next button
+    document.getElementById('vocab-next').style.display = 'inline-block';
+  }
+
+  function nextVocabQuestion() {
+    currentSongVocabIdx++;
+    renderVocabQuestion();
+  }
+
+  function resetSongQuiz() {
+    songVocabAnswered = false;
+    songVocabScore = { correct: 0, total: 0 };
+
+    // Reshuffle questions for new randomized order
+    const song = SONGS_DATA.find(s => s.id === currentSongId);
+    if (song) {
+      songVocabQueue = shuffleArr([...Array(song.vocab.length).keys()]);
+      currentSongVocabIdx = 0;
+    }
+    renderVocabQuestion();
+  }
+
+  function selectRandomSong() {
+    const otherSongs = SONGS_DATA.filter(s => s.id !== currentSongId);
+    if (otherSongs.length > 0) {
+      const randomSong = otherSongs[Math.floor(Math.random() * otherSongs.length)];
+      selectSong(randomSong.id);
+    } else {
+      resetSongQuiz();
+    }
   }
 
 
