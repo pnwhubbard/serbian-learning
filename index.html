@@ -8916,7 +8916,7 @@
 
   function buildNomDeck() {
     nomDeck = [...NOMINATIVE_EXERCISES];
-    shuffleArray(nomDeck);
+    shuffleArr(nomDeck);
     nomIndex = 0;
   }
 
@@ -8940,7 +8940,7 @@
 
     // Shuffle options and set up buttons
     const shuffledOptions = [...exercise.options];
-    shuffleArray(shuffledOptions);
+    shuffleArr(shuffledOptions);
 
     for (let i = 0; i < 4; i++) {
       const btn = document.getElementById(`nom-btn-${i}`);
@@ -9028,7 +9028,7 @@
   }
 
   function shuffleNominative() {
-    shuffleArray(nomDeck);
+    shuffleArr(nomDeck);
     nomIndex = 0;
     nomAnswered = false;
     renderNomCard();
