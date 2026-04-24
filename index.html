@@ -561,6 +561,62 @@
     }
     .ctx-feedback-note { font-size: 0.95rem; color: #ccc; line-height: 1.5; }
 
+    /* ── NOMINATIVE ──────────────────────────────────── */
+    .nom-card {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 20px; text-align: center; margin-bottom: 20px;
+    }
+    .nom-sentence {
+      font-size: 1.25rem; font-weight: 600; color: #f0f0f0;
+      text-align: center; line-height: 1.5; margin: 12px 0;
+    }
+    .nom-english {
+      font-size: 1rem; color: #aaa; font-style: italic;
+      text-align: center; margin: 10px 0;
+    }
+    .nom-target-word {
+      font-size: 1.1rem; color: #ccc; margin: 15px 0;
+    }
+    .nom-target-word span {
+      color: #e94560; font-weight: bold; background: #3a1a1a;
+      padding: 2px 8px; border-radius: 4px;
+    }
+
+    .nom-choices {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      margin: 20px 0;
+    }
+    .nom-choice {
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px 12px; border-radius: 12px; cursor: pointer;
+      border: 2px solid transparent; transition: transform 0.1s, border-color 0.15s;
+      background: #16213e; color: #f0f0f0;
+      font-size: 1.2rem; font-weight: 600;
+    }
+    .nom-choice:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: #4a90e2;
+    }
+    .nom-choice:disabled { cursor: default; }
+
+    .nom-choice.correct {
+      background: #0d2b1a; border-color: #27ae60; color: #55efc4;
+    }
+    .nom-choice.wrong {
+      background: #2b0d1a; border-color: #e94560; color: #ff7070;
+    }
+
+    .nom-feedback {
+      background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+      padding: 16px 20px; margin: 20px 0;
+    }
+    .nom-feedback .feedback-correct {
+      color: #55efc4;
+    }
+    .nom-feedback .feedback-wrong {
+      color: #ff7070;
+    }
+
     /* ── SLAGALICA ───────────────────────────────────── */
     #slagalica-view { display: flex; flex-direction: column; gap: 24px; }
     .slag-screen { display: flex; flex-direction: column; gap: 20px; }
@@ -1199,6 +1255,7 @@
     <button id="nav-verbs"   onclick="showView('verbs')">Verbs</button>
     <button id="nav-adj"     onclick="showView('adj')">Adjectives</button>
     <button id="nav-aspect"     onclick="showView('aspect')">Context</button>
+    <button id="nav-nominative" onclick="showView('nominative')">Nominative</button>
     <button id="nav-drill"      onclick="showView('drill')">Fill-in</button>
     <button id="nav-slagalica"  onclick="showView('slagalica')">Slagalica</button>
     <button id="nav-cyrillic"   onclick="showView('cyrillic')">Cyrillic</button>
@@ -1480,6 +1537,40 @@
       <button class="btn btn-secondary" id="ctx-prev-btn" onclick="ctxPrev()">← Prev</button>
       <button class="btn btn-secondary" id="ctx-next-btn" onclick="ctxNext()">Next →</button>
       <button class="btn btn-secondary" onclick="shuffleCtx()">⇌ Shuffle</button>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ NOMINATIVE VIEW ═══════════════ -->
+  <div id="nominative-view" style="display:none">
+
+    <div class="g-header-row">
+      <span id="nom-progress">1 of 20</span>
+      <span class="g-score-badge">Score: <span id="nom-score-val">0 / 0</span></span>
+    </div>
+
+    <div class="noun-card nom-card" id="nom-card">
+      <span class="noun-card-given">What is the nominative form?</span>
+      <div class="nom-sentence" id="nom-sentence"></div>
+      <div class="nom-english" id="nom-english"></div>
+      <div class="nom-target-word">
+        Target: <span id="nom-target"></span>
+      </div>
+    </div>
+
+    <div class="nom-choices" id="nom-choices">
+      <button class="nom-choice" id="nom-btn-0" onclick="nomAnswer(0)"></button>
+      <button class="nom-choice" id="nom-btn-1" onclick="nomAnswer(1)"></button>
+      <button class="nom-choice" id="nom-btn-2" onclick="nomAnswer(2)"></button>
+      <button class="nom-choice" id="nom-btn-3" onclick="nomAnswer(3)"></button>
+    </div>
+
+    <div class="nom-feedback" id="nom-feedback" style="display:none"></div>
+
+    <div class="grammar-controls">
+      <button class="btn btn-secondary" id="nom-prev-btn" onclick="nomPrev()">← Prev</button>
+      <button class="btn btn-secondary" id="nom-next-btn" onclick="nomNext()">Next →</button>
+      <button class="btn btn-secondary" onclick="shuffleNominative()">⇌ Shuffle</button>
     </div>
 
   </div>
@@ -6465,6 +6556,154 @@
     { serbian:'čujemo se!',             english:'talk soon! (lit. we\'ll hear each other)', category:'Unit 27' },
   ];
 
+  // ═══════════════════════════════════════════════════
+  //  NOMINATIVE CONVERSION EXERCISES
+  // ═══════════════════════════════════════════════════
+  const NOMINATIVE_EXERCISES = [
+    // Format: serbian (sentence), english (translation),
+    // target (inflected word in sentence), answer (correct nominative), options (4 choices), explanation
+
+    { serbian: 'Video sam dečaka u parku.',
+      english: 'I saw a boy in the park.',
+      target: 'dečaka',
+      answer: 'dečak',
+      options: ['dečak', 'dečaka', 'dečaku', 'dečakom'],
+      explanation: '"Dečaka" is accusative case (direct object). The nominative form is "dečak" (boy).' },
+
+    { serbian: 'Razgovaram sa profesorom.',
+      english: 'I am talking with the professor.',
+      target: 'profesorom',
+      answer: 'profesor',
+      options: ['profesor', 'profesora', 'profesoru', 'profesorom'],
+      explanation: '"Profesorom" is instrumental case (with "sa"). The nominative form is "profesor".' },
+
+    { serbian: 'Pišem pismo majci.',
+      english: 'I am writing a letter to mother.',
+      target: 'majci',
+      answer: 'majka',
+      options: ['majka', 'majke', 'majci', 'majkom'],
+      explanation: '"Majci" is dative case (indirect object). The nominative form is "majka".' },
+
+    { serbian: 'Idem u školu ujutru.',
+      english: 'I go to school in the morning.',
+      target: 'školu',
+      answer: 'škola',
+      options: ['škola', 'škole', 'školi', 'školu'],
+      explanation: '"Školu" is accusative case (direction "u školu"). The nominative form is "škola".' },
+
+    { serbian: 'Zovem prijatelje na kafu.',
+      english: 'I am calling friends for coffee.',
+      target: 'prijatelje',
+      answer: 'prijatelj',
+      options: ['prijatelj', 'prijatelja', 'prijatelju', 'prijatelje'],
+      explanation: '"Prijatelje" is accusative plural. The singular nominative form is "prijatelj".' },
+
+    { serbian: 'Pričam s decom o školi.',
+      english: 'I talk with children about school.',
+      target: 'decom',
+      answer: 'deca',
+      options: ['deca', 'dece', 'deci', 'decom'],
+      explanation: '"Decom" is instrumental case (with "s"). The nominative form is "deca" (children).' },
+
+    { serbian: 'Dajemo poklone deci.',
+      english: 'We give gifts to children.',
+      target: 'deci',
+      answer: 'deca',
+      options: ['deca', 'dece', 'deci', 'decom'],
+      explanation: '"Deci" is dative case (indirect object). The nominative form is "deca".' },
+
+    { serbian: 'Vidimo zvezde na nebu.',
+      english: 'We see stars in the sky.',
+      target: 'zvezde',
+      answer: 'zvezda',
+      options: ['zvezda', 'zvezde', 'zvezdi', 'zvezdu'],
+      explanation: '"Zvezde" is accusative plural. The singular nominative form is "zvezda" (star).' },
+
+    { serbian: 'Pišem pisma roditeljima.',
+      english: 'I write letters to parents.',
+      target: 'roditeljima',
+      answer: 'roditelj',
+      options: ['roditelj', 'roditelja', 'roditeljima', 'roditeljem'],
+      explanation: '"Roditeljima" is dative plural. The singular nominative form is "roditelj" (parent).' },
+
+    { serbian: 'Vozim se kolima do posla.',
+      english: 'I drive to work by car.',
+      target: 'kolima',
+      answer: 'kola',
+      options: ['kola', 'kola', 'kolima', 'kolom'],
+      explanation: '"Kolima" is instrumental case. The nominative form is "kola" (car, plural-only noun).' },
+
+    { serbian: 'Igram fudbal s prijateljima.',
+      english: 'I play soccer with friends.',
+      target: 'prijateljima',
+      answer: 'prijatelj',
+      options: ['prijatelj', 'prijatelja', 'prijateljima', 'prijateljem'],
+      explanation: '"Prijateljima" is instrumental plural. The singular nominative form is "prijatelj".' },
+
+    { serbian: 'Kupujem hleb u prodavnici.',
+      english: 'I buy bread at the store.',
+      target: 'prodavnici',
+      answer: 'prodavnica',
+      options: ['prodavnica', 'prodavnice', 'prodavnici', 'prodavnicom'],
+      explanation: '"Prodavnici" is locative case (location "u prodavnici"). The nominative form is "prodavnica".' },
+
+    { serbian: 'Čitam knihu bratovom.',
+      english: 'I read my brother\'s book.',
+      target: 'bratovom',
+      answer: 'brat',
+      options: ['brat', 'brata', 'bratovom', 'bratu'],
+      explanation: '"Bratovom" is instrumental case possessive. The nominative form is "brat".' },
+
+    { serbian: 'Govorim sa učiteljicom.',
+      english: 'I am speaking with the teacher.',
+      target: 'učiteljicom',
+      answer: 'učiteljica',
+      options: ['učiteljica', 'učiteljice', 'učiteljicom', 'učiteljici'],
+      explanation: '"Učiteljicom" is instrumental case (with "sa"). The nominative form is "učiteljica".' },
+
+    { serbian: 'Čekam autobus na stanici.',
+      english: 'I am waiting for the bus at the station.',
+      target: 'stanici',
+      answer: 'stanica',
+      options: ['stanica', 'stanice', 'stanici', 'stanicom'],
+      explanation: '"Stanici" is locative case (location "na stanici"). The nominative form is "stanica".' },
+
+    { serbian: 'Dajemo hranu mačkama.',
+      english: 'We give food to cats.',
+      target: 'mačkama',
+      answer: 'mačka',
+      options: ['mačka', 'mačke', 'mačkama', 'mačkom'],
+      explanation: '"Mačkama" is dative plural. The singular nominative form is "mačka".' },
+
+    { serbian: 'Pišem olovkom.',
+      english: 'I write with a pencil.',
+      target: 'olovkom',
+      answer: 'olovka',
+      options: ['olovka', 'olovke', 'olovkom', 'olovci'],
+      explanation: '"Olovkom" is instrumental case (instrument "olovkom"). The nominative form is "olovka".' },
+
+    { serbian: 'Čitam o istoriji.',
+      english: 'I read about history.',
+      target: 'istoriji',
+      answer: 'istorija',
+      options: ['istorija', 'istorije', 'istoriji', 'istorijom'],
+      explanation: '"Istoriji" is locative case (about "o istoriji"). The nominative form is "istorija".' },
+
+    { serbian: 'Idem kod lekara.',
+      english: 'I am going to the doctor.',
+      target: 'lekara',
+      answer: 'lekar',
+      options: ['lekar', 'lekara', 'lekaru', 'lekarom'],
+      explanation: '"Lekara" is genitive case (direction "kod lekara"). The nominative form is "lekar".' },
+
+    { serbian: 'Razgovaramo o filmovima.',
+      english: 'We talk about movies.',
+      target: 'filmovima',
+      answer: 'film',
+      options: ['film', 'filma', 'filmovima', 'filmom'],
+      explanation: '"Filmovima" is locative plural (about "o filmovima"). The singular nominative form is "film".' }
+  ];
+
   function loadCards() {
     const raw = localStorage.getItem(STORAGE_KEY);
     const ver = localStorage.getItem(STORAGE_KEY + '_v');
@@ -6750,6 +6989,12 @@
   let ctxScoredQ       = false;
   let ctxAnswered      = false;
   let ctxActiveFilters = new Set(['po', 'o', 'za', 'iz', 'na', 'pro', 'u', 'irregular']);
+
+  // Nominative Conversion state
+  let nomDeck          = [];
+  let nomIndex         = 0;
+  let nomScore         = { correct: 0, total: 0 };
+  let nomAnswered      = false;
 
   // Cyrillic Reading state
   let cyrDeck      = [];
@@ -7306,6 +7551,7 @@
     document.getElementById('adj-view').style.display        = view === 'adj'        ? 'flex' : 'none';
     document.getElementById('drill-view').style.display      = view === 'drill'      ? 'flex' : 'none';
     document.getElementById('aspect-view').style.display     = view === 'aspect'     ? 'flex' : 'none';
+    document.getElementById('nominative-view').style.display = view === 'nominative' ? 'flex' : 'none';
     document.getElementById('slagalica-view').style.display  = view === 'slagalica'  ? 'flex' : 'none';
     document.getElementById('cyrillic-view').style.display   = view === 'cyrillic'   ? 'flex' : 'none';
     document.getElementById('numbers-view').style.display    = view === 'numbers'    ? 'flex' : 'none';
@@ -7317,7 +7563,7 @@
     document.getElementById('songs-view').style.display      = view === 'songs'      ? 'flex' : 'none';
     document.getElementById('antonyms-view').style.display   = view === 'antonyms'   ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','slagalica','cyrillic','numbers','mace','jezurka','cases','caserules','possessives','songs','antonyms','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','nominative','slagalica','cyrillic','numbers','mace','jezurka','cases','caserules','possessives','songs','antonyms','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -7326,6 +7572,7 @@
     if (view === 'adj')        renderAdjView();
     if (view === 'drill')      renderDrillView();
     if (view === 'aspect')     renderContextView();
+    if (view === 'nominative') renderNominativeView();
     if (view === 'slagalica')  renderSlagView();
     if (view === 'cyrillic')   renderCyrView();
     if (view === 'numbers')    renderNumView();
@@ -8656,6 +8903,135 @@
   function shuffleCtx() {
     buildCtxDeck();
     renderCtxCard();
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  NOMINATIVE CONVERSION — functions
+  // ═══════════════════════════════════════════════════
+  function renderNominativeView() {
+    if (nomDeck.length === 0) buildNomDeck();
+    nomAnswered = false;
+    renderNomCard();
+  }
+
+  function buildNomDeck() {
+    nomDeck = [...NOMINATIVE_EXERCISES];
+    shuffleArray(nomDeck);
+    nomIndex = 0;
+  }
+
+  function renderNomCard() {
+    if (nomIndex >= nomDeck.length) nomIndex = 0;
+    const exercise = nomDeck[nomIndex];
+
+    // Update progress
+    document.getElementById('nom-progress').textContent = `${nomIndex + 1} of ${nomDeck.length}`;
+
+    // Update navigation buttons
+    const prevBtn = document.getElementById('nom-prev-btn');
+    const nextBtn = document.getElementById('nom-next-btn');
+    if (prevBtn) prevBtn.disabled = nomIndex === 0;
+    if (nextBtn) nextBtn.disabled = nomIndex === nomDeck.length - 1;
+
+    // Display sentence and target
+    document.getElementById('nom-sentence').textContent = exercise.serbian;
+    document.getElementById('nom-english').textContent = exercise.english;
+    document.getElementById('nom-target').textContent = exercise.target;
+
+    // Shuffle options and set up buttons
+    const shuffledOptions = [...exercise.options];
+    shuffleArray(shuffledOptions);
+
+    for (let i = 0; i < 4; i++) {
+      const btn = document.getElementById(`nom-btn-${i}`);
+      btn.textContent = shuffledOptions[i];
+      btn.className = 'nom-choice'; // Reset styling
+      btn.disabled = false;
+    }
+
+    // Hide feedback
+    document.getElementById('nom-feedback').style.display = 'none';
+
+    // Update stats
+    updateNomScore();
+  }
+
+  function nomAnswer(optionIndex) {
+    if (nomAnswered) return;
+
+    const exercise = nomDeck[nomIndex];
+    const btn = document.getElementById(`nom-btn-${optionIndex}`);
+    const selectedAnswer = btn.textContent.trim();
+    const isCorrect = selectedAnswer === exercise.answer;
+
+    nomAnswered = true;
+
+    // Update score
+    nomScore.total++;
+    if (isCorrect) nomScore.correct++;
+
+    // Disable all buttons and highlight the selected one
+    for (let i = 0; i < 4; i++) {
+      const button = document.getElementById(`nom-btn-${i}`);
+      button.disabled = true;
+
+      if (button.textContent.trim() === exercise.answer) {
+        button.className = 'nom-choice correct'; // Correct answer
+      } else if (i === optionIndex && !isCorrect) {
+        button.className = 'nom-choice wrong'; // Wrong selection
+      }
+    }
+
+    // Show feedback
+    const feedback = document.getElementById('nom-feedback');
+    feedback.style.display = 'block';
+
+    if (isCorrect) {
+      feedback.innerHTML = `
+        <div class="feedback-correct">
+          <strong>✓ Correct!</strong><br>
+          ${exercise.explanation}
+        </div>
+      `;
+    } else {
+      feedback.innerHTML = `
+        <div class="feedback-wrong">
+          <strong>✗ Incorrect</strong><br>
+          <strong>Correct answer:</strong> ${exercise.answer}<br><br>
+          ${exercise.explanation}
+        </div>
+      `;
+    }
+
+    updateNomScore();
+  }
+
+  function updateNomScore() {
+    const accuracy = nomScore.total > 0 ? Math.round((nomScore.correct / nomScore.total) * 100) : 0;
+    document.getElementById('nom-score-val').textContent = `${nomScore.correct} / ${nomScore.total}`;
+  }
+
+  function nomNext() {
+    if (nomIndex < nomDeck.length - 1) {
+      nomIndex++;
+      nomAnswered = false;
+      renderNomCard();
+    }
+  }
+
+  function nomPrev() {
+    if (nomIndex > 0) {
+      nomIndex--;
+      nomAnswered = false;
+      renderNomCard();
+    }
+  }
+
+  function shuffleNominative() {
+    shuffleArray(nomDeck);
+    nomIndex = 0;
+    nomAnswered = false;
+    renderNomCard();
   }
 
   // ═══════════════════════════════════════════════════
