@@ -1243,6 +1243,25 @@
     .antn-feedback.show { display:block; }
     .antn-pair     { font-size:1rem; color:#c8d8e8; }
     .antn-next-row { display:flex; justify-content:flex-end; }
+
+    /* ── UNIT QUIZ VIEWS (shared: Unit 10, 11, 12) ────────── */
+    .unitq-header  { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    .unitq-score   { font-size:0.85rem; color:#779; }
+    .unitq-counter { font-size:0.85rem; color:#556; }
+    .unitq-unit-tag{ font-size:0.75rem; color:#88a; background:#1a2540; border-radius:4px; padding:2px 8px; }
+    .unitq-prompt  { background:#16213e; border:1px solid #2a2a4a; border-radius:10px; padding:18px 22px; font-size:1.05rem; line-height:1.6; color:#dde; }
+    .unitq-context { font-size:1.1rem; color:#e0e0ff; font-style:italic; margin-top:10px; }
+    .unitq-en      { font-size:0.85rem; color:#889; margin-top:4px; }
+    .unitq-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .unitq-option  { padding:13px 16px; border:2px solid #3a3a5a; background:none; color:#cce; border-radius:10px; cursor:pointer; font-size:0.95rem; transition:background 0.15s,border-color 0.15s; text-align:center; }
+    .unitq-option:hover:not(:disabled) { border-color:#7070cc; background:#2a2a4a; }
+    .unitq-option.correct { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .unitq-option.wrong   { border-color:#e94560; background:#3a1a2a; color:#ff8080; }
+    .unitq-option.reveal  { border-color:#4caf50; background:#1a3a1a; color:#80ff80; }
+    .unitq-option:disabled{ cursor:default; opacity:0.75; }
+    .unitq-note    { background:#16213e; border-left:3px solid #4a8acc; border-radius:0 8px 8px 0; padding:12px 16px; font-size:0.88rem; color:#aac; line-height:1.6; display:none; }
+    .unitq-note.show { display:block; }
+    .unitq-next-row{ display:flex; justify-content:flex-end; }
   </style>
 </head>
 <body>
@@ -1267,6 +1286,9 @@
     <button id="nav-possessives" onclick="showView('possessives')">Possessives</button>
     <button id="nav-songs"      onclick="showView('songs')">Songs</button>
     <button id="nav-antonyms"   onclick="showView('antonyms')">Antonyms</button>
+    <button id="nav-unit10"     onclick="showView('unit10')">Unit 10</button>
+    <button id="nav-unit11"     onclick="showView('unit11')">Unit 11</button>
+    <button id="nav-unit12"     onclick="showView('unit12')">Unit 12</button>
     <button id="nav-manage"     onclick="showView('manage')">Manage Cards</button>
   </nav>
 </header>
@@ -1816,6 +1838,15 @@
 
   <!-- ═══════════════ ANTONYMS VIEW ═══════════════ -->
   <div id="antonyms-view" style="display:none"><!-- rendered by JS --></div><!-- /antonyms-view -->
+
+  <!-- ═══════════════ UNIT 10 VIEW ═══════════════ -->
+  <div id="unit10-view" style="display:none"><!-- rendered by JS --></div>
+
+  <!-- ═══════════════ UNIT 11 VIEW ═══════════════ -->
+  <div id="unit11-view" style="display:none"><!-- rendered by JS --></div>
+
+  <!-- ═══════════════ UNIT 12 VIEW ═══════════════ -->
+  <div id="unit12-view" style="display:none"><!-- rendered by JS --></div>
 
   <!-- ═══════════════ MANAGE VIEW ═══════════════ -->
   <div id="manage-view" style="display:none">
@@ -7712,8 +7743,11 @@
     document.getElementById('possessives-view').style.display = view === 'possessives' ? 'flex' : 'none';
     document.getElementById('songs-view').style.display      = view === 'songs'      ? 'flex' : 'none';
     document.getElementById('antonyms-view').style.display   = view === 'antonyms'   ? 'flex' : 'none';
+    document.getElementById('unit10-view').style.display     = view === 'unit10'     ? 'flex' : 'none';
+    document.getElementById('unit11-view').style.display     = view === 'unit11'     ? 'flex' : 'none';
+    document.getElementById('unit12-view').style.display     = view === 'unit12'     ? 'flex' : 'none';
     document.getElementById('manage-view').style.display     = view === 'manage'     ? 'flex' : 'none';
-    ['study','grammar','verbs','adj','drill','aspect','nominative','slagalica','cyrillic','numbers','mace','jezurka','cases','caserules','possessives','songs','antonyms','manage'].forEach(v =>
+    ['study','grammar','verbs','adj','drill','aspect','nominative','slagalica','cyrillic','numbers','mace','jezurka','cases','caserules','possessives','songs','antonyms','unit10','unit11','unit12','manage'].forEach(v =>
       document.getElementById(`nav-${v}`).classList.toggle('active', v === view)
     );
     if (view === 'study')      renderStudy();
@@ -7733,6 +7767,9 @@
     if (view === 'possessives') renderPossessivesView();
     if (view === 'songs')      renderSongsView();
     if (view === 'antonyms')   renderAntonymsView();
+    if (view === 'unit10')     renderUnit10View();
+    if (view === 'unit11')     renderUnit11View();
+    if (view === 'unit12')     renderUnit12View();
     if (view === 'manage')     renderManage();
   }
 
@@ -11733,6 +11770,303 @@
     if (antonymsQIdx >= antonymsQueue.length) buildAntonymsQueue();
     renderAntonymsItem();
   }
+
+  // ═══════════════════════════════════════════════════
+  //  UNIT 10 — PORODICA (Family)  multiple-choice quiz
+  // ═══════════════════════════════════════════════════
+
+  const UNIT10_EXERCISES = [
+    { q:'What does "svekrva" mean?', options:['mother-in-law','sister-in-law','grandmother','aunt'], answer:'mother-in-law', note:'"Svekrva" is your husband\'s mother. The male counterpart is "svekar" (father-in-law). "Tašta" is a wife\'s mother.' },
+    { q:'Which word means "son-in-law"?', options:['zet','snaja','svekar','stric'], answer:'zet', note:'"Zet" is the husband of your daughter. "Snaja" is the wife of your son (daughter-in-law).' },
+    { q:'What does "ujak" mean?', options:['uncle (mother\'s brother)','uncle (father\'s brother)','grandfather','cousin'], answer:'uncle (mother\'s brother)', note:'Serbian has distinct words for maternal and paternal uncles: "ujak" (mother\'s brother) vs "stric" (father\'s brother).' },
+    { q:'Which word means "married" for a man?', options:['oženjen','udata','suprug','udovac'], answer:'oženjen', note:'"Oženjen" is used for a married man. A married woman says "udata." These are gender-specific forms.' },
+    { q:'What does "roditelji" mean?', options:['parents','children','grandparents','relatives'], answer:'parents', note:'"Roditelji" (parents) is the plural of "roditelj." Compare "deca" (children) and "baka i deda" (grandparents).' },
+    { q:'Which profession is a "bibliotekar"?', options:['librarian','doctor','lawyer','engineer'], answer:'librarian', note:'"Bibliotekar" comes from "biblioteka" (library). A doctor is "lekar," a lawyer is "pravnik."' },
+    { q:'What does "stric" mean?', options:['uncle (father\'s brother)','uncle (mother\'s brother)','cousin','grandfather'], answer:'uncle (father\'s brother)', note:'"Stric" is your father\'s brother. Your mother\'s brother is "ujak." His wife is "strina."' },
+    { q:'Which phrase means "retired" in Serbian?', options:['u penziji','po profesiji','studirati','na odmoru'], answer:'u penziji', note:'"U penziji" literally means "in pension/retirement." Compare "po profesiji" (by profession).' },
+    { q:'What does "snaja" mean?', options:['daughter-in-law','sister-in-law','granddaughter','niece'], answer:'daughter-in-law', note:'"Snaja" is the wife of your son. The husband of your daughter is "zet."' },
+    { q:'Which verb means "to cook"?', options:['kuvati','putovati','šetati','igrati'], answer:'kuvati', note:'"Kuvati" = to cook. "Putovati" = to travel. "Šetati" = to stroll. "Igrati" = to play.' },
+    { q:'What does "po profesiji" mean?', options:['by profession','in retirement','at work','after school'], answer:'by profession', note:'"On je lekar po profesiji." = He is a doctor by profession. The phrase follows the profession noun.' },
+    { q:'Which word means "grandmother"?', options:['baka','deda','tetka','strina'], answer:'baka', note:'"Baka" (grandmother) and "deda" (grandfather). "Tetka" = aunt. "Strina" = uncle\'s wife.' },
+    { q:'What does "strina" mean?', options:['uncle\'s wife (aunt by marriage)','aunt (mother\'s sister)','grandmother','cousin (f)'], answer:'uncle\'s wife (aunt by marriage)', note:'"Strina" is the wife of your "stric" (father\'s brother). She is an aunt by marriage, not by blood.' },
+    { q:'Which informal word means "dad"?', options:['tata','otac','suprug','svekar'], answer:'tata', note:'"Tata" is the informal/everyday word for dad. "Otac" is the more formal or literary form.' },
+    { q:'What does "unuk" mean?', options:['grandson','granddaughter','son-in-law','nephew'], answer:'grandson', note:'"Unuk" (grandson) and "unuka" (granddaughter). "Deda" and "baka" are their grandparents.' },
+    { q:'Which term means "cousin (male or female)"?', options:['bratić / sestrična','ujak / tetka','zet / snaja','unuk / unuka'], answer:'bratić / sestrična', note:'"Bratić" = male cousin, "sestrična" = female cousin. Note the different gender endings.' },
+    { q:'What does "lekar" mean?', options:['doctor / physician','lawyer','librarian','professor'], answer:'doctor / physician', note:'"Lekar" is a doctor. Colloquially you may hear "doktor." A lawyer is "pravnik" or "advokat."' },
+    { q:'Fill in the blank (Ana is married — she is a woman)', context:'Ana je ___ za Marka.', en:'Ana is married to Marko.', options:['udata','oženjen','suprug','u penziji'], answer:'udata', note:'A woman who is married says "udata." A man says "oženjen." These forms are gender-specific.' },
+    { q:'What does "pravnik" mean?', options:['lawyer','doctor','librarian','engineer'], answer:'lawyer', note:'"Pravnik" from "pravo" (law/right). Compare "lekar" (doctor) and "bibliotekar" (librarian).' },
+    { q:'Which verb means "to travel"?', options:['putovati','kuvati','šetati','igrati'], answer:'putovati', note:'"Putovati" (to travel) from "put" (road/trip). "Šetati" means to stroll/walk casually.' },
+    { q:'What does "svekar" mean?', options:['father-in-law','son-in-law','brother-in-law','uncle'], answer:'father-in-law', note:'"Svekar" is your husband\'s father. Your husband\'s mother is "svekrva."' },
+    { q:'What does "igrati" mean?', options:['to play','to walk','to travel','to cook'], answer:'to play', note:'"Igrati" = to play (games/sports) or to dance. "Igrati fudbal" = to play football.' },
+    { q:'Fill in the blank (Marko is a doctor by profession)', context:'Marko je lekar ___.', en:'Marko is a doctor by profession.', options:['po profesiji','u penziji','na poslu','u gradu'], answer:'po profesiji', note:'"Po profesiji" follows the profession noun to indicate "by profession."' },
+    { q:'What does "bašta" mean?', options:['garden','suburb','dining room','yard / courtyard'], answer:'garden', note:'"Bašta" = garden. "Dvorište" = yard/courtyard. "Predgrađe" = suburb. "Trpezarija" = dining room.' },
+    { q:'Which verb means "to study (at university)"?', options:['studirati','učiti','kuvati','raditi'], answer:'studirati', note:'"Studirati" specifically means studying at university level. "Učiti" means to study/learn in general.' },
+    { q:'What does "deca" mean?', options:['children','grandchildren','babies','family'], answer:'children', note:'"Deca" is the plural of "dete" (child). Irregular: "deca" looks singular but is grammatically plural.' },
+    { q:'Which verb means "to walk / to stroll"?', options:['šetati','hodati','putovati','igrati'], answer:'šetati', note:'"Šetati" implies a leisurely stroll. "Hodati" is more neutral (to walk on foot).' },
+    { q:'What does "unuka" mean?', options:['granddaughter','grandson','daughter-in-law','niece'], answer:'granddaughter', note:'"Unuka" (granddaughter) is the female form of "unuk" (grandson). Both are grandchildren.' },
+  ];
+
+  let u10Queue = [], u10QIdx = 0, u10Answered = false, u10Score = {correct:0, total:0};
+  let u10CurrentOpts = [];
+
+  function renderUnit10View() {
+    if (u10Queue.length === 0) {
+      u10Queue = shuffleArr([...Array(UNIT10_EXERCISES.length).keys()]);
+      u10QIdx  = 0;
+    }
+    renderUnit10Item();
+  }
+
+  function renderUnit10Item() {
+    u10Answered = false;
+    const item = UNIT10_EXERCISES[u10Queue[u10QIdx]];
+    const el   = document.getElementById('unit10-view');
+    u10CurrentOpts = shuffleArr([...item.options]);
+    const ctxHtml = item.context
+      ? `<div class="unitq-context">${item.context.replace('___','<strong>___</strong>')}</div><div class="unitq-en">"${item.en}"</div>`
+      : '';
+    el.innerHTML = `
+      <div class="unitq-header">
+        <span class="unitq-unit-tag">Unit 10 &middot; Porodica</span>
+        <span class="unitq-score" id="u10-score">Score: ${u10Score.correct} / ${u10Score.total}</span>
+        <span class="unitq-counter">${u10QIdx + 1} / ${u10Queue.length}</span>
+      </div>
+      <div class="unitq-prompt">${item.q}${ctxHtml}</div>
+      <div class="unitq-options">
+        ${u10CurrentOpts.map((o,i) => `<button class="unitq-option" onclick="u10Answer(${i})">${o}</button>`).join('')}
+      </div>
+      <div class="unitq-note" id="u10-note">${item.note}</div>
+      <div class="unitq-next-row">
+        <button class="btn btn-primary" id="u10-next" style="display:none" onclick="u10Next()">Next →</button>
+      </div>`;
+  }
+
+  function u10Answer(idx) {
+    if (u10Answered) return;
+    u10Answered = true;
+    const item    = UNIT10_EXERCISES[u10Queue[u10QIdx]];
+    const chosen  = u10CurrentOpts[idx];
+    const correct = item.answer;
+    const ok      = chosen === correct;
+    u10Score.total++;
+    if (ok) u10Score.correct++;
+    document.getElementById('u10-score').textContent = `Score: ${u10Score.correct} / ${u10Score.total}`;
+    document.querySelectorAll('#unit10-view .unitq-option').forEach((b, i) => {
+      b.disabled = true;
+      if (u10CurrentOpts[i] === correct) b.classList.add(ok ? 'correct' : 'reveal');
+      if (u10CurrentOpts[i] === chosen && !ok) b.classList.add('wrong');
+    });
+    document.getElementById('u10-note').classList.add('show');
+    document.getElementById('u10-next').style.display = 'inline-block';
+  }
+
+  function u10Next() {
+    u10QIdx++;
+    if (u10QIdx >= u10Queue.length) {
+      u10Queue = shuffleArr([...Array(UNIT10_EXERCISES.length).keys()]);
+      u10QIdx  = 0;
+    }
+    renderUnit10Item();
+  }
+
+
+  // ═══════════════════════════════════════════════════
+  //  UNIT 11 — LJADI / STAN  multiple-choice quiz
+  // ═══════════════════════════════════════════════════
+
+  const UNIT11_EXERCISES = [
+    { q:'What does "predgrađe" mean?', options:['suburb','city center','neighborhood','district'], answer:'suburb', note:'"Predgrađe" literally means "before the city" (pred + grad). It refers to a suburban area outside the main city.' },
+    { q:'Which word means "furnished"?', options:['namešten','nameštaj','miran','namestiti'], answer:'namešten', note:'"Namešten" (furnished) is the adjective. "Nameštaj" (furniture) is the related noun.' },
+    { q:'What does "razgovarati" mean?', options:['to talk / to chat','to listen','to write','to shout'], answer:'to talk / to chat', note:'"Razgovarati" implies a conversation between two people. Compare "pričati" (to tell/talk) and "govoriti" (to speak).' },
+    { q:'Which word means "hardworking / diligent"?', options:['marljiv','lenj','iskren','veseo'], answer:'marljiv', note:'"Marljiv" (hardworking) is the opposite of "lenj" (lazy). Both describe a person\'s work ethic.' },
+    { q:'What does "svirati" mean?', options:['to play (an instrument)','to sing','to dance','to listen to music'], answer:'to play (an instrument)', note:'"Svirati" is specifically for instruments: "svirati gitaru" (to play guitar). "Pevati" = to sing.' },
+    { q:'Which phrase means "three-room apartment"?', options:['trosoban stan','dvosoban stan','jednosoban stan','četvorosoban stan'], answer:'trosoban stan', note:'"Trosoban" = three-room (tri + soba). "Dvosoban" = two-room. These count living spaces, not bedrooms.' },
+    { q:'What does "tražiti" mean?', options:['to look for / to seek','to find','to give','to ask'], answer:'to look for / to seek', note:'"Tražiti" = to search for. Its perfective pair "naći" means to find. "Tražim stan." = I\'m looking for an apartment.' },
+    { q:'Which word means "immediately / right away"?', options:['odmah','zajedno','retko','uvek'], answer:'odmah', note:'"Odmah" = immediately. "Zajedno" = together. "Retko" = rarely. "Uvek" = always.' },
+    { q:'What does "iskren" mean?', options:['honest / sincere','cheerful','loud','quiet'], answer:'honest / sincere', note:'"Iskren" describes a trustworthy person. Compare "veseo" (cheerful), "glasan" (loud), "tih" (soft-spoken).' },
+    { q:'Which word means "lazy"?', options:['lenj','tih','marljiv','iskren'], answer:'lenj', note:'"Lenj" is the opposite of "marljiv" (hardworking). Both are common personality adjectives.' },
+    { q:'What does "pogled na..." mean?', options:['view of...','next to...','near...','away from...'], answer:'view of...', note:'"Pogled na reku" = view of the river. "Pored reke" = next to/beside the river.' },
+    { q:'Which phrase means "by the river"?', options:['pored reke','pogled na reku','blizu reke','na reci'], answer:'pored reke', note:'"Pored" + genitive = beside/next to. "Na reci" (locative) = on the river. "Blizu" also means near.' },
+    { q:'What does "glasan" mean?', options:['loud','quiet','cheerful','honest'], answer:'loud', note:'"Glasan" is the opposite of "tih" (soft-spoken/quiet). "Miran" = calm/peaceful. All are personality adjectives.' },
+    { q:'Which possessive pronoun means "my" with a feminine noun?', options:['moja','moj','moje','mog'], answer:'moja', note:'Possessives agree with noun gender: "moj brat" (m), "moja sestra" (f), "moje dete" (n).' },
+    { q:'What does "zajedno" mean?', options:['together','immediately','separately','rarely'], answer:'together', note:'"Zajedno" = together. "Odmah" = immediately. "Retko" = rarely. "Posebno" = separately.' },
+    { q:'Which word means "to go out"?', options:['izlaziti','ulaziti','sedeti','dolaziti'], answer:'izlaziti', note:'"Izlaziti" (to go out) is the imperfective. "Ulaziti" = to go in/enter. "Dolaziti" = to come/arrive.' },
+    { q:'What does "košarka" mean?', options:['basketball','football / soccer','tennis','volleyball'], answer:'basketball', note:'"Košarka" (basketball) from "koš" (basket). "Fudbal" = football/soccer. "Tenis" = tennis.' },
+    { q:'Which word means "letter (written)"?', options:['pismo','mejl','telefon','poruka'], answer:'pismo', note:'"Pismo" = a written letter. "Mejl" = email. "Poruka" = a message/text. "Telefon" = phone.' },
+    { q:'What does "veseo" mean?', options:['cheerful / happy','honest','lazy','quiet'], answer:'cheerful / happy', note:'"Veseo" (m) / "vesela" (f) describes an upbeat, cheerful person. Compare "srećan" (happy/fortunate).' },
+    { q:'Which possessive pronoun means "your" (informal sg.) with a neuter noun?', options:['tvoje','tvoj','tvoja','vaše'], answer:'tvoje', note:'"Tvoje" is the neuter form: "tvoje dete" (your child). "Tvoj" is masculine, "tvoja" is feminine.' },
+    { q:'What does "nameštaj" mean?', options:['furniture','furnished (adj)','to furnish','room'], answer:'furniture', note:'"Nameštaj" (furniture) is the noun. "Namešten" (furnished) is the adjective derived from it.' },
+    { q:'Which word means "to sit"?', options:['sedeti','stajati','hodati','ležati'], answer:'sedeti', note:'"Sedeti" = to sit. "Stajati" = to stand. "Hodati" = to walk. "Ležati" = to lie down.' },
+    { q:'Fill in the blank (a two-room apartment)', context:'___ stan ima dve sobe.', en:'A two-room apartment has two rooms.', options:['Dvosoban','Trosoban','Namešten','Miran'], answer:'Dvosoban', note:'"Dvosoban" = two-room (dvo + soba). "Trosoban" = three rooms. "Namešten" = furnished. "Miran" = quiet.' },
+    { q:'What does "miran" mean?', options:['quiet / peaceful','loud','cheerful','honest'], answer:'quiet / peaceful', note:'"Miran" describes a calm, peaceful person or place. "Tih" more specifically means soft-spoken.' },
+    { q:'Which phrase means "to ride a bike"?', options:['voziti bicikl','voziti auto','jahati konja','ići peške'], answer:'voziti bicikl', note:'"Voziti bicikl" = to ride a bike. "Voziti" alone usually means to drive a car. "Jahati" = to ride a horse.' },
+    { q:'What does "pevati" mean?', options:['to sing','to play music','to dance','to listen'], answer:'to sing', note:'"Pevati" = to sing. "Svirati" = to play an instrument. "Plesati" = to dance. "Slušati" = to listen.' },
+    { q:'Which possessive set correctly means "his / her / its"?', options:['njegov / njena / njegovo','moj / moja / moje','tvoj / tvoja / tvoje','naš / naša / naše'], answer:'njegov / njena / njegovo', note:'3rd person possessives: "njegov" (his, m noun), "njena" (her, f noun), "njegovo" (its/his, n noun).' },
+    { q:'What does "ples" mean?', options:['dance / dancing','song','music','sport'], answer:'dance / dancing', note:'"Ples" (dance) is the noun. "Plesati" is the verb. "Pevanje" = singing. "Muzika" = music.' },
+  ];
+
+  let u11Queue = [], u11QIdx = 0, u11Answered = false, u11Score = {correct:0, total:0};
+  let u11CurrentOpts = [];
+
+  function renderUnit11View() {
+    if (u11Queue.length === 0) {
+      u11Queue = shuffleArr([...Array(UNIT11_EXERCISES.length).keys()]);
+      u11QIdx  = 0;
+    }
+    renderUnit11Item();
+  }
+
+  function renderUnit11Item() {
+    u11Answered = false;
+    const item = UNIT11_EXERCISES[u11Queue[u11QIdx]];
+    const el   = document.getElementById('unit11-view');
+    u11CurrentOpts = shuffleArr([...item.options]);
+    const ctxHtml = item.context
+      ? `<div class="unitq-context">${item.context.replace('___','<strong>___</strong>')}</div><div class="unitq-en">"${item.en}"</div>`
+      : '';
+    el.innerHTML = `
+      <div class="unitq-header">
+        <span class="unitq-unit-tag">Unit 11 &middot; Ljadi / Stan</span>
+        <span class="unitq-score" id="u11-score">Score: ${u11Score.correct} / ${u11Score.total}</span>
+        <span class="unitq-counter">${u11QIdx + 1} / ${u11Queue.length}</span>
+      </div>
+      <div class="unitq-prompt">${item.q}${ctxHtml}</div>
+      <div class="unitq-options">
+        ${u11CurrentOpts.map((o,i) => `<button class="unitq-option" onclick="u11Answer(${i})">${o}</button>`).join('')}
+      </div>
+      <div class="unitq-note" id="u11-note">${item.note}</div>
+      <div class="unitq-next-row">
+        <button class="btn btn-primary" id="u11-next" style="display:none" onclick="u11Next()">Next →</button>
+      </div>`;
+  }
+
+  function u11Answer(idx) {
+    if (u11Answered) return;
+    u11Answered = true;
+    const item    = UNIT11_EXERCISES[u11Queue[u11QIdx]];
+    const chosen  = u11CurrentOpts[idx];
+    const correct = item.answer;
+    const ok      = chosen === correct;
+    u11Score.total++;
+    if (ok) u11Score.correct++;
+    document.getElementById('u11-score').textContent = `Score: ${u11Score.correct} / ${u11Score.total}`;
+    document.querySelectorAll('#unit11-view .unitq-option').forEach((b, i) => {
+      b.disabled = true;
+      if (u11CurrentOpts[i] === correct) b.classList.add(ok ? 'correct' : 'reveal');
+      if (u11CurrentOpts[i] === chosen && !ok) b.classList.add('wrong');
+    });
+    document.getElementById('u11-note').classList.add('show');
+    document.getElementById('u11-next').style.display = 'inline-block';
+  }
+
+  function u11Next() {
+    u11QIdx++;
+    if (u11QIdx >= u11Queue.length) {
+      u11Queue = shuffleArr([...Array(UNIT11_EXERCISES.length).keys()]);
+      u11QIdx  = 0;
+    }
+    renderUnit11Item();
+  }
+
+
+  // ═══════════════════════════════════════════════════
+  //  UNIT 12 — NARODI I JEZICI  multiple-choice quiz
+  // ═══════════════════════════════════════════════════
+
+  const UNIT12_EXERCISES = [
+    { q:'Which country is "Nemačka"?', options:['Germany','Norway','Netherlands','Denmark'], answer:'Germany', note:'"Nemačka" = Germany. "Norveška" = Norway. "Holandija" = Netherlands. "Danska" = Denmark.' },
+    { q:'What is the correct nationality pair for Germany?', options:['Nemac / Nemica','Nemenka / Nemenkinja','Alemanac / Alemanka','Germanski / Germanka'], answer:'Nemac / Nemica', note:'"Nemac" (German man) / "Nemica" (German woman). The female form "-ica" is irregular here — most use "-kinja."' },
+    { q:'Which language is "holandski"?', options:['Dutch','Norwegian','Danish','Finnish'], answer:'Dutch', note:'"Holandski" = Dutch. "Norveški" = Norwegian. "Danski" = Danish. "Finski" = Finnish.' },
+    { q:'What does "rečnik" mean?', options:['dictionary','lesson','course','school'], answer:'dictionary', note:'"Rečnik" from "reč" (word). Compare "kurs" (course) and "čas" (class/lesson).' },
+    { q:'Which phrase means "three times a week"?', options:['tri puta nedeljno','tri puta dnevno','jednom nedeljno','dva puta mesečno'], answer:'tri puta nedeljno', note:'"Tri puta nedeljno" = three times weekly. "Dnevno" = daily. "Mesečno" = monthly.' },
+    { q:'What does "odlično" mean?', options:['excellent','poorly','rarely','often'], answer:'excellent', note:'"Odlično!" is used like "Excellent!" or "Great!" "Slabo" = poorly. "Dobro" = well.' },
+    { q:'Which is the nationality pair for France?', options:['Francuz / Francuskinja','Španac / Špankinja','Italijan / Italijanka','Franko / Frankinja'], answer:'Francuz / Francuskinja', note:'"Francuz" (Frenchman) / "Francuskinja" (Frenchwoman). The "-kinja" suffix is the common female form.' },
+    { q:'What does "slabo" mean?', options:['poorly / weakly','rarely','slowly','quietly'], answer:'poorly / weakly', note:'"Slabo" can mean poorly, weakly, or not well. "Retko" = rarely. "Polako" = slowly. "Tiho" = quietly.' },
+    { q:'Which country is "Holandija"?', options:['Netherlands / Holland','Norway','Hungary','Denmark'], answer:'Netherlands / Holland', note:'"Holandija" = Netherlands/Holland. "Norveška" = Norway. "Mađarska" = Hungary. "Danska" = Denmark.' },
+    { q:'What does "retko" mean?', options:['rarely','often','sometimes','always'], answer:'rarely', note:'"Retko" = rarely/seldom. "Često" = often. "Ponekad" = sometimes. "Uvek" = always.' },
+    { q:'What is "knjižara"?', options:['bookstore','library','school','book'], answer:'bookstore', note:'"Knjižara" = bookstore (where you buy books). "Biblioteka" = library (where you borrow books).' },
+    { q:'What does "pričati" mean?', options:['to talk / to tell','to write','to listen','to read'], answer:'to talk / to tell', note:'"Pričati" = to talk or tell a story. "Pisati" = to write. "Slušati" = to listen. "Čitati" = to read.' },
+    { q:'Which nationality pair is correct for Spain?', options:['Španac / Špankinja','Italijan / Italijanka','Englez / Engleskinja','Grk / Grkinja'], answer:'Španac / Špankinja', note:'"Španac" (Spanish man) / "Špankinja" (Spanish woman). From "Španija" (Spain).' },
+    { q:'What does "probati" mean?', options:['to try','to taste (formally)','to test someone','to practice'], answer:'to try', note:'"Probati" = to try or attempt. "Probaj!" = Try it! Also used for trying on clothes or food.' },
+    { q:'What is the Serbian word for Japan?', options:['Japan','Kina','Koreja','Tajland'], answer:'Japan', note:'"Japan" stays the same in Serbian. "Kina" = China. "Koreja" = Korea. "Tajland" = Thailand.' },
+    { q:'What does "čas" mean?', options:['class / lesson / hour','course','dictionary','school'], answer:'class / lesson / hour', note:'"Čas" has two meanings: a lesson/class (e.g., "čas srpskog") and an hour of time.' },
+    { q:'Which nationality pair is correct for Italy?', options:['Italijan / Italijanka','Italiano / Italiana','Talijan / Talijanka','Italijac / Italijanica'], answer:'Italijan / Italijanka', note:'"Italijan" (Italian man) / "Italijanka" (Italian woman). Female suffix here is "-ka," not "-kinja."' },
+    { q:'Which country corresponds to "kineski" (Chinese language)?', options:['Kina','Japan','Koreja','Tajvan'], answer:'Kina', note:'"Kineski" = Chinese (language). "Kina" = China. "Japanski" = Japanese. "Korejski" = Korean.' },
+    { q:'What does "koji / koja" (relativna) mean in English?', options:['which / that (relative pronoun)','who / whom (personal)','where / when','some / any'], answer:'which / that (relative pronoun)', note:'"Koji/koja/koje" as a relative pronoun = which/that/who. E.g., "Student koji uči" = The student who studies.' },
+    { q:'What is the correct female nationality for Germany?', options:['Nemica','Nemkinja','Nemenka','Nemanka'], answer:'Nemica', note:'"Nemica" is the female form of "Nemac." Most female nationalities use "-kinja," but German is an exception.' },
+    { q:'How do you say "Serbian (language)"?', options:['srpski','srbski','Srbijanski','serbijansko'], answer:'srpski', note:'"Srpski" is the adjective for Serbian. "Govorim srpski." = I speak Serbian.' },
+    { q:'Which country does "Španac / Špankinja" come from?', options:['Španija','Italija','Grčka','Holandija'], answer:'Španija', note:'"Španija" = Spain. The nationalities "Španac" (m) and "Špankinja" (f) derive from this country name.' },
+    { q:'Fill in the blank (She speaks ___ because she lives in Germany)', context:'Ona govori ___ jer živi u Nemačkoj.', en:'She speaks ___ because she lives in Germany.', options:['nemački','holandski','srpski','grčki'], answer:'nemački', note:'"Nemačka" = Germany → "nemački" = German language. Key country-language pairs are essential vocab.' },
+    { q:'What does "kurs" mean?', options:['course','lesson / class','dictionary','grade'], answer:'course', note:'"Kurs" = a course of study. "Čas" = a single lesson. "Rečnik" = dictionary.' },
+    { q:'Which is the Serbian word for "Australia"?', options:['Australija','Amerika','Kanada','Novi Zeland'], answer:'Australija', note:'"Australija" = Australia. "Amerika" = America/USA. "Kanada" = Canada. All recognizable from English.' },
+    { q:'How do you say "French (language)" in Serbian?', options:['francuski','francastu','Francija','francusko'], answer:'francuski', note:'"Francuski" is the adjective for French. "Francuz" = Frenchman. "Francuska" = France.' },
+    { q:'Which nationality pair is correct for England?', options:['Englez / Engleskinja','Britanac / Britaninka','Inglesman / Inglesmenka','Britan / Britanka'], answer:'Englez / Engleskinja', note:'"Englez" (Englishman) / "Engleskinja" (Englishwoman) are the standard forms used in Unit 12.' },
+    { q:'Fill in the blank (I\'m learning ___ because I love Italy)', context:'Učim ___ zato što volim Italiju.', en:"I'm learning ___ because I love Italy.", options:['italijanski','srpski','grčki','holandski'], answer:'italijanski', note:'"Italija" = Italy → "italijanski" = Italian language. "Učim" = I\'m learning (imperfective present).' },
+  ];
+
+  let u12Queue = [], u12QIdx = 0, u12Answered = false, u12Score = {correct:0, total:0};
+  let u12CurrentOpts = [];
+
+  function renderUnit12View() {
+    if (u12Queue.length === 0) {
+      u12Queue = shuffleArr([...Array(UNIT12_EXERCISES.length).keys()]);
+      u12QIdx  = 0;
+    }
+    renderUnit12Item();
+  }
+
+  function renderUnit12Item() {
+    u12Answered = false;
+    const item = UNIT12_EXERCISES[u12Queue[u12QIdx]];
+    const el   = document.getElementById('unit12-view');
+    u12CurrentOpts = shuffleArr([...item.options]);
+    const ctxHtml = item.context
+      ? `<div class="unitq-context">${item.context.replace('___','<strong>___</strong>')}</div><div class="unitq-en">"${item.en}"</div>`
+      : '';
+    el.innerHTML = `
+      <div class="unitq-header">
+        <span class="unitq-unit-tag">Unit 12 &middot; Narodi i Jezici</span>
+        <span class="unitq-score" id="u12-score">Score: ${u12Score.correct} / ${u12Score.total}</span>
+        <span class="unitq-counter">${u12QIdx + 1} / ${u12Queue.length}</span>
+      </div>
+      <div class="unitq-prompt">${item.q}${ctxHtml}</div>
+      <div class="unitq-options">
+        ${u12CurrentOpts.map((o,i) => `<button class="unitq-option" onclick="u12Answer(${i})">${o}</button>`).join('')}
+      </div>
+      <div class="unitq-note" id="u12-note">${item.note}</div>
+      <div class="unitq-next-row">
+        <button class="btn btn-primary" id="u12-next" style="display:none" onclick="u12Next()">Next →</button>
+      </div>`;
+  }
+
+  function u12Answer(idx) {
+    if (u12Answered) return;
+    u12Answered = true;
+    const item    = UNIT12_EXERCISES[u12Queue[u12QIdx]];
+    const chosen  = u12CurrentOpts[idx];
+    const correct = item.answer;
+    const ok      = chosen === correct;
+    u12Score.total++;
+    if (ok) u12Score.correct++;
+    document.getElementById('u12-score').textContent = `Score: ${u12Score.correct} / ${u12Score.total}`;
+    document.querySelectorAll('#unit12-view .unitq-option').forEach((b, i) => {
+      b.disabled = true;
+      if (u12CurrentOpts[i] === correct) b.classList.add(ok ? 'correct' : 'reveal');
+      if (u12CurrentOpts[i] === chosen && !ok) b.classList.add('wrong');
+    });
+    document.getElementById('u12-note').classList.add('show');
+    document.getElementById('u12-next').style.display = 'inline-block';
+  }
+
+  function u12Next() {
+    u12QIdx++;
+    if (u12QIdx >= u12Queue.length) {
+      u12Queue = shuffleArr([...Array(UNIT12_EXERCISES.length).keys()]);
+      u12QIdx  = 0;
+    }
+    renderUnit12Item();
+  }
+
 
   // ═══════════════════════════════════════════════════
   //  INIT
