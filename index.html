@@ -6804,6 +6804,7 @@
   //  GRAMMAR NOUN STORAGE
   // ═══════════════════════════════════════════════════
   const GRAMMAR_KEY = 'serbian_grammar_nouns';
+  const GRAMMAR_VER = '2';
 
   const DEFAULT_GRAMMAR_NOUNS = [
     // ── MASCULINE NOUNS ────────────────────────────────────
@@ -6916,11 +6917,53 @@
     // Animals
     { english:'animal',    gender:'neuter',    forms:{ nominativ:'životinja',genitiv:'životinje', dativ:'životinji', akuzativ:'životinja', vokativ:'životinjo', instrumental:'životinjom', lokativ:'životinji' }},
     { english:'deer',      gender:'neuter',    forms:{ nominativ:'jelen',    genitiv:'jelena',    dativ:'jelenu',    akuzativ:'jelena',    vokativ:'jelene',    instrumental:'jelenom',    lokativ:'jelenu'    }},
+
+    // ── HARDER MASCULINE (soft stem / fleeting-a / consonant shift) ────────
+    { english:'king',             gender:'masculine', forms:{ nominativ:'kralj',     genitiv:'kralja',     dativ:'kralju',     akuzativ:'kralja',     vokativ:'kralju',     instrumental:'kraljem',     lokativ:'kralju'     }},
+    { english:'husband',          gender:'masculine', forms:{ nominativ:'muž',        genitiv:'muža',       dativ:'mužu',       akuzativ:'muža',       vokativ:'mužu',       instrumental:'mužem',       lokativ:'mužu'       }},
+    { english:'friend',           gender:'masculine', forms:{ nominativ:'prijatelj',  genitiv:'prijatelja', dativ:'prijatelju', akuzativ:'prijatelja', vokativ:'prijatelju', instrumental:'prijateljem', lokativ:'prijatelju' }},
+    { english:'guest',            gender:'masculine', forms:{ nominativ:'gost',       genitiv:'gosta',      dativ:'gostu',      akuzativ:'gosta',      vokativ:'goste',      instrumental:'gostom',      lokativ:'gostu'      }},
+    { english:'road / way',       gender:'masculine', forms:{ nominativ:'put',        genitiv:'puta',       dativ:'putu',       akuzativ:'put',        vokativ:'pute',       instrumental:'putem',       lokativ:'putu'       }},
+    { english:'hour / clock',     gender:'masculine', forms:{ nominativ:'sat',        genitiv:'sata',       dativ:'satu',       akuzativ:'sat',        vokativ:'sate',       instrumental:'satom',       lokativ:'satu'       }},
+    { english:'mouse',            gender:'masculine', forms:{ nominativ:'miš',        genitiv:'miša',       dativ:'mišu',       akuzativ:'miša',       vokativ:'mišu',       instrumental:'mišem',       lokativ:'mišu'       }},
+    { english:'dream (fleeting-a)',gender:'masculine', forms:{ nominativ:'san',       genitiv:'sna',        dativ:'snu',        akuzativ:'san',        vokativ:'sne',        instrumental:'snom',        lokativ:'snu'        }},
+    { english:'Friday (fleeting-a)',gender:'masculine',forms:{ nominativ:'petak',     genitiv:'petka',      dativ:'petku',      akuzativ:'petak',      vokativ:'petče',      instrumental:'petkom',      lokativ:'petku'      }},
+    { english:'old man (fleeting-a)',gender:'masculine',forms:{ nominativ:'starac',   genitiv:'starca',     dativ:'starcu',     akuzativ:'starca',     vokativ:'starče',     instrumental:'starcem',     lokativ:'starcu'     }},
+    { english:'nail (fleeting-a)', gender:'masculine', forms:{ nominativ:'nokat',     genitiv:'nokta',      dativ:'noktu',      akuzativ:'nokat',      vokativ:'nokte',      instrumental:'noktom',      lokativ:'noktu'      }},
+
+    // ── HARDER FEMININE (i-stem: consonant-final, looks masculine) ─────────
+    { english:'night (i-stem)',    gender:'feminine',  forms:{ nominativ:'noć',       genitiv:'noći',       dativ:'noći',       akuzativ:'noć',        vokativ:'noći',       instrumental:'noću',        lokativ:'noći'       }},
+    { english:'thing (i-stem)',    gender:'feminine',  forms:{ nominativ:'stvar',     genitiv:'stvari',     dativ:'stvari',     akuzativ:'stvar',      vokativ:'stvar',      instrumental:'stvarju',     lokativ:'stvari'     }},
+    { english:'love (i-stem)',     gender:'feminine',  forms:{ nominativ:'ljubav',    genitiv:'ljubavi',    dativ:'ljubavi',    akuzativ:'ljubav',     vokativ:'ljubavi',    instrumental:'ljubavlju',   lokativ:'ljubavi'    }},
+    { english:'bone (i-stem)',     gender:'feminine',  forms:{ nominativ:'kost',      genitiv:'kosti',      dativ:'kosti',      akuzativ:'kost',       vokativ:'kosti',      instrumental:'košću',       lokativ:'kosti'      }},
+    { english:'help (i-stem)',     gender:'feminine',  forms:{ nominativ:'pomoć',     genitiv:'pomoći',     dativ:'pomoći',     akuzativ:'pomoć',      vokativ:'pomoći',     instrumental:'pomoću',      lokativ:'pomoći'     }},
+    { english:'lie / falsehood',   gender:'feminine',  forms:{ nominativ:'laž',       genitiv:'laži',       dativ:'laži',       akuzativ:'laž',        vokativ:'laži',       instrumental:'lažju',       lokativ:'laži'       }},
+    { english:'death (i-stem)',    gender:'feminine',  forms:{ nominativ:'smrt',      genitiv:'smrti',      dativ:'smrti',      akuzativ:'smrt',       vokativ:'smrti',      instrumental:'smrću',       lokativ:'smrti'      }},
+    { english:'thought (irregular)',gender:'feminine', forms:{ nominativ:'misao',     genitiv:'misli',      dativ:'misli',      akuzativ:'misao',      vokativ:'misli',      instrumental:'mišlju',      lokativ:'misli'      }},
+
+    // ── HARDER NEUTER (n-stem, irregular, or tricky) ───────────────────────
+    { english:'body',              gender:'neuter',    forms:{ nominativ:'telo',      genitiv:'tela',       dativ:'telu',       akuzativ:'telo',       vokativ:'telo',       instrumental:'telom',       lokativ:'telu'       }},
+    { english:'letter / writing',  gender:'neuter',    forms:{ nominativ:'pismo',     genitiv:'pisma',      dativ:'pismu',      akuzativ:'pismo',      vokativ:'pismo',      instrumental:'pismom',      lokativ:'pismu'      }},
+    { english:'miracle / wonder',  gender:'neuter',    forms:{ nominativ:'čudo',      genitiv:'čuda',       dativ:'čudu',       akuzativ:'čudo',       vokativ:'čudo',       instrumental:'čudom',       lokativ:'čudu'       }},
+    { english:'shoulder (n-stem)', gender:'neuter',    forms:{ nominativ:'rame',      genitiv:'ramena',     dativ:'ramenu',     akuzativ:'rame',       vokativ:'rame',       instrumental:'ramenom',     lokativ:'ramenu'     }},
+    { english:'button (n-stem)',   gender:'neuter',    forms:{ nominativ:'dugme',     genitiv:'dugmeta',    dativ:'dugmetu',    akuzativ:'dugme',      vokativ:'dugme',      instrumental:'dugmetom',    lokativ:'dugmetu'    }},
+    { english:'ear (irreg. plural: uši)', gender:'neuter', forms:{ nominativ:'uvo',  genitiv:'uva',        dativ:'uvu',        akuzativ:'uvo',        vokativ:'uvo',        instrumental:'uvom',        lokativ:'uvu'        }},
   ];
 
   function loadGrammarNouns() {
     const raw = localStorage.getItem(GRAMMAR_KEY);
-    if (!raw) { saveGrammarNouns(DEFAULT_GRAMMAR_NOUNS); return [...DEFAULT_GRAMMAR_NOUNS]; }
+    const ver = localStorage.getItem(GRAMMAR_KEY + '_v');
+    if (!raw || ver !== GRAMMAR_VER) {
+      const existing = raw ? JSON.parse(raw) : [];
+      const merged   = [...existing];
+      DEFAULT_GRAMMAR_NOUNS.forEach(def => {
+        const idx = merged.findIndex(e => e.forms.nominativ === def.forms.nominativ && e.gender === def.gender);
+        if (idx === -1) merged.push(def);
+      });
+      saveGrammarNouns(merged);
+      localStorage.setItem(GRAMMAR_KEY + '_v', GRAMMAR_VER);
+      return merged;
+    }
     return JSON.parse(raw);
   }
   function saveGrammarNouns(n) { localStorage.setItem(GRAMMAR_KEY, JSON.stringify(n)); }
